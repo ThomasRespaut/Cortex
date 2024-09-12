@@ -1,0 +1,21 @@
+[33mcommit c10bc4398e6a1be52ec182d1ca372f060b6d27f5[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: ThomasRespaut <thomas.respaut@edu.devinci.fr>
+Date:   Thu Sep 12 18:21:08 2024 +0200
+
+    Ajout de .env au gitignore et suppression du suivi Git
+
+ .env                                           |  0
+ .idea/.gitignore                               |  8 [32m+++[m
+ .idea/Projet PI A5.iml                         | 10 [32m++++[m
+ .idea/inspectionProfiles/Project_Default.xml   | 67 [32m++++++++++++++++++++++++++[m
+ .idea/inspectionProfiles/profiles_settings.xml |  6 [32m+++[m
+ .idea/misc.xml                                 |  4 [32m++[m
+ .idea/modules.xml                              |  8 [32m+++[m
+ .idea/vcs.xml                                  |  6 [32m+++[m
+ cortex.py                                      |  0
+ functions.py                                   |  0
+ main.py                                        |  0
+ ok_google.py                                   |  0
+ package.json                                   | 10 [32m++++[m
+ tools.json                                     |  0
+ 14 files changed, 119 insertions(+)
