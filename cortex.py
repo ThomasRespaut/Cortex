@@ -208,10 +208,10 @@ class Cortex:
 
     def keyword_detection(self):
         access_key = os.getenv('picovoice_api_key')
-        keyword_path = ".venv/Lib/site-packages/pvporcupine/resources/keyword_files/windows/Ok-Cortex.ppn"
+        keyword_path = "Ok-Cortex.ppn"
 
         porcupine = pvporcupine.create(access_key=access_key, keyword_paths=[keyword_path],
-                                       model_path=".venv/Lib/site-packages/pvporcupine/resources/model/porcupine_params_fr.pv")
+                                       model_path="porcupine_params_fr.pv")
 
         pa = pyaudio.PyAudio()
         audio_stream = pa.open(
