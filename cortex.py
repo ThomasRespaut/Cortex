@@ -23,7 +23,7 @@ names_to_functions = {
 load_dotenv()
 
 class Cortex:
-    def __init__(self):
+    def __init__(self,input_mode="voice",output_mode="voice"):
         openai_api_key = os.getenv('OPENAI_API_KEY')
         self.openai_client = OpenAI(api_key=openai_api_key) if openai_api_key else None
         self.voice = "echo"
@@ -43,6 +43,9 @@ class Cortex:
         self.messages = [
             {"role": "system", "content": self.system},
         ]
+
+        self.input_mode = input_mode
+        self.output_mode = output_mode
 
     def generate_speach(self, text):
         if self.openai_client is None:
@@ -244,13 +247,13 @@ class Cortex:
         print("Aucune réponse détectée pendant 5 secondes, retour à la détection du mot clé.")
         return None
 
-    def conversation(self, input_mode="voice", output_mode="voice"):
+    def conversation(self):
 
         print("Ok Cortex pour démarrer...")  # Message de démarrage
         while True:
             user_response = None
 
-            if input_mode == "voice":
+            if self.input_mode == "voice":
                 if self.first_keyword_detection:
                     if not self.keyword_detection():
                         continue
@@ -264,7 +267,7 @@ class Cortex:
                     self.first_keyword_detection = True
                     continue
 
-            if input_mode == "text":
+            if self.input_mode == "text":
                 user_response = input("Utilisateur : ")
 
                 if user_response.lower() in ["quit", "stop", "exit"]:
@@ -277,7 +280,7 @@ class Cortex:
             ai_response = self.generate_text(user_response)
             print(f"Cortex : {ai_response}")
 
-            if output_mode == "voice":
+            if self.output_mode == "voice":
                 if isinstance(ai_response, str) and ai_response.strip():
                     audio_stream = self.generate_speach(ai_response)
                     if audio_stream:
@@ -289,7 +292,5 @@ class Cortex:
 
 
 if __name__ == "__main__":
-    cortex = Cortex()
-    input_mode = "voice"
-    output_mode = "voice"
-    cortex.conversation(input_mode, output_mode)
+    cortex = Cortex(input_mode = "text",output_mode = "text")
+    cortex.conversation()
