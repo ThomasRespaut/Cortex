@@ -292,5 +292,5 @@ class Cortex:
 
 
 if __name__ == "__main__":
-    cortex = Cortex(input_mode = "text",output_mode = "text")
+    cortex = Cortex(input_mode = "voice",output_mode = "voice")
     cortex.conversation()

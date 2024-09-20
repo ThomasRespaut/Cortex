@@ -47,7 +47,6 @@ class Apple_Assistant():
         except Exception as e:
             print(f"Erreur lors de la récupération du niveau de batterie : {e}")
             self.battery_level = "N/A"
-
     def get_location(self):
         self.location = self.client.iphone.location()
         self.latitude = self.location.get("latitude","0")
@@ -88,18 +87,15 @@ class Apple_Assistant():
         # Récupère tous les contacts
         self.contacts = self.client.contacts.all()
 
-        # Si un nom est fourni, filtre les contacts dont le prénom commence par le texte saisi (insensible à la casse)
         if name:
             self.contacts = [contact for contact in self.contacts if
                              contact.get('firstName', '').lower().startswith(name.lower())]
 
-        # Affiche les contacts filtrés avec seulement les informations importantes
         if not self.contacts:
             print(f"Aucun contact trouvé dont le prénom commence par '{name}'.")
         else:
             print(f"{len(self.contacts)} contact(s) trouvé(s) dont le prénom commence par '{name}':")
             for contact in self.contacts:
-                # Récupération des informations importantes
                 first_name = contact.get('firstName', 'Prénom indisponible')
                 last_name = contact.get('lastName', '')
                 birthday = contact.get('birthday', '')
@@ -107,7 +103,6 @@ class Apple_Assistant():
                 emails = [email.get('field', 'Email indisponible') for email in contact.get('emails', [])]
                 addresses = [address.get('field', 'Adresse indisponible') for address in contact.get('addresses', [])]
 
-                # Construction de la chaîne d'affichage ordonnée par importance
                 contact_info = f"Prénom: {first_name}"
                 if last_name:
                     contact_info += f", Nom: {last_name}"
@@ -120,7 +115,6 @@ class Apple_Assistant():
                 if addresses:
                     contact_info += f", Adresse(s): {', '.join(addresses)}"
 
-                # Affichage des informations du contact
                 print(contact_info)
 
     def play_sound(self):
@@ -131,14 +125,21 @@ class Apple_Assistant():
         message = 'Merci de me rendre mon téléphone.'
         self.client.iphone.lost_device(phone_number, message)
 
-    # Exemple d'appel de la fonction
-    # apple.get_contacts("Tom") afficherait les informations importantes pour les contacts dont le prénom commence par "Tom"
-
 
 if __name__ == "__main__":
     apple = Apple_Assistant()
 
-    apple.play_sound()
+    apple.get_iphone_battery()
+    print(apple.battery_level)
+
+    apple.get_location()
+    print(apple.location)
+    print(apple.adress)
+
+    apple.get_weather()
+    print(apple.weather)
+
+    print(apple.get_contacts("Edvin"))
 
 
 
