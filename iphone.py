@@ -1,14 +1,12 @@
 import os
-
 import requests
-
 from pyicloud import PyiCloudService
 from pyicloud.exceptions import PyiCloudFailedLoginException, PyiCloudAPIResponseException
-
 from dotenv import load_dotenv
+
 load_dotenv()
 
-class Apple_Assistant():
+class AppleAssistant:
     def __init__(self):
         self.username = os.getenv("apple_username")
         self.password = os.getenv("apple_password")
@@ -22,125 +20,121 @@ class Apple_Assistant():
                 code = input("Entrez le code reçu : ")
                 result = self.client.validate_2fa_code(code)
                 if not result:
-                    print("Impossible de vérifier le code de sécurité.")
+                    raise ValueError("Impossible de vérifier le code de sécurité.")
 
-
-        except PyiCloudFailedLoginException as e:
-            print(f"Impossible de se connecter à Icloud : {e}")
+        except (PyiCloudFailedLoginException, PyiCloudAPIResponseException, ValueError) as e:
             self.client = None
-
-        except PyiCloudAPIResponseException as e:
-            print(f"Erreur dans l'API : {e}")
-            self.client = None
-
-        except Exception as e:
-            print(f"Erreur : {e}")
-            self.client = None
+            self.error_message = f"Erreur lors de la connexion à iCloud : {e}"
 
     def get_iphone_battery(self):
+        if not self.client:
+            return {"status": "error", "message": self.error_message}
         try:
             iphone_info = self.client.iphone.status()
             battery_level = iphone_info.get("batteryLevel", None)
-
-            self.battery_level = f"{battery_level * 100:.0f}%" if battery_level is not None else "N/A"
-
+            battery_message = f"Niveau de batterie : {battery_level * 100:.0f}%" if battery_level is not None else "Niveau de batterie indisponible"
+            return {"status": "success", "battery_level": battery_message}
         except Exception as e:
-            print(f"Erreur lors de la récupération du niveau de batterie : {e}")
-            self.battery_level = "N/A"
+            return {"status": "error", "message": f"Erreur lors de la récupération du niveau de batterie : {e}"}
+
     def get_location(self):
-        self.location = self.client.iphone.location()
-        self.latitude = self.location.get("latitude","0")
-        self.longitude = self.location.get("longitude","0")
-
+        if not self.client:
+            return {"status": "error", "message": self.error_message}
         try:
-            url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={self.latitude},{self.longitude}&key={self.maps_api_key}"
+            self.location = self.client.iphone.location()
+            latitude = self.location.get("latitude", "0")
+            longitude = self.location.get("longitude", "0")
+            url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={self.maps_api_key}"
             response = requests.get(url)
-            address = response.json()
-            if address["status"] == "OK":
-                self.adress = address["results"][0]["formatted_address"]
-            else:
-                self.adress = "Adresse inconnue"
-
+            address_data = response.json()
+            address = address_data["results"][0]["formatted_address"] if address_data["status"] == "OK" else "Adresse inconnue"
+            return {"status": "success", "latitude": latitude, "longitude": longitude, "address": address}
         except Exception as e:
-            print(f"Erreur dans la récupération de l'adresse : {e}")
-            self.adress = "Adresse inconnue"
+            return {"status": "error", "message": f"Erreur lors de la récupération de l'adresse : {e}"}
 
     def get_weather(self):
+        location_result = self.get_location()
+        if location_result["status"] == "error":
+            return location_result
         try:
-            self.get_location()
-            url = f"http://api.openweathermap.org/data/2.5/weather?lat={self.latitude}&lon={self.longitude}&appid={self.openweathermap_api_key}&units=metric"
+            latitude = location_result["latitude"]
+            longitude = location_result["longitude"]
+            url = f"http://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={self.openweathermap_api_key}&units=metric"
             response = requests.get(url)
             weather = response.json()
             if weather['cod'] == 200:
                 weather_main = weather['weather'][0]['main']
                 weather_description = weather['weather'][0]['description']
                 weather_temp = weather['main']["temp"]
-                self.weather = f"Conditions météo : {weather_main}, {weather_description}. Température : {weather_temp}°C."
+                weather_message = f"Conditions météo : {weather_main}, {weather_description}. Température : {weather_temp}°C."
+                return {"status": "success", "weather": weather_message}
             else:
-                self.weather = "Informations météorologiques non disponibles."
-
+                return {"status": "error", "message": "Informations météorologiques non disponibles."}
         except Exception as e:
-            print(f"Erreur lors de la récupération de la météo: {e}")
-            self.weather = "Informations météorologiques non disponibles."
+            return {"status": "error", "message": f"Erreur lors de la récupération de la météo : {e}"}
 
     def get_contacts(self, name=None):
-        # Récupère tous les contacts
-        self.contacts = self.client.contacts.all()
+        if not self.client:
+            return {"status": "error", "message": self.error_message}
+        try:
+            contacts = self.client.contacts.all()
+            if name:
+                contacts = [contact for contact in contacts if contact.get('firstName', '').lower().startswith(name.lower())]
 
-        if name:
-            self.contacts = [contact for contact in self.contacts if
-                             contact.get('firstName', '').lower().startswith(name.lower())]
+            if not contacts:
+                return {"status": "error", "message": f"Aucun contact trouvé dont le prénom commence par '{name}'."}
 
-        if not self.contacts:
-            print(f"Aucun contact trouvé dont le prénom commence par '{name}'.")
-        else:
-            print(f"{len(self.contacts)} contact(s) trouvé(s) dont le prénom commence par '{name}':")
-            for contact in self.contacts:
+            contact_list = []
+            for contact in contacts:
                 first_name = contact.get('firstName', 'Prénom indisponible')
                 last_name = contact.get('lastName', '')
-                birthday = contact.get('birthday', '')
                 phones = [phone.get('field', 'Numéro indisponible') for phone in contact.get('phones', [])]
                 emails = [email.get('field', 'Email indisponible') for email in contact.get('emails', [])]
-                addresses = [address.get('field', 'Adresse indisponible') for address in contact.get('addresses', [])]
+                contact_info = {
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "phones": phones,
+                    "emails": emails
+                }
+                contact_list.append(contact_info)
 
-                contact_info = f"Prénom: {first_name}"
-                if last_name:
-                    contact_info += f", Nom: {last_name}"
-                if phones:
-                    contact_info += f", Numéro(s): {', '.join(phones)}"
-                if emails:
-                    contact_info += f", Email(s): {', '.join(emails)}"
-                if birthday:
-                    contact_info += f", Anniversaire: {birthday}"
-                if addresses:
-                    contact_info += f", Adresse(s): {', '.join(addresses)}"
+            return {"status": "success", "contacts": contact_list}
+        except Exception as e:
+            return {"status": "error", "message": f"Erreur lors de la récupération des contacts : {e}"}
 
-                print(contact_info)
+    def play_sound_on_iphone(self):
+        if not self.client:
+            return {"status": "error", "message": self.error_message}
+        try:
+            self.client.iphone.play_sound()
+            return {"status": "success", "message": "Le son a été joué sur l'iPhone."}
+        except Exception as e:
+            return {"status": "error", "message": f"Erreur lors de la lecture du son : {e}"}
 
-    def play_sound(self):
-        self.client.iphone.play_sound()
-
-    def lost_mode(self):
-        phone_number = '+33 7 62 73 98 94'
-        message = 'Merci de me rendre mon téléphone.'
-        self.client.iphone.lost_device(phone_number, message)
+    def activate_lost_mode(self):
+        if not self.client:
+            return {"status": "error", "message": self.error_message}
+        try:
+            phone_number = '+33 7 62 73 98 94'
+            message = 'Merci de me rendre mon téléphone.'
+            self.client.iphone.lost_device(phone_number, message)
+            return {"status": "success", "message": "Le mode perdu a été activé sur l'iPhone."}
+        except Exception as e:
+            return {"status": "error", "message": f"Erreur lors de l'activation du mode perdu : {e}"}
 
 
 if __name__ == "__main__":
-    apple = Apple_Assistant()
+    apple_assistant = AppleAssistant()
 
-    apple.get_iphone_battery()
-    print(apple.battery_level)
+    # Exemple d'utilisation des fonctions
+    battery_info = apple_assistant.get_iphone_battery()
+    print(battery_info)
 
-    apple.get_location()
-    print(apple.location)
-    print(apple.adress)
+    location_info = apple_assistant.get_location()
+    print(location_info)
 
-    apple.get_weather()
-    print(apple.weather)
+    weather_info = apple_assistant.get_weather()
+    print(weather_info)
 
-    print(apple.get_contacts("Edvin"))
-
-
-
-
+    contacts_info = apple_assistant.get_contacts("Edvin")
+    print(contacts_info)

@@ -31,5 +31,578 @@
         "required": ["min_value", "max_value"]
       }
     }
-  }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "recommend_media",
+      "description": "Recommander des films ou des séries en utilisant une recherche par titre ou par genre.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Le titre du média à recommander. Utilisez ce paramètre pour chercher un média spécifique par son titre."
+          },
+          "genre": {
+            "type": "string",
+            "description": "Le genre du média à recommander. Utilisez ce paramètre pour obtenir des recommandations basées sur un genre spécifique. Les genres disponibles varient selon le type de média sélectionné : \nPour les films ('movie'), vous pouvez choisir parmi : Action, Aventure, Animation, Comédie, Crime, Documentaire, Drame, Familial, Fantastique, Histoire, Horreur, Musique, Mystère, Romance, Science-fiction, Téléfilm, Thriller, Guerre, Western.\nPour les séries TV ('tv'), vous pouvez choisir parmi : Action & Adventure, Animation, Comédie, Crime, Documentaire, Drame, Familial, Kids, Mystère, News, Reality, Science-fiction & Fantastique, Soap, Talk, War & Politics, Western. Veuillez spécifier un genre correspondant au type de média choisi."
+          },
+          "media_type": {
+            "type": "string",
+            "description": "Le type de média pour la recommandation ('movie' pour film ou 'tv' pour série TV).",
+            "enum": ["movie", "tv"],
+            "default": "movie"
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "play_track",
+      "description": "Mettre la musique Spotify sur l'appareil choisi par l'utilisateur.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "track_name": {
+            "type": "string",
+            "description": "Le nom de la musique choisi par l'utilisateur."
+          }
+        },
+        "required": ["track_name"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "pause_playback",
+      "description": "Mettre en pause la lecture en cours sur Spotify.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "resume_playback",
+      "description": "Reprendre la lecture en cours sur Spotify.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "next_track",
+      "description": "Passer au morceau suivant sur Spotify.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "previous_track",
+      "description": "Revenir au morceau précédent sur Spotify.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "set_volume",
+      "description": "Définir le volume de la lecture (0 à 100).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "volume_level": {
+            "type": "integer",
+            "description": "Niveau de volume (0 à 100)."
+          }
+        },
+        "required": ["volume_level"],
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_current_playback",
+      "description": "Obtenir les informations de la lecture en cours.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "play_recommendations_track",
+      "description": "Jouer les recommandations sur Spotify, en fonction d'un titre, d'un artiste, ou d'un genre.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "track_name": {
+            "type": "string",
+            "description": "Recommandations liées au titre spécifié."
+          },
+          "artist_name": {
+            "type": "string",
+            "description": "Recommandations basées sur l'artiste spécifié."
+          },
+          "genre_name": {
+            "type": "string",
+            "description": "Recommandations basées sur le genre spécifié."
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_iphone_battery",
+      "description": "Récupère le niveau de batterie actuel de l'iPhone.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_location",
+      "description": "Récupère la position actuelle de l'iPhone et l'adresse correspondante.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_weather",
+      "description": "Récupère les informations météorologiques actuelles à l'emplacement de l'iPhone.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_contacts",
+      "description": "Récupère les contacts de l'utilisateur. Peut être filtré par prénom.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Prénom du contact recherché (optionnel)."
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "play_sound_on_iphone",
+      "description": "Fait sonner l'iPhone.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "activate_lost_mode",
+      "description": "Active le mode perdu sur l'iPhone, en fournissant un numéro de contact et un message.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "description": "Numéro de téléphone à contacter."
+          },
+          "message": {
+            "type": "string",
+            "description": "Message à afficher sur l'écran de l'iPhone perdu."
+          }
+        },
+        "required": ["phone_number", "message"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+        "name": "calculate_route",
+        "description": "Calcule un itinéraire entre deux villes.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "from_city": {
+                    "type": "string",
+                    "description": "Ville de départ pour calculer l'itinéraire."
+                },
+                "to_city": {
+                    "type": "string",
+                    "description": "Ville d'arrivée pour calculer l'itinéraire."
+                }
+            },
+            "required": ["from_city", "to_city"]
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "create_google_task",
+        "description": "Ajoute une nouvelle tâche dans Google Tasks. Utilisez cette fonction lorsqu'un utilisateur demande d'ajouter une tâche à faire ou de gérer une nouvelle tâche.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "task_title": {
+                    "type": "string",
+                    "description": "Le titre ou la description de la tâche à ajouter."
+                },
+                "task_notes": {
+                    "type": "string",
+                    "description": "Toute note ou information supplémentaire à inclure avec la tâche."
+                }
+            },
+            "required": ["task_title"]
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "create_calendar_event",
+        "description": "Créer un événement dans Google Calendar.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Nom de l'événement ou de la réunion."
+                },
+                "duration": {
+                    "type": "string",
+                    "description": "Durée de l'événement (par exemple, '2 heures' ou '30 minutes')."
+                },
+                "participants": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Liste des participants à l'événement."
+                },
+                "date_preference": {
+                    "type": "string",
+                    "description": "Préférence de date pour l'événement (format 'YYYY-MM-DD' ou 'YYYY-MM-DDTHH:MM:SS')."
+                },
+                "time_range": {
+                    "type": "string",
+                    "description": "Plage horaire préférée."
+                },
+                "location": {
+                    "type": "string",
+                    "description": "Lieu de la réunion."
+                }
+            },
+            "required": ["name", "duration", "participants"]
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "summarize_today_emails",
+        "description": "Fournir un résumé des emails du jour.",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "list_and_analyze_today_emails",
+        "description": "Lister et analyser les emails du jour, puis les déplacer dans les labels appropriés.",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "collect_emails",
+        "description": "Collecte des emails avec des filtres avancés (non-lus, boîte de réception, etc.) et possibilité d'inclure une plage de dates.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "filter_type": {
+                    "type": "string",
+                    "enum": ["unread", "inbox", "today", "week", "month", "year"],
+                    "description": "Filtrer les emails par état ou période."
+                },
+                "specific_recipient": {
+                    "type": "string",
+                    "description": "Filtrer les emails envoyés à un destinataire spécifique."
+                },
+                "specific_word": {
+                    "type": "string",
+                    "description": "Filtrer les emails contenant un mot spécifique dans le sujet."
+                },
+                "start_date": {
+                    "type": "string",
+                    "description": "Filtrer les emails reçus après cette date (format : YYYY-MM-DD)."
+                },
+                "end_date": {
+                    "type": "string",
+                    "description": "Filtrer les emails reçus avant cette date (format : YYYY-MM-DD)."
+                }
+            },
+            "required": []
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "mark_as_read",
+        "description": "Marque un message comme lu.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "message_id": {
+                    "type": "string",
+                    "description": "ID du message à marquer comme lu."
+                },
+                "user_id": {
+                    "type": "string",
+                    "description": "ID de l'utilisateur (par défaut 'me').",
+                    "default": "me"
+                }
+            },
+            "required": ["message_id"]
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "trash_message",
+        "description": "Mettre un message à la corbeille.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "message_id": {
+                    "type": "string",
+                    "description": "ID du message à mettre à la corbeille."
+                },
+                "user_id": {
+                    "type": "string",
+                    "description": "ID de l'utilisateur (par défaut 'me').",
+                    "default": "me"
+                }
+            },
+            "required": ["message_id"]
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "archive_message",
+        "description": "Archiver un message.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "message_id": {
+                    "type": "string",
+                    "description": "ID du message à archiver."
+                },
+                "user_id": {
+                    "type": "string",
+                    "description": "ID de l'utilisateur (par défaut 'me').",
+                    "default": "me"
+                }
+            },
+            "required": ["message_id"]
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "reply_to_message",
+        "description": "Répondre à un message.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "message_id": {
+                    "type": "string",
+                    "description": "ID du message auquel répondre."
+                },
+                "user_id": {
+                    "type": "string",
+                    "description": "ID de l'utilisateur (par défaut 'me').",
+                    "default": "me"
+                },
+                "reply_body": {
+                    "type": "string",
+                    "description": "Le corps du message de réponse."
+                }
+            },
+            "required": ["message_id", "reply_body"]
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "create_email",
+        "description": "Créer un brouillon d'email en utilisant GPT pour générer le corps de l'email.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "to": {
+                    "type": "string",
+                    "description": "Adresse email du destinataire."
+                },
+                "subject": {
+                    "type": "string",
+                    "description": "Sujet de l'email."
+                },
+                "additional_info": {
+                    "type": "string",
+                    "description": "Informations supplémentaires à inclure dans le contenu de l'email.",
+                    "default": null
+                },
+                "user_id": {
+                    "type": "string",
+                    "description": "ID de l'utilisateur (par défaut 'me').",
+                    "default": "me"
+                }
+            },
+            "required": ["to", "subject"]
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "display_draft",
+        "description": "Afficher le contenu d'un brouillon d'email basé sur son ID.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "draft_id": {
+                    "type": "string",
+                    "description": "ID du brouillon à afficher."
+                },
+                "user_id": {
+                    "type": "string",
+                    "description": "ID de l'utilisateur (par défaut 'me').",
+                    "default": "me"
+                }
+            },
+            "required": ["draft_id"]
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "create_draft_reply",
+        "description": "Créer un brouillon de réponse à un message donné en utilisant GPT pour générer le corps de la réponse.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "message_id": {
+                    "type": "string",
+                    "description": "ID du message auquel répondre."
+                },
+                "additional_info": {
+                    "type": "string",
+                    "description": "Informations supplémentaires à inclure dans la réponse.",
+                    "default": null
+                },
+                "user_id": {
+                    "type": "string",
+                    "description": "ID de l'utilisateur (par défaut 'me').",
+                    "default": "me"
+                }
+            },
+            "required": ["message_id"]
+        }
+    }
+},
+  {
+    "type": "function",
+    "function": {
+        "name": "send_draft",
+        "description": "Envoyer un brouillon d'email. Si nécessaire, modifier son contenu avant de l'envoyer.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "draft_id": {
+                    "type": "string",
+                    "description": "ID du brouillon à envoyer."
+                },
+                "content": {
+                    "type": "string",
+                    "description": "Nouveau contenu de l'email à envoyer, si une modification est nécessaire.",
+                    "default": null
+                },
+                "user_id": {
+                    "type": "string",
+                    "description": "ID de l'utilisateur (par défaut 'me').",
+                    "default": "me"
+                }
+            },
+            "required": ["draft_id"]
+        }
+    }
+}
 ]

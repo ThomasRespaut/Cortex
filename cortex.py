@@ -10,14 +10,64 @@ import os
 from dotenv import load_dotenv
 import time
 import json
-
+from database import Neo4jDatabase
+import films_and_series
+from spotify_assistant import SpotifyAssistant
+from test import IDFMAssistant
 
 from functools import partial
+
+from iphone import AppleAssistant
+from google_assistant import GoogleAssistant
+
 import functions  # Importer les fonctions du fichier functions.py
 
+# Instancier les assistants Spotify et Apple
+spotify_assistant = SpotifyAssistant()
+apple_assistant = AppleAssistant()
+idfm_assistant = IDFMAssistant()
+google_assistant = GoogleAssistant()
+
+# Créer le dictionnaire de fonctions en utilisant les instances des assistants
 names_to_functions = {
-    'get_current_time': functions.get_current_time,  # Appelle la fonction get_current_time sans arguments.
-    'generate_random_number': functions.generate_random_number  # Appelle la fonction avec les paramètres fournis.
+    # Spotify Functions
+    'get_current_time': functions.get_current_time,
+    'generate_random_number': functions.generate_random_number,
+    'recommend_media': films_and_series.recommend_media,
+    'play_track': spotify_assistant.play_track,
+    'pause_playback': spotify_assistant.pause_playback,
+    'resume_playback': spotify_assistant.resume_playback,
+    'next_track': spotify_assistant.next_track,
+    'previous_track': spotify_assistant.previous_track,
+    'set_volume': spotify_assistant.set_volume,
+    'get_current_playback': spotify_assistant.get_current_playback,
+    'play_recommendations_track': spotify_assistant.play_recommendations_track,
+
+    # Apple Functions
+    'get_iphone_battery': apple_assistant.get_iphone_battery,
+    'get_location': apple_assistant.get_location,
+    'get_weather': apple_assistant.get_weather,
+    'get_contacts': apple_assistant.get_contacts,
+    'play_sound_on_iphone': apple_assistant.play_sound_on_iphone,
+    'activate_lost_mode': apple_assistant.activate_lost_mode,
+
+    # IDFM Assistant Functions
+    'calculate_route': idfm_assistant.calculate_route,
+
+    # Google Assistant Functions
+    'create_google_task': google_assistant.create_google_task,
+    'create_calendar_event': google_assistant.create_calendar_event,
+    'summarize_today_emails': google_assistant.summarize_today_emails,
+    'list_and_analyze_today_emails': google_assistant.list_and_analyze_today_emails,
+    'collect_emails': google_assistant.collect_emails,
+    'mark_as_read': google_assistant.mark_as_read,
+    'trash_message': google_assistant.trash_message,
+    'archive_message': google_assistant.archive_message,
+    'reply_to_message': google_assistant.reply_to_message,
+    'create_email': google_assistant.create_email,
+    'display_draft': google_assistant.display_draft,
+    'create_draft_reply': google_assistant.create_draft_reply,
+    'send_draft': google_assistant.send_draft
 }
 
 load_dotenv()
@@ -31,7 +81,7 @@ class Cortex:
 
         mistral_api_key = os.getenv('MISTRAL_API_KEY')
         self.mistral_client = Mistral(api_key=mistral_api_key) if mistral_api_key else None
-        self.mistral_model = "open-mistral-nemo"
+        self.mistral_model = "ft:open-mistral-nemo:7771e396:20241004:a1df71c2"
 
         with open("tools.json", "r") as file:
             self.tools = json.load(file)
@@ -155,22 +205,51 @@ class Cortex:
             return audio_stream
 
     def generate_text(self, prompt):
+        """
+        Génère une réponse textuelle à partir d'un prompt en utilisant la RAG (Retrieval-Augmented Generation).
+        Les informations du graphe Neo4j sont récupérées et intégrées dans le contexte avant l'appel à Mistral.
+        """
         ai_response = None
 
+        # Ajouter le message utilisateur au contexte
         self.messages.append({"role": "user", "content": prompt})
+
+        # Étape 1 : Récupérer les informations de la base Neo4j (RAG)
+        try:
+            db = Neo4jDatabase()
+            graph_data = db.recuperer_informations_graph()
+
+            # Ajouter les informations pertinentes récupérées du graphe dans le contexte
+            if graph_data and "noeuds" in graph_data and "relations" in graph_data:
+                noeuds_info = "\n".join([f"{n['proprietes'].get('nom', 'Nœud sans nom')}: {n['proprietes']}" for n in
+                                         graph_data["noeuds"].values()])
+                relations_info = "\n".join(
+                    [f"{rel['type']} entre {rel['de']} et {rel['vers']}" for rel in graph_data["relations"]])
+                contexte_rag = f"Voici des informations provenant de la base de données:\nNœuds:\n{noeuds_info}\nRelations:\n{relations_info}"
+                self.messages.append({"role": "system", "content": contexte_rag})
+
+                print(self.messages)
+
+        except Exception as e:
+            print(f"Erreur lors de la récupération des informations du graphe : {e}")
+
+        # Étape 2 : Appel à Mistral pour générer la réponse basée sur le contexte
         try:
             chat_response = self.mistral_client.chat.complete(
                 model=self.mistral_model,
                 messages=self.messages,
-                tools=self.tools,
+                tools=self.tools,  # Inclure les outils pour permettre à Mistral d'appeler des fonctions
                 tool_choice="auto"
             )
+
+            print(chat_response)
 
             # Vérification et extraction de l'appel de fonction
             tool_call = chat_response.choices[0].message.tool_calls
 
             if tool_call:
                 function_name = tool_call[0].function.name
+                #print(function_name)
                 function_params = json.loads(tool_call[0].function.arguments)
 
                 try:
@@ -178,11 +257,13 @@ class Cortex:
                     if function_name in names_to_functions:
                         function_result = names_to_functions[function_name](**function_params)
 
-                        # Ajoutez le résultat de la fonction comme un message de l'utilisateur pour continuer le contexte
+                        print(function_result)
+
+                        # Ajouter le résultat de la fonction comme un message utilisateur pour continuer le contexte
                         self.messages.append({"role": "user",
                                               "content": f"Résultat de la fonction '{function_name}': {function_result}"})
 
-                        # Rappeler l'API pour générer une réponse finale avec le contexte mis à jour
+                        # Appel de Mistral pour générer une réponse finale avec le contexte mis à jour
                         chat_response_2 = self.mistral_client.chat.complete(
                             model=self.mistral_model,
                             messages=self.messages,
@@ -200,6 +281,7 @@ class Cortex:
                 # Récupération de la réponse de l'IA
                 ai_response = chat_response.choices[0].message.content
                 self.messages.append({"role": "assistant", "content": ai_response})
+                return ai_response
 
             return ai_response
 
@@ -208,6 +290,124 @@ class Cortex:
             if hasattr(e, 'data'):
                 print(f"Détails de l'erreur : {e.data}")
             return "Désolé, une erreur est survenue lors de la génération de texte."
+
+    def add_to_database(self, user_response, ai_response):
+        """
+        Utilise Mistral pour ajouter des informations supplémentaires dans la base de données via Neo4j.
+        """
+        db = Neo4jDatabase()
+
+        choice = "auto"
+
+        keywords_any = ["retiens", "sauvegarde", "enregistre", "ajoute", "intègre", "insère"]
+
+        if any(keyword in user_response.lower() for keyword in keywords_any):
+            choice = "any"
+
+        # Prompt pour guider l'IA dans l'utilisation de la fonction
+        prompt = (
+            f"Si tu apprends de nouvelles informations sur l'utilisateur ou que tu dois ajouter des informations, "
+            f"utilise absolument les tools (outils), et en particulier la fonction ajouter_entite_et_relation() "
+            f"pour les intégrer dans la base de données Neo4j. "
+            f"Utilise les informations fournies dans {user_response} et {ai_response} pour compléter la base de données. "
+            f"Ajoute des nœuds et des relations pour enrichir les données de l'utilisateur."
+            f"\nVérifie toujours si des nœuds similaires existent déjà dans la base avant d'en créer de nouveaux. "
+            f"Voici les nœuds et relations actuellement présents dans la base de données : {str(db.recuperer_informations_graph())}. "
+            f"Réutilise les nœuds existants si nécessaire."
+            f"\nSi tu ne peux pas ajouter ces informations toi-même, utilise la fonction ajouter_entite_et_relation() pour effectuer cette action."
+        )
+
+        # Ajouter le message à la conversation
+        self.messages.append({"role": "user", "content": prompt})
+
+        # Nom de la fonction cible
+        function_name_db = "ajouter_entite_et_relation"
+
+        # Définition de l'outil en JSON
+        tool_json = {
+            "type": "function",
+            "function": {
+                "name": "ajouter_entite_et_relation",
+                "description": ("Ajoute une entité et, si spécifié, une relation avec une autre entité. "
+                                "Si l'entité ou la relation cible n'existe pas, elles seront créées. "
+                                "Si relation_inverse est True, on inverse la direction de la relation. "
+                                "Exemple : entite='ActiviteSportive', proprietes={'nom': 'Natation', 'duree': '1h'}, "
+                                "relation='PRATIQUE', cible_relation='Personne', "
+                                "proprietes_relation={'prenom': 'Thomas', 'nom': 'Respaut'}, "
+                                "relation_inverse=True"),
+                "parameters": {
+                    "entite": {
+                        "type": "string",
+                        "description": "Le type d'entité à créer ou à vérifier (par exemple: ActiviteSportive, Lieu, etc.)."
+                    },
+                    "proprietes": {
+                        "type": "object",
+                        "description": "Un dictionnaire contenant les propriétés de l'entité à créer (par exemple: nom, description, duree)."
+                    },
+                    "relation": {
+                        "type": "string",
+                        "description": "Le type de relation à établir entre l'entité et l'entité cible (par exemple: PRATIQUE, VIT_A, AIME)."
+                    },
+                    "cible_relation": {
+                        "type": "string",
+                        "description": "Le type de l'entité cible avec laquelle la relation sera créée (par exemple: Personne, Plat, Lieu, etc.)."
+                    },
+                    "proprietes_relation": {
+                        "type": "object",
+                        "description": "Un dictionnaire contenant les propriétés de l'entité cible pour établir une correspondance (par exemple: nom, prenom pour une Personne)."
+                    },
+                    "relation_inverse": {
+                        "type": "boolean",
+                        "description": "Indique si la relation doit être inversée. Si True, la relation ira de l'entité cible vers l'entité principale."
+                    }
+                }
+            }
+        }
+
+        try:
+            # Appel à l'API Mistral pour obtenir une réponse de l'IA
+            chat_response = self.mistral_client.chat.complete(
+                model=self.mistral_model,
+                messages=self.messages,
+                tools=[tool_json],  # Utilisation de l'outil Neo4j en JSON
+                tool_choice=choice
+            )
+
+
+            # Extraction de l'appel de fonction (tool call)
+            tool_call = chat_response.choices[0].message.tool_calls
+
+            if tool_call:
+                # Si un appel de fonction a été généré
+                function_name = tool_call[0].function.name
+                function_params = json.loads(tool_call[0].function.arguments)
+
+                try:
+                    # Vérifie si la fonction appelée correspond à "ajouter_entite_et_relation"
+                    if function_name_db == function_name:
+                        # Vérifier que l'entité principale et l'entité cible ne soient pas les mêmes
+                        if function_params["proprietes_relation"] == function_params["proprietes"]:
+                            return "Erreur : L'entité principale et l'entité cible ne peuvent pas être les mêmes."
+
+                        # Exécute la fonction avec les paramètres extraits
+                        function_result = db.ajouter_entite_et_relation(**function_params)
+
+                        print(
+                            f"Exécution de la fonction 'ajouter_entite_et_relation' avec les paramètres : {function_params}")
+                        return f"Informations ajoutées : {function_result}"
+                    else:
+                        return f"La fonction '{function_name}' n'existe pas dans le dictionnaire."
+                except Exception as e:
+                    return f"Erreur lors de l'exécution de la fonction '{function_name}': {e}"
+
+            else:
+                return "(Pas d'informations ajoutées à la BDD.)"
+
+        except Exception as e:
+            print(f"Erreur lors de l'appel à Mistral : {e}")
+            if hasattr(e, 'data'):
+                print(f"Détails de l'erreur : {e.data}")
+            return "Désolé, une erreur est survenue lors de la génération de l'utilisation du tool."
 
     def keyword_detection(self):
         access_key = os.getenv('picovoice_api_key')
@@ -237,7 +437,7 @@ class Cortex:
 
     def wait_for_response(self, timeout=5):
         print("Le micro est activé, attente d'une réponse de l'utilisateur...")
-        filename = self.record_audio(save_to_file=True, silent_limit=0.5, threshold=500)
+        filename = self.record_audio(save_to_file=True, silent_limit=2, threshold=500)
         if filename:
             with open(filename, "rb") as audio_file:
                 user_response = self.transcribe_audio(audio_file)
@@ -278,19 +478,22 @@ class Cortex:
                 continue
 
             ai_response = self.generate_text(user_response)
-            print(f"Cortex : {ai_response}")
 
-            if self.output_mode == "voice":
-                if isinstance(ai_response, str) and ai_response.strip():
-                    audio_stream = self.generate_speach(ai_response)
-                    if audio_stream:
-                        self.play_audio(audio_stream)
-                    else:
-                        print("Impossible de générer l'audio.")
+            if ai_response:
+                print(self.add_to_database(user_response,ai_response))
+                print(f"Cortex : {ai_response}")
+
+                if self.output_mode == "voice":
+                    if isinstance(ai_response, str) and ai_response.strip():
+                        audio_stream = self.generate_speach(ai_response)
+                        if audio_stream:
+                            self.play_audio(audio_stream)
+                        else:
+                            print("Impossible de générer l'audio.")
 
             print("-" * 100)
 
 
 if __name__ == "__main__":
-    cortex = Cortex(input_mode = "voice",output_mode = "voice")
+    cortex = Cortex(input_mode="text",output_mode="text")
     cortex.conversation()

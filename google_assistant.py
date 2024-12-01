@@ -326,23 +326,101 @@ class GoogleAssistant:
             result.append(f"Une erreur s'est produite lors de la lecture du message : {error}")
             return result
 
-    def summarize_emails(self, filter_type=None, specific_recipient=None, specific_word=None):
-        """Fournir des résumés des emails."""
+    def summarize_all_emails(self, filter_type=None, specific_recipient=None, specific_word=None):
+        """Fournir un résumé global de tous les emails."""
         result = []
-        summary_data = self.collect_emails(filter_type=filter_type, specific_recipient=specific_recipient, specific_word=specific_word)
+        summary_data = self.collect_emails(filter_type=filter_type, specific_recipient=specific_recipient,
+                                           specific_word=specific_word)
+
+        if not summary_data:
+            result.append("Aucun email trouvé pour les critères spécifiés.")
+            return result
+
+        all_summaries = []  # Liste pour stocker tous les résumés individuels
 
         for email_id, email in summary_data.items():
-            response = client.chat.completions.create(
-                model="ft:gpt-4o-mini-2024-07-18:personal:t-o-m:9w6Mhcn0",
-                messages=[
-                    {"role": "system", "content": "Tu es TOM, un assistant polyvalent qui aide les utilisateurs à gérer leurs mails et bien d'autres choses."},
-                    {"role": "user", "content": f"Résumé cet email : {email['body']}"}
-                ],
-                max_tokens=150
-            )
-            summary = response.choices[0].message.content.strip()
-            result.append(f"Résumé pour l'email {email_id} : {summary}\n")
-        return result
+            try:
+                email_subject = email.get("subject", "(Pas de sujet)")
+                email_body = email.get("body", "")
+
+                # Si le body n'existe pas, utiliser tout l'email comme fallback
+                if not email_body:
+                    email_body = f"Sujet: {email_subject}\n\n{str(email)}"
+
+                # Création du prompt pour chaque email
+                prompt = (
+                    f"Voici un email à résumer.\n\n"
+                    f"Sujet de l'email : {email_subject}\n\n"
+                    f"Corps de l'email : {email_body}\n\n"
+                    f"Fournis un résumé de cet email en tenant compte du sujet et du corps."
+                )
+
+                response = client.chat.completions.create(
+                    model="ft:gpt-4o-mini-2024-07-18:personal:t-o-m:9w6Mhcn0",
+                    messages=[
+                        {"role": "system",
+                         "content": "Tu es TOM, un assistant polyvalent qui aide les utilisateurs à gérer leurs mails et bien d'autres choses."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    max_tokens=150
+                )
+                summary = response.choices[0].message.content.strip()
+                all_summaries.append(
+                    f"Résumé pour l'email {email_id} : {summary}\n")  # Ajouter chaque résumé à la liste
+            except Exception as e:
+                all_summaries.append(f"Erreur lors du résumé de l'email {email_id} : {str(e)}")
+
+        # Retourner un résumé global avec tous les résumés concaténés
+        result.append("Résumé global de tous les emails :\n\n" + "\n".join(all_summaries))
+        return "\n".join(result)
+
+    def summarize_today_emails(self):
+        """Fournir un résumé des emails du jour."""
+        result = []
+
+        # Collecte des emails du jour
+        summary_data = self.collect_emails(filter_type='today')
+
+        if not summary_data:
+            result.append("Aucun email trouvé aujourd'hui.")
+            return result
+
+        all_summaries = []  # Liste pour stocker tous les résumés individuels
+
+        for email_id, email in summary_data.items():
+            try:
+                email_subject = email.get("subject", "(Pas de sujet)")
+                email_body = email.get("body", "")
+
+                # Si le corps de l'email n'existe pas, utiliser tout l'email comme fallback
+                if not email_body:
+                    email_body = f"Sujet: {email_subject}\n\n{str(email)}"
+
+                # Création du prompt pour chaque email
+                prompt = (
+                    f"Voici un email à résumer.\n\n"
+                    f"Sujet de l'email : {email_subject}\n\n"
+                    f"Corps de l'email : {email_body}\n\n"
+                    f"Fournis un résumé de cet email en tenant compte du sujet et du corps."
+                )
+
+                response = client.chat.completions.create(
+                    model="ft:gpt-4o-mini-2024-07-18:personal:t-o-m:9w6Mhcn0",
+                    messages=[
+                        {"role": "system",
+                         "content": "Tu es TOM, un assistant polyvalent qui aide les utilisateurs à gérer leurs mails et bien d'autres choses."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    max_tokens=150
+                )
+                summary = response.choices[0].message.content.strip()
+                all_summaries.append(f"Résumé pour l'email {email_id} : {summary}\n")
+            except Exception as e:
+                all_summaries.append(f"Erreur lors du résumé de l'email {email_id} : {str(e)}")
+
+        # Retourner un résumé global avec tous les résumés concaténés
+        result.append("Résumé global des emails du jour :\n\n" + "\n".join(all_summaries))
+        return "\n".join(result)
 
     def list_and_interact_with_messages(self, filter_type=None, specific_recipient=None, specific_word=None, max_results=10):
         """Lister et interagir avec les messages Gmail, avec des filtres."""
@@ -369,10 +447,17 @@ class GoogleAssistant:
             "1. 'category' : La catégorie de l'email (e.g., Travail, Personnel, Finance, Promotions, Spam, Phishing), "
             "2. 'priority_score' : Un score de priorité entre 1 et 10 basé sur l'importance de l'email, "
             "3. 'tasks' : Une liste des tâches à effectuer basées sur le contenu de l'email en français, "
-            "4. 'sender' : L'adresse email de l'expéditeur, "
-            "5. 'recipient' : L'adresse email du destinataire, "
-            "6. 'subject' : L'objet de l'email, "
-            "7. 'date' : La date à laquelle l'email a été envoyé. "
+            "4. 'meetings' : Une liste d'événements à planifier dans le calendrier, avec les détails nécessaires : "
+            "   - 'name' : Nom de l'événement ou de la réunion "
+            "   - 'duration' : Durée de l'événement "
+            "   - 'participants' : Liste des participants (nom ou email) "
+            "   - 'date_preference' : Préférence de date (si précisée) "
+            "   - 'time_range' : Plage horaire préférée (si précisée) "
+            "   - 'location' : Lieu de la réunion (si précisé) "
+            "5. 'sender' : L'adresse email de l'expéditeur, "
+            "6. 'recipient' : L'adresse email du destinataire, "
+            "7. 'subject' : L'objet de l'email, "
+            "8. 'date' : La date à laquelle l'email a été envoyé. "
             "Voici l'email :\n"
             f"Expéditeur : {email.get('sender', 'Inconnu')}\n"
             f"Destinataire : {email.get('recipient', 'Inconnu')}\n"
@@ -405,87 +490,77 @@ class GoogleAssistant:
 
         return analysis
 
-    def list_existing_labels(self):
-        """Lister tous les labels existants dans Gmail."""
-        service = self.gmail_service
-        result = []
+    def create_calendar_event(self, name, duration, participants, date_preference, time_range, location):
         try:
-            labels = service.users().labels().list(userId='me').execute().get('labels', [])
-            return labels
-        except HttpError as error:
-            result.append(f"Une erreur s'est produite lors de la récupération des labels : {error}")
-            return result
+            # Gestion de la date et de l'heure
+            if date_preference:
+                try:
+                    # Si une heure est précisée dans la date
+                    start_time = datetime.strptime(date_preference, "%Y-%m-%dT%H:%M:%S")
+                except ValueError:
+                    # Si la date est au format '%Y-%m-%d', ajouter une heure par défaut (09:00)
+                    start_time = datetime.strptime(date_preference, "%Y-%m-%d")
+                    start_time = start_time.replace(hour=9, minute=0)
+            else:
+                # Si aucune date n'est précisée, mettre par défaut à demain à 09:00
+                start_time = datetime.now() + timedelta(days=1)
+                start_time = start_time.replace(hour=9, minute=0)
 
-    def create_labels_if_not_exist(self, labels):
-        """Créer les labels dans Gmail s'ils n'existent pas."""
-        result = []
-        service = self.gmail_service
+            # Définir la durée de la réunion
+            if "heures" in duration:
+                hours = int(duration.split()[0])
+                end_time = start_time + timedelta(hours=hours)
+            elif "minutes" in duration:
+                minutes = int(duration.split()[0])
+                end_time = start_time + timedelta(minutes=minutes)
+            else:
+                # Par défaut, durée de 1 heure
+                end_time = start_time + timedelta(hours=1)
 
-        try:
-            existing_labels = service.users().labels().list(userId='me').execute().get('labels', [])
-            existing_label_names = {label['name'] for label in existing_labels}
-
-            for label in labels:
-                if label not in existing_label_names:
-                    label_body = {
-                        "labelListVisibility": "labelShow",
-                        "messageListVisibility": "show",
-                        "name": label
-                    }
-                    service.users().labels().create(userId='me', body=label_body).execute()
-                    result.append(f"Label '{label}' créé.")
-
-        except HttpError as error:
-            result.append(f"Une erreur s'est produite lors de la création des labels : {error}")
-        return result
-
-    def move_email_to_label(self, email_id, category):
-        """Déplace un email vers le label approprié selon la catégorie."""
-        result = []
-        try:
-            label_mapping = {
-                'travail': 'Travail',
-                'personnel': 'Personnel',
-                'finance': 'Finance',
-                'promotions': 'Promotions',
-                'spam': 'Spam',
-                'phishing': 'Spam',
+            # Création de l'événement
+            event = {
+                'summary': name,
+                'description': f"Réunion planifiée avec : {', '.join(participants)}",
+                'location': location if location != 'Lieu non précisé' else 'Non spécifié',
+                'start': {
+                    'dateTime': start_time.isoformat(),
+                    'timeZone': 'Europe/Paris',
+                },
+                'end': {
+                    'dateTime': end_time.isoformat(),
+                    'timeZone': 'Europe/Paris',
+                },
+                'attendees': [{'email': p} for p in participants if '@' in p]
+                # Ajouter les participants s'ils ont une adresse email
             }
 
-            existing_labels = self.list_existing_labels()
-            label_id_map = {label['name'].lower(): label['id'] for label in existing_labels}
-
-            label_name = label_mapping.get(category.lower())
-
-            if label_name:
-                label_id = label_id_map.get(label_name.lower())
-
-                if label_id:
-                    self.gmail_service.users().messages().modify(
-                        userId='me',
-                        id=email_id,
-                        body={'addLabelIds': [label_id]}
-                    ).execute()
-
-                    result.append(f"Email ID {email_id} déplacé vers le label '{label_name}' avec ID '{label_id}'.")
-                else:
-                    result.append(f"Aucun label trouvé pour la catégorie '{category}'. Vérifiez si le label est bien créé et mappé correctement.")
-            else:
-                result.append(f"Catégorie '{category}' non reconnue.")
-
+            event_result = self.calendar_service.events().insert(calendarId='primary', body=event).execute()
+            return f"Événement ajouté au calendrier : {event_result['summary']} pour le {start_time.strftime('%Y-%m-%d %H:%M:%S')}."
         except HttpError as error:
-            result.append(f"Une erreur s'est produite lors du déplacement de l'email ID {email_id} : {error}")
-        return result
+            return f"Erreur lors de la création de l'événement dans le calendrier : {error}"
+        except ValueError as e:
+            return f"Erreur lors du formatage de la date : {e}"
+
+    def create_google_task(self, task_title, task_notes):
+        """Créer une tâche dans Google Tasks."""
+        try:
+            task = {
+                'title': task_title,
+                'notes': task_notes,
+                'due': (datetime.now() + timedelta(days=1)).isoformat() + 'Z'  # Ajouter une échéance pour le jour suivant
+            }
+            task_result = self.tasks_service.tasks().insert(tasklist='@default', body=task).execute()
+            return f"Tâche ajoutée à Google Tasks : {task_result['title']}."
+        except HttpError as error:
+            return f"Erreur lors de la création de la tâche dans Google Tasks : {error}"
 
     def list_and_analyze_emails(self, filter_type=None, specific_recipient=None, specific_word=None):
         """Lister et analyser les emails, puis les déplacer dans les labels appropriés."""
         result = []
 
-        necessary_labels = ['Travail', 'Personnel', 'Finance', 'Promotions', 'Phishing']
-        label_result = self.create_labels_if_not_exist(necessary_labels)
-        result.extend(label_result)
-
-        emails = self.collect_emails(filter_type=filter_type, specific_recipient=specific_recipient, specific_word=specific_word)
+        # Collecte des emails
+        emails = self.collect_emails(filter_type=filter_type, specific_recipient=specific_recipient,
+                                     specific_word=specific_word)
 
         if not emails:
             result.append('Aucun message trouvé.')
@@ -494,8 +569,10 @@ class GoogleAssistant:
         result.append(f'{len(emails)} messages trouvés :')
 
         tasks_summary = []
+        meetings_summary = []
 
         for email_id, email in emails.items():
+            # Analyse de l'email
             analysis = self.analyze_email(email)
 
             subject = email.get('subject', 'Aucun sujet')
@@ -504,28 +581,166 @@ class GoogleAssistant:
             category = analysis.get('category', 'Inconnu')
             priority_score = analysis.get('priority_score', 0)
             tasks = analysis.get('tasks', [])
+            meetings = analysis.get('meetings', [])
 
             result.append(f"- ID : {email_id} | Sujet : {subject} | De : {sender} | Date : {date}")
             result.append(f"  Catégorie : {category.capitalize()} | Priorité : {priority_score}")
 
+            # Gérer les tâches à ajouter à Google Tasks
             if tasks:
                 result.append("  Tâches à effectuer :")
                 for task in tasks:
                     result.append(f"    - {task}")
                     tasks_summary.append((priority_score, task, subject, sender, date))
+
+                    if int(priority_score) > 5:
+                        # Ajouter chaque tâche à Google Tasks
+                        google_task_result = self.create_google_task(task, f"Email de {sender}, sujet : {subject}")
+                        result.append(google_task_result)
             else:
                 result.append("  Aucune tâche détectée.")
 
-            result.append("\n" + "-"*80 + "\n")
+            # Gérer les réunions à planifier
+            if meetings:
+                result.append("  Réunions à planifier :")
+                for meeting in meetings:
+                    meeting_name = meeting.get('name', 'Réunion sans nom')
+                    duration = meeting.get('duration', 'Durée non précisée')
+                    participants = meeting.get('participants', [])
+                    date_preference = meeting.get('date_preference', 'Date non précisée')
+                    time_range = meeting.get('time_range', 'Plage horaire non précisée')
+                    location = meeting.get('location', 'Lieu non précisé')
 
+                    meeting_info = (
+                        f"    - {meeting_name} | Durée : {duration} | Participants : {', '.join(participants)} | "
+                        f"Date : {date_preference} | Plage horaire : {time_range} | Lieu : {location}"
+                    )
+                    result.append(meeting_info)
+
+                    # Ajouter la réunion à la liste des réunions à planifier
+                    meetings_summary.append(
+                        (meeting_name, duration, participants, date_preference, time_range, location, subject, sender))
+
+                    # Créer un événement dans le calendrier en fonction des disponibilités
+                    calendar_result = self.create_calendar_event(
+                        meeting_name, duration, participants, date_preference, time_range, location
+                    )
+                    result.append(calendar_result)
+            else:
+                result.append("  Aucune réunion à planifier.")
+
+            result.append("\n" + "-" * 80 + "\n")
+
+        # Résumé des tâches par priorité
         tasks_summary.sort(reverse=True, key=lambda x: x[0])
-
         result.append("Résumé des tâches à effectuer, ordonnées par priorité :\n")
         for priority_score, task, subject, sender, date in tasks_summary:
             result.append(f"Tâche : {task}")
             result.append(f"  Priorité : {priority_score} | Sujet : {subject} | De : {sender} | Date : {date}\n")
 
-        return result
+        # Résumé des réunions à planifier
+        if meetings_summary:
+            result.append("Résumé des réunions à planifier :\n")
+            for meeting_name, duration, participants, date_preference, time_range, location, subject, sender in meetings_summary:
+                result.append(f"Réunion : {meeting_name}")
+                result.append(
+                    f"  Durée : {duration} | Participants : {', '.join(participants)} | Date : {date_preference}")
+                result.append(
+                    f"  Plage horaire : {time_range} | Lieu : {location} | Sujet : {subject} | De : {sender}\n")
+
+        return str(result)
+
+    def list_and_analyze_today_emails(self):
+        """Lister et analyser les emails du jour, puis les déplacer dans les labels appropriés."""
+        result = []
+
+        # Collecte des emails du jour
+        emails = self.collect_emails(filter_type='today')
+
+        if not emails:
+            result.append('Aucun message trouvé aujourd\'hui.')
+            return result
+
+        result.append(f'{len(emails)} messages trouvés aujourd\'hui :')
+
+        tasks_summary = []
+        meetings_summary = []
+
+        for email_id, email in emails.items():
+            # Analyse de l'email
+            analysis = self.analyze_email(email)
+
+            subject = email.get('subject', 'Aucun sujet')
+            sender = analysis.get('sender', 'Inconnu')
+            date = analysis.get('date', 'Inconnue')
+            category = analysis.get('category', 'Inconnu')
+            priority_score = analysis.get('priority_score', 0)
+            tasks = analysis.get('tasks', [])
+            meetings = analysis.get('meetings', [])
+
+            result.append(f"- ID : {email_id} | Sujet : {subject} | De : {sender} | Date : {date}")
+            result.append(f"  Catégorie : {category.capitalize()} | Priorité : {priority_score}")
+
+            # Gérer les tâches
+            if tasks:
+                result.append("  Tâches à effectuer :")
+                for task in tasks:
+                    result.append(f"    - {task}")
+                    tasks_summary.append((priority_score, task, subject, sender, date))
+
+                    # Ajouter chaque tâche à Google Tasks si priorité > 5
+                    if int(priority_score) > 5:
+                        google_task_result = self.create_google_task(task, f"Email de {sender}, sujet : {subject}")
+                        result.append(google_task_result)
+            else:
+                result.append("  Aucune tâche détectée.")
+
+            # Gérer les réunions
+            if meetings:
+                result.append("  Réunions à planifier :")
+                for meeting in meetings:
+                    meeting_name = meeting.get('name', 'Réunion sans nom')
+                    duration = meeting.get('duration', 'Durée non précisée')
+                    participants = meeting.get('participants', [])
+                    date_preference = meeting.get('date_preference', 'Date non précisée')
+                    time_range = meeting.get('time_range', 'Plage horaire non précisée')
+                    location = meeting.get('location', 'Lieu non précisé')
+
+                    result.append(
+                        f"    - {meeting_name} | Durée : {duration} | Participants : {', '.join(participants)} | "
+                        f"Date : {date_preference} | Plage horaire : {time_range} | Lieu : {location}"
+                    )
+
+                    meetings_summary.append(
+                        (meeting_name, duration, participants, date_preference, time_range, location, subject, sender))
+
+                    # Créer un événement dans le calendrier
+                    calendar_result = self.create_calendar_event(meeting_name, duration, participants, date_preference,
+                                                                 time_range, location)
+                    result.append(calendar_result)
+            else:
+                result.append("  Aucune réunion à planifier.")
+
+            result.append("\n" + "-" * 80 + "\n")
+
+        # Résumé des tâches
+        tasks_summary.sort(reverse=True, key=lambda x: x[0])
+        result.append("Résumé des tâches à effectuer, ordonnées par priorité :\n")
+        for priority_score, task, subject, sender, date in tasks_summary:
+            result.append(f"Tâche : {task}")
+            result.append(f"  Priorité : {priority_score} | Sujet : {subject} | De : {sender} | Date : {date}\n")
+
+        # Résumé des réunions
+        if meetings_summary:
+            result.append("Résumé des réunions à planifier :\n")
+            for meeting_name, duration, participants, date_preference, time_range, location, subject, sender in meetings_summary:
+                result.append(f"Réunion : {meeting_name}")
+                result.append(
+                    f"  Durée : {duration} | Participants : {', '.join(participants)} | Date : {date_preference}")
+                result.append(
+                    f"  Plage horaire : {time_range} | Lieu : {location} | Sujet : {subject} | De : {sender}\n")
+
+        return str(result)
 
     def create_email(self, to, subject, additional_info=None, user_id='me'):
         """Créer un brouillon d'email en utilisant GPT pour générer le corps de l'email."""
@@ -758,4 +973,6 @@ if __name__ == '__main__':
     google_assistant = GoogleAssistant()
 
     # Récupérer les emails du jour
-    google_assistant.list_and_interact_with_messages(filter_type='today')
+    result = google_assistant.summarize_all_emails(filter_type='today')
+
+    print(result)
