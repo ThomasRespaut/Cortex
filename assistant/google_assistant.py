@@ -26,8 +26,8 @@ mistral_client = Mistral(api_key=mistral_api_key) if mistral_api_key else None
 
 
 # Chemin vers les fichiers credentials et token
-CREDENTIALS_FILE = "google_secret.json"
-TOKEN_FILE = "token_google.json"
+CREDENTIALS_FILE = "../oauth2/google_secret.json"
+TOKEN_FILE = "../oauth2/token_google.json"
 
 class GoogleAssistant:
     def __init__(self):
