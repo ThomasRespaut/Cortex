@@ -11,12 +11,12 @@ from dotenv import load_dotenv
 import time
 import json
 from database.database import Neo4jDatabase
-from assistant import films_and_series, functions
-from assistant.spotify_assistant import SpotifyAssistant
-from assistant.ratp_assistant import IDFMAssistant
-
-from assistant.iphone import AppleAssistant
-from assistant.google_assistant import GoogleAssistant
+from assistant.films_and_series import films_and_series
+from assistant.spotify.spotify_assistant import SpotifyAssistant
+from assistant.ratp.ratp_assistant import IDFMAssistant
+from assistant import functions
+from assistant.apple.iphone import AppleAssistant
+from assistant.google.google_assistant import GoogleAssistant
 
 # Instancier les assistants Spotify et Apple
 spotify_assistant = SpotifyAssistant()
@@ -224,7 +224,7 @@ class Cortex:
                 contexte_rag = f"Voici des informations provenant de la base de données:\nNœuds:\n{noeuds_info}\nRelations:\n{relations_info}"
                 self.messages.append({"role": "system", "content": contexte_rag})
 
-                print(self.messages)
+                #print(self.messages)
 
         except Exception as e:
             print(f"Erreur lors de la récupération des informations du graphe : {e}")
@@ -238,7 +238,7 @@ class Cortex:
                 tool_choice="auto"
             )
 
-            print(chat_response)
+            #print(chat_response)
 
             # Vérification et extraction de l'appel de fonction
             tool_call = chat_response.choices[0].message.tool_calls
@@ -253,7 +253,7 @@ class Cortex:
                     if function_name in names_to_functions:
                         function_result = names_to_functions[function_name](**function_params)
 
-                        print(function_result)
+                        #print(function_result)
 
                         # Ajouter le résultat de la fonction comme un message utilisateur pour continuer le contexte
                         self.messages.append({"role": "user",
@@ -476,7 +476,7 @@ class Cortex:
             ai_response = self.generate_text(user_response)
 
             if ai_response:
-                print(self.add_to_database(user_response,ai_response))
+                #print(self.add_to_database(user_response,ai_response))
                 print(f"Cortex : {ai_response}")
 
                 if self.output_mode == "voice":
@@ -491,5 +491,5 @@ class Cortex:
 
 
 if __name__ == "__main__":
-    cortex = Cortex(input_mode="text",output_mode="text")
+    cortex = Cortex(input_mode="text",output_mode="voice")
     cortex.conversation()
