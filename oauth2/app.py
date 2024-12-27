@@ -153,7 +153,7 @@ def recently_played():
 def login_google():
     session.clear()  # Clear session to avoid any previous state issues
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        'google_secret.json', scopes=GOOGLE_SCOPES)
+        '../assistant/google/google_secret.json', scopes=GOOGLE_SCOPES)
     flow.redirect_uri = url_for('callback_google', _external=True)
 
     authorization_url, state = flow.authorization_url(
@@ -168,7 +168,7 @@ def callback_google():
     state = session['state']
 
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        'google_secret.json', scopes=GOOGLE_SCOPES, state=state)
+        '../assistant/google/google_secret.json', scopes=GOOGLE_SCOPES, state=state)
     flow.redirect_uri = url_for('callback_google', _external=True)
 
     authorization_response = request.url

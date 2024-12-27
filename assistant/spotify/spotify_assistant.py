@@ -9,7 +9,7 @@ SPOTIPY_CLIENT_SECRET = "b127ca139a524d4fa1045ba4202c0f1e"
 SPOTIPY_REDIRECT_URI = "http://localhost:8888/callback_spotify"
 SPOTIPY_SCOPE = "user-read-playback-state user-modify-playback-state streaming"
 
-TOKEN_FILE = "../oauth2/token_info.json"
+TOKEN_FILE = "token_info.json"
 
 class SpotifyAssistant:
     def __init__(self):
