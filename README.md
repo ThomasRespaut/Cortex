@@ -55,7 +55,7 @@ Cortex est un projet étudiant visant à développer un homepod utilisant l'inte
 4. Configurer les fichiers `.env` avec vos clés API et informations personnelles.
 5. Lancer le projet :
    ```bash
-   python main.py
+   python cortex.py
    ```
 
 ## Utilisation
