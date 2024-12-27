@@ -137,4 +137,26 @@ if __name__ == "__main__":
 
     result = IDFMAssistant.calculate_route(from_city, to_city)
 
-    print(result)
+    # Améliorer l'affichage
+    if result and isinstance(result, list):
+        print("\n======= Itinéraire Calculé =======\n")
+        for route in result:
+            print(f"Départ : {from_city} | Arrivée : {to_city}")
+            print(f"  Heure de départ : {route['departure_time']}")
+            print(f"  Heure d'arrivée : {route['arrival_time']}")
+            print(f"  Durée : {route['duration'] // 60} min {route['duration'] % 60} sec")
+            print(f"  Émissions CO2 : {route['co2_emission']:.2f} g")
+            print(f"  Nombre de transferts : {route['nb_transfers']}")
+            print(f"  Distance à pied : {route['walking_distance']} m")
+            print(f"  Tarif : {float(route['fare']) / 100:.2f} € ({route['currency']})")
+            print("\n--- Sections du trajet ---")
+            for section in route.get("sections", []):
+                print(f"    - Type : {section['type']}")
+                print(f"      Mode : {section['mode']}")
+                print(f"      De : {section['from_name']}")
+                print(f"      À : {section['to_name']}")
+                print(f"      Durée : {section['section_duration'] // 60} min {section['section_duration'] % 60} sec")
+            print("\n============================\n")
+    else:
+        print("Aucun itinéraire trouvé.")
+

@@ -969,10 +969,19 @@ class GoogleAssistant:
             return result
 
 
+def print_result(result):
+    print("\n======= Emails Récupérés =======\n")
+    for key, email_data in result.items():
+        print(f"Email ID: {key}")
+        print(f"  Sujet       : {email_data.get('subject', 'Aucun sujet')}")
+        print(f"  Corps       : {email_data.get('body', 'Corps vide')[:100]}...")  # Limiter le corps à 100 caractères
+        print(f"  ---")
+    print("\n======= Fin des Emails =======\n")
+
+
 if __name__ == '__main__':
     google_assistant = GoogleAssistant()
 
     # Récupérer les emails du jour
-    result = google_assistant.summarize_all_emails(filter_type='today')
+    print(google_assistant.list_and_analyze_today_emails())
 
-    print(result)

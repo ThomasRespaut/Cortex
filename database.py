@@ -121,12 +121,12 @@ class Neo4jDatabase:
             with self.driver.session(database=self.database) as session:
                 # Vérification des nœuds pour éviter la duplication
                 prop_string = ", ".join([f"{key}: ${key}" for key in proprietes.keys()])
-                query = f"MERGE (e:{entite} {{{prop_string}}})"
+                query = f"MERGE (e:{entite.replace(' ', '_')} {{{prop_string}}})"
 
                 # Si une relation est définie, gérer la relation avec l'entité cible
                 if relation and cible_relation and proprietes_relation:
                     cible_prop_string = ", ".join([f"{key}: ${key}_cible" for key in proprietes_relation.keys()])
-                    query += f" MERGE (c:{cible_relation} {{{cible_prop_string}}})"
+                    query += f" MERGE (c:{cible_relation.replace(' ', '_')} {{{cible_prop_string}}})"
 
                     # Inverser la relation si nécessaire
                     if relation_inverse:
@@ -694,6 +694,8 @@ if __name__ == "__main__":
     # Connexion à la base de données
     db = Neo4jDatabase()
 
+    '''
+
     # Ajouter une activité sportive (Natation) et la relier à Thomas (relation directe)
     db.ajouter_entite_et_relation(
         entite="ActiviteSportive",
@@ -713,9 +715,15 @@ if __name__ == "__main__":
         proprietes_relation={"prenom": "Thomas", "nom": "Respaut"},
         relation_inverse=True  # La relation va de Thomas vers Courbevoie
     )
+    
+    '''
 
-    db.visualiser_graph_interactif()
+    #db.visualiser_graph_interactif()
+
+    print(db.recuperer_informations_graph())
 
 
     # Fermeture de la connexion
     db.close()
+
+

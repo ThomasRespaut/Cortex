@@ -1,0 +1,2328 @@
+[
+    {
+        "entite": "Personne",
+        "proprietes": "{\"prenom\": \"Julien\", \"nom\": \"Dupont\"}",
+        "relation": "AMI PROCHE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"nom\": \"Respaut\", \"prenom\": \"Thomas\"}",
+        "relation": "a pour ami",
+        "cible_relation": "Ami Proche",
+        "proprietes_relation": "{\"nom\": \"Dupont\", \"prenom\": \"Marie\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Ami Proche",
+        "proprietes": "{\"nom\": \"Jean\", \"age\": \"30\", \"ville\": \"Paris\"}",
+        "relation": "AMI_DE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"prenom\": \"Sam\", \"nom\": \"Durand\"}",
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Ami Proche",
+        "proprietes": "{\"prenom\": \"Lucas\", \"nom\": \"Martin\", \"age\": 28}",
+        "relation": "EST_AMI_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation": "AMIS_PROCHE",
+        "cible_relation": "Ami",
+        "proprietes_relation": "{\"prenom\": \"Laura\", \"nom\": \"Dubois\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Ami proche",
+        "proprietes": "{\"prenom\": \"Julien\", \"nom\": \"Dupont\", \"date_de_naissance\": \"1985-10-25\"}",
+        "relation": "AMI_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": "{\"nom\": \"Projet IA\", \"duree\": \"6 mois\"}",
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation": "A_POUR_AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Alice\", \"nom\": \"Dubois\", \"tempsAmitie\": \"5 ans\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation": "A_POUR_AMI",
+        "cible_relation": "Ami Proche",
+        "proprietes_relation": "{\"prenom\": \"Sophie\", \"nom\": \"Durand\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"prenom\": \"Luc\", \"nom\": \"Martin\", \"age\": \"30\"}",
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation": "PRACTISE",
+        "cible_relation": "Activite Sportive",
+        "proprietes_relation": "{\"nom\": \"Football\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{'prenom': 'Alice', 'nom': 'Dupont', 'age': '28'}",
+        "relation": "AMI_PROCHE_DE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{'prenom': 'Thomas', 'nom': 'Respaut'}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Ami",
+        "proprietes": "{\"prenom\": \"Alex\", \"nom\": \"Martin\"}",
+        "relation": "EST_AMI_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{'prenom': 'Thomas', 'nom': 'Respaut'}",
+        "relation": "A_POUR_AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{'prenom': 'Julien', 'nom': 'Dupuis'}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{'prenom': 'Thomas', 'nom': 'Respaut'}",
+        "relation": "est_ami_avec",
+        "cible_relation": "Ami proche",
+        "proprietes_relation": "{'prenom': 'Alice', 'nom': 'Dubois', 'age': 28}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Activité Sportive",
+        "proprietes": "{\"type\":\"Football\"}",
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\":\"Thomas\",\"nom\":\"Respaut\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Ami",
+        "proprietes": "{\"prenom\": \"Julie\", \"nom\": \"Martin\", \"age\": \"28\"}",
+        "relation": "AMI_DE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Activité Sportive",
+        "proprietes": "{\"nom\": \"Football\", \"lieu\": \"Stade Local\"}",
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Ami Proche",
+        "proprietes": "{\"prenom\": \"Alex\", \"nom\": \"Bertrand\", \"age\": \"28\", \"interets\": [\"Football\", \"Echecs\"]}",
+        "relation": "AMI_DE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Ami",
+        "proprietes": "{\"prenom\":\"Lucas\",\"nom\":\"Martin\"}",
+        "relation": "EST_AMI_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\":\"Thomas\",\"nom\":\"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Activite",
+        "proprietes_relation": "{\"nom\": \"Football\", \"duree\": \"1h\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": "{\"nom\": \"Projet IA\", \"etat\": \"En cours\"}",
+        "relation": "PARTICIPE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation": "A_POUR_AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Alice\", \"nom\": \"Dubois\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Activité sportive",
+        "proprietes": "{\"type\": \"football\", \"frequence\": \"hebdomadaire\"}",
+        "relation": "PARTICIPE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"nom\": \"Respaut\", \"prenom\": \"Thomas\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Ami Proche",
+        "proprietes": "{\"prenom\": \"Jean\", \"nom\": \"Dupont\", \"age\": \"36\"}",
+        "relation": "EST_AMI_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": "{\"nom\":\"Projet IA 2023\", \"duree\":\"6 mois\"}",
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\":\"Thomas\", \"nom\":\"Respaut\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": "{\"nom\": \"Football\", \"duree\": \"1h30\"}",
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": "{\"nom\": \"Projet IA\", \"duree\": \"1h\"}",
+        "relation": "EST_PARTICIPANT",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": "{\"nom\": \"Projet A\", \"duree\": \"3 mois\"}",
+        "relation": "EST_MEMBRE_DE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"nom\": \"Respaut\", \"prenom\": \"Thomas\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{'nom': 'Respaut', 'prenom': 'Thomas'}",
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{'nom': 'Dupont', 'prenom': 'Alice'}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"nom\": \"Respaut\", \"prenom\": \"Thomas\"}",
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Elodie\", \"nom\": \"Martin\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": "{\"nom\": \"Yoga\", \"duree\": \"45min\"}",
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"nom\": \"Respaut\", \"prenom\": \"Thomas\"}",
+        "relation": "JOUE_A",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": "{\"nom\": \"Football\", \"duree\": \"1h30\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation": "SE_COOORDONNE_AVEEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": "{\"nom\": \"Projet B\", \"duree\": \"6 mois\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"nom\": \"Respaut\", \"prenom\": \"Thomas\"}",
+        "relation": "TRAVAILLE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": "{\"nom\": \"Projet B\", \"duree\": \"6 mois\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"nom\": \"Respaut\", \"prenom\": \"Thomas\"}",
+        "relation": "PARTICIPE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"nom\": \"Martin\", \"prenom\": \"Mathieu\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"nom\": \"Respaut\", \"prenom\": \"Thomas\"}",
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": "{\"nom\": \"Projet IA\", \"duree\": \"1h\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": "{\"nom\": \"Dupont\", \"prenom\": \"Alice\"}",
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": "{\"nom\": \"Projet A\", \"duree\": \"3 mois\"}",
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": "{\"nom\": \"Projet IA\", \"duree\": \"1h\"}",
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Thomas\", \"nom\": \"Respaut\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": "{\"nom\": \"Natation\", \"duree\": \"1h\"}",
+        "relation": "A_PARTICIPE",
+        "cible_relation": "Personne",
+        "proprietes_relation": "{\"prenom\": \"Léa\", \"nom\": \"Durand\"}",
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Durand",
+            "prenom": "Léa"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "CONNAIT",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Tennis",
+            "duree": "1h"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Lieu",
+        "proprietes": {
+            "nom": "Courbevoie"
+        },
+        "relation": "SE_DEROULLE_A",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Football"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet C",
+            "duree": "2 mois"
+        },
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "duree": "1h30",
+            "nom": "Football"
+        },
+        "relation": "SE_PRATIQUE_A",
+        "cible_relation": "Lieu",
+        "proprietes_relation": {
+            "nom": "Courbevoie"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet D",
+            "duree": "4 mois"
+        },
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet IA",
+            "duree": "1h"
+        },
+        "relation": "EST_DIRECTION_PAR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Basketball",
+            "duree": "2h"
+        },
+        "relation": "PARTICIPE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Jean",
+            "nom": "Dupuis"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Jean",
+            "nom": "Dupuis"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Course à pied",
+            "duree": "30min"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Z",
+            "duree": "5 mois"
+        },
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "duree": "2 mois",
+            "nom": "Projet C"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Yoga",
+            "duree": "45min"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation": "JOUE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "David",
+            "nom": "Roux"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Lieu",
+        "proprietes": {
+            "nom": "Stade de Courbevoie"
+        },
+        "relation": "SE_PRATIQUE_A",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Football"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Basketball",
+            "duree": "2h"
+        },
+        "relation": "SE_DEROULLE_A",
+        "cible_relation": "Lieu",
+        "proprietes_relation": {
+            "nom": "Stade de Courbevoie"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "VIT_A",
+        "cible_relation": "Lieu",
+        "proprietes_relation": {
+            "nom": "Paris"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Running",
+            "duree": "45min"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Roux",
+            "prenom": "David"
+        },
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Z",
+            "duree": "5 mois"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Martin",
+            "prenom": "Elodie"
+        },
+        "relation": "JOUE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Lieu",
+        "proprietes": {
+            "nom": "Courbevoie"
+        },
+        "relation": "LIEU_DE_RENCONTRE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Martin",
+            "prenom": "Camille"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation": "APPARTIENT_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet V",
+            "duree": "3 mois"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet E",
+            "duree": "3 mois"
+        },
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation": "CONNAIT",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Paris",
+            "duree": "1h"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "JOUE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Bernard",
+            "prenom": "Lucie"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Martin",
+            "prenom": "Camille"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Claire",
+            "nom": "Legrand"
+        },
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Thomas",
+            "prenom": "Respaut"
+        },
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Emma",
+            "nom": "Dubois"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Bernard",
+            "prenom": "Lucie"
+        },
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet A"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "CONNAIT",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Yoga",
+            "duree": "45min"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Durand",
+            "prenom": "Léa"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Amis",
+        "proprietes_relation": {
+            "prenom": "David",
+            "nom": "Roux"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "AMIS_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Dubois",
+            "prenom": "Emma"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Escalade",
+            "duree": "2h"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "JOUE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Durand",
+            "prenom": "Léa"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Cyclisme",
+            "duree": "1h30"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respatut",
+            "prenom": "Thomas"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Athlétisme",
+            "duree": "1h"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Lucas",
+            "nom": "Martin"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet IA",
+            "duree": "6 mois"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Duval",
+            "prenom": "Sophie"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Karaté",
+            "duree": "1h30"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet IA",
+            "duree": "6 mois"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Robotique",
+            "duree": "3 mois"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Natation",
+            "duree": "1h"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Football",
+            "duree": "1h"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Lieu",
+        "proprietes": {
+            "nom": "Paris"
+        },
+        "relation": "A_TRAVAILLE",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Robotique",
+            "duree": "3 mois"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Garcia",
+            "prenom": "Elena"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Lieu",
+        "proprietes": {},
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Cyclisme",
+            "duree": "2 mois"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Blanc",
+            "prenom": "Clement"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenon": "Sophie",
+            "nom": "Dupont"
+        },
+        "relation": "TRAVAILLE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet IA",
+            "duree": "6 mois"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "CONNAIT_A",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Football",
+            "duree": "1h"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Smith",
+            "prenom": "Anaïs"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Developpement Durable",
+            "duree": "4 mois"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Martin",
+            "prenom": "Lucas"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Developpement Durable"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Lucas",
+            "nom": "Martin"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Marie",
+            "nom": "Leroux"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Basketball",
+            "duree": "2h"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "duree": "1 semaine",
+            "nom": "Projet Drones"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Yoga",
+            "duree": "1h"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Emma",
+            "nom": "Durand"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Escalade",
+            "duree": "2h"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Sophie",
+            "nom": "Dupont"
+        },
+        "relation": "TRAVAILLE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Volley-ball",
+            "duree": "1.5h"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Blanc",
+            "prenom": "Clement"
+        },
+        "relation": "ASSISTE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "duree": "4 mois",
+            "nom": "Projet Developpement Durable"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Lemoine",
+            "prenom": "Julien"
+        },
+        "relation": "FRERE_DE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Leroux",
+            "prenom": "Marie"
+        },
+        "relation": "TRAVAILLE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Robotique"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Bien-être",
+            "duree": "3 mois"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Course à Pied",
+            "duree": "45min"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Thomas",
+            "prenom": "Respaut"
+        },
+        "relation": "A_UNE_PASSION",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Cyclisme",
+            "duree": "2h"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Evénementiel",
+            "duree": "3 semaines"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Randonnée",
+            "duree": "3h"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Football",
+            "duree": "1h"
+        },
+        "relation": "SE_DEROULE_A",
+        "cible_relation": "Lieu",
+        "proprietes_relation": {
+            "nom": "Stade Municipal"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Sarah",
+            "nom": "Dupre"
+        },
+        "relation": "ASSISTE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Evénementiel",
+            "duree": "3 semaines"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Lieu",
+        "proprietes": {
+            "nom": "Gymnase Central"
+        },
+        "relation": "ASSOCIE_A",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Basketball",
+            "duree": "2h"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Escalade",
+            "duree": "2h"
+        },
+        "relation": "PRATIQUE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Anaïs",
+            "nom": "Smith"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Planche à Voile",
+            "duree": "2h"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Emma",
+            "nom": "Durand"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet IA"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Lucas",
+            "nom": "Martin"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet IA"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Dubois",
+            "prenom": "Amelie"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Bien-être",
+            "duree": "3 mois"
+        },
+        "relation": "EST_REALISE_PAR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Dumont",
+            "prenom": "Lucas"
+        },
+        "relation": "TRAVAILLE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "duree": "4 semaines",
+            "nom": "Projet Python"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Lieu",
+        "proprietes": {
+            "nom": "Gymnase Central",
+            "duree": "3h"
+        },
+        "relation": "ASSOCIE_A",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Basketball"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Football",
+            "duree": "1h"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Martin",
+            "prenom": "Lucas"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Robotique"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Marie",
+            "nom": "Leroux"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Photographie",
+            "duree": "2 mois"
+        },
+        "relation": "CONTRIBUE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "duree": "5 mois",
+            "nom": "Projet Drone"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Dupre",
+            "prenom": "Sarah"
+        },
+        "relation": "COMMUNIQUE_AVE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Photographie",
+            "duree": "2 mois"
+        },
+        "relation": "EST_SUPERVISE_PAR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Volley-ball",
+            "duree": "1.5h"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Charpentier",
+            "prenom": "Lucie"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Yoga",
+            "duree": "1h"
+        },
+        "relation": "PARTICIPE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Elena",
+            "nom": "Garcia"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Garcia",
+            "prenom": "Elena"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet IA",
+            "duree": "6 mois"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Boucher",
+            "prenom": "Paul"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Lemoine",
+            "prenom": "Julien"
+        },
+        "relation": "TRAVAILLE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Leroy",
+            "prenom": "Jean"
+        },
+        "relation": "PARTAGE_PASSION_POUR",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Cyclisme",
+            "duree": "2h"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Paul",
+            "nom": "Martin"
+        },
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet IA",
+            "duree": "6 mois"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet IA",
+            "duree": "6 mois"
+        },
+        "relation": "EST_SUPERVISE_PAR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Escalade",
+            "duree": "1h30"
+        },
+        "relation": "ORGANISE_PAR",
+        "cible_relation": "Lieu",
+        "proprietes_relation": {
+            "nom": "Gymnase Central"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Moreau",
+            "prenom": "Alice"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Bien-être"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Dufour",
+            "prenom": "Antoine"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Escalade",
+            "duree": "1.5h"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Marche Rapide",
+            "duree": "30min"
+        },
+        "relation": "PRATIQUE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Football",
+            "duree": "1h"
+        },
+        "relation": "SE_DEROULE_A",
+        "cible_relation": "Lieu",
+        "proprietes_relation": {
+            "nom": "Stade Municipal"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Marathon de Paris",
+            "duree": "5 mois"
+        },
+        "relation": "ORGANISE_PAR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Duval",
+            "prenom": "Sophie"
+        },
+        "relation": "TRAVAILLE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Drone",
+            "duree": "5 mois"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Lieu",
+        "proprietes": {
+            "nom": "Projet Cyclisme",
+            "duree": "3h"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Moreau",
+            "prenom": "Luc"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "duree": "6 mois",
+            "nom": "Projet Developpement Durable"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Football",
+            "duree": "1h"
+        },
+        "relation": "EST_PRATIQUE_PAR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Thomas",
+            "prenom": "Respaut"
+        },
+        "relation": "PRATIQUE_ACTIVITE",
+        "cible_relation": "ActiviteSportive",
+        "proprietes_relation": {
+            "nom": "Escalade"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Dupuis",
+            "prenom": "Marc"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Morel",
+            "prenom": "Julie"
+        },
+        "relation": "TRAVAILLE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet IA"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Elena",
+            "nom": "Garcia"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet IA"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Judo",
+            "duree": "2h"
+        },
+        "relation": "PARTICIPE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Football",
+            "duree": "1h30"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Martin",
+            "prenom": "Lucas"
+        },
+        "relation": "TRAVAILLE_SUR",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Drone"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "A_ENTREPRISE_COMMUNE",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet IA",
+            "duree": "6 mois"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Tennis",
+            "duree": "2h"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Sophie",
+            "nom": "Morel"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Environnement",
+            "duree": "5 mois"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Dubois",
+            "prenom": "Amelie"
+        },
+        "relation": "COLLABORE_SUR",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Photographie"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Environnement",
+            "duree": "3 mois"
+        },
+        "relation": "EST_SUPERVISE_PAR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Football",
+            "duree": "1h"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Lucas",
+            "nom": "Martin"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Marathon de Paris"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Photographie",
+            "duree": "2 mois"
+        },
+        "relation": "ASSIGNE_A",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "CONNAIT",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet IA",
+            "duree": "6 mois"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Marathon de Paris",
+            "duree": "5h"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Lacroix",
+            "prenom": "Julie"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Dupont",
+            "prenom": "Julie"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Tennis",
+            "duree": "2h"
+        },
+        "relation": "PARTICIPE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Photographie",
+            "duree": "2 mois"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Tennis de Table",
+            "duree": "1.5h"
+        },
+        "relation": "PRATIQUE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Dupont",
+            "prenom": "Alice"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Yoga",
+            "duree": "1h"
+        },
+        "relation": "PARTICIPE_EN",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Elena",
+            "nom": "Garcia"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Football"
+        },
+        "relation": "EST_PRATIQUE_PAR",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation": "PARTICIPE_A",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Environnement",
+            "duree": "5 mois"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet Voyage",
+            "duree": "8 mois"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Moreau",
+            "prenom": "Luc"
+        },
+        "relation": "TRAVAILLE_AVEC",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Environnement",
+            "duree": "5 mois"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Smith",
+            "prenom": "Anaïs"
+        },
+        "relation": "COLLABORE_SUR",
+        "cible_relation": "Activite",
+        "proprietes_relation": {
+            "nom": "Projet Robotique",
+            "duree": "3 mois"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation": "PRATIQUE_A",
+        "cible_relation": "Lieu",
+        "proprietes_relation": {
+            "nom": "Paris",
+            "duree": "1h"
+        },
+        "relation_inverse": false
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "prenom": "Alice",
+            "nom": "Moreau"
+        },
+        "relation": "AMI",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "ActiviteSportive",
+        "proprietes": {
+            "nom": "Escalade",
+            "duree": "1.5h"
+        },
+        "relation": "PRATIQUE",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "nom": "Respaut",
+            "prenom": "Thomas"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Personne",
+        "proprietes": {
+            "nom": "Dumont",
+            "prenom": "Lucas"
+        },
+        "relation": "COLLABORE_SUR",
+        "cible_relation": "Projet",
+        "proprietes_relation": {
+            "nom": "Projet Drones",
+            "duree": "1 semaine"
+        },
+        "relation_inverse": true
+    },
+    {
+        "entite": "Projet",
+        "proprietes": {
+            "nom": "Projet AI"
+        },
+        "relation": "COLLABORE_AVEC",
+        "cible_relation": "Personne",
+        "proprietes_relation": {
+            "prenom": "Thomas",
+            "nom": "Respaut"
+        },
+        "relation_inverse": false
+    }
+]
