@@ -10,17 +10,13 @@ import os
 from dotenv import load_dotenv
 import time
 import json
-from database import Neo4jDatabase
-import films_and_series
-from spotify_assistant import SpotifyAssistant
-from test import IDFMAssistant
+from database.database import Neo4jDatabase
+from assistant import films_and_series, functions
+from assistant.spotify_assistant import SpotifyAssistant
+from assistant.ratp_assistant import IDFMAssistant
 
-from functools import partial
-
-from iphone import AppleAssistant
-from google_assistant import GoogleAssistant
-
-import functions  # Importer les fonctions du fichier functions.py
+from assistant.iphone import AppleAssistant
+from assistant.google_assistant import GoogleAssistant
 
 # Instancier les assistants Spotify et Apple
 spotify_assistant = SpotifyAssistant()
@@ -83,7 +79,7 @@ class Cortex:
         self.mistral_client = Mistral(api_key=mistral_api_key) if mistral_api_key else None
         self.mistral_model = "ft:open-mistral-nemo:7771e396:20241004:a1df71c2"
 
-        with open("tools.json", "r") as file:
+        with open("assistant/tools.json", "r") as file:
             self.tools = json.load(file)
 
         self.system = """
@@ -411,10 +407,10 @@ class Cortex:
 
     def keyword_detection(self):
         access_key = os.getenv('picovoice_api_key')
-        keyword_path = "Ok-Cortex.ppn"
+        keyword_path = "porcupine/Ok-Cortex.ppn"
 
         porcupine = pvporcupine.create(access_key=access_key, keyword_paths=[keyword_path],
-                                       model_path="porcupine_params_fr.pv")
+                                       model_path="porcupine/porcupine_params_fr.pv")
 
         pa = pyaudio.PyAudio()
         audio_stream = pa.open(
