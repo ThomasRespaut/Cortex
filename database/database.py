@@ -78,6 +78,11 @@ class Neo4jDatabase:
         except Exception as e:
             print(f"Erreur de connexion à la base de données Neo4j : {e}")
 
+    def execute_query(self, query, parameters=None):
+        with self.driver.session() as session:
+            result = session.run(query, parameters)
+            return [record for record in result]
+
     def query(self, query, parameters=None):
         try:
             with self.driver.session(database=self.database) as session:

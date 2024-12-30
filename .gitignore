@@ -1,3 +1,13 @@
 .env
 assistant/google/google_secret.json
 assistant/google/token_google.json
+tinyllama_cortex_finetuned
+tinyllama_cortex_finetuned.zip
+tinyllama_cortex_finetuned/config.json
+tinyllama_cortex_finetuned/generation_config.json
+tinyllama_cortex_finetuned/model.safetensors
+tinyllama_cortex_finetuned/special_tokens_map.json
+tinyllama_cortex_finetuned/tokenizer.json
+tinyllama_cortex_finetuned/tokenizer.model
+tinyllama_cortex_finetuned/tokenizer_config.json
+tinyllama_cortex_finetuned/training_args.bin
