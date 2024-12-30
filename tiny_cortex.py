@@ -10,9 +10,10 @@ tokenizer = AutoTokenizer.from_pretrained(finetuned_model_path)
 model = AutoModelForCausalLM.from_pretrained(finetuned_model_path)
 print("Modèle fine-tuné chargé avec succès.")
 
-# Charger le modèle d'embeddings
-embedder = SentenceTransformer('all-MiniLM-L6-v2')
-print("Modèle d'embeddings chargé avec succès.")
+# Spécifiez le chemin où enregistrer localement le modèle
+model_path = "./models/all-MiniLM-L6-v2"
+embedder = SentenceTransformer('all-MiniLM-L6-v2', cache_folder=model_path)
+print("Modèle d'embeddings téléchargé et chargé avec succès.")
 
 def fetch_graph_with_relations(query, db, top_k=10):
     """
