@@ -2,9 +2,7 @@ from huawei_lte_api.Client import Client
 from huawei_lte_api.Connection import Connection
 from huawei_lte_api.enums.sms import BoxTypeEnum, SortTypeEnum
 import time
-
-from openai.types.beta import Assistant
-
+from huawei_lte_api.enums.client import ResponseEnum
 from start import TinyCortex
 
 class Dongle:
@@ -27,6 +25,16 @@ class Dongle:
         if self.connection:
             self.connection.close()
             print("Connexion fermée.")
+
+    def reboot_modem(self):
+        try:
+            if self.client.device.reboot() == ResponseEnum.OK.value:
+                print("Reboot demandé avec succès.")
+                time.sleep(30)  # Attente pour que le modem redémarre
+            else:
+                print("Erreur lors du reboot du modem.")
+        except Exception as e:
+            print(f"Erreur lors du reboot du modem : {str(e)}")
 
     def get_received_sms(self):
         try:
@@ -53,7 +61,11 @@ class Dongle:
             return messages
 
         except Exception as e:
-            print(f"Erreur lors de la récupération des SMS : {str(e)}")
+            if "125003" in str(e):
+                print("Erreur 125003 détectée. Tentative de reboot du modem.")
+                self.reboot_modem()
+            else:
+                print(f"Erreur lors de la récupération des SMS : {str(e)}")
             return []
 
     def send_sms(self, phone_number, content):
@@ -61,7 +73,11 @@ class Dongle:
             self.client.sms.send_sms(phone_number, content)
             print(f"SMS envoyé à {phone_number}: {content}")
         except Exception as e:
-            print(f"Erreur lors de l'envoi du SMS : {str(e)}")
+            if "125003" in str(e):
+                print("Erreur 125003 détectée. Tentative de reboot du modem.")
+                self.reboot_modem()
+            else:
+                print(f"Erreur lors de l'envoi du SMS : {str(e)}")
 
     def delete_sms(self, message_id):
         try:
