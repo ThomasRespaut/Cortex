@@ -17,6 +17,7 @@ class Dongle:
             self.connection = Connection(self.connection_url)
             self.client = Client(self.connection)
             print("Connexion réussie au dongle.")
+            print(self.client.device.information())
         except Exception as e:
             print(f"Erreur lors de la connexion au dongle : {str(e)}")
             raise
@@ -28,6 +29,9 @@ class Dongle:
 
     def reboot_modem(self):
         try:
+            print("Fermeture de la connexion avant le reboot.")
+            self.close_connection()  # Fermer la connexion pour éviter les problèmes de session
+            self.connect()  # Ré-établir une connexion propre
             if self.client.device.reboot() == ResponseEnum.OK.value:
                 print("Reboot demandé avec succès.")
                 time.sleep(30)  # Attente pour que le modem redémarre
