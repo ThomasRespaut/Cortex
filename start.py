@@ -1,5 +1,6 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
+import re
 
 # Charger le modèle fine-tuné et le tokenizer
 finetuned_model_path = "./tinyllama_cortex_finetuned"
@@ -29,9 +30,15 @@ if __name__ == "__main__":
     print("\nAssistant basé sur TinyLlama. Tapez 'stop' pour quitter.\n")
     while True:
         user_query = input("Votre question : ")
+        user_question = f"Question: {user_query}\nRéponse :"
         if user_query.lower() == "stop":
             print("Assistant arrêté. À bientôt !")
             break
         else:
-            response = generate_response(user_query)
-            print(f"\nRéponse : {response}\n")
+            response = generate_response(user_question)
+            match = re.search(r"Réponse :(.*)", response)
+            if match:
+                result = match.group(1).strip()
+                response = result
+            print("Réponse : " + response)
+

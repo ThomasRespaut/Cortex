@@ -1,0 +1,122 @@
+[
+    {
+        "question": "Génère un nombre aléatoire entre deux valeurs spécifiées.",
+        "response": "[generate_random_number min_value=10 max_value=10]"
+    },
+    {
+        "question": "Recommander des films ou des séries en utilisant une recherche par titre ou par genre.",
+        "response": "[recommend_media title='example' genre='example' media_type='example']"
+    },
+    {
+        "question": "Mettre la musique Spotify sur l'appareil choisi par l'utilisateur.",
+        "response": "[play_track track_name='example']"
+    },
+    {
+        "question": "Mettre en pause la lecture en cours sur Spotify.",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Reprendre la lecture en cours sur Spotify.",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Passer au morceau suivant sur Spotify.",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Revenir au morceau précédent sur Spotify.",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Définir le volume de la lecture (0 à 100).",
+        "response": "[set_volume volume_level=10]"
+    },
+    {
+        "question": "Obtenir les informations de la lecture en cours.",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Jouer les recommandations sur Spotify, en fonction d'un titre, d'un artiste, ou d'un genre.",
+        "response": "[play_recommendations_track track_name='example' artist_name='example' genre_name='example']"
+    },
+    {
+        "question": "Récupère le niveau de batterie actuel de l'iPhone.",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Récupère la position actuelle de l'iPhone et l'adresse correspondante.",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Récupère les informations météorologiques actuelles à l'emplacement de l'iPhone.",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Récupère les contacts de l'utilisateur. Peut être filtré par prénom.",
+        "response": "[get_contacts name='example']"
+    },
+    {
+        "question": "Fait sonner l'iPhone.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Active le mode perdu sur l'iPhone, en fournissant un numéro de contact et un message.",
+        "response": "[activate_lost_mode phone_number='example' message='example']"
+    },
+    {
+        "question": "Calcule un itinéraire entre deux villes.",
+        "response": "[calculate_route from_city='example' to_city='example']"
+    },
+    {
+        "question": "Ajoute une nouvelle tâche dans Google Tasks. Utilisez cette fonction lorsqu'un utilisateur demande d'ajouter une tâche à faire ou de gérer une nouvelle tâche.",
+        "response": "[create_google_task task_title='example' task_notes='example']"
+    },
+    {
+        "question": "Créer un événement dans Google Calendar.",
+        "response": "[create_calendar_event name='example' duration='example' participants=['value1', 'value2'] date_preference='example' time_range='example' location='example']"
+    },
+    {
+        "question": "Fournir un résumé des emails du jour.",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Lister et analyser les emails du jour, puis les déplacer dans les labels appropriés.",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Collecte des emails avec des filtres avancés (non-lus, boîte de réception, etc.) et possibilité d'inclure une plage de dates.",
+        "response": "[collect_emails filter_type='example' specific_recipient='example' specific_word='example' start_date='example' end_date='example']"
+    },
+    {
+        "question": "Marque un message comme lu.",
+        "response": "[mark_as_read message_id='example' user_id='example']"
+    },
+    {
+        "question": "Mettre un message à la corbeille.",
+        "response": "[trash_message message_id='example' user_id='example']"
+    },
+    {
+        "question": "Archiver un message.",
+        "response": "[archive_message message_id='example' user_id='example']"
+    },
+    {
+        "question": "Répondre à un message.",
+        "response": "[reply_to_message message_id='example' user_id='example' reply_body='example']"
+    },
+    {
+        "question": "Créer un brouillon d'email en utilisant GPT pour générer le corps de l'email.",
+        "response": "[create_email to='example' subject='example' additional_info='example' user_id='example']"
+    },
+    {
+        "question": "Afficher le contenu d'un brouillon d'email basé sur son ID.",
+        "response": "[display_draft draft_id='example' user_id='example']"
+    },
+    {
+        "question": "Créer un brouillon de réponse à un message donné en utilisant GPT pour générer le corps de la réponse.",
+        "response": "[create_draft_reply message_id='example' additional_info='example' user_id='example']"
+    },
+    {
+        "question": "Envoyer un brouillon d'email. Si nécessaire, modifier son contenu avant de l'envoyer.",
+        "response": "[send_draft draft_id='example' content='example' user_id='example']"
+    }
+]

@@ -1,0 +1,4202 @@
+[
+    {
+        "question": "Pourrais-tu me donner un chiffre aléatoire compris entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Pourrais-tu créer un nombre aléatoire compris entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Trouve-moi un nombre compris entre 20 et 50, s'il te plaît.",
+        "response": "[generate_random_number min_value=20 max_value=50]"
+    },
+    {
+        "question": "Génère-moi un entier aléatoire compris entre 5 et 15 s'il te plaît.",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Pourrais-tu tirer au sort un chiffre compris entre 10 et 10 ?",
+        "response": "[generate_random_number min_value=10 max_value=10]"
+    },
+    {
+        "question": "Cortex, pourrais-tu me donner un chiffre aléatoire compris entre 5 et 20 ?",
+        "response": "[generate_random_number min_value=5 max_value=20]"
+    },
+    {
+        "question": "Salutations Cortex, pourrais-tu tirer un chiffre compris entre 1 et 100 pour moi ?",
+        "response": "[generate_random_number min_value=1 max_value=100]"
+    },
+    {
+        "question": "Pourrais-tu choisir un nombre aléatoire entre 1 et 100 pour moi ?",
+        "response": "[generate_random_number min_value=1 max_value=100]"
+    },
+    {
+        "question": "Pourrais-tu créer un chiffre au hasard compris entre 20 et 100 ?",
+        "response": "[generate_random_number min_value=20 max_value=100]"
+    },
+    {
+        "question": "Pourrais-tu produire un chiffre compris entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Pourrais-tu me suggérer un film d'action à regarder ce soir ?",
+        "response": "[recommend_media title='' genre='action' media_type='movie']"
+    },
+    {
+        "question": "Pourrais-tu me conseiller un bon film d'action récent ?",
+        "response": "[recommend_media title='' genre='action' media_type='film']"
+    },
+    {
+        "question": "Que dirais-tu de me proposer un film d'action à visionner ce soir ?",
+        "response": "[recommend_media title='' genre='action' media_type='movie']"
+    },
+    {
+        "question": "Trouve-moi un film de science-fiction à regarder ce soir.",
+        "response": "[recommend_media title='' genre='science-fiction' media_type='movie']"
+    },
+    {
+        "question": "Peux-tu me recommander un film d'action ?",
+        "response": "[recommend_media title='' genre='action' media_type='movie']"
+    },
+    {
+        "question": "Trouve-moi un film d'action pour ce soir.",
+        "response": "[recommend_media title='' genre='action' media_type='film']"
+    },
+    {
+        "question": "Peux-tu me suggérer un film romantique ?",
+        "response": "[recommend_media title='' genre='romantic' media_type='movie']"
+    },
+    {
+        "question": "Pourrais-tu me recommander un bon film d'action ?",
+        "response": "[recommend_media title='' genre='action' media_type='film']"
+    },
+    {
+        "question": "Recommande-moi un film de science-fiction.",
+        "response": "[recommend_media title='' genre='science-fiction' media_type='movie']"
+    },
+    {
+        "question": "Peux-tu me suggérer un film de science-fiction captivant ?",
+        "response": "[recommend_media title='' genre='science-fiction' media_type='movie']"
+    },
+    {
+        "question": "Joue le morceau \"Bohemian Rhapsody\" pour moi.",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Peux-tu jouer la chanson 'Bohemian Rhapsody' sur mon appareil ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Pourrais-tu jouer la chanson 'Shape of You' par Ed Sheeran ?",
+        "response": "[play_track track_name='Shape of You']"
+    },
+    {
+        "question": "Lance la chanson \"Blinding Lights\" s'il te plaît.",
+        "response": "[play_track track_name='Blinding Lights']"
+    },
+    {
+        "question": "Peux-tu jouer la chanson intitulée 'Highway to Hell' s'il te plaît ?",
+        "response": "[play_track track_name='Highway to Hell']"
+    },
+    {
+        "question": "Peux-tu jouer \"Shape of You\" de Ed Sheeran sur ma tablette ?",
+        "response": "[play_track track_name='Shape of You']"
+    },
+    {
+        "question": "Peux-tu jouer la chanson 'Bohemian Rhapsody' sur l'enceinte du salon ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Peux-tu mettre la chanson 'Bohemian Rhapsody' sur mon enceinte Bluetooth ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Joue la chanson 'Imagine' sur Spotify.",
+        "response": "[play_track track_name='Imagine']"
+    },
+    {
+        "question": "Lance la musique 'Bohemian Rhapsody' s'il te plaît.",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Peux-tu arrêter la musique actuelle sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu mettre la chanson en pause sur Spotify, s'il te plaît ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu mettre en pause la chanson sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Peux-tu stopper la piste que j'écoute actuellement sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Peux-tu mettre en pause ce que Spotify joue actuellement ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu interrompre la musique en cours sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Peux-tu arrêter la musique actuelle sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu interrompre la musique qui joue actuellement sur mon Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Hey Cortex, peux-tu stopper temporairement la musique sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu mettre en pause la chanson actuelle sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre là où ma lecture Spotify était restée ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre la lecture de là où elle s'était arrêtée sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu reprendre la lecture de la musique où elle s'était arrêtée sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Relance la chanson où je m'étais arrêté sur Spotify.",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Cortex, peux-tu reprendre la musique où je m'étais arrêté sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Lance la lecture de la musique que je n'ai pas terminée sur Spotify.",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Reprends la lecture de ma liste de lecture sur Spotify.",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre la lecture de ma dernière playlist sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Reprends la piste musicale là où je l'ai laissée sur Spotify, s'il te plaît.",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre la chanson que j'écoutais hier soir sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Pourrais-tu passer à la chanson suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer au morceau suivant sur Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Cortex, passe à la piste suivante sur Spotify.",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Cortex, peux-tu passer à la chanson suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer au titre suivant sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Cortex, peux-tu passer au titre suivant sur Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Pourrais-tu revenir à la chanson précédente sur Spotify, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu revenir au morceau précédent sur Spotify, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu revenir à la chanson précédente dans ma liste de lecture Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu mettre la chanson précédente sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu rejouer le morceau précédent sur Spotify, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Cortex, pourrais-tu activer la fonction pour revenir au morceau précédent sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Cortex, peux-tu repasser le morceau d'avant sur Spotify, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Cortex, pourrais-tu passer à la chanson d'avant sur ma playlist ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu repasser au morceau précédent sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu revenir au son précédent sur Spotify, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu baisser le niveau sonore à 10, s'il te plaît ?",
+        "response": "[set_volume volume_level=10]"
+    },
+    {
+        "question": "Peux-tu diminuer le volume à 25 ?",
+        "response": "[set_volume volume_level=25]"
+    },
+    {
+        "question": "Augmente le son à 75, s'il te plaît.",
+        "response": "[set_volume volume_level=75]"
+    },
+    {
+        "question": "Pourrais-tu régler le volume à 25, s'il te plaît ?",
+        "response": "[set_volume volume_level=25]"
+    },
+    {
+        "question": "Peux-tu régler le volume à 85 ?",
+        "response": "[set_volume volume_level=85]"
+    },
+    {
+        "question": "Peux-tu baisser le volume à 30 s'il te plaît ?",
+        "response": "[set_volume volume_level=30]"
+    },
+    {
+        "question": "Peux-tu ajuster le volume au niveau 75 s'il te plaît ?",
+        "response": "[set_volume volume_level=75]"
+    },
+    {
+        "question": "Quel doit être le niveau sonore pour l'ambiance musicale de ce soir ?",
+        "response": "[set_volume volume_level=70]"
+    },
+    {
+        "question": "Peux-tu régler le volume sur un niveau élevé?",
+        "response": "[set_volume volume_level=80]"
+    },
+    {
+        "question": "Ajuste le volume à cinquante pour cent, s'il te plaît.",
+        "response": "[set_volume volume_level=50]"
+    },
+    {
+        "question": "Quel est le morceau de musique actuellement en lecture ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est le morceau que j'écoute actuellement sur la plateforme musicale ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quelle est la musique en cours de lecture actuellement ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est le contenu actuellement en écoute ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quelle est la musique en cours de lecture sur l'application ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Qu'est-ce qui est actuellement diffusé sur mon compte Spotify ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est l'état de la lecture actuelle sur mon appareil ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quelle chanson est actuellement en train de jouer ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est le morceau que nous écoutons actuellement ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Que se passe-t-il en ce moment dans ma playlist ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Pourrais-tu lire des morceaux similaires à \"Shape of You\" d'Ed Sheeran ?",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']"
+    },
+    {
+        "question": "Lance des titres similaires à 'Shape of You' par Ed Sheeran.",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']"
+    },
+    {
+        "question": "Pourrais-tu jouer de nouvelles recommandations basées sur le titre 'Blinding Lights' ?",
+        "response": "[play_recommendations_track track_name='Blinding Lights' artist_name='' genre_name='']"
+    },
+    {
+        "question": "\"Peux-tu lire des recommandations basées sur la chanson 'Shape of You' par Ed Sheeran ?\"",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']"
+    },
+    {
+        "question": "Pourrais-tu jouer les recommandations basées sur le titre 'Wonderwall' ?",
+        "response": "[play_recommendations_track track_name='Wonderwall' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer des recommandations basées sur le titre 'Imagine' ?",
+        "response": "[play_recommendations_track track_name='Imagine' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Pourrais-tu jouer les recommandations basées sur l'artiste Coldplay, s'il te plaît ?",
+        "response": "[play_recommendations_track track_name='' artist_name='Coldplay' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer des recommandations basées sur le titre 'Shape of You' ?",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer les recommandations basées sur la chanson 'Bohemian Rhapsody' ?",
+        "response": "[play_recommendations_track track_name='Bohemian Rhapsody' artist_name='Queen' genre_name='rock']"
+    },
+    {
+        "question": "Peux-tu me jouer des recommandations basées sur la chanson 'Shape of You' ?",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Quel est l'état actuel de la batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage de batterie actuellement sur mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage actuel de la batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage de batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le niveau de la batterie de mon téléphone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Cortex, combien de batterie me reste-t-il actuellement sur mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quelle est la charge de la batterie de mon téléphone Apple actuellement ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quelle est la charge actuelle de la batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage de batterie actuel sur mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quelle est la charge actuelle de la batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Où se trouve actuellement mon iPhone et quelle en est l'adresse ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Pourrais-tu déterminer où je me situe actuellement et me fournir l'adresse associée ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Où suis-je actuellement ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Pourrais-tu me dire où je suis en ce moment ainsi que l'adresse exacte ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quel est l'endroit exact où je me trouve actuellement ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Cortex, pourrais-tu me dire où je me trouve actuellement et m'en donner l'adresse précise ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Où est situé mon iPhone en ce moment ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Cortex, quelle est l'adresse correspondant à ma position actuelle ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quelle est ma position actuelle sur la carte ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Pourrais-tu me dire où je me trouve actuellement sur la carte ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement là où je me trouve ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement à ma position ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement ici d'après mon iPhone ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement là où je me trouve ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement près de chez moi ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement à l'emplacement de mon iPhone ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quelle est la météo à ma position actuelle ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement là où se trouve mon iPhone ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel est le temps actuel à l'endroit où je suis avec mon iPhone ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement là où je suis ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Pourrais-tu me fournir la liste de mes contacts ?",
+        "response": "[get_contacts]"
+    },
+    {
+        "question": "Qui sont les personnes que je connais sous le nom de 'Sophie' ?",
+        "response": "[get_contacts name='Sophie']"
+    },
+    {
+        "question": "Pourrais-tu obtenir mes contacts, s'il te plaît ?",
+        "response": "[get_contacts]"
+    },
+    {
+        "question": "Peux-tu me donner la liste de mes contacts ?",
+        "response": "[get_contacts name='']"
+    },
+    {
+        "question": "Pourrais-tu me présenter tous mes contacts, s'il te plaît ?",
+        "response": "[get_contacts]"
+    },
+    {
+        "question": "Pourrais-tu extraire les coordonnées de mes contacts avec le prénom 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "As-tu la possibilité de récupérer les coordonnées de mes contacts dont le prénom est 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Pourrais-tu me donner la liste de mes contacts, s'il te plaît ?",
+        "response": "[get_contacts name='*']"
+    },
+    {
+        "question": "Cortex, peux-tu lister tous mes contacts ?",
+        "response": "[get_contacts name='']"
+    },
+    {
+        "question": "Peux-tu me fournir la liste de mes contacts par prénom ?",
+        "response": "[get_contacts]"
+    },
+    {
+        "question": "Fais sonner mon iPhone, s'il te plaît.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Pourrais-tu déclencher une sonnerie sur mon iPhone s'il te plaît ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Fais sonner mon iPhone, s'il te plaît.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Pourrais-tu faire sonner mon iPhone immédiatement ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Peux-tu faire retentir mon iPhone pour que je puisse le retrouver ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Active le son de localisation sur mon iPhone, s'il te plaît.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Active le signal sonore sur mon téléphone, s'il te plaît.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Cortex, pourrais-tu rendre mon iPhone bruyant maintenant ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Fais retentir le signal sonore de mon téléphone !",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Fais retentir la sonnerie de mon iPhone immédiatement !",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Peux-tu activer le mode perdu sur mon iPhone et afficher ce message : 'Mon téléphone est perdu, merci de m'appeler' ?",
+        "response": "[activate_lost_mode phone_number='1234567890' message='Mon téléphone est perdu, merci de m'appeler']"
+    },
+    {
+        "question": "Comment puis-je sécuriser mon iPhone en cas de vol, en y affichant un message personnalisé ?",
+        "response": "[activate_lost_mode phone_number='0123456789' message='Ce téléphone est perdu. Merci de le retourner en appelant ce numéro.']"
+    },
+    {
+        "question": "Active le mode perdu sur mon iPhone et affiche le message 'Mon téléphone est égaré' avec ce numéro de contact : +123456789.",
+        "response": "[activate_lost_mode phone_number='+123456789' message='Mon téléphone est égaré']"
+    },
+    {
+        "question": "Je viens de perdre mon téléphone, peux-tu activer le mode perdu avec le message 'Veuillez appeler ce numéro' et ce numéro de contact ?",
+        "response": "[activate_lost_mode phone_number='1234567890' message='Veuillez appeler ce numéro']"
+    },
+    {
+        "question": "Pourrais-tu activer le mode perdu sur mon iPhone et afficher 'Appelle-moi au 1234567890' ?",
+        "response": "[activate_lost_mode phone_number='1234567890' message='Appelle-moi au 1234567890']"
+    },
+    {
+        "question": "Comment puis-je activer le mode perdu sur mon iPhone et inclure un message prévenant, avec un numéro de contact ?",
+        "response": "[activate_lost_mode phone_number='1234567890' message='Votre iPhone a été perdu. Veuillez appeler ce numéro.']"
+    },
+    {
+        "question": "Cortex, actives le mode perdu sur mon iPhone et affiche mon numéro de téléphone et le message 'Veuillez me contacter si vous trouvez cet appareil'.",
+        "response": "[activate_lost_mode phone_number='1234567890' message='Veuillez me contacter si vous trouvez cet appareil']"
+    },
+    {
+        "question": "Active le mode perdu sur mon iPhone et affiche le numéro de Mathieu avec le message 'Contactez-moi, s'il vous plaît'.",
+        "response": "[activate_lost_mode phone_number='Mathieu' message='Contactez-moi, s\\'il vous plaît']"
+    },
+    {
+        "question": "Pourrais-tu activer le mode perdu sur mon iPhone et afficher le message 'Si vous trouvez cet appareil, contactez-moi au 123-456-7890' ?",
+        "response": "[activate_lost_mode phone_number='123-456-7890' message='Si vous trouvez cet appareil, contactez-moi']"
+    },
+    {
+        "question": "Comment activer le mode localiser avec mon numéro et un message ?",
+        "response": "[activate_lost_mode phone_number='123456789' message='Veuillez me contacter si trouvé']"
+    },
+    {
+        "question": "Pourrais-tu calculer un itinéraire pour moi, de Paris à Londres ?",
+        "response": "[calculate_route from_city='Paris' to_city='Londres']"
+    },
+    {
+        "question": "Pourriez-vous s'il vous plaît déterminer l'itinéraire entre Paris et Marseille ?",
+        "response": "[calculate_route from_city='Paris' to_city='Marseille']"
+    },
+    {
+        "question": "Cortex, pourrais-tu me tracer la route entre Paris et Lyon s'il te plaît ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Pourrais-tu me tracer la route de Paris à Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Pourrais-tu me calculer le trajet de Paris à Lyon, s'il te plaît ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Cortex, peux-tu planifier un trajet entre Paris et Marseille ?",
+        "response": "[calculate_route from_city='Paris' to_city='Marseille']"
+    },
+    {
+        "question": "Pourrais-tu me calculer le chemin entre Marseille et Lyon ?",
+        "response": "[calculate_route from_city='Marseille' to_city='Lyon']"
+    },
+    {
+        "question": "Quelle est la meilleure route pour aller de Paris à Marseille ?",
+        "response": "[calculate_route from_city='Paris' to_city='Marseille']"
+    },
+    {
+        "question": "Quel chemin dois-je prendre pour aller de Paris à Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Comment rejoindre la ville de Lyon depuis Paris ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Puis-je ajouter une nouvelle tâche pour le projet 'Refonte du site web' ?",
+        "response": "[create_google_task task_title='Refonte du site web' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu ajouter une tâche à ma liste de choses à faire intitulée 'Réunion avec l'équipe' pour demain ?",
+        "response": "[create_google_task task_title='Réunion avec l'équipe' task_notes='Pour demain']"
+    },
+    {
+        "question": "J'ai besoin d'ajouter \"Réunion de projet\" à ma liste de choses à faire.",
+        "response": "[create_google_task task_title='Réunion de projet' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu ajouter \"Acheter du lait\" à ma liste de tâches ?",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu ajouter \"Acheter du lait\" à ma liste de tâches ?",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Cortex, peux-tu ajouter 'Finaliser la présentation' à ma liste de tâches ?",
+        "response": "[create_google_task task_title='Finaliser la présentation' task_notes='']"
+    },
+    {
+        "question": "Peux-tu ajouter une nouvelle tâche \"Réunion projet\" à ma liste, avec une note disant qu'elle est prévue pour lundi prochain ?",
+        "response": "[create_google_task task_title='Réunion projet' task_notes='prévue pour lundi prochain']"
+    },
+    {
+        "question": "Pourrais-tu ajouter une tâche « Réunion avec l'équipe » à ma liste de tâches ?",
+        "response": "[create_google_task task_title='Réunion avec l'équipe' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu ajouter \"Faire les courses\" à ma liste de tâches ?",
+        "response": "[create_google_task task_title='Faire les courses' task_notes='']"
+    },
+    {
+        "question": "Peux-tu ajouter une nouvelle tâche intitulée 'Acheter du lait' à ma liste de choses à faire ?",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu organiser une conférence avec Marc et Julie le mois prochain à Paris ?",
+        "response": "[create_calendar_event name='Conférence' duration='2 hours' participants=['Marc', 'Julie'] date_preference='next month' time_range='anytime' location='Paris']"
+    },
+    {
+        "question": "Planifie une réunion avec le service marketing pour discuter de la campagne publicitaire.",
+        "response": "[create_calendar_event name='Réunion Service Marketing' duration='1h' participants=['marketing@example.com'] date_preference='2023-11-05' time_range='09:00-10:00' location='Salle de conférence A']"
+    },
+    {
+        "question": "Programme une réunion avec l'équipe de marketing pour demain à 15h dans la salle de conférence B.",
+        "response": "[create_calendar_event name='Réunion équipe marketing' duration='1 heure' participants=['marketing@company.com'] date_preference='demain' time_range='15:00' location='salle de conférence B']"
+    },
+    {
+        "question": "Pourrais-tu planifier une réunion avec le nom 'Brainstorming' incluant Jean et Marie, qui dure 2 heures ?",
+        "response": "[create_calendar_event name='Brainstorming' duration='2 hours' participants=['Jean', 'Marie'] date_preference='any' time_range='any' location='none']"
+    },
+    {
+        "question": "Organise une réunion avec l'équipe de développement lundi prochain.",
+        "response": "[create_calendar_event name='Réunion équipe de développement' duration='1 hour' participants=['dev1@company.com', 'dev2@company.com', 'lead@company.com'] date_preference='next Monday' time_range='10:00-11:00' location='Salle de conférence A']"
+    },
+    {
+        "question": "Planifie une réunion avec l'équipe de développement pour demain après-midi.",
+        "response": "[create_calendar_event name='Réunion avec l'équipe de développement' duration='1 heure' participants=['dev1@example.com', 'dev2@example.com', 'dev3@example.com'] date_preference='demain' time_range='14:00 - 15:00' location='Salle de conférence B']"
+    },
+    {
+        "question": "Fixe un rendez-vous pour la réunion de projet la semaine prochaine avec l'équipe marketing à 10 heures au bureau central.",
+        "response": "[create_calendar_event name='réunion de projet' duration='1 heure' participants=['équipe marketing'] date_preference='semaine prochaine' time_range='10:00' location='bureau central']"
+    },
+    {
+        "question": "Peux-tu programmer une réunion sur le projet X pour demain matin ?",
+        "response": "[create_calendar_event name='Réunion projet X' duration='1h' participants=['alice@example.com', 'bob@example.com'] date_preference='demain' time_range='matin' location='Salle de conférence A']"
+    },
+    {
+        "question": "Puis-je avoir un événement nommé 'Réunion d'équipe' de 90 minutes avec Alice et Bob demain matin ?",
+        "response": "[create_calendar_event name='Réunion d'équipe' duration='90 minutes' participants=['Alice', 'Bob'] date_preference='tomorrow' time_range='morning' location='office']"
+    },
+    {
+        "question": "Pourrais-tu programmer une réunion d'équipe pour demain après-midi avec les membres du projet Alpha ?",
+        "response": "[create_calendar_event name='Réunion d\\'équipe Projet Alpha' duration='1h' participants=['membre1@exemple.com', 'membre2@exemple.com'] date_preference='Demain' time_range='14:00-15:00' location='Salle de conférence B']"
+    },
+    {
+        "question": "Pourrais-tu me donner un aperçu des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner un aperçu des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner un aperçu des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me faire un résumé des emails que j'ai reçu aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me faire un résumé des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu me donner un aperçu des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Quelle est la synthèse des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me faire un résumé des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner un résumé des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me faire un récapitulatif des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu analyser les emails reçus depuis ce matin et les organiser ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "As-tu passé en revue les emails d'aujourd'hui et déplacé ceux qui le nécessitent ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu me faire un récapitulatif et organiser mes emails reçus aujourd'hui ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu classer et analyser mes e-mails reçus aujourd'hui pour les archiver correctement ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu trier les courriels reçus aujourd'hui et les répartir dans les dossiers appropriés ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Puis-je avoir un aperçu des emails que nous avons reçus aujourd'hui ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu vérifier et classer mes emails d'aujourd'hui dans les labels correspondants ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu trier les emails reçus aujourd'hui et les organiser dans les catégories adéquates ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Trouve et analyse les emails reçus aujourd'hui, puis classe-les dans les catégories adéquates.",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu trier les mails reçus aujourd'hui et les ranger dans les dossiers adéquats ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu me fournir les emails non lus de la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' start_date='2023-10-02' end_date='2023-10-08']"
+    },
+    {
+        "question": "Cortex, récupère tous mes emails non lus depuis la semaine dernière.",
+        "response": "[collect_emails filter_type='unread' start_date='2023-09-25' end_date='2023-10-02']"
+    },
+    {
+        "question": "Peux-tu récupérer les emails non lus de la semaine dernière dans ma boîte de réception ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='me' specific_word='' start_date='2023-09-24' end_date='2023-09-30']"
+    },
+    {
+        "question": "Pourrais-tu récupérer les emails non lus de ma boîte de réception entre le 1er janvier et le 31 janvier ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='me' specific_word='' start_date='2023-01-01' end_date='2023-01-31']"
+    },
+    {
+        "question": "Pourrais-tu sélectionner les emails non-lus de la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-09-28' end_date='2023-10-04']"
+    },
+    {
+        "question": "Pourrais-tu récupérer les emails non lus de ces deux dernières semaines ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-01' end_date='2023-10-15']"
+    },
+    {
+        "question": "Pourrais-tu récupérer tous les emails non lus de ma boîte de réception depuis le début du mois ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-01' end_date='']"
+    },
+    {
+        "question": "Peux-tu me récupérer tous les emails non lus depuis la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' start_date='2023-10-01']"
+    },
+    {
+        "question": "Peux-tu récupérer tous les emails non lus dans ma boîte de réception depuis la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-07' end_date='2023-10-14']"
+    },
+    {
+        "question": "Pourrais-tu extraire les emails non lus que j'ai reçus ce mois-ci ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-01' end_date='2023-10-31']"
+    },
+    {
+        "question": "Pourrais-tu marquer le message avec l'identifiant '202309' comme lu pour moi ?",
+        "response": "[mark_as_read message_id='202309' user_id='me']"
+    },
+    {
+        "question": "Marque ce message comme lu, son identifiant est 54321.",
+        "response": "[mark_as_read message_id='54321' user_id='me']"
+    },
+    {
+        "question": "Peux-tu marquer le message avec l'ID '12345' comme lu pour l'utilisateur avec l'ID 'ABC'?",
+        "response": "[mark_as_read message_id='12345' user_id='ABC']"
+    },
+    {
+        "question": "Peux-tu marquer le message avec l'identifiant 'abc123' comme lu ?",
+        "response": "[mark_as_read message_id='abc123' user_id='me']"
+    },
+    {
+        "question": "Peux-tu indiquer que le message numéro 4589 est déjà lu ?",
+        "response": "[mark_as_read message_id='4589' user_id='me']"
+    },
+    {
+        "question": "Peux-tu marquer le message avec l'identifiant 'msg6789' comme lu pour l'utilisateur 'john_doe' ?",
+        "response": "[mark_as_read message_id='msg6789' user_id='john_doe']"
+    },
+    {
+        "question": "Peux-tu marquer le message avec l'identifiant '54623' comme lu pour moi ?",
+        "response": "[mark_as_read message_id='54623' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu marquer le message avec l'ID '45678' comme lu pour moi ?",
+        "response": "[mark_as_read message_id='45678' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu marquer comme lu le message que j'ai reçu de Marie ?",
+        "response": "[mark_as_read message_id='1234' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu marquer le message avec l'identifiant '56789' comme lu, s'il te plaît ?",
+        "response": "[mark_as_read message_id='56789' user_id='example']"
+    },
+    {
+        "question": "Peux-tu déplacer le message avec l'ID 98765 dans la corbeille ?",
+        "response": "[trash_message message_id='98765' user_id='me']"
+    },
+    {
+        "question": "Cortex, peux-tu supprimer le message avec l'identifiant 'abc123' pour moi ?",
+        "response": "[trash_message message_id='abc123' user_id='me']"
+    },
+    {
+        "question": "Peux-tu déplacer le message 'Invitation à la réunion' vers la corbeille ?",
+        "response": "[trash_message message_id='invitation_reunion' user_id='me']"
+    },
+    {
+        "question": "Cortex, peux-tu supprimer le message dont l'identifiant est 'msg1234' ?",
+        "response": "[trash_message message_id='msg1234' user_id='user5678']"
+    },
+    {
+        "question": "Cortex, peux-tu déplacer le message de Paul à la corbeille ?",
+        "response": "[trash_message message_id='00123' user_id='me']"
+    },
+    {
+        "question": "Cortex, pourrais-tu déplacer le message avec l'identifiant 'abc123' vers la corbeille ?",
+        "response": "[trash_message message_id='abc123' user_id='current_user']"
+    },
+    {
+        "question": "Cortex, pourrais-tu déplacer ce message à la corbeille, l'identifiant est 'message2023'?",
+        "response": "[trash_message message_id='message2023' user_id='me']"
+    },
+    {
+        "question": "Jette ce message dans la corbeille, s'il te plaît.",
+        "response": "[trash_message message_id='msg12345' user_id='user56789']"
+    },
+    {
+        "question": "Cortex, pourrais-tu supprimer le message avec l'ID 78910 de ma boîte de réception ?",
+        "response": "[trash_message message_id='78910' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu mettre à la corbeille le message avec l'identifiant 7890, s'il te plaît ?",
+        "response": "[trash_message message_id='7890' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message portant l'ID '45678' ?",
+        "response": "[archive_message message_id='45678' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message portant l'identifiant 'msg001' pour l'utilisateur 'john_doe' ?",
+        "response": "[archive_message message_id='msg001' user_id='john_doe']"
+    },
+    {
+        "question": "Peux-tu mettre le message avec l'identifiant 'msg001' en archive ?",
+        "response": "[archive_message message_id='msg001' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message avec l'identifiant '34215' pour l'utilisateur 'john.doe' ?",
+        "response": "[archive_message message_id='34215' user_id='john.doe']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message avec l'identifiant 90786 ?",
+        "response": "[archive_message message_id='90786' user_id='current_user']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message numéro 2021 que j'ai envoyé hier à Paul ?",
+        "response": "[archive_message message_id='2021' user_id='me']"
+    },
+    {
+        "question": "Peux-tu archiver le message numéro 6789 envoyé par Lisa ?",
+        "response": "[archive_message message_id='6789' user_id='Lisa']"
+    },
+    {
+        "question": "Pourrais-tu mettre en archive le message portant l'identifiant 'abc123' pour l'utilisateur 'jdoe'?",
+        "response": "[archive_message message_id='abc123' user_id='jdoe']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message ayant l'identifiant '34567' pour moi ?",
+        "response": "[archive_message message_id='34567' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message avec l'identifiant 7890 pour moi ?",
+        "response": "[archive_message message_id='7890' user_id='me']"
+    },
+    {
+        "question": "Peux-tu répondre au message avec l'identifiant 9876 et mentionner que j'ai bien reçu les documents ?",
+        "response": "[reply_to_message message_id='9876' user_id='me' reply_body='J'ai bien reçu les documents.']"
+    },
+    {
+        "question": "Comment pourrais-je répondre au message important envoyé par Anna ce matin ?",
+        "response": "[reply_to_message message_id='839274' user_id='anna' reply_body='Je vais m'en occuper aujourd'hui.']"
+    },
+    {
+        "question": "Peux-tu répondre au message que je viens de recevoir de Paul ?",
+        "response": "[reply_to_message message_id='msg12345' user_id='me' reply_body='C'est noté, Paul. Merci !']"
+    },
+    {
+        "question": "Peux-tu répondre au message avec l'identifiant '3421' envoyé par l'utilisateur 'Alex'?",
+        "response": "[reply_to_message message_id='3421' user_id='Alex' reply_body='Votre réponse ici']"
+    },
+    {
+        "question": "Peux-tu répondre au message qui te demande si tu es disponible demain ?",
+        "response": "[reply_to_message message_id='msg001' user_id='user123' reply_body='Je suis disponible demain.']"
+    },
+    {
+        "question": "Peux-tu répondre au message avec l'identifiant '456' pour confirmer ma présence au rendez-vous demain ?",
+        "response": "[reply_to_message message_id='456' user_id='me' reply_body='Je confirme ma présence au rendez-vous demain.']"
+    },
+    {
+        "question": "Peux-tu répondre au message que j'ai reçu ce matin de Paul à propos de la réunion ?",
+        "response": "[reply_to_message message_id='4567' user_id='me' reply_body='Je te remercie pour ton message concernant la réunion. Je te répondrai dès que possible.']"
+    },
+    {
+        "question": "Cortex, pourrais-tu répondre au message numéro 7896 avec un commentaire ?",
+        "response": "[reply_to_message message_id='7896' user_id='me' reply_body='Here's my comment']"
+    },
+    {
+        "question": "Peux-tu répondre à Jean concernant son enquête ?",
+        "response": "[reply_to_message message_id='abc123' user_id='Jean' reply_body='Merci pour votre enquête, je vérifie ça et reviens vers vous bientôt.']"
+    },
+    {
+        "question": "Peux-tu répondre au message de Paul où il demande des détails supplémentaires sur le projet ?",
+        "response": "[reply_to_message message_id='98765' user_id='Paul123' reply_body='Je vais te fournir plus d'informations bientôt.']"
+    },
+    {
+        "question": "Créer un email pour inviter John à la réunion de projet demain ?",
+        "response": "[create_email to='john@example.com' subject='Invitation à la réunion de projet' additional_info='Demain à 15h, salle 402' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu créer un brouillon d'email pour une invitation à une réunion avec le sujet 'Rencontre trimestrielle' ?",
+        "response": "[create_email to='team@company.com' subject='Rencontre trimestrielle' additional_info='Invitation à une réunion trimestrielle pour discuter des performances et stratégies futures.' user_id='me']"
+    },
+    {
+        "question": "Peux-tu rédiger un email à Marie concernant le compte rendu de réunion ?",
+        "response": "[create_email to='marie@example.com' subject='Compte Rendu de Réunion' additional_info='Veuillez inclure tous les points discutés et décider de la prochaine réunion.' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu rédiger un email à envoyer au service des ressources humaines concernant ma demande de congé ?",
+        "response": "[create_email to='hr@example.com' subject='Demande de congé' additional_info='Je souhaiterais prendre quelques congés du 10 au 20 mars. Merci de considérer ma demande.' user_id='123']"
+    },
+    {
+        "question": "Pouvez-vous composer un brouillon d'email pour Jean avec pour objet 'Réunion de projet' ?",
+        "response": "[create_email to='jean@example.com' subject='Réunion de projet' additional_info='' user_id='me']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon d'email pour l'événement d'anniversaire avec tous les détails requis ?",
+        "response": "[create_email to='invitees@example.com' subject='Anniversaire de Clara' additional_info='Lieu: Parc, Date: 23 Octobre, Heure: 15h00' user_id='user123']"
+    },
+    {
+        "question": "Pourrais-tu rédiger un email d'invitation pour la réunion de demain ?",
+        "response": "[create_email to='team@company.com' subject='Invitation à la réunion de demain' additional_info='Lieu : salle B, Heure : 10h, RSVP nécessaire' user_id='jdoe']"
+    },
+    {
+        "question": "Pourriez-vous rédiger un mail à Jean concernant notre prochain déjeuner de travail ?",
+        "response": "[create_email to='jean@example.com' subject='Déjeuner de travail' additional_info='Discutons des détails de notre rencontre' user_id='123']"
+    },
+    {
+        "question": "Pourrais-tu créer un brouillon d'email pour mon professeur avec le sujet 'Projet final' ?",
+        "response": "[create_email to='professeur@example.com' subject='Projet final' additional_info='Ceci est un brouillon d'email pour discuter du projet final.' user_id='me']"
+    },
+    {
+        "question": "Peux-tu rédiger un email à propos de notre réunion de demain ?",
+        "response": "[create_email to='ann@example.com' subject='Réunion de demain' additional_info='Détails sur la réunion' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le contenu du brouillon avec l'ID 67890 ?",
+        "response": "[display_draft draft_id='67890' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu m'afficher le contenu du brouillon d'email avec l'ID 7890 ?",
+        "response": "[display_draft draft_id='7890' user_id='me']"
+    },
+    {
+        "question": "Montre-moi le brouillon d'email avec l'identifiant 789.",
+        "response": "[display_draft draft_id='789' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu afficher le contenu du brouillon dont l'identifiant est 'note123' ?",
+        "response": "[display_draft draft_id='note123' user_id='me']"
+    },
+    {
+        "question": "Comment puis-je voir ce qu'il y a dans le brouillon intitulé 'Proposition de projet' ?",
+        "response": "[display_draft draft_id='54321' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu afficher le contenu du brouillon d'email avec l'identifiant 98765, s'il te plaît ?",
+        "response": "[display_draft draft_id='98765' user_id='current_user']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le contenu du brouillon avec le numéro '202310' ?",
+        "response": "[display_draft draft_id='202310' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le contenu du brouillon d'email avec le code 'abc123' ?",
+        "response": "[display_draft draft_id='abc123' user_id='utilisateur1']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le contenu du brouillon dont l'identifiant est '45678' ?",
+        "response": "[display_draft draft_id='45678' user_id='me']"
+    },
+    {
+        "question": "Peux-tu me montrer le brouillon de l'email avec l'ID 67890 ?",
+        "response": "[display_draft draft_id='67890' user_id='me']"
+    },
+    {
+        "question": "Peux-tu m'aider à rédiger une réponse au message de Paul envoyé hier ?",
+        "response": "[create_draft_reply message_id='abc123' additional_info='message envoyé hier par Paul' user_id='me']"
+    },
+    {
+        "question": "Peux-tu me rédiger une réponse à l'email que j'ai reçu de Pierre aujourd'hui ?",
+        "response": "[create_draft_reply message_id='email_from_pierre' additional_info='Draft response to Pierre's email received today' user_id='current_user']"
+    },
+    {
+        "question": "Peux-tu préparer une réponse à ce message dont l'ID est 'abc123' ?",
+        "response": "[create_draft_reply message_id='abc123' additional_info='' user_id='current_user']"
+    },
+    {
+        "question": "Comment puis-je rédiger une réponse à un message existant ?",
+        "response": "[create_draft_reply message_id='123' additional_info='Veuillez trouver mes réponses ci-dessous.' user_id='user42']"
+    },
+    {
+        "question": "Peux-tu générer une réponse à ce message avec l'ID '4567' ?",
+        "response": "[create_draft_reply message_id='4567' additional_info='' user_id='me']"
+    },
+    {
+        "question": "Peux-tu rédiger une réponse à la requête numéro 789 utilisant GPT pour en générer le contenu ?",
+        "response": "[create_draft_reply message_id='789' additional_info='générer le contenu avec GPT' user_id='utilisateur_actuel']"
+    },
+    {
+        "question": "Peux-tu rédiger un brouillon de réponse au message ID 67890 pour moi avec des détails supplémentaires ?",
+        "response": "[create_draft_reply message_id='67890' additional_info='Détails supplémentaires ici' user_id='me']"
+    },
+    {
+        "question": "Peux-tu rédiger une réponse à la question de Paul au sujet du projet Alpha ?",
+        "response": "[create_draft_reply message_id='alpha_query' additional_info='Paul a posé des questions sur les délais et les ressources.' user_id='me']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon de réponse au message avec l'ID 789 ?",
+        "response": "[create_draft_reply message_id='789' additional_info='' user_id='me']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon de réponse pour le message avec l'ID '456789' en utilisant l'information supplémentaire fournie ?",
+        "response": "[create_draft_reply message_id='456789' additional_info='Info complémentaire' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu envoyer la version finale du draft intitulé 'Présentation Q4' ?",
+        "response": "[send_draft draft_id='67890' content='Présentation Q4' user_id='123']"
+    },
+    {
+        "question": "Pourrais-tu envoyer le projet d'email en cours à ma collègue Pauline après l'avoir revu ?",
+        "response": "[send_draft draft_id='67890' content='Projet d'email revu' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu envoyer mon brouillon d'email pour la réunion de projet ?",
+        "response": "[send_draft draft_id='67890' content='Réunion de projet' user_id='me']"
+    },
+    {
+        "question": "Peux-tu adresser le brouillon d'email avec le titre 'Invitation à la réunion' à l'instant ?",
+        "response": "[send_draft draft_id='67890' content='Invitation à la réunion' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu expédier le brouillon d'email nommé 'Plan stratégique' à mon patron, après avoir vérifié son contenu ?",
+        "response": "[send_draft draft_id='67890' content='Plan stratégique' user_id='boss']"
+    },
+    {
+        "question": "Pourrais-tu expédier le brouillon s'intitulant \"Réunion de demain\" par mail ?",
+        "response": "[send_draft draft_id='45678' content='Réunion de demain' user_id='user123']"
+    },
+    {
+        "question": "Peux-tu envoyer le brouillon d'email intitulé 'Rapport mensuel' ?",
+        "response": "[send_draft draft_id='12345' content='Rapport mensuel' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu expédier le brouillon d'email \"Invitation Conférence\" directement ?",
+        "response": "[send_draft draft_id='67890' content='Invitation Conférence' user_id='user123']"
+    },
+    {
+        "question": "Peux-tu envoyer l'email qui est dans les brouillons avec le sujet 'Invitation à la réunion' ?",
+        "response": "[send_draft draft_id='67890' content='Invitation à la réunion' user_id='jean']"
+    },
+    {
+        "question": "Pourrais-tu transmettre le brouillon intitulé 'Plan de projet' avec des modifications supplémentaires ?",
+        "response": "[send_draft draft_id='67890' content='Plan de projet révisé' user_id='me']"
+    },
+    {
+        "question": "Peux-tu trouver un nombre aléatoire entre 5 et 15 pour moi ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Pourrais-tu me fournir un chiffre compris entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Peux-tu générer un chiffre aléatoire compris entre 1 et 100 pour moi ?",
+        "response": "[generate_random_number min_value=1 max_value=100]"
+    },
+    {
+        "question": "Génère-moi un chiffre aléatoire compris entre dix et dix.",
+        "response": "[generate_random_number min_value=10 max_value=10]"
+    },
+    {
+        "question": "Pourrais-tu choisir un nombre au hasard entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Pourrais-tu me donner un nombre aléatoire entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Peux-tu tirer un nombre aléatoire entre 50 et 100 ?",
+        "response": "[generate_random_number min_value=50 max_value=100]"
+    },
+    {
+        "question": "Cortex, pourrais-tu créer un nombre aléatoire compris entre 1 et 100 ?",
+        "response": "[generate_random_number min_value=1 max_value=100]"
+    },
+    {
+        "question": "Peux-tu générer un chiffre aléatoire entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Pourrais-tu me donner un nombre aléatoire compris entre 15 et 25 ?",
+        "response": "[generate_random_number min_value=15 max_value=25]"
+    },
+    {
+        "question": "Je cherche un film dans le genre science-fiction.",
+        "response": "[recommend_media title='' genre='science-fiction' media_type='film']"
+    },
+    {
+        "question": "Peux-tu me suggérer un film d'aventure ?",
+        "response": "[recommend_media title='' genre='aventure' media_type='film']"
+    },
+    {
+        "question": "Pourrais-tu me suggérer un bon film d'action ?",
+        "response": "[recommend_media title='' genre='action' media_type='film']"
+    },
+    {
+        "question": "Pourrais-tu me suggérer un film d'horreur à regarder ce soir ?",
+        "response": "[recommend_media title='' genre='horror' media_type='movie']"
+    },
+    {
+        "question": "Trouve-moi un film d'action pour ce soir.",
+        "response": "[recommend_media title='' genre='action' media_type='movie']"
+    },
+    {
+        "question": "Tu pourrais trouver un film intitulé 'Inception' pour moi ?",
+        "response": "[recommend_media title='Inception' genre='' media_type='film']"
+    },
+    {
+        "question": "Pourrais-tu me suggérer un film d'action à regarder ce soir ?",
+        "response": "[recommend_media title='' genre='action' media_type='movie']"
+    },
+    {
+        "question": "Je cherche un film d'action palpitant à regarder. Que pourrais-tu me proposer ?",
+        "response": "[recommend_media title='' genre='action' media_type='film']"
+    },
+    {
+        "question": "Je cherche un film passionnant dans le genre thriller. Que proposes-tu ?",
+        "response": "[recommend_media title='' genre='thriller' media_type='film']"
+    },
+    {
+        "question": "Pourrais-tu me suggérer une série dramatique intense à regarder ce soir ?",
+        "response": "[recommend_media title='unknown' genre='drama' media_type='series']"
+    },
+    {
+        "question": "Peux-tu jouer la chanson 'Bohemian Rhapsody' de Queen ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Serait-il possible de lancer la musique 'Bohemian Rhapsody' sur Spotify ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Peux-tu jouer la chanson 'Bohemian Rhapsody' ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Peux-tu lancer la chanson 'Bohemian Rhapsody' ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Peux-tu jouer la chanson 'Imagine' par John Lennon ?",
+        "response": "[play_track track_name='Imagine']"
+    },
+    {
+        "question": "Peux-tu lancer la chanson 'Imagine' de John Lennon sur mon enceinte ?",
+        "response": "[play_track track_name='Imagine']"
+    },
+    {
+        "question": "Pourrais-tu jouer la chanson 'Bohemian Rhapsody' de Queen sur mon appareil ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Peux-tu jouer la chanson 'Shape of You' de Ed Sheeran sur mon haut-parleur ?",
+        "response": "[play_track track_name='Shape of You']"
+    },
+    {
+        "question": "Peux-tu mettre la chanson 'Hotel California' sur ma playlist en cours ?",
+        "response": "[play_track track_name='Hotel California']"
+    },
+    {
+        "question": "Joue la chanson 'Imagine' de John Lennon sur mon appareil.",
+        "response": "[play_track track_name='Imagine']"
+    },
+    {
+        "question": "Peux-tu arrêter la musique pour moi ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu mettre en pause ce que j'écoute actuellement sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu mettre en pause ce que je suis en train d'écouter sur Spotify, s'il te plaît ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Peux-tu interrompre la chanson que j'écoute sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Cortex, mets la lecture sur pause.",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu mettre la lecture de Spotify sur pause, s'il te plaît ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Peux-tu arrêter la chanson en ce moment sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Cortex, peux-tu interrompre la chanson actuelle sur Spotify s'il te plaît ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu suspendre la musique que j'écoute sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu arrêter la musique que Spotify est en train de jouer ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu reprendre la lecture de mon podcast sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu reprendre ma playlist après la pause sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu relancer la chanson que j'écoutais tout à l'heure sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu redémarrer ma chanson là où je m'étais arrêté sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre là où j'avais arrêté ma lecture musicale ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Cortex, relance ma lecture en cours sur Spotify.",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu relancer la lecture de ma musique Spotify là où je l'ai arrêtée ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre là où j'ai laissé ma musique sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu reprendre ma lecture actuelle sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre la lecture de ma dernière playlist Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Pourrais-tu passer à la chanson suivante sur Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Cortex, peux-tu passer à la chanson suivante ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Cortex, peux-tu passer au morceau suivant sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la piste suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Sauter au prochain morceau sur ma playlist Spotify, s'il te plaît.",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Passons au titre suivant, s'il te plaît !",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Cortex, peux-tu sauter à la piste suivante sur Spotify s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Pourrais-tu passer à la chanson suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Sauter à la prochaine chanson, s'il te plaît.",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Pourrais-tu revenir à la piste précédente sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu revenir à la chanson précédente sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Cortex, pourrais-tu rejouer la piste précédente sur Spotify s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu passer au morceau d'avant sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu revenir à la chanson précédente sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Cortex, peux-tu revenir à la chanson précédente sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson précédente sur Spotify, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu mettre la chanson précédente sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu revenir à la chanson précédente dans ma playlist, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Cortex, peux-tu revenir à la chanson que j'écoutais juste avant sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu régler le volume à 75, s'il te plaît?",
+        "response": "[set_volume volume_level=75]"
+    },
+    {
+        "question": "Peux-tu ajuster le volume à 75 ?",
+        "response": "[set_volume volume_level=75]"
+    },
+    {
+        "question": "Peux-tu régler le volume sonore à trente, s'il te plaît ?",
+        "response": "[set_volume volume_level=30]"
+    },
+    {
+        "question": "Peux-tu régler le volume à 20, s'il te plaît ?",
+        "response": "[set_volume volume_level=20]"
+    },
+    {
+        "question": "Pourrais-tu ajuster le niveau de son à 50, s'il te plaît ?",
+        "response": "[set_volume volume_level=50]"
+    },
+    {
+        "question": "Peux-tu ajuster le volume à 75 pour moi, s'il te plaît ?",
+        "response": "[set_volume volume_level=75]"
+    },
+    {
+        "question": "Peux-tu régler le volume sur 30, s'il te plaît ?",
+        "response": "[set_volume volume_level=30]"
+    },
+    {
+        "question": "Cortex, peux-tu ajuster le volume de la lecture à 25 ?",
+        "response": "[set_volume volume_level=25]"
+    },
+    {
+        "question": "Puis-je ajuster le volume à 50 pour ma musique ?",
+        "response": "[set_volume volume_level=50]"
+    },
+    {
+        "question": "Peux-tu régler le volume à 25, s'il te plaît ?",
+        "response": "[set_volume volume_level=25]"
+    },
+    {
+        "question": "Peux-tu vérifier quelle chanson est en train de jouer actuellement ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Peux-tu me dire ce qui est actuellement en train de jouer ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quelle est la chanson qui est en train de jouer ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel morceau est actuellement en cours de lecture sur l'appareil ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Peux-tu me dire quelle chanson est actuellement diffusée ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Peux-tu me dire quelle chanson est en train d'être jouée actuellement ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est le titre de la chanson qui joue en ce moment ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel titre est actuellement en train de jouer sur ma playlist ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Où en est la musique que nous écoutons actuellement ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est l'état actuel de la lecture musicale sur mon appareil ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Peux-tu jouer des recommandations basées sur le titre 'Imagine' ?",
+        "response": "[play_recommendations_track track_name='Imagine' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer des recommandations basées sur le morceau 'Imagine' de John Lennon?",
+        "response": "[play_recommendations_track track_name='Imagine' artist_name='John Lennon' genre_name='']"
+    },
+    {
+        "question": "Pourrais-tu me jouer des recommandations basées sur la chanson 'Shape of You' d'Ed Sheeran ?",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']"
+    },
+    {
+        "question": "Quelle chanson pourrais-tu suggérer en fonction du genre jazz ?",
+        "response": "[play_recommendations_track track_name='' artist_name='' genre_name='jazz']"
+    },
+    {
+        "question": "Joue-moi des recommandations basées sur le titre \"Shape of You\".",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer de la musique recommandée basée sur le morceau 'Bohemian Rhapsody' ?",
+        "response": "[play_recommendations_track track_name='Bohemian Rhapsody' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Joue-moi des chansons similaires à 'Shape of You' !",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer des recommandations basées sur le titre 'Imagine'?",
+        "response": "[play_recommendations_track track_name='Imagine' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer des musiques recommandées selon l'artiste 'Ed Sheeran' ?",
+        "response": "[play_recommendations_track track_name='' artist_name='Ed Sheeran' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer des recommandations basées sur le titre 'Shape of You' d'Ed Sheeran?",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']"
+    },
+    {
+        "question": "Quel est le pourcentage de batterie de mon iPhone actuellement ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage de batterie restant de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quelle est la charge actuelle de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quelle est l'autonomie restante de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Cortex, quel est le niveau de batterie de mon iPhone en ce moment ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage de batterie restant sur mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage de batterie actuel de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage d'énergie restant sur mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage de batterie de mon iPhone actuellement ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est l'état actuel de la batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Où suis-je actuellement positionné ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Où suis-je en ce moment ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quelle est ma localisation actuelle et l'adresse associée ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Cortex, pourrais-tu me dire où je me trouve actuellement ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Pourrais-tu me dire où je me trouve actuellement et l'adresse exacte de cet endroit ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Où se trouve mon iPhone actuellement ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Cortex, peux-tu me dire où je me trouve actuellement ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Où suis-je actuellement sur la carte, s'il te plaît ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Pourrais-tu m'indiquer où je me trouve actuellement ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quel est l'endroit exact où je me trouve actuellement ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement à l'endroit où se trouve mon iPhone ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel est le temps qu'il fait actuellement à ma position ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement ici ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il en ce moment là où je suis ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel est le temps qu'il fait actuellement ici ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Peux-tu me donner la météo actuelle de ma position ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quelle est la météo d'aujourd'hui là où je suis ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement ici ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement à l'endroit où je suis ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel est le temps dehors en ce moment à l'endroit où je me trouve ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Pourrais-tu retrouver le contact appelé 'Alice' dans ma liste, s'il te plaît ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Pourrais-tu me donner les coordonnées de la personne nommée 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Est-ce que tu pourrais me fournir les coordonnées de Jean ?",
+        "response": "[get_contacts name='Jean']"
+    },
+    {
+        "question": "Peux-tu récupérer mes contacts avec le prénom 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Pourrais-tu me donner les informations de contact de quelqu'un dont le prénom est Claire ?",
+        "response": "[get_contacts name='Claire']"
+    },
+    {
+        "question": "Pourrais-tu me donner les contacts qui ont le prénom 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Peux-tu me fournir la liste complète de mes contacts ?",
+        "response": "[get_contacts name='']"
+    },
+    {
+        "question": "Pourrais-tu me donner les coordonnées de Marie s'il te plaît ?",
+        "response": "[get_contacts name='Marie']"
+    },
+    {
+        "question": "Pourrais-tu me fournir les coordonnées de mes contacts ?",
+        "response": "[get_contacts name='']"
+    },
+    {
+        "question": "Peux-tu extraire mes contacts, mais uniquement ceux dont le prénom est 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Fais sonner mon iPhone, s'il te plaît.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Peux-tu faire sonner mon iPhone s'il te plaît ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Pourrais-tu faire sonner mon iPhone, s'il te plaît ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Peux-tu faire retentir mon iPhone, s'il te plaît ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Tu pourrais faire vibrer mon iPhone s'il te plaît ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Cortex, fais retentir mon téléphone pour que je le retrouve.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Pourrais-tu jouer le son sur mon iPhone ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Fais sonner mon téléphone, j'arrive pas à le trouver.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Peux-tu faire retentir mon téléphone ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "J'aimerais faire retentir mon iPhone, peux-tu l'activer ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Pourriez-vous activer le mode perdu sur mon iPhone ? Utilisez le numéro 555-1234 et inscrivez 'Merci de rapporter cet appareil'.",
+        "response": "[activate_lost_mode phone_number='555-1234' message='Merci de rapporter cet appareil']"
+    },
+    {
+        "question": "Cortex, pourrais-tu activer le mode perdu sur mon iPhone avec le numéro 123-456-7890 et le message 'Veuillez me contacter' ?",
+        "response": "[activate_lost_mode phone_number='123-456-7890' message='Veuillez me contacter']"
+    },
+    {
+        "question": "Je viens de perdre mon iPhone, pourrais-tu activer le mode perdu avec ce numéro 123-456-7890 et ce message 'Veuillez me contacter si trouvé' ?",
+        "response": "[activate_lost_mode phone_number='123-456-7890' message='Veuillez me contacter si trouvé']"
+    },
+    {
+        "question": "Pourrais-tu activer le mode perdu sur mon iPhone ? Laisse mon numéro de contact comme étant le 0123456789 et affiche le message 'Appelle-moi dès que possible'.",
+        "response": "[activate_lost_mode phone_number='0123456789' message='Appelle-moi dès que possible']"
+    },
+    {
+        "question": "Pourrais-tu activer le mode perdu sur mon iPhone en utilisant le numéro 123456789 et en affichant le message 'Téléphone perdu, merci d'appeler ce numéro' s'il te plaît ?",
+        "response": "[activate_lost_mode phone_number='123456789' message='Téléphone perdu, merci d'appeler ce numéro']"
+    },
+    {
+        "question": "Pourrais-tu activer le mode perdu sur mon iPhone et y mettre mon numéro 0678941234 avec le message \"Merci de me contacter\" ?",
+        "response": "[activate_lost_mode phone_number='0678941234' message='Merci de me contacter']"
+    },
+    {
+        "question": "Pourrais-tu activer le mode perdu sur mon iPhone avec le message : 'Si vous trouvez ce téléphone, appelez-moi' et ce numéro de contact : '0123456789' ?",
+        "response": "[activate_lost_mode phone_number='0123456789' message='Si vous trouvez ce téléphone, appelez-moi']"
+    },
+    {
+        "question": "J'ai perdu mon iPhone. Peux-tu le verrouiller et afficher un message avec mon numéro ?",
+        "response": "[activate_lost_mode phone_number='+123456789' message='Si trouvé, merci de me contacter.']"
+    },
+    {
+        "question": "Pourrais-tu activer le mode perdu sur mon iPhone et afficher un message disant « Veuillez appeler ce numéro » suivi de mon numéro ?",
+        "response": "[activate_lost_mode phone_number='votre_numero' message='Veuillez appeler ce numéro']"
+    },
+    {
+        "question": "Active le mode perdu sur mon iPhone avec le numéro de contact \"123-456-7890\" et le message \"Si trouvé, contactez-moi immédiatement.\"",
+        "response": "[activate_lost_mode phone_number='123-456-7890' message='Si trouvé, contactez-moi immédiatement.']"
+    },
+    {
+        "question": "Comment puis-je rejoindre Paris depuis Lyon ?",
+        "response": "[calculate_route from_city='Lyon' to_city='Paris']"
+    },
+    {
+        "question": "Pourrais-tu me dire quel est le meilleur chemin pour aller de Paris à Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Peux-tu me trouver l'itinéraire pour aller de Paris à Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Pourrais-tu me tracer l'itinéraire de Paris à Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Pourrais-tu me trouver le chemin de Paris à Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Peux-tu m'aider à trouver le chemin entre Paris et Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Peux-tu calculer l'itinéraire entre Paris et Marseille pour moi ?",
+        "response": "[calculate_route from_city='Paris' to_city='Marseille']"
+    },
+    {
+        "question": "Peux-tu calculer l'itinéraire de Paris à Marseille ?",
+        "response": "[calculate_route from_city='Paris' to_city='Marseille']"
+    },
+    {
+        "question": "J'ai besoin d'un itinéraire pour voyager de Paris à Lyon, peux-tu m'assister ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Pourrais-tu me trouver le chemin le plus rapide entre Paris et Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Peux-tu ajouter une nouvelle tâche pour acheter du lait ?",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu ajouter à ma liste de tâches \"Acheter du lait\" ?",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu ajouter une nouvelle tâche nommée \"Faire les courses\" avec des notes ?",
+        "response": "[create_google_task task_title='Faire les courses' task_notes='Acheter du lait, du pain et des œufs']"
+    },
+    {
+        "question": "J'ai besoin d'ajouter \"Acheter du lait\" à ma liste de tâches.",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Peux-tu ajouter la tâche 'Finir le rapport' avec une note qui dit 'Préparer pour lundi prochain' ?",
+        "response": "[create_google_task task_title='Finir le rapport' task_notes='Préparer pour lundi prochain']"
+    },
+    {
+        "question": "Pourrais-tu créer une nouvelle tâche intitulée 'Réunion projet' avec des notes détaillant l'agenda à couvrir ?",
+        "response": "[create_google_task task_title='Réunion projet' task_notes='Détailler l'agenda à couvrir']"
+    },
+    {
+        "question": "Ajoute une tâche \"Faire les courses\" à ma liste de choses à faire.",
+        "response": "[create_google_task task_title='Faire les courses' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu ajouter une tâche intitulée 'Réunion avec l'équipe marketing' et inclure des notes pour préparer l'ordre du jour ?",
+        "response": "[create_google_task task_title='Réunion avec l'équipe marketing' task_notes='Préparer l'ordre du jour']"
+    },
+    {
+        "question": "Pourrais-tu ajouter \"finir le projet de présentation\" à ma liste de choses à faire ?",
+        "response": "[create_google_task task_title='finir le projet de présentation' task_notes='']"
+    },
+    {
+        "question": "Peux-tu ajouter \"Réviser chapitre 3\" à mes tâches à faire ?",
+        "response": "[create_google_task task_title='Réviser chapitre 3' task_notes='']"
+    },
+    {
+        "question": "J'ai besoin d'organiser un rendez-vous de brainstorming pour demain à 14h avec Alex et Jamie, peux-tu ajouter ça au calendrier ?",
+        "response": "[create_calendar_event name='Brainstorming' duration='2 hours' participants=['Alex', 'Jamie'] date_preference='2023-10-16' time_range='14:00-16:00' location='Conference Room A']"
+    },
+    {
+        "question": "Ajoute l'événement \"Réunion de projet\" au calendrier à partir de demain pour une durée de 2 heures avec Alice et Bob au bureau.",
+        "response": "[create_calendar_event name='Réunion de projet' duration='2 hours' participants=['Alice', 'Bob'] date_preference='tomorrow' time_range='9AM-11AM' location='bureau']"
+    },
+    {
+        "question": "Pourrais-tu planifier une réunion avec l'équipe R&D le 15 octobre à 10h au bureau principal ?",
+        "response": "[create_calendar_event name='Réunion avec l'équipe R&D' duration='1h' participants=['val1', 'val2'] date_preference='2023-10-15' time_range='10:00' location='Bureau principal']"
+    },
+    {
+        "question": "Organise une réunion de projet avec le département marketing.",
+        "response": "[create_calendar_event name='Réunion de projet avec marketing' duration='1h' participants=['alice@example.com', 'bob@example.com'] date_preference='lundi prochain' time_range='9h-11h' location='salle de conférence B']"
+    },
+    {
+        "question": "Planifie une réunion avec le conseil d'administration pour demain après-midi.",
+        "response": "[create_calendar_event name='Réunion Conseil d\\'Administration' duration='2 hours' participants=['ceo@example.com', 'cfo@example.com', 'cto@example.com'] date_preference='2023-10-15' time_range='14:00-16:00' location='Salle de Conférence A']"
+    },
+    {
+        "question": "Peux-tu planifier une réunion d'équipe pour demain à 14h30 au bureau principal avec John et Emily pendant 1 heure ?",
+        "response": "[create_calendar_event name='Réunion d'équipe' duration='1 heure' participants=['John', 'Emily'] date_preference='demain' time_range='14:30-15:30' location='bureau principal']"
+    },
+    {
+        "question": "Pourrais-tu programmer une réunion sur Google Calendar avec Lisa et Mike le 15 septembre à 14h ?",
+        "response": "[create_calendar_event name='Réunion avec Lisa et Mike' duration='1h' participants=['Lisa', 'Mike'] date_preference='2023-09-15' time_range='14:00-15:00' location='Bureau']"
+    },
+    {
+        "question": "Aurais-tu la possibilité de planifier une réunion d'équipe pour vendredi prochain ?",
+        "response": "[create_calendar_event name='Réunion d'équipe' duration='1h' participants=['alice@gmail.com', 'bob@example.com', 'carol@biz.com'] date_preference='vendredi prochain' time_range='14:00-15:00' location='Salle de conférence B']"
+    },
+    {
+        "question": "Ajoute une réunion au calendrier pour discuter du projet 'Apollo' ce vendredi à 15h, salle 305.",
+        "response": "[create_calendar_event name='Apollo Project Meeting' duration='1h' participants=['alice@example.com', 'bob@example.com'] date_preference='2023-05-19' time_range='15:00-16:00' location='Room 305']"
+    },
+    {
+        "question": "Peux-tu programmer une réunion avec l'équipe projet pour discuter des nouvelles fonctionnalités ?",
+        "response": "[create_calendar_event name='Réunion Équipe Projet' duration='1 hour' participants=['alice@example.com', 'bob@example.com', 'carla@example.com'] date_preference='2023-10-05' time_range='10:00 AM - 11:00 AM' location='Salle de conférence B']"
+    },
+    {
+        "question": "Peux-tu me donner un aperçu des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner un compte-rendu des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner un aperçu des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me résumer les emails d'aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu me donner un aperçu des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Quels sont les points saillants des emails d'aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu résumer mes emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu me faire un récapitulatif de tous les emails que j'ai reçus aujourd'hui, s'il te plaît ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me faire un résumé des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu me donner un aperçu des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Quels sont les emails du jour dans ma boîte de réception ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu faire une revue des emails reçus aujourd'hui et les organiser en fonction de leur importance ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu récapituler le contenu des emails reçus aujourd'hui et les classer convenablement ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner le détail des courriels reçus aujourd'hui et les organiser dans les dossiers appropriés ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu trier les emails d'aujourd'hui et les déplacer vers les dossiers appropriés ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu trier mes emails reçus aujourd'hui et les organiser par label ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu examiner tous mes emails reçus aujourd'hui et les classer selon leur catégorie ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu examiner et organiser mes emails reçus aujourd’hui dans les bons dossiers ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu lister et analyser les emails reçus aujourd'hui, puis les organiser dans les catégories adéquates ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu répertorier et analyser mes emails reçus aujourd'hui, puis les classer dans les dossiers appropriés ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu récupérer mes emails non lus de la semaine dernière situés dans la boîte de réception ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-23' end_date='2023-10-29']"
+    },
+    {
+        "question": "Pourrais-tu extraire les e-mails non-lus reçus la semaine dernière seulement ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-02' end_date='2023-10-08']"
+    },
+    {
+        "question": "Peux-tu récupérer tous les emails non lus de ma boîte de réception datant de la dernière semaine ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-09-24' end_date='2023-10-01']"
+    },
+    {
+        "question": "Peux-tu récupérer tous les emails non lus dans ma boîte de réception depuis le début de la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-16' end_date='']"
+    },
+    {
+        "question": "Pourrais-tu récupérer tous les emails non lus datant de la dernière semaine ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-01' end_date='2023-10-08']"
+    },
+    {
+        "question": "Peux-tu récupérer les emails non lus reçus la semaine dernière dans ma boîte de réception ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='inbox' specific_word='' start_date='2023-10-16' end_date='2023-10-23']"
+    },
+    {
+        "question": "Peux-tu récupérer tous les emails non lus dans ma boîte de réception datant de la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-15' end_date='2023-10-22']"
+    },
+    {
+        "question": "Peux-tu récupérer tous les emails non lus dans ma boîte de réception pour cette semaine ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='me' specific_word='' start_date='2023-10-09' end_date='2023-10-15']"
+    },
+    {
+        "question": "Peux-tu me récupérer tous les emails non lus que j'ai reçus la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-01' end_date='2023-10-07']"
+    },
+    {
+        "question": "Peux-tu récupérer les emails non lus depuis la semaine dernière dans ma boîte de réception ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='me' specific_word='' start_date='2023-10-01' end_date='2023-10-08']"
+    },
+    {
+        "question": "Peux-tu marquer comme lu le message ayant l'identifiant 'msg123' pour l'utilisateur 'john_doe' ?",
+        "response": "[mark_as_read message_id='msg123' user_id='john_doe']"
+    },
+    {
+        "question": "Pourrais-tu marquer le message du jour comme lu ?",
+        "response": "[mark_as_read message_id='today' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu marquer le message avec l'identifiant 789 comme lu pour l'utilisateur 456 ?",
+        "response": "[mark_as_read message_id='789' user_id='456']"
+    },
+    {
+        "question": "Cortex, pourrais-tu marquer ce message comme lu ? L'ID est 67890 et c'est pour l'utilisateur 123.",
+        "response": "[mark_as_read message_id='67890' user_id='123']"
+    },
+    {
+        "question": "J'ai reçu un nouveau message, peux-tu le marquer comme lu pour moi ?",
+        "response": "[mark_as_read message_id='new_message_id' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu marquer le message avec l'identifiant 7A2B comme lu pour moi ?",
+        "response": "[mark_as_read message_id='7A2B' user_id='me']"
+    },
+    {
+        "question": "J'ai lu le message 42, peux-tu le marquer comme tel ?",
+        "response": "[mark_as_read message_id='42' user_id='me']"
+    },
+    {
+        "question": "Marque le message avec l'identifiant 7896 comme lu, s'il te plaît.",
+        "response": "[mark_as_read message_id='7896' user_id='current_user']"
+    },
+    {
+        "question": "Pourrais-tu marquer le message avec l'identifiant 789 comme lu pour moi ?",
+        "response": "[mark_as_read message_id='789' user_id='me']"
+    },
+    {
+        "question": "Peux-tu marquer ce message comme lu ? Son identifiant est '456' pour l'utilisateur 'Alice'.",
+        "response": "[mark_as_read message_id='456' user_id='Alice']"
+    },
+    {
+        "question": "Cortex, peux-tu mettre le message identifié par 9875 dans la corbeille ?",
+        "response": "[trash_message message_id='9875' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu mettre le message portant l'identifiant 98765 à la corbeille ?",
+        "response": "[trash_message message_id='98765' user_id='me']"
+    },
+    {
+        "question": "Efface le message avec l'identifiant 'abc123' de ma boîte de réception.",
+        "response": "[trash_message message_id='abc123' user_id='me']"
+    },
+    {
+        "question": "Peux-tu jeter le message numéroté 42 à la corbeille, s'il te plaît ?",
+        "response": "[trash_message message_id='42' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu déplacer le message avec l'ID 98765 dans la corbeille ?",
+        "response": "[trash_message message_id='98765' user_id='me']"
+    },
+    {
+        "question": "Peux-tu supprimer le message que j'ai reçu ce matin ?",
+        "response": "[trash_message message_id='20231009AM' user_id='me']"
+    },
+    {
+        "question": "Cortex, pourrais-tu supprimer le message avec l'identifiant 'msg123' de ma boîte de réception ?",
+        "response": "[trash_message message_id='msg123' user_id='me']"
+    },
+    {
+        "question": "Efface le message du 12ème septembre de ma boîte de réception.",
+        "response": "[trash_message message_id='msg1234' user_id='user42']"
+    },
+    {
+        "question": "Peux-tu archiver le message avec l'identifiant 76892 pour moi ?",
+        "response": "[trash_message message_id='76892' user_id='me']"
+    },
+    {
+        "question": "Peux-tu supprimer le message identifié comme 'invitation_dîner' de ma boîte de réception ?",
+        "response": "[trash_message message_id='invitation_dîner' user_id='me']"
+    },
+    {
+        "question": "J'aimerais que tu archives le message de Paul concernant le projet Alpha.",
+        "response": "[archive_message message_id='p123' user_id='current']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message portant l'identifiant 'msg447' d'un des utilisateurs ?",
+        "response": "[archive_message message_id='msg447' user_id='current_user']"
+    },
+    {
+        "question": "Comment puis-je archiver le message avec l'identifiant '123abc' ?",
+        "response": "[archive_message message_id='123abc' user_id='current_user']"
+    },
+    {
+        "question": "Peux-tu archiver le message avec l'identifiant 789 dans la boîte de réception de Paul ?",
+        "response": "[archive_message message_id='789' user_id='Paul']"
+    },
+    {
+        "question": "Cortex, pourrais-tu archiver le message dont l'identifiant est 98765 ?",
+        "response": "[archive_message message_id='98765' user_id='me']"
+    },
+    {
+        "question": "Cortex, pourrais-tu archiver le message numéro 789 pour moi ?",
+        "response": "[archive_message message_id='789' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message référencé par l'identifiant 'A1234' ?",
+        "response": "[archive_message message_id='A1234' user_id='current_user']"
+    },
+    {
+        "question": "Comment puis-je archiver le message avec l'identifiant 6789 pour l'utilisateur activement connecté ?",
+        "response": "[archive_message message_id='6789' user_id='current_user']"
+    },
+    {
+        "question": "Peux-tu archiver le message avec l'identifiant 54321 pour moi ?",
+        "response": "[archive_message message_id='54321' user_id='me']"
+    },
+    {
+        "question": "Peux-tu archiver le message avec l'identifiant 'abc123' que j'ai reçu ?",
+        "response": "[archive_message message_id='abc123' user_id='me']"
+    },
+    {
+        "question": "Comment répondre au message ID 98765 dans le chat ?",
+        "response": "[reply_to_message message_id='98765' user_id='me' reply_body='Here is my response.']"
+    },
+    {
+        "question": "Pourrais-tu répondre au message que j'ai reçu hier concernant le dîner de travail ?",
+        "response": "[reply_to_message message_id='6789' user_id='me' reply_body='Je suis partant pour le dîner de travail.']"
+    },
+    {
+        "question": "Peux-tu répondre au message que j'ai reçu hier soir avec le texte 'Je te remercie pour ton aide' ?",
+        "response": "[reply_to_message message_id='67890' user_id='me' reply_body='Je te remercie pour ton aide']"
+    },
+    {
+        "question": "Peux-tu répondre au message d'utilisateur où il parle du projet ?",
+        "response": "[reply_to_message message_id='7543' user_id='user123' reply_body='Bonjour ! Voici quelques idées pour le projet...']"
+    },
+    {
+        "question": "Peux-tu répondre au message qui a l'identifiant '45678' dans notre conversation ?",
+        "response": "[reply_to_message message_id='45678' user_id='me' reply_body='Voici ma réponse.']"
+    },
+    {
+        "question": "Pourrais-tu répondre au message envoyé par Jean ce matin ?",
+        "response": "[reply_to_message message_id='56789' user_id='me' reply_body='Sure, let me get back to you on that.']"
+    },
+    {
+        "question": "Peux-tu répondre à ce message de Jean avec un remerciement pour sa suggestion ?",
+        "response": "[reply_to_message message_id='78910' user_id='john_doe' reply_body='Merci beaucoup pour votre suggestion, elle est très appréciée !']"
+    },
+    {
+        "question": "Peux-tu répondre au message de François au sujet de la réunion de demain ?",
+        "response": "[reply_to_message message_id='msg1234' user_id='francois' reply_body='Je serai présent à la réunion de demain.']"
+    },
+    {
+        "question": "As-tu pu lire le message de Laura sur le projet X ?",
+        "response": "[reply_to_message message_id='8765' user_id='Laura' reply_body='J'ai bien reçu ton message, merci pour l'information.']"
+    },
+    {
+        "question": "Peux-tu répondre au message de mon patron envoyé hier soir ?",
+        "response": "[reply_to_message message_id='67890' user_id='boss' reply_body='Je vais jeter un œil et je vous répondrai sous peu.']"
+    },
+    {
+        "question": "Pourrais-tu rédiger un email à 'soutien@entreprise.com' avec pour objet 'Demande d'assistance technique' ?",
+        "response": "[create_email to='soutien@entreprise.com' subject='Demande d\\'assistance technique' additional_info='Besoin d\\'aide avec un problème technique' user_id='1234']"
+    },
+    {
+        "question": "Pourrais-tu rédiger un email à Paul avec l'objet 'Invitation à la réunion' ?",
+        "response": "[create_email to='paul@example.com' subject='Invitation à la réunion' additional_info='' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu concevoir le corps d'un email pour une réunion de projet la semaine prochaine ?",
+        "response": "[create_email to='team@example.com' subject='Projet réunion' additional_info='Discussion sur les objectifs et les tâches' user_id='me']"
+    },
+    {
+        "question": "Peux-tu me créer un email à envoyer à 'john.doe@example.com' avec pour sujet 'Réunion vendredi' ?",
+        "response": "[create_email to='john.doe@example.com' subject='Réunion vendredi' additional_info='' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu rédiger un email pour mon collègue avec le sujet 'Réunion de projet' ?",
+        "response": "[create_email to='colleague@example.com' subject='Réunion de projet' additional_info='Détails à inclure' user_id='me']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon d'email pour inviter quelqu'un à une réunion concernant le projet Apollo ?",
+        "response": "[create_email to='colleague@example.com' subject='Invitation à la réunion sur le projet Apollo' additional_info='Réunion prévue le lundi à 10h00, salle B' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu rédiger un email à envoyer à l'adresse 'client@example.com' avec pour objet 'Nouvelle proposition' ?",
+        "response": "[create_email to='client@example.com' subject='Nouvelle proposition' additional_info='Rédiger le corps du texte' user_id='me']"
+    },
+    {
+        "question": "Peux-tu créer un email pour inviter mes collègues à une réunion la semaine prochaine ?",
+        "response": "[create_email to='colleagues@example.com' subject='Invitation à la réunion de la semaine prochaine' additional_info='Veuillez confirmer votre disponibilité.' user_id='me']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon d'email pour inviter mes collègues à la réunion de projet ?",
+        "response": "[create_email to='colleagues@example.com' subject='Invitation à la réunion de projet' additional_info='Veuillez ajouter les détails de connexion pour la réunion.' user_id='user123']"
+    },
+    {
+        "question": "Pourrais-tu rédiger un email à 'john.doe@example.com' avec pour objet 'Demande de rendez-vous' ?",
+        "response": "[create_email to='john.doe@example.com' subject='Demande de rendez-vous' additional_info='' user_id='current_user']"
+    },
+    {
+        "question": "Cortex, pourrais-tu me montrer le brouillon de l'email portant l'ID 67890 ?",
+        "response": "[display_draft draft_id='67890' user_id='current_user']"
+    },
+    {
+        "question": "Peux-tu me montrer le brouillon d'email avec l'ID 7890 ?",
+        "response": "[display_draft draft_id='7890' user_id='utilisateur123']"
+    },
+    {
+        "question": "Montre-moi le contenu du brouillon d'email avec l'identifiant 'Draft_321'.",
+        "response": "[display_draft draft_id='Draft_321' user_id='me']"
+    },
+    {
+        "question": "Peux-tu me montrer le contenu du brouillon avec l'identifiant 6789 ?",
+        "response": "[display_draft draft_id='6789' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le brouillon d'email avec l'ID 78910 ?",
+        "response": "[display_draft draft_id='78910' user_id='current_user']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le contenu du brouillon dont l'identifiant est '56789' ?",
+        "response": "[display_draft draft_id='56789' user_id='current_user']"
+    },
+    {
+        "question": "Peux-tu afficher le contenu du brouillon d'email avec l'ID '4567' pour l'utilisateur 'alice' ?",
+        "response": "[display_draft draft_id='4567' user_id='alice']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le brouillon d'email avec l'identifiant 789 !",
+        "response": "[display_draft draft_id='789' user_id='example']"
+    },
+    {
+        "question": "Cortex, peux-tu me montrer le contenu du brouillon d'email avec l'identifiant '4567' pour mon compte personnel ?",
+        "response": "[display_draft draft_id='4567' user_id='personal_account']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le contenu du brouillon d'email avec l'identifiant 60987 ?",
+        "response": "[display_draft draft_id='60987' user_id='current_user']"
+    },
+    {
+        "question": "Cortex, peux-tu rédiger une réponse au dernier message de Paul ?",
+        "response": "[create_draft_reply message_id='67890' additional_info='répondre à Paul avec des détails sur la réunion' user_id='me']"
+    },
+    {
+        "question": "As-tu la possibilité de rédiger une première ébauche de réponse au message avec l'identifiant 'urgent_support_request' ?",
+        "response": "[create_draft_reply message_id='urgent_support_request']"
+    },
+    {
+        "question": "Peux-tu générer un brouillon de réponse au dernier message reçu ?",
+        "response": "[create_draft_reply message_id='latest' additional_info='auto' user_id='user123']"
+    },
+    {
+        "question": "Peux-tu rédiger une réponse au message que j'ai reçu ce matin ?",
+        "response": "[create_draft_reply message_id='001' additional_info='Received this morning' user_id='JohnDoe']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon de réponse à l'email avec l'identifiant 'abc123' ?",
+        "response": "[create_draft_reply message_id='abc123' additional_info='Pour répondre efficacement, veuillez inclure des détails' user_id='user_001']"
+    },
+    {
+        "question": "Peux-tu rédiger une réponse à ce message intitulé 'Invitation à la conférence' ?",
+        "response": "[create_draft_reply message_id='4567' additional_info='Veuillez confirmer votre présence' user_id='myuser']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon de réponse pour le message numéro 42 avec des informations supplémentaires ?",
+        "response": "[create_draft_reply message_id='42' additional_info='des informations supplémentaires' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu créer un brouillon de réponse au message avec l'identifiant 'abc123'?",
+        "response": "[create_draft_reply message_id='abc123' additional_info='S'il te plaît, ajoute quelques détails spécifiques à la réponse.' user_id='utilisateur1']"
+    },
+    {
+        "question": "Peux-tu préparer une réponse au message avec l'identifiant 007 et y ajouter quelques informations supplémentaires ?",
+        "response": "[create_draft_reply message_id='007' additional_info='Quelques informations supplémentaires' user_id='current_user']"
+    },
+    {
+        "question": "Peux-tu rédiger une réponse au message avec l'ID '123abc' en utilisant un contenu personnalisé issu de notre modèle GPT ?",
+        "response": "[create_draft_reply message_id='123abc' additional_info='Utiliser contenu personnalisé créé par GPT' user_id='me']"
+    },
+    {
+        "question": "Peux-tu envoyer le brouillon d'email qui a pour objet \"Rencontre avec le client\" à ma place ?",
+        "response": "[send_draft draft_id='67890' content='Rencontre avec le client' user_id='me']"
+    },
+    {
+        "question": "Cortex, envoie le brouillon de l'email que j'ai commencé hier, s'il te plaît.",
+        "response": "[send_draft draft_id='56789' content='Email commencé hier' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu envoyer le brouillon d'email dont le titre est 'Réunion de projet' ?",
+        "response": "[send_draft draft_id='78901' content='Réunion de projet' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu envoyer le brouillon de l'e-mail concernant la réunion de demain ?",
+        "response": "[send_draft draft_id='67890' content='Réunion de demain' user_id='me']"
+    },
+    {
+        "question": "Peux-tu envoyer le brouillon avec l'objet 'Plan de projet' au plus vite ?",
+        "response": "[send_draft draft_id='54321' content='Plan de projet' user_id='user123']"
+    },
+    {
+        "question": "Pourrais-tu envoyer ce brouillon d'email concernant la réunion de projet ?",
+        "response": "[send_draft draft_id='67890' content='Réunion de projet' user_id='utilisateur1']"
+    },
+    {
+        "question": "Pourrais-tu expédier l'ébauche d'email portant le sujet 'Invitation à la conférence' ?",
+        "response": "[send_draft draft_id='67890' content='Invitation à la conférence' user_id='user123']"
+    },
+    {
+        "question": "Pourrais-tu expédier le brouillon d'email avec l'objet 'Invitation à la réunion' ?",
+        "response": "[send_draft draft_id='67890' content='Invitation à la réunion' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu expédier le brouillon qui porte la mention 'Invitation au séminaire' ?",
+        "response": "[send_draft draft_id='67890' content='Invitation au séminaire' user_id='user123']"
+    },
+    {
+        "question": "Peux-tu envoyer l'email de brouillon avec le sujet 'Réunion annuelle' après révision ?",
+        "response": "[send_draft draft_id='67890' content='Réunion annuelle' user_id='admin']"
+    },
+    {
+        "question": "Cortex, pourrais-tu me donner un nombre aléatoire entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Pourrais-tu s'il te plaît me donner un nombre choisi au hasard entre 1 et 100 ?",
+        "response": "[generate_random_number min_value=1 max_value=100]"
+    },
+    {
+        "question": "Hey Cortex, pourrais-tu tirer un numéro au hasard entre 20 et 50 pour moi ?",
+        "response": "[generate_random_number min_value=20 max_value=50]"
+    },
+    {
+        "question": "Peux-tu choisir un nombre au hasard entre 5 et 15 pour moi ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "J'aimerais obtenir un nombre aléatoire avec une valeur minimale de 5 et maximale de 15, peux-tu faire ça ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Peux-tu me donner un nombre aléatoire entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Peux-tu tirer un nombre compris entre 7 et 15 pour moi ?",
+        "response": "[generate_random_number min_value=7 max_value=15]"
+    },
+    {
+        "question": "Peux-tu créer un nombre aléatoire entre 100 et 200 ?",
+        "response": "[generate_random_number min_value=100 max_value=200]"
+    },
+    {
+        "question": "Pourrais-tu me fournir un nombre aléatoire compris entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Peux-tu me donner un nombre aléatoire entre 10 et 10, s'il te plaît ?",
+        "response": "[generate_random_number min_value=10 max_value=10]"
+    },
+    {
+        "question": "Pourrais-tu me suggérer une bonne série de science-fiction ?",
+        "response": "[recommend_media title='' genre='science-fiction' media_type='series']"
+    },
+    {
+        "question": "Quels films d'action pourrais-tu me recommander ?",
+        "response": "[recommend_media title='' genre='action' media_type='film']"
+    },
+    {
+        "question": "Pourrais-tu me suggérer un film du genre comédie romantique ?",
+        "response": "[recommend_media title='' genre='comédie romantique' media_type='film']"
+    },
+    {
+        "question": "Pourrais-tu me suggérer un film d'action palpitant ?",
+        "response": "[recommend_media title='' genre='action' media_type='movie']"
+    },
+    {
+        "question": "Peux-tu me recommander un film d'action à regarder ce soir ?",
+        "response": "[recommend_media title='' genre='action' media_type='film']"
+    },
+    {
+        "question": "Pourrais-tu me conseiller un film de science-fiction captivant ?",
+        "response": "[recommend_media title='' genre='science-fiction' media_type='movie']"
+    },
+    {
+        "question": "Pourrais-tu me conseiller un film basé sur le genre d'épouvante ?",
+        "response": "[recommend_media title='' genre='horror' media_type='movie']"
+    },
+    {
+        "question": "Pourrais-tu me suggérer une série dramatique à regarder ce week-end ?",
+        "response": "[recommend_media title='' genre='dramatique' media_type='série']"
+    },
+    {
+        "question": "Peux-tu me recommander une série avec un ton comique ?",
+        "response": "[recommend_media title='' genre='Comedy' media_type='Series']"
+    },
+    {
+        "question": "Peux-tu me suggérer un bon film d'action avec Bruce Willis ?",
+        "response": "[recommend_media title='Bruce Willis' genre='action' media_type='film']"
+    },
+    {
+        "question": "Peux-tu lancer la chanson 'Despacito' sur mon téléphone ?",
+        "response": "[play_track track_name='Despacito']"
+    },
+    {
+        "question": "Peux-tu lancer la chanson 'Blinding Lights' sur Spotify ?",
+        "response": "[play_track track_name='Blinding Lights']"
+    },
+    {
+        "question": "Pourrais-tu mettre 'Blinding Lights' de The Weeknd sur ma chaîne hi-fi ?",
+        "response": "[play_track track_name='Blinding Lights']"
+    },
+    {
+        "question": "Joue la chanson 'Shape of You' par Ed Sheeran, s'il te plaît.",
+        "response": "[play_track track_name='Shape of You']"
+    },
+    {
+        "question": "Peux-tu lancer la chanson 'Imagine' de John Lennon ?",
+        "response": "[play_track track_name='Imagine']"
+    },
+    {
+        "question": "Peux-tu jouer la chanson 'Never Gonna Give You Up' de Rick Astley, s'il te plaît ?",
+        "response": "[play_track track_name='Never Gonna Give You Up']"
+    },
+    {
+        "question": "Lance la chanson 'Bohemian Rhapsody' s'il te plaît.",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Peux-tu lancer sur Spotify le morceau 'Bohemian Rhapsody' ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Pourrais-tu lancer le morceau 'Imagine' de Spotify ?",
+        "response": "[play_track track_name='Imagine']"
+    },
+    {
+        "question": "Joue la chanson 'Bohemian Rhapsody' pour moi.",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Pourrais-tu interrompre la musique en cours sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Peux-tu mettre en pause la chanson sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Hey Cortex, pourrais-tu mettre la musique en pause s'il te plaît ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu interrompre la musique en cours sur Spotify, s'il te plaît ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu stopper la lecture actuelle sur Spotify s'il te plaît ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Peux-tu interrompre la musique que j'écoute sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu mettre en pause la musique sur Spotify, s'il te plaît ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Cortex, mets en pause la chanson que j'écoute actuellement sur Spotify.",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Cortex, pourrais-tu mettre en veille la musique qui joue actuellement sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu stopper la musique en cours sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Reprends la lecture de ma musique sur Spotify, s'il te plaît.",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu continuer la lecture de ma playlist \"Focus\" sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu continuer à jouer la musique là où je me suis arrêté sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre la lecture de là où je m'étais arrêté sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre la lecture de ma playlist sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu relancer la lecture de ma playlist actuelle ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Reprends où je m'étais arrêté sur Spotify, s'il te plaît.",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre là où j'ai arrêté sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre ma playlist là où je me suis arrêté sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre la musique où je l'avais laissée sur Spotify, s'il te plaît ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu jouer le morceau suivant sur ma playlist Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Pourrais-je passer à la piste suivante sur Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Pourrais-tu passer à la chanson suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Pourrais-tu passer à la piste suivante sur Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Pourrais-tu passer à la piste suivante, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Cortex, peux-tu revenir au morceau précédent sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu passer au morceau précédent sur Spotify, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu remettre le morceau précédent sur Spotify, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu revenir au morceau précédent sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu revenir à la chanson précédente dans ma playlist Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Cortex, pourrais-tu revenir à la chanson précédente, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Passe au morceau d'avant sur Spotify, s'il te plaît.",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu retourner à la chanson précédente sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu revenir à la chanson précédente sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Cortex, peux-tu revenir sur la chanson précédente sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu ajuster le niveau sonore à 75 pour moi ?",
+        "response": "[set_volume volume_level=75]"
+    },
+    {
+        "question": "Pourrais-tu régler le son sur 25, s'il te plaît ?",
+        "response": "[set_volume volume_level=25]"
+    },
+    {
+        "question": "Peux-tu ajuster le niveau sonore à 30, s'il te plaît ?",
+        "response": "[set_volume volume_level=30]"
+    },
+    {
+        "question": "Cortex, peux-tu ajuster le son à 50 pour moi ?",
+        "response": "[set_volume volume_level=50]"
+    },
+    {
+        "question": "Ajuste le volume à 25, s'il te plaît.",
+        "response": "[set_volume volume_level=25]"
+    },
+    {
+        "question": "Pourrais-tu régler le volume à son maximum ?",
+        "response": "[set_volume volume_level=100]"
+    },
+    {
+        "question": "Peux-tu ajuster le son à 25 pour ma liste de lecture ?",
+        "response": "[set_volume volume_level=25]"
+    },
+    {
+        "question": "Peux-tu régler le volume à 80, s'il te plaît ?",
+        "response": "[set_volume volume_level=80]"
+    },
+    {
+        "question": "Cortex, pourrais-tu régler le volume sonore à 50 s'il te plaît ?",
+        "response": "[set_volume volume_level=50]"
+    },
+    {
+        "question": "Peux-tu ajuster le volume à 35% ?",
+        "response": "[set_volume volume_level=35]"
+    },
+    {
+        "question": "Qu'est-ce qui se joue actuellement sur Spotify ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quels sont les détails de la musique en cours de lecture ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel morceau est actuellement en train de jouer sur mon appareil ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Peux-tu me dire quel morceau est en train d'être diffusé actuellement ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est le morceau actuellement en cours de lecture ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel morceau est actuellement en lecture sur mon application musicale ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est l'état actuellement de la musique que nous écoutons ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Qu'est-ce qui est en train d'être joué actuellement sur mon compte Spotify ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Qu'est-ce qui est actuellement diffusé sur ma playlist ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est le morceau actuellement en cours de lecture sur mon appareil ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Pourrais-tu jouer des recommandations basées sur le morceau 'Bohemian Rhapsody' ?",
+        "response": "[play_recommendations_track track_name='Bohemian Rhapsody' artist_name='' genre_name='']"
+    },
+    {
+        "question": "« Cortex, fais-moi découvrir des morceaux similaires à ‘Shape of You’ par Ed Sheeran »",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']"
+    },
+    {
+        "question": "Joue-moi des recommandations basées sur la chanson 'Bohemian Rhapsody'.",
+        "response": "[play_recommendations_track track_name='Bohemian Rhapsody' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Pourrais-tu jouer les morceaux recommandés en fonction de l'artiste \"Adele\" ?",
+        "response": "[play_recommendations_track track_name='' artist_name='Adele' genre_name='']"
+    },
+    {
+        "question": "Pourrais-tu lancer des titres recommandés basés sur la chanson 'Shape of You' d'Ed Sheeran ?",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer des titres similaires à \"Shape of You\" d'Ed Sheeran ?",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']"
+    },
+    {
+        "question": "Joue-moi des recommandations basées sur le morceau 'Blinding Lights' de The Weeknd.",
+        "response": "[play_recommendations_track track_name='Blinding Lights' artist_name='The Weeknd' genre_name='']"
+    },
+    {
+        "question": "Pourrais-tu jouer des recommandations de musique basées sur la chanson 'Bohemian Rhapsody' ?",
+        "response": "[play_recommendations_track track_name='Bohemian Rhapsody' artist_name='' genre_name='']"
+    },
+    {
+        "question": "Peux-tu lire les recommandations basées sur le morceau 'Imagine' de John Lennon ?",
+        "response": "[play_recommendations_track track_name='Imagine' artist_name='John Lennon' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer des recommandations basées sur la chanson 'Viva La Vida' de Coldplay ?",
+        "response": "[play_recommendations_track track_name='Viva La Vida' artist_name='Coldplay' genre_name='']"
+    },
+    {
+        "question": "Quel est le pourcentage de batterie restant sur mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage de charge de mon iPhone actuellement ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage actuel de batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage actuel de la batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage de batterie restant sur mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quelle est l'autonomie actuelle de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est l'état actuel de la batterie de l'iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage actuel de la batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel niveau d'énergie reste-t-il dans mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est actuellement l'état de la batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Cortex, pourrais-tu me dire où je me trouve actuellement et l'adresse associée ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quel est mon emplacement actuel et quelle adresse y correspond ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Où suis-je actuellement ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Où est situé mon iPhone exactement et quelle est l'adresse actuelle ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Pourrais-tu me dire où je suis actuellement ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quel est l'emplacement actuel de mon iPhone ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Peux-tu déterminer où je me situe actuellement et me donner l'adresse ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Cortex, pourrais-tu me donner ma localisation actuelle ainsi que l'adresse associée ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Pourrais-tu me dire où se trouve actuellement mon iPhone, s'il te plaît ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Où est-ce que je me trouve actuellement avec mon iPhone ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quelle est la météo actuelle autour de moi ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel est le temps qu'il fait actuellement à ma position ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement ici ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel est le temps qu'il fait actuellement ici ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel est le temps qu'il fait actuellement à l'emplacement de mon téléphone ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quelles sont les prévisions météo actuelles pour ma position ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel est le temps qu'il fait actuellement à ma localisation précise ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il maintenant à l'endroit où je suis avec mon iPhone ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement ici ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il autour de moi actuellement avec cet iPhone ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Pourrais-tu extraire les contacts enregistrés sur le prénom 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Pourrais-tu me donner les coordonnées de contact de quelqu'un nommé 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Pourrais-tu me fournir la liste complète de mes contacts ?",
+        "response": "[get_contacts]"
+    },
+    {
+        "question": "Peux-tu me donner les coordonnées de Julie ?",
+        "response": "[get_contacts name='Julie']"
+    },
+    {
+        "question": "Pourrais-tu récupérer tous mes contacts, s'il te plaît ?",
+        "response": "[get_contacts name='']"
+    },
+    {
+        "question": "Pourrais-tu me fournir le contact dont le prénom est Lisa ?",
+        "response": "[get_contacts name='Lisa']"
+    },
+    {
+        "question": "Pourrais-tu me fournir les coordonnées de l'utilisateur avec le prénom 'Alice'?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Peux-tu récupérer tous les contacts associés à mon carnet d'adresses ?",
+        "response": "[get_contacts]"
+    },
+    {
+        "question": "Pourrais-tu me fournir la liste de mes contacts, s'il te plaît ?",
+        "response": "[get_contacts]"
+    },
+    {
+        "question": "Peux-tu me fournir les coordonnées de mes contacts ?",
+        "response": "[get_contacts name='']"
+    },
+    {
+        "question": "Peux-tu activer l'alerte sonore sur mon iPhone pour le retrouver ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Pourrais-tu faire retentir mon iPhone, s'il te plaît ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Salut Cortex, pourrais-tu faire retentir mon iPhone s'il te plaît ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Où as-tu mis l'iPhone ? Fais-le sonner pour que je le retrouve.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Peux-tu faire retentir mon iPhone maintenant ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Fais-moi écouter un son sur l'iPhone, s'il te plaît.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Fais retentir le son de mon iPhone, s'il te plaît.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Pourrais-tu faire retentir l'alerte sur mon iPhone ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Fais sonner mon iPhone, je ne le retrouve plus.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Je ne trouve plus mon téléphone, peux-tu le faire sonner s'il te plaît ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Comment mettre mon iPhone en mode perdu avec le numéro 0123456789 et un message invitant à appeler ce numéro ?",
+        "response": "[activate_lost_mode phone_number='0123456789' message='Veuillez appeler ce numéro pour restituer l'iPhone']"
+    },
+    {
+        "question": "Je viens de perdre mon téléphone. Peux-tu activer le mode perdu et afficher un message avec mon numéro pour qu'on me le rende ?",
+        "response": "[activate_lost_mode phone_number='1234567890' message='Si vous trouvez cet iPhone, veuillez appeler ce numéro. Merci !']"
+    },
+    {
+        "question": "Pourrais-tu activer le mode 'perdu' sur mon iPhone avec le message 'Bonjour, merci de me contacter' et ajouter ce numéro : 0612345678 ?",
+        "response": "[activate_lost_mode phone_number='0612345678' message='Bonjour, merci de me contacter']"
+    },
+    {
+        "question": "Active le mode perdu sur mon iPhone et affiche \"Veuillez appeler 555-1234\".",
+        "response": "[activate_lost_mode phone_number='555-1234' message='Veuillez appeler 555-1234']"
+    },
+    {
+        "question": "Pourriez-vous activer le mode perdu sur mon iPhone avec ce numéro de contact : 0123456789 et ce message : 'Veuillez appeler ce numéro dès que possible' ?",
+        "response": "[activate_lost_mode phone_number='0123456789' message='Veuillez appeler ce numéro dès que possible']"
+    },
+    {
+        "question": "Comment activer le mode perdu sur mon téléphone avec le message 'Je l'ai perdu, contactez-moi' ?",
+        "response": "[activate_lost_mode phone_number='1234567890' message=\"Je l'ai perdu, contactez-moi\"]"
+    },
+    {
+        "question": "Peux-tu activer le mode perdu sur mon iPhone et afficher le message 'Appelez-moi au même numéro' ?",
+        "response": "[activate_lost_mode phone_number='same' message='Appelez-moi au même numéro']"
+    },
+    {
+        "question": "Peux-tu activer le mode perdu sur mon iPhone et afficher le numéro +33712345678 avec le message « Téléphone égaré, appelez-moi au plus vite. » ?",
+        "response": "[activate_lost_mode phone_number='+33712345678' message='Téléphone égaré, appelez-moi au plus vite.']"
+    },
+    {
+        "question": "Mon iPhone est perdu, aide-moi à le localiser et affiche un message avec mon numéro de contact.",
+        "response": "[activate_lost_mode phone_number='+123456789' message='Ce téléphone est perdu. Merci de le retourner à son propriétaire.']"
+    },
+    {
+        "question": "Mon iPhone est perdu, pourrais-tu activer le mode perdu et afficher mon numéro de contact ?",
+        "response": "[activate_lost_mode phone_number='+123456789' message='Contactez-moi dès que possible']"
+    },
+    {
+        "question": "Peux-tu tracer l'itinéraire de Paris à Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Trouve l'itinéraire pour aller de Paris à Lyon, s'il te plaît.",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Quelle est la meilleure route pour aller de Paris à Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Comment faire pour aller de Paris à Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Pourrais-tu me guider de New York à Boston ?",
+        "response": "[calculate_route from_city='New York' to_city='Boston']"
+    },
+    {
+        "question": "J'aimerais connaitre le chemin pour aller de Lyon à Marseille, s'il te plaît.",
+        "response": "[calculate_route from_city='Lyon' to_city='Marseille']"
+    },
+    {
+        "question": "Pourrais-tu préparer un itinéraire entre Lyon et Marseille ?",
+        "response": "[calculate_route from_city='Lyon' to_city='Marseille']"
+    },
+    {
+        "question": "Peux-tu calculer l'itinéraire de Paris à Lyon, s'il te plaît ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Quel est le meilleur chemin pour aller de Paris à Marseille ?",
+        "response": "[calculate_route from_city='Paris' to_city='Marseille']"
+    },
+    {
+        "question": "Comment rejoindre Paris en partant de Lyon ?",
+        "response": "[calculate_route from_city='Lyon' to_city='Paris']"
+    },
+    {
+        "question": "Peux-tu ajouter une tâche demain à 15h pour appeler le plombier ?",
+        "response": "[create_google_task task_title='Appeler le plombier' task_notes='Demain à 15h']"
+    },
+    {
+        "question": "Peux-tu ajouter une tâche dans ma liste de choses à faire, intitulée 'Acheter du lait' ?",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Peux-tu ajouter une nouvelle tâche intitulée 'Réunion avec l'équipe' dans ma liste de tâches ?",
+        "response": "[create_google_task task_title='Réunion avec l\\u0027équipe' task_notes='']"
+    },
+    {
+        "question": "Peux-tu ajouter une tâche intitulée 'Acheter du lait' ?",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Peux-tu ajouter une tâche \"Achat de courses\" à ma liste ?",
+        "response": "[create_google_task task_title='Achat de courses' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu ajouter 'Acheter du lait' comme nouvelle tâche ?",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Ajoute \"Appeler le plombier\" à ma liste de tâches.",
+        "response": "[create_google_task task_title='Appeler le plombier' task_notes='']"
+    },
+    {
+        "question": "Peux-tu ajouter une tâche de planification pour la réunion de demain ?",
+        "response": "[create_google_task task_title='Planification réunion' task_notes='Pour la réunion de demain']"
+    },
+    {
+        "question": "Je dois penser à terminer le projet de recherche. Ajoute-le à ma liste de tâches.",
+        "response": "[create_google_task task_title='Terminer le projet de recherche' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu créer une nouvelle tâche intitulée 'Préparer la présentation' avec des notes indiquant d'inclure les derniers chiffres de vente ?",
+        "response": "[create_google_task task_title='Préparer la présentation' task_notes='Inclure les derniers chiffres de vente']"
+    },
+    {
+        "question": "Organise une réunion avec l'équipe de projet pour demain après-midi.",
+        "response": "[create_calendar_event name='Réunion Projet' duration='1h30' participants=['alice@example.com', 'bob@example.com'] date_preference='demain' time_range='14:00-15:30' location='Salle de conférence']"
+    },
+    {
+        "question": "Peux-tu mettre en place une réunion avec l'équipe de marketing demain à 15h ?",
+        "response": "[create_calendar_event name='Réunion avec équipe marketing' duration='1h' participants=['marketing@entreprise.com'] date_preference='demain' time_range='15:00-16:00' location='salle de conférence']"
+    },
+    {
+        "question": "Organise une réunion avec l'équipe de développement pour vendredi à 15 heures.",
+        "response": "[create_calendar_event name='Réunion équipe développement' duration='1 heure' participants=['dev1@company.com', 'dev2@company.com'] date_preference='vendredi' time_range='15:00 - 16:00' location='Salle A']"
+    },
+    {
+        "question": "Pourrais-tu organiser une réunion de projet avec Paul et Lila la semaine prochaine ?",
+        "response": "[create_calendar_event name='Réunion de projet' duration='1 heure' participants=['Paul', 'Lila'] date_preference='prochaine semaine' time_range='9h-17h' location='Salle de conférence']"
+    },
+    {
+        "question": "Organise une réunion d'équipe pour vendredi prochain à 14h avec Alice et Bob.",
+        "response": "[create_calendar_event name='Réunion d'équipe' duration='1h' participants=['Alice', 'Bob'] date_preference='vendredi prochain' time_range='14:00' location='Bureau']"
+    },
+    {
+        "question": "Peux-tu organiser une réunion pour discuter des avancées du projet avec l'équipe marketing lundi prochain ?",
+        "response": "[create_calendar_event name='Réunion avancées projet' duration='1 heure' participants=['marketing@example.com'] date_preference='prochain lundi' time_range='matin' location='salle de conférence']"
+    },
+    {
+        "question": "Organise une réunion pour discuter du projet Alpha avec l'équipe marketing lundi prochain.",
+        "response": "[create_calendar_event name='Projet Alpha Meeting' duration='1 hour' participants=['marketing_team@example.com'] date_preference='next Monday' time_range='10:00 AM - 11:00 AM' location='Conference Room 2']"
+    },
+    {
+        "question": "Peux-tu planifier une réunion d'équipe pour demain matin avec Luc et Sophie dans la salle de réunion 3 ?",
+        "response": "[create_calendar_event name='Réunion d'équipe' duration='30 minutes' participants=['Luc', 'Sophie'] date_preference='Demain' time_range='09:00 AM - 09:30 AM' location='Salle de réunion 3']"
+    },
+    {
+        "question": "Organise une réunion pour analyser notre stratégie marketing la semaine prochaine.",
+        "response": "[create_calendar_event name='Réunion stratégie marketing' duration='1 heure' participants=['alice@example.com', 'bob@example.com'] date_preference='prochaine semaine' time_range='9h-11h' location='Salle de conférence B']"
+    },
+    {
+        "question": "Peux-tu programmer une réunion pour discuter du projet \"Alpha\" demain après-midi avec l'équipe ?",
+        "response": "[create_calendar_event name='Projet Alpha Discussion' duration='1 hour' participants=['jane@example.com', 'john@example.com'] date_preference='2023-10-05' time_range='14:00-15:00' location='Salle de conférence A']"
+    },
+    {
+        "question": "Peux-tu me fournir un résumé des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu faire un résumé des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu me faire un récapitulatif des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu me faire un récapitulatif des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Pourrais-je avoir un aperçu des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner un aperçu des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner un aperçu rapide des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu faire un résumé des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner un aperçu des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me faire un résumé des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu analyser et trier les emails reçus aujourd'hui ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu examiner les emails d'aujourd'hui et les classer correctement ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu faire un inventaire des emails reçus aujourd'hui et les organiser dans leurs catégories respectives ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu répertorier tous les emails que j'ai reçus aujourd'hui et les classer dans les dossiers correspondants ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu passer en revue les emails que j'ai reçus aujourd'hui et les organiser en fonction de leur catégorie ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu trier mes emails du jour et les organiser dans les dossiers adéquats ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu vérifier et classer les emails reçus aujourd'hui ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu jeter un œil aux emails d'aujourd'hui et les ranger dans les labels adéquats ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu analyser et organiser mes emails reçus aujourd'hui ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu s'il te plaît analyser mes emails récents et les trier dans leurs catégories respectives ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu récupérer les emails récents de ma boîte de réception qui ne sont pas encore lus ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='' end_date='']"
+    },
+    {
+        "question": "Cortex, pourrais-tu récupérer tous mes emails non lus de la semaine dernière qui se trouvent dans la boîte de réception ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='inbox' specific_word='' start_date='2023-10-16' end_date='2023-10-22']"
+    },
+    {
+        "question": "Pourrais-tu récupérer les emails non lus de ma boîte de réception datant de la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='me' start_date='2023-10-09' end_date='2023-10-15']"
+    },
+    {
+        "question": "Pourrais-tu me récupérer tous les emails non-lus dans ma boîte de réception depuis le début du mois dernier ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='inbox' specific_word='none' start_date='2023-09-01' end_date='2023-09-30']"
+    },
+    {
+        "question": "Peux-tu récupérer les emails reçus entre le 1er et le 15 octobre dans ma boîte de réception ?",
+        "response": "[collect_emails filter_type='inbox' start_date='2023-10-01' end_date='2023-10-15']"
+    },
+    {
+        "question": "Peux-tu récupérer tous les emails non lus dans ma boîte de réception à partir du 1er janvier 2023 ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='inbox' specific_word='' start_date='2023-01-01' end_date='']"
+    },
+    {
+        "question": "Peux-tu récupérer tous les emails non lus de ma boîte de réception depuis le début du mois ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-01' end_date='']"
+    },
+    {
+        "question": "Pourrais-tu récupérer les emails non-lus reçus entre le 1er septembre et le 15 septembre ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-09-01' end_date='2023-09-15']"
+    },
+    {
+        "question": "Peux-tu rassembler tous mes emails non-lus de la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' start_date='2023-10-01' end_date='2023-10-07']"
+    },
+    {
+        "question": "Peux-tu récupérer les emails non-lus de la dernière semaine ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-10-10' end_date='2023-10-17']"
+    },
+    {
+        "question": "Pourrais-tu marquer comme lu le message numéro 123 dans ma boîte de réception ?",
+        "response": "[mark_as_read message_id='123' user_id='current_user']"
+    },
+    {
+        "question": "Marque le message avec l'identifiant 789 comme étant lu, s'il te plaît.",
+        "response": "[mark_as_read message_id='789' user_id='current_user']"
+    },
+    {
+        "question": "Pourrais-tu marquer le message numéro 67890 comme étant lu ?",
+        "response": "[mark_as_read message_id='67890' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu marquer le message avec l'identifiant 'MSG00123' comme lu ?",
+        "response": "[mark_as_read message_id='MSG00123' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu marquer le message avec l'identifiant 67890 comme lu, s'il te plaît ?",
+        "response": "[mark_as_read message_id='67890' user_id='me']"
+    },
+    {
+        "question": "Cortex, peux-tu marquer ce message comme lu pour moi ?",
+        "response": "[mark_as_read message_id='12345' user_id='me']"
+    },
+    {
+        "question": "Cortex, pourrais-tu marquer le message numéro 84 comme lu sur mon compte ?",
+        "response": "[mark_as_read message_id='84' user_id='me']"
+    },
+    {
+        "question": "Peux-tu marquer le message numéro 789 comme lu pour moi ?",
+        "response": "[mark_as_read message_id='789' user_id='me']"
+    },
+    {
+        "question": "Cortex, pourrais-tu marquer le message avec l'identifiant '4523' comme lu, s'il te plaît ?",
+        "response": "[mark_as_read message_id='4523' user_id='current_user']"
+    },
+    {
+        "question": "Comment puis-je marquer le message avec l'identifiant '2023A9B' comme lu pour l'utilisateur 557?",
+        "response": "[mark_as_read message_id='2023A9B' user_id='557']"
+    },
+    {
+        "question": "Cortex, mets le message avec l'identifiant '123abc' à la corbeille, s'il te plaît.",
+        "response": "[trash_message message_id='123abc' user_id='courant']"
+    },
+    {
+        "question": "Peux-tu retirer le message avec l'identifiant 67890 et l'envoyer à la corbeille ?",
+        "response": "[trash_message message_id='67890' user_id='me']"
+    },
+    {
+        "question": "Peux-tu mettre le message dont l'identifiant est 'ABC123' à la corbeille, s'il te plaît ?",
+        "response": "[trash_message message_id='ABC123' user_id='user_XYZ']"
+    },
+    {
+        "question": "Peux-tu supprimer le message avec l'identifiant '1234' de ma boîte de réception ?",
+        "response": "[trash_message message_id='1234' user_id='current_user']"
+    },
+    {
+        "question": "Peux-tu supprimer le message de la discussion avec Alex ?",
+        "response": "[trash_message message_id='45678' user_id='me']"
+    },
+    {
+        "question": "Peux-tu supprimer le message avec l'identifiant 78910 de ma boîte de réception ?",
+        "response": "[trash_message message_id='78910' user_id='me']"
+    },
+    {
+        "question": "Cortex, pourrais-tu supprimer le message ayant l'identifiant '123abc' pour l'utilisateur actuellement connecté ?",
+        "response": "[trash_message message_id='123abc' user_id='current']"
+    },
+    {
+        "question": "Cortex, mets le message avec l'identifiant '4567' dans la corbeille.",
+        "response": "[trash_message message_id='4567' user_id='me']"
+    },
+    {
+        "question": "Cortex, peux-tu déplacer ce message à la corbeille, s'il te plaît ? L'identifiant est 789.",
+        "response": "[trash_message message_id='789' user_id='me']"
+    },
+    {
+        "question": "Supprime l'e-mail avec l'identifiant 'inbox-5678' de Jean.",
+        "response": "[trash_message message_id='inbox-5678' user_id='Jean']"
+    },
+    {
+        "question": "Peux-tu archiver le message numéro 25679 pour l'utilisateur ID 67890 ?",
+        "response": "[archive_message message_id='25679' user_id='67890']"
+    },
+    {
+        "question": "Pourrais-tu mettre en archive le message ayant l'identifiant 'MSG007' pour moi ?",
+        "response": "[archive_message message_id='MSG007' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message avec l'identifiant 42 pour moi ?",
+        "response": "[archive_message message_id='42' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message avec l'identifiant A123B pour l'utilisateur 789XY ?",
+        "response": "[archive_message message_id='A123B' user_id='789XY']"
+    },
+    {
+        "question": "Peux-tu mettre en archive le message identifié par '123abc' de l'utilisateur 'john_doe' ?",
+        "response": "[archive_message message_id='123abc' user_id='john_doe']"
+    },
+    {
+        "question": "Pourrais-tu mettre de côté le message numéro 789 pour moi ?",
+        "response": "[archive_message message_id='789' user_id='me']"
+    },
+    {
+        "question": "Comment puis-je archiver le message intitulé 'Agenda de la réunion' ?",
+        "response": "[archive_message message_id='67890' user_id='me']"
+    },
+    {
+        "question": "Peux-tu mettre le message ID 7463 dans les archives pour moi ?",
+        "response": "[archive_message message_id='7463' user_id='me']"
+    },
+    {
+        "question": "Archiver le message numéro 76543 pour l'utilisateur John.",
+        "response": "[archive_message message_id='76543' user_id='John']"
+    },
+    {
+        "question": "Pourrais-tu archiver le message avec l'identifiant 'msg123' pour moi ?",
+        "response": "[archive_message message_id='msg123' user_id='me']"
+    },
+    {
+        "question": "Peux-tu répondre au message de Paul en lui disant que je suis d'accord avec ses propositions ?",
+        "response": "[reply_to_message message_id='45678' user_id='paul' reply_body='Je suis d'accord avec tes propositions']"
+    },
+    {
+        "question": "Peux-tu répondre au message que j'ai reçu de Max hier ?",
+        "response": "[reply_to_message message_id='abc123' user_id='me' reply_body='Bonjour Max, comment puis-je t'aider ?']"
+    },
+    {
+        "question": "Peux-tu répondre au dernier message que j'ai reçu de Jean ?",
+        "response": "[reply_to_message message_id='001' user_id='jean' reply_body='Bonjour, Jean. Comment puis-je vous aider aujourd'hui ?']"
+    },
+    {
+        "question": "Peux-tu répondre au dernier message de Paul avec « Je vais bien, merci » ?",
+        "response": "[reply_to_message message_id='msg1234' user_id='paul' reply_body='Je vais bien, merci']"
+    },
+    {
+        "question": "Pourrais-tu répondre au message ID '9876' de la part de l'utilisateur 'johnDoe' avec \"Je suis en réunion\" ?",
+        "response": "[reply_to_message message_id='9876' user_id='johnDoe' reply_body='Je suis en réunion']"
+    },
+    {
+        "question": "Peux-tu répondre au message de Jacqueline avec un merci ?",
+        "response": "[reply_to_message message_id='67890' user_id='jacqueline' reply_body='merci']"
+    },
+    {
+        "question": "Peux-tu répondre au message que j'ai reçu avec le sujet 'Invitation à la réunion' ?",
+        "response": "[reply_to_message message_id='56789' user_id='me' reply_body='J'y serai présent. Merci pour l'invitation.']"
+    },
+    {
+        "question": "Pourrais-tu répondre au message de Pierre avec \"Je m'en occupe tout de suite\" ?",
+        "response": "[reply_to_message message_id='7890' user_id='Pierre' reply_body=\"Je m'en occupe tout de suite\"]"
+    },
+    {
+        "question": "Peux-tu répondre au message de Jean concernant le compte-rendu ?",
+        "response": "[reply_to_message message_id='67890' user_id='Jean123' reply_body='J'ai bien reçu ton message, voici mes remarques sur le compte-rendu.']"
+    },
+    {
+        "question": "Peux-tu répondre à ce message que j'ai reçu il y a une heure ?",
+        "response": "[reply_to_message message_id='456789' user_id='123' reply_body='Je te remercie pour ta réponse rapide.']"
+    },
+    {
+        "question": "Peux-tu rédiger un email pour proposer une réunion avec l'équipe de marketing ?",
+        "response": "[create_email to='marketing_team@company.com' subject='Proposal for Meeting' additional_info='Please let us know your availability this week.' user_id='me']"
+    },
+    {
+        "question": "Peux-tu me rédiger un email pour confirmer la réunion de demain ?",
+        "response": "[create_email to='contact@entreprise.com' subject='Confirmation de la réunion de demain' additional_info='N'oubliez pas d'apporter les documents nécessaires.' user_id='123']"
+    },
+    {
+        "question": "Rédige un email pour informer l'équipe du changement d'horaire de la réunion.",
+        "response": "[create_email to='team@company.com' subject='Changement d'heure de la réunion' additional_info='Veuillez noter que la réunion initialement prévue à 10h est reprogrammée à 14h.' user_id='123']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon d'email pour notifier l'équipe du changement de réunion, avec le sujet 'Nouveau Planning' ?",
+        "response": "[create_email to='team@example.com' subject='Nouveau Planning' additional_info='Changement d'horaire pour notre prochaine réunion' user_id='me']"
+    },
+    {
+        "question": "Peux-tu rédiger un email pour informer le service informatique d'un problème de réseau ?",
+        "response": "[create_email to='service-informatique@example.com' subject='Problème de réseau' additional_info='Décrit en détail le problème de réseau rencontré aujourd\\'hui.' user_id='utilisateur_123']"
+    },
+    {
+        "question": "Peux-tu créer un email destiné à 'john.doe@example.com' avec le sujet 'Réunion de projet' et des informations supplémentaires concernant l'agenda ?",
+        "response": "[create_email to='john.doe@example.com' subject='Réunion de projet' additional_info='informations concernant l'agenda' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu rédiger un email destiné à Pierre concernant la réunion de demain ?",
+        "response": "[create_email to='pierre@example.com' subject='Réunion de demain' additional_info='Veuillez trouver ci-joint les détails de notre rencontre prévue pour demain.' user_id='me']"
+    },
+    {
+        "question": "Rédige un email pour remercier Linda de son aide lors du projet.",
+        "response": "[create_email to='linda@example.com' subject='Merci pour votre aide' additional_info='remerciements pour votre support durant le projet' user_id='me']"
+    },
+    {
+        "question": "Peux-tu rédiger un email à destination de Jean Dupont avec l'objet 'Réunion importante' ?",
+        "response": "[create_email to='jean.dupont@example.com' subject='Réunion importante' additional_info='N'oubliez pas d'inclure tous les détails nécessaires à la réunion.' user_id='me']"
+    },
+    {
+        "question": "Peux-tu me rédiger un email pour informer l'équipe de notre réunion demain ?",
+        "response": "[create_email to='team@example.com' subject='Réunion de demain' additional_info='Informez l'équipe de la réunion prévue demain à 10h.' user_id='me']"
+    },
+    {
+        "question": "Montre-moi le contenu du brouillon d'email avec l'identifiant 'abc123'.",
+        "response": "[display_draft draft_id='abc123' user_id='default_user']"
+    },
+    {
+        "question": "Peux-tu me montrer le contenu du brouillon d'email avec l'ID '123' ?",
+        "response": "[display_draft draft_id='123' user_id='me']"
+    },
+    {
+        "question": "Peux-tu me montrer le contenu du brouillon d'email avec l'ID 5467?",
+        "response": "[display_draft draft_id='5467' user_id='me']"
+    },
+    {
+        "question": "Cortex, peux-tu me montrer le brouillon d'email avec l'ID 789 ?",
+        "response": "[display_draft draft_id='789' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu afficher le brouillon d'email avec l'ID '56789' pour moi ?",
+        "response": "[display_draft draft_id='56789' user_id='me']"
+    },
+    {
+        "question": "Cortex, peux-tu me montrer ce que contient le brouillon d'email avec l'identifiant 789 ?",
+        "response": "[display_draft draft_id='789' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le contenu du brouillon d'email avec l'identifiant 67890 ?",
+        "response": "[display_draft draft_id='67890' user_id='example']"
+    },
+    {
+        "question": "Peux-tu me montrer le brouillon d'email avec l'identifiant 7890 pour voir ce que j'ai écrit ?",
+        "response": "[display_draft draft_id='7890' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le contenu du brouillon d'email avec l'ID 'abc123' ?",
+        "response": "[display_draft draft_id='abc123' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu me montrer le contenu du brouillon avec l'ID '65234' ?",
+        "response": "[display_draft draft_id='65234' user_id='me']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon de réponse au message ID 67890 avec des informations supplémentaires ?",
+        "response": "[create_draft_reply message_id='67890' additional_info='Réunion de suivi fixée au 15 mars à 10h' user_id='123']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon de réponse au message avec l'ID 'abc123' en ajoutant les détails de la proposition de projet ?",
+        "response": "[create_draft_reply message_id='abc123' additional_info='proposition de projet' user_id='utilisateur1']"
+    },
+    {
+        "question": "Peux-tu rédiger une réponse à la demande concernant le projet 'Avenir Éolien' ?",
+        "response": "[create_draft_reply message_id='proj_eolien_01' additional_info='Requiert clarification budgetaire' user_id='a123']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon en réponse au message ayant l'ID 'A5678', avec des informations supplémentaires si possible ?",
+        "response": "[create_draft_reply message_id='A5678' additional_info='oui' user_id='12345']"
+    },
+    {
+        "question": "Pourrais-tu préparer une ébauche de réponse au message avec l'identifiant 'abc123' ?",
+        "response": "[create_draft_reply message_id='abc123' additional_info='Réponse préparée' user_id='user_345']"
+    },
+    {
+        "question": "Peux-tu rédiger un brouillon de réponse au message intitulé 'Invitation à la conférence' ?",
+        "response": "[create_draft_reply message_id='invitation_conf' additional_info='Préparer une réponse polie pour confirmer ma présence' user_id='current_user']"
+    },
+    {
+        "question": "Peux-tu créer un brouillon de réponse au message 67890 avec quelques informations additionnelles ?",
+        "response": "[create_draft_reply message_id='67890' additional_info='Here is some additional information to include' user_id='user_xyz']"
+    },
+    {
+        "question": "Peux-tu rédiger une réponse au message ID 67890 avec quelques informations supplémentaires ?",
+        "response": "[create_draft_reply message_id='67890' additional_info='Voici quelques mises à jour importantes.' user_id='utilisateur']"
+    },
+    {
+        "question": "Peux-tu me préparer une réponse au message avec l'identifiant '45678', s'il te plaît ?",
+        "response": "[create_draft_reply message_id='45678' additional_info='None' user_id='current']"
+    },
+    {
+        "question": "Peux-tu rédiger un brouillon de réponse au message de l'identifiant '654321' en intégrant des infos supplémentaires ?",
+        "response": "[create_draft_reply message_id='654321' additional_info='Infos supplémentaires à intégrer' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu envoyer l'email en brouillon nommé 'Invitation à la réunion' après l'avoir mis à jour ?",
+        "response": "[send_draft draft_id='67890' content='Invitation à la réunion' user_id='user123']"
+    },
+    {
+        "question": "Pourrais-tu transmettre le brouillon de l'email nommé 'Présentation projet' ?",
+        "response": "[send_draft draft_id='67890' content='Présentation projet' user_id='utilisateur']"
+    },
+    {
+        "question": "Pourrais-tu modifier et expédier le brouillon avec l'ID 'abc123' en l'envoyant à mon contact principal ?",
+        "response": "[send_draft draft_id='abc123' content='Mise à jour et envoi' user_id='principal_contact']"
+    },
+    {
+        "question": "Pourrais-tu expédier le brouillon d'email nommé 'Invitation spéciale' ?",
+        "response": "[send_draft draft_id='inv001' content='Invitation spéciale' user_id='alex']"
+    },
+    {
+        "question": "Cortex, est-ce que tu pourrais expédier le brouillon d'email appelé 'Invitation à la réunion' ?",
+        "response": "[send_draft draft_id='67890' content='Invitation à la réunion' user_id='me']"
+    },
+    {
+        "question": "Envoie l'ébauche d'email avec l'objet 'Réunion d'équipe' dès que possible.",
+        "response": "[send_draft draft_id='67890' content='Réunion d\\'équipe' user_id='me']"
+    },
+    {
+        "question": "Peux-tu envoyer ce brouillon d'email sur notre proposition de projet ?",
+        "response": "[send_draft draft_id='67890' content='Proposition de projet' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu transmettre le brouillon de l'email dont le sujet est 'Réunion de projet' ?",
+        "response": "[send_draft draft_id='67890' content='Réunion de projet' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu expédier le brouillon d'email intitulé 'Invitation à la réunion' après l'avoir modifié ?",
+        "response": "[send_draft draft_id='67890' content='Invitation à la réunion' user_id='userXYZ']"
+    },
+    {
+        "question": "Pourrais-tu envoyer le brouillon d'email avec l'objet 'Invitation à la réunion' ?",
+        "response": "[send_draft draft_id='67890' content='Invitation à la réunion' user_id='me']"
+    },
+    {
+        "question": "Trouve un nombre aléatoire compris entre 5 et 15.",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Peux-tu tirer un chiffre entre 10 et 10 pour moi?",
+        "response": "[generate_random_number min_value=10 max_value=10]"
+    },
+    {
+        "question": "Pourrais-tu me générer un chiffre aléatoire entre 25 et 75 ?",
+        "response": "[generate_random_number min_value=25 max_value=75]"
+    },
+    {
+        "question": "Peux-tu générer un nombre aléatoire, s'il te plaît, entre 5 et 15 ?",
+        "response": "[generate_random_number min_value=5 max_value=15]"
+    },
+    {
+        "question": "Génère un nombre aléatoire entre 100 et 200.",
+        "response": "[generate_random_number min_value=100 max_value=200]"
+    },
+    {
+        "question": "Pourrais-tu me recommander un film d'action ?",
+        "response": "[recommend_media title='' genre='action' media_type='film']"
+    },
+    {
+        "question": "Peux-tu me proposer un bon film d'action à regarder ce soir ?",
+        "response": "[recommend_media title='' genre='action' media_type='movie']"
+    },
+    {
+        "question": "Peux-tu me conseiller un film dans le genre thriller ?",
+        "response": "[recommend_media title='' genre='thriller' media_type='film']"
+    },
+    {
+        "question": "Pourrais-tu me suggérer un film d'aventure qui s'appelle \"Jungle Escape\" ?",
+        "response": "[recommend_media title='Jungle Escape' genre='adventure' media_type='movie']"
+    },
+    {
+        "question": "Quels films du genre science-fiction peux-tu me suggérer ?",
+        "response": "[recommend_media title='' genre='science-fiction' media_type='movie']"
+    },
+    {
+        "question": "Peux-tu jouer la chanson 'Bohemian Rhapsody' ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Pourrais-tu lancer la chanson 'Bohemian Rhapsody' sur mon appareil ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Peux-tu jouer le morceau 'Bohemian Rhapsody' sur mon enceinte connectée ?",
+        "response": "[play_track track_name='Bohemian Rhapsody']"
+    },
+    {
+        "question": "Pourrais-tu lancer la chanson 'Shape of You' ?",
+        "response": "[play_track track_name='Shape of You']"
+    },
+    {
+        "question": "Peux-tu jouer la chanson 'Imagine' sur mon appareil ?",
+        "response": "[play_track track_name='Imagine']"
+    },
+    {
+        "question": "Pourrais-tu mettre stoppé la chanson qui passe sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu mettre la lecture en cours de Spotify en pause, s'il te plaît ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu mettre en veille la chanson qui joue actuellement sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Peux-tu mettre en pause la musique qui joue actuellement sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Pourrais-tu mettre la musique en pause sur Spotify ?",
+        "response": "[pause_playback]"
+    },
+    {
+        "question": "Reprends la musique là où je l'avais laissée sur Spotify, s'il te plaît.",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Reprends la musique où je m'étais arrêté sur Spotify.",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu reprendre la lecture de ma liste de lecture actuelle sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu redémarrer la dernière chanson que j'écoutais sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Pourrais-tu relancer la lecture là où je l'ai interrompue sur Spotify ?",
+        "response": "[resume_playback]"
+    },
+    {
+        "question": "Peux-tu passer à la prochaine chanson sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Cortex, peux-tu sauter au morceau suivant sur Spotify s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Pourrais-tu passer au morceau suivant, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Pourrais-tu passer à la chanson suivante dans ma playlist Spotify, s'il te plaît ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify ?",
+        "response": "[next_track]"
+    },
+    {
+        "question": "Peux-tu revenir à la chanson précédente que j'écoutais sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Cortex, pourrais-tu revenir à la piste précédente que j'écoutais sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Peux-tu passer au titre précédent sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu repasser à la chanson précédente sur Spotify, s'il te plaît ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu repasser le morceau précédent sur Spotify ?",
+        "response": "[previous_track]"
+    },
+    {
+        "question": "Pourrais-tu régler le volume à 50 ?",
+        "response": "[set_volume volume_level=50]"
+    },
+    {
+        "question": "Régle le volume sur un niveau agréable pour une soirée tranquille.",
+        "response": "[set_volume volume_level=30]"
+    },
+    {
+        "question": "Peux-tu régler le volume à 75% ?",
+        "response": "[set_volume volume_level=75]"
+    },
+    {
+        "question": "Peux-tu ajuster le volume sonore à 50% ?",
+        "response": "[set_volume volume_level=50]"
+    },
+    {
+        "question": "Peux-tu régler le volume sur 75, s'il te plaît ?",
+        "response": "[set_volume volume_level=75]"
+    },
+    {
+        "question": "Quelle chanson est en train de jouer actuellement ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est l'état actuel de la musique que j'écoute ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel morceau est en train de jouer actuellement sur mon appareil ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel est le morceau en cours de lecture sur ma playlist ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Quel morceau est en train de jouer en ce moment ?",
+        "response": "[get_current_playback]"
+    },
+    {
+        "question": "Peux-tu jouer des morceaux similaires à 'Rolling in the Deep' par Adele ?",
+        "response": "[play_recommendations_track track_name='Rolling in the Deep' artist_name='Adele' genre_name='']"
+    },
+    {
+        "question": "Peux-tu découvrir des musiques similaires à 'Shape of You' par Ed Sheeran ?",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']"
+    },
+    {
+        "question": "Pourrais-tu me jouer des morceaux similaires à 'Bohemian Rhapsody' du groupe Queen ?",
+        "response": "[play_recommendations_track track_name='Bohemian Rhapsody' artist_name='Queen' genre_name='']"
+    },
+    {
+        "question": "Peux-tu jouer de la musique similaire à 'Bohemian Rhapsody' de Queen ?",
+        "response": "[play_recommendations_track track_name='Bohemian Rhapsody' artist_name='Queen' genre_name='']"
+    },
+    {
+        "question": "Peux-tu me proposer des titres similaires à 'Shape of You' ?",
+        "response": "[play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='pop']"
+    },
+    {
+        "question": "Quelle est la charge actuelle de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Cortex, peux-tu vérifier combien de batterie il me reste sur mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quel est le pourcentage actuel de batterie de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Quelle est la charge actuelle de mon iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Cortex, pourrais-tu vérifier l'autonomie restante de l'iPhone ?",
+        "response": "[get_iphone_battery]"
+    },
+    {
+        "question": "Comment puis-je connaître ma localisation actuelle et l'endroit exact où je me trouve ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Où est-ce que je me trouve actuellement avec mon iPhone ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quelle est ma position géographique exacte actuellement ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quel est mon emplacement actuel ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Peux-tu me dire où je me trouve actuellement avec l'adresse correspondante ?",
+        "response": "[get_location]"
+    },
+    {
+        "question": "Quel temps fait-il dehors actuellement à mon emplacement ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il ici sur mon iPhone ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel temps fait-il actuellement là où je me trouve ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quelle est la situation météorologique ici en ce moment ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Quel est le bulletin météo actuel là où je me trouve ?",
+        "response": "[get_weather]"
+    },
+    {
+        "question": "Peux-tu récupérer tous mes contacts dont le prénom est 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Peux-tu me donner les coordonnées des personnes dans mes contacts qui s'appellent 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Peux-tu retrouver mes contacts ?",
+        "response": "[get_contacts name='']"
+    },
+    {
+        "question": "Pourrais-tu me montrer les coordonnées de tous mes contacts ?",
+        "response": "[get_contacts name='']"
+    },
+    {
+        "question": "Puis-je obtenir les coordonnées de mon contact nommé 'Alice' ?",
+        "response": "[get_contacts name='Alice']"
+    },
+    {
+        "question": "Peux-tu faire sonner mon iPhone immédiatement ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Peux-tu déclencher une sonnerie sur mon iPhone pour le localiser ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Fais retentir le son sur mon iPhone, s'il te plaît.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Pourrais-tu faire retentir mon téléphone à distance ?",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Fais sonner mon iPhone s'il te plaît.",
+        "response": "[play_sound_on_iphone]"
+    },
+    {
+        "question": "Comment puis-je activer le mode perdu sur mon iPhone avec le message « Si vous le trouvez, merci de rappeler » et mon numéro de contact ?",
+        "response": "[activate_lost_mode phone_number='1234567890' message='Si vous le trouvez, merci de rappeler']"
+    },
+    {
+        "question": "Cortex, peux-tu activer le mode perdu sur mon iPhone et afficher 'Veuillez contacter ce numéro : 0123456789' ?",
+        "response": "[activate_lost_mode phone_number='0123456789' message='Veuillez contacter ce numéro']"
+    },
+    {
+        "question": "J'ai perdu mon iPhone, peux-tu activer le mode perdu et afficher le message avec mon numéro?",
+        "response": "[activate_lost_mode phone_number='06 12 34 56 78' message='Veuillez appeler ce numéro']"
+    },
+    {
+        "question": "Pourrais-tu activer le mode perdu sur mon iPhone en indiquant mon numéro et un message ?",
+        "response": "[activate_lost_mode phone_number='1234567890' message='Ce téléphone est perdu, veuillez appeler ce numéro.']"
+    },
+    {
+        "question": "Cortex, active le mode perdu sur mon iPhone en utilisant le numéro 1122334455 et laisse un message disant 'Appelle-moi dès que possible'.",
+        "response": "[activate_lost_mode phone_number='1122334455' message='Appelle-moi dès que possible']"
+    },
+    {
+        "question": "Peux-tu calculer l'itinéraire entre Paris et Lyon s'il te plaît ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Je voudrais connaître le chemin pour aller de Paris à Lyon.",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Pourrais-tu me montrer l'itinéraire de Paris à Lyon ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Pourriez-vous me tracer un chemin entre Paris et Lyon, s’il vous plaît ?",
+        "response": "[calculate_route from_city='Paris' to_city='Lyon']"
+    },
+    {
+        "question": "Quelle est la meilleure route pour aller de Paris à Marseille ?",
+        "response": "[calculate_route from_city='Paris' to_city='Marseille']"
+    },
+    {
+        "question": "\"Pourrais-tu ajouter 'Réunion avec Paul' à mes tâches de la semaine prochaine, s'il te plaît ?\"",
+        "response": "[create_google_task task_title='Réunion avec Paul' task_notes='Prévue pour la semaine prochaine']"
+    },
+    {
+        "question": "Ajoute \"Acheter du lait\" à ma liste de choses à faire.",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Pourrais-tu programmer une nouvelle tâche intitulée 'Aller chez le dentiste' ?",
+        "response": "[create_google_task task_title='Aller chez le dentiste' task_notes='']"
+    },
+    {
+        "question": "Peux-tu ajouter une tâche \"Envoyer le rapport\" à ma liste de choses à faire ?",
+        "response": "[create_google_task task_title='Envoyer le rapport' task_notes='']"
+    },
+    {
+        "question": "Peux-tu ajouter une tâche intitulée 'Acheter du lait' dans ma liste de tâches ?",
+        "response": "[create_google_task task_title='Acheter du lait' task_notes='']"
+    },
+    {
+        "question": "Peux-tu programmer une réunion d'équipe pour demain à 14h ?",
+        "response": "[create_calendar_event name='Réunion d'équipe' duration='1h' participants=['alice@example.com', 'bob@example.com'] date_preference='demain' time_range='14:00' location='Salle de conférence']"
+    },
+    {
+        "question": "Pourrais-tu programmer une réunion avec l'équipe technique sur Google Calendar ?",
+        "response": "[create_calendar_event name='Réunion Équipe Technique' duration='60' participants=['alice@example.com', 'bob@example.com'] date_preference='demain' time_range='14:00-15:00' location='Salle de conférence B']"
+    },
+    {
+        "question": "Pourrais-tu programmer une réunion d'équipe pour demain à 10h au siège ?",
+        "response": "[create_calendar_event name='Réunion d'équipe' duration='1h' participants=['Jean','Marie'] date_preference='demain' time_range='10:00' location='siège']"
+    },
+    {
+        "question": "Ajoute un événement d'anniversaire pour Pierre ce vendredi à 15h au café des Arts.",
+        "response": "[create_calendar_event name='Anniversaire de Pierre' duration='2h' participants=['Pierre'] date_preference='vendredi' time_range='15:00 - 17:00' location='café des Arts']"
+    },
+    {
+        "question": "Organise une réunion avec l'équipe projet la semaine prochaine.",
+        "response": "[create_calendar_event name='Réunion équipe projet' duration='1h' participants=['alice@example.com', 'bob@example.com'] date_preference='semaine prochaine' time_range='10:00-12:00' location='Salle de conférence B']"
+    },
+    {
+        "question": "Quels sont les points saillants des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu me faire un résumé des emails reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner un résumé des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me faire un résumé des courriels reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu me donner un aperçu des emails que j'ai reçus aujourd'hui ?",
+        "response": "[summarize_today_emails]"
+    },
+    {
+        "question": "Peux-tu vérifier les courriels reçus aujourd'hui et les classer selon leur contenu ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Pourrais-tu passer en revue mes emails d'aujourd'hui et les organiser en conséquence ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Cortex, pourrais-tu répertorier les emails reçus aujourd'hui et les classer dans les catégories appropriées ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu trier les emails reçus aujourd'hui et les ranger dans leurs labels correspondants ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu trier les emails reçus aujourd'hui et les organiser par étiquette ?",
+        "response": "[list_and_analyze_today_emails]"
+    },
+    {
+        "question": "Peux-tu récupérer les emails non-lus de la boîte de réception datant de la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' specific_recipient='inbox' specific_word='' start_date='2023-10-01' end_date='2023-10-07']"
+    },
+    {
+        "question": "Cortex, rassemble toutes les emails non-lus que j'ai reçus la semaine dernière.",
+        "response": "[collect_emails filter_type='unread' specific_recipient='me' specific_word='' start_date='2023-10-16' end_date='2023-10-22']"
+    },
+    {
+        "question": "Récupère-moi les emails non lus dans ma boîte de réception.",
+        "response": "[collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='' end_date='']"
+    },
+    {
+        "question": "Trouve tous les emails non lus dans ma boîte de réception depuis la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread_inbox' start_date='2023-10-16' end_date='2023-10-23']"
+    },
+    {
+        "question": "Peux-tu me récupérer tous les emails non lus reçus la semaine dernière ?",
+        "response": "[collect_emails filter_type='unread' start_date='2023-10-01' end_date='2023-10-07']"
+    },
+    {
+        "question": "Cortex, peux-tu marquer comme lu ce message pour moi ?",
+        "response": "[mark_as_read message_id='12345' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu marquer ce message comme étant lu ? Son identifiant est 789 et c'est pour l'utilisateur 456.",
+        "response": "[mark_as_read message_id='789' user_id='456']"
+    },
+    {
+        "question": "Peux-tu marquer le message avec l'identifiant 'msg_2023' comme lu pour moi?",
+        "response": "[mark_as_read message_id='msg_2023' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu marquer ce message comme lu ? Son identifiant est 987654.",
+        "response": "[mark_as_read message_id='987654' user_id='me']"
+    },
+    {
+        "question": "Peux-tu marquer le message avec l'identifiant 'msg789' comme déjà lu pour moi ?",
+        "response": "[mark_as_read message_id='msg789' user_id='me']"
+    },
+    {
+        "question": "Peux-tu supprimer le message avec l'identifiant 789 de ma boîte de réception ?",
+        "response": "[trash_message message_id='789' user_id='me']"
+    },
+    {
+        "question": "Peux-tu mettre le message avec l'ID 7632 à la corbeille, s'il te plaît ?",
+        "response": "[trash_message message_id='7632' user_id='me']"
+    },
+    {
+        "question": "Peux-tu déplacer le message au dossier de suppression ?",
+        "response": "[trash_message message_id='12345' user_id='abc']"
+    },
+    {
+        "question": "Cortex, pourrais-tu mettre le message avec l'identifiant 1456 à la corbeille pour moi ?",
+        "response": "[trash_message message_id='1456' user_id='me']"
+    },
+    {
+        "question": "Cortex, peux-tu jeter le message avec l'identifiant '4567' dans la corbeille pour moi ?",
+        "response": "[trash_message message_id='4567' user_id='me']"
+    },
+    {
+        "question": "Peux-tu archiver le message avec l'identifiant 98765 pour l'utilisateur 123?",
+        "response": "[archive_message message_id='98765' user_id='123']"
+    },
+    {
+        "question": "Je souhaite archiver le message numéro 101 de mon compte.",
+        "response": "[archive_message message_id='101' user_id='me']"
+    },
+    {
+        "question": "Peux-tu archiver le message avec l'identifiant 67890 pour moi ?",
+        "response": "[archive_message message_id='67890' user_id='me']"
+    },
+    {
+        "question": "Peux-tu archiver le message numéro 456 pour moi ?",
+        "response": "[archive_message message_id='456' user_id='me']"
+    },
+    {
+        "question": "Peux-tu archiver le message numéro 207 pour l'utilisateur ID 42 ?",
+        "response": "[archive_message message_id='207' user_id='42']"
+    },
+    {
+        "question": "Peux-tu répondre au message numéro 6589 de l'utilisateur john_doe avec une note de remerciement ?",
+        "response": "[reply_to_message message_id='6589' user_id='john_doe' reply_body='Merci beaucoup pour votre aide !']"
+    },
+    {
+        "question": "Peux-tu répondre au message lié au projet X avec les suggestions que j'ai faites ?",
+        "response": "[reply_to_message message_id='123abc' user_id='me' reply_body='Voici mes suggestions pour le projet X...']"
+    },
+    {
+        "question": "Peux-tu répondre au message d'identifiant 67890 en remerciant pour l'invitation au dîner ?",
+        "response": "[reply_to_message message_id='67890' user_id='me' reply_body='Merci beaucoup pour l'invitation au dîner !']"
+    },
+    {
+        "question": "Pourrais-tu répondre au message de Julien concernant notre réunion de demain ?",
+        "response": "[reply_to_message message_id='abc123' user_id='julien' reply_body='Je confirme notre réunion pour demain.']"
+    },
+    {
+        "question": "Peux-tu répondre au message avec l'ID '999' qui vient de John ?",
+        "response": "[reply_to_message message_id='999' user_id='me' reply_body='Bonjour John, je suis là pour répondre à votre question !']"
+    },
+    {
+        "question": "Peux-tu rédiger un brouillon d'email pour inviter Stéphanie à notre réunion de la semaine prochaine ?",
+        "response": "[create_email to='stephanie@example.com' subject='Invitation à la réunion de la semaine prochaine' additional_info='Veuillez confirmer votre disponibilité' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu rédiger un email de suivi pour notre réunion de projet de jeudi dernier ?",
+        "response": "[create_email to='team@company.com' subject='Suivi de réunion de projet' additional_info='Réunion de jeudi dernier' user_id='user123']"
+    },
+    {
+        "question": "Peux-tu rédiger un brouillon d'email pour une réunion de projet avec l'équipe à 10h ?",
+        "response": "[create_email to='team@example.com' subject='Réunion de Projet' additional_info='Rendez-vous à 10h pour discuter des progrès.' user_id='me']"
+    },
+    {
+        "question": "Rédige un email de suivi avec pour objet 'Réunion' pour John.",
+        "response": "[create_email to='john@example.com' subject='Réunion' additional_info='Merci de votre présence à la réunion d'aujourd'hui.']"
+    },
+    {
+        "question": "Rédige un email pour mon collègue concernant la réunion de demain.",
+        "response": "[create_email to='colleague@example.com' subject='Réunion de demain' additional_info='Discutons des points à aborder pour la réunion de demain à 10h' user_id='me']"
+    },
+    {
+        "question": "Quel est le contenu du brouillon d'email avec l'ID 67890 ?",
+        "response": "[display_draft draft_id='67890' user_id='me']"
+    },
+    {
+        "question": "Montre-moi le brouillon d'email avec l'identifiant 67890.",
+        "response": "[display_draft draft_id='67890' user_id='current_user']"
+    },
+    {
+        "question": "Pourrais-tu montrer le contenu de mon brouillon avec l'identifiant 007 ?",
+        "response": "[display_draft draft_id='007' user_id='me']"
+    },
+    {
+        "question": "Pourrais-je voir le brouillon d'email avec l'identifiant '45678' que Michel a rédigé ?",
+        "response": "[display_draft draft_id='45678' user_id='michel']"
+    },
+    {
+        "question": "Montre-moi le contenu du brouillon d'email avec l'ID 'brouillon123'.",
+        "response": "[display_draft draft_id='brouillon123' user_id='userX']"
+    },
+    {
+        "question": "Peux-tu rédiger une esquisse de réponse à ce message en utilisant GPT ?",
+        "response": "[create_draft_reply message_id='a1b2c3' additional_info='Rien à signaler.' user_id='utilisateur123']"
+    },
+    {
+        "question": "Peux-tu générer un brouillon de réponse pour le message avec l'identifiant 'abc123' ?",
+        "response": "[create_draft_reply message_id='abc123' additional_info='' user_id='myself']"
+    },
+    {
+        "question": "Peux-tu rédiger un brouillon de réponse au message reçu de Jean ?",
+        "response": "[create_draft_reply message_id='123456' additional_info='Réponse à Jean' user_id='unique_user_01']"
+    },
+    {
+        "question": "Pourrais-tu concevoir une réponse de brouillon pour le message numéro '56789' ?",
+        "response": "[create_draft_reply message_id='56789' additional_info='' user_id='me']"
+    },
+    {
+        "question": "Peux-tu rédiger un brouillon de réponse au message avec l'ID 5678 ?",
+        "response": "[create_draft_reply message_id='5678' additional_info='' user_id='me']"
+    },
+    {
+        "question": "Peux-tu transmettre le brouillon d'email qui contient la mise à jour du projet ?",
+        "response": "[send_draft draft_id='67890' content='Mise à jour du projet' user_id='team_leader']"
+    },
+    {
+        "question": "Salut Cortex, tu peux transmettre le brouillon de l'email au sujet 'Agenda de la réunion' ?",
+        "response": "[send_draft draft_id='67890' content='Agenda de la réunion' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu envoyer le brouillon intitulé 'Invitation au mariage' après mise à jour du contenu ?",
+        "response": "[send_draft draft_id='54321' content='Invitation au mariage' user_id='me']"
+    },
+    {
+        "question": "Pourrais-tu envoyer le brouillon que j'ai préparé pour la réunion de demain ?",
+        "response": "[send_draft draft_id='67890' content='Préparation pour la réunion de demain' user_id='utilisateur']"
+    },
+    {
+        "question": "Peux-tu expédier le brouillon d'email nommé 'Invitation au séminaire' ?",
+        "response": "[send_draft draft_id='67890' content='Invitation au séminaire' user_id='me']"
+    }
+]
