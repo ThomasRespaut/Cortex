@@ -118,15 +118,37 @@ class Dongle:
             except Exception as e:
                 print(f"Erreur lors de l'auto-réponse : {str(e)}. Messages en cours : {messages}")
 
-# Exemple d'utilisation de la classe Dongle
+class DongleManager:
+    def __init__(self, dongle_urls, username='admin', password='admin'):
+        self.dongle_urls = dongle_urls
+        self.current_index = 0
+        self.username = username
+        self.password = password
+        self.current_dongle = self._initialize_dongle()
+
+    def _initialize_dongle(self):
+        return Dongle(username=self.username, password=self.password, dongle_url=self.dongle_urls[self.current_index])
+
+    def switch_dongle(self):
+        print(f"Changement de dongle. Ancien dongle : {self.dongle_urls[self.current_index]}")
+        self.current_index = (self.current_index + 1) % len(self.dongle_urls)
+        self.current_dongle = self._initialize_dongle()
+        print(f"Nouvel dongle : {self.dongle_urls[self.current_index]}")
+
+    def handle_error_and_switch(self, error):
+        print(f"Erreur critique détectée : {error}")
+        self.switch_dongle()
+
+# Exemple d'utilisation de DongleManager
 if __name__ == "__main__":
-    dongle = Dongle()
+    dongle_urls = ["192.168.8.1", "192.168.8.2"]  # Liste des dongles disponibles
+    manager = DongleManager(dongle_urls)
     cortex = TinyCortex()
     try:
-        dongle.connect()
-        dongle.auto_respond_to_new_sms(cortex)
-
+        manager.current_dongle.connect()
+        manager.current_dongle.auto_respond_to_new_sms(cortex)
     except Exception as e:
-        print(f"Erreur : {str(e)}")
+        manager.handle_error_and_switch(e)
     finally:
-        dongle.close_connection()
+        manager.current_dongle.close_connection()
+
