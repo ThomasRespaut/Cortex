@@ -83,7 +83,7 @@ class Dongle:
                             phone_number = message['Phone']
                             sms = f"Question : {message['Content']} \n Réponse : "
                             #Utiliser le modèle pour répondre :
-                            reply_content = cortex.get_reply_to(sms)
+                            reply_content = cortex.generate_response(sms)
                             self.send_sms(phone_number, reply_content)
                             self.delete_sms(message_id)
                             self.processed_messages[message_signature] = True

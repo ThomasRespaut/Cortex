@@ -1,6 +1,3 @@
-# Exemple concret de question/réponse
-# Message utilisateur et réponse du LLM sous forme d'un cas réel
-# Implémentation du système d'exécution
 import re
 from assistant.films_and_series import films_and_series
 from assistant.spotify.spotify_assistant import SpotifyAssistant
