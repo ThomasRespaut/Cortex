@@ -1,6 +1,7 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import re
+from function_calling import execute_tool
 
 # Charger le modèle fine-tuné et le tokenizer
 finetuned_model_path = "./tinyllama_cortex_finetuned"
@@ -41,4 +42,6 @@ if __name__ == "__main__":
                 result = match.group(1).strip()
                 response = result
             print("Réponse : " + response)
+            print(execute_tool(response))
+
 

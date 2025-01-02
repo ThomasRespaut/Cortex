@@ -33,8 +33,49 @@ def search_media(query=None, genre_name=None, media_type='movie'):
     data = make_request(f"{endpoint}/{media_type}", params)
     return data.get('results', [])
 
+def levenshtein_distance(s1, s2):
+    """Calculer la distance de Levenshtein entre deux chaînes."""
+    if len(s1) < len(s2):
+        return levenshtein_distance(s2, s1)
+
+    if len(s2) == 0:
+        return len(s1)
+
+    previous_row = range(len(s2) + 1)
+    for i, c1 in enumerate(s1):
+        current_row = [i + 1]
+        for j, c2 in enumerate(s2):
+            insertions = previous_row[j + 1] + 1
+            deletions = current_row[j] + 1
+            substitutions = previous_row[j] + (c1 != c2)
+            current_row.append(min(insertions, deletions, substitutions))
+        previous_row = current_row
+
+    return previous_row[-1]
+
 
 def recommend_media(title=None, genre=None, media_type='movie'):
+    """
+    Recommander un média basé sur le titre, le genre, et le type de média.
+    Si le genre est fourni et ne correspond pas directement, on cherche le genre le plus proche.
+    """
+
+    if media_type == 'film':
+        media_type = 'movie'
+
+    if media_type == 'tv':
+        genre_list = ["Action & adventure", "Animation", "Comédie", "Crime", "Documentaire", "Drame", "Familial","Kids", "Mystère", "News", "Reality","Science - fiction & fantastique","Soap","Talk","War & politics","Western"]
+    else:
+        genre_list = ["Action", "Aventure", "Animation", "Comédie", "Crime", "Documentaire", "Drame", "Familial",
+                      "Fantastique", "Histoire", "Horreur", "Musique", "Mystère", "Romance", "Science-fiction", "Téléfilm",
+                      "Thriller", "Guerre", "Western"]
+
+    # Si le genre n'est pas None mais ne correspond pas directement, trouver le plus proche
+    if genre and genre not in genre_list:
+        closest_genre = min(genre_list, key=lambda g: levenshtein_distance(genre, g))
+        print(f"Genre '{genre}' non trouvé. Utilisation du genre le plus proche : {closest_genre}.")
+        genre = closest_genre
+
     results = search_media(query=title, genre_name=genre, media_type=media_type)
     if not results:
         print(f"Aucun {media_type} trouvé.")

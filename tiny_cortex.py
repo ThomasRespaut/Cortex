@@ -3,6 +3,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from neo4j import GraphDatabase
 from sentence_transformers import SentenceTransformer, util
 from database.database import Neo4jDatabase
+from function_calling import execute_tool
 
 # Chargement du modèle et du tokenizer fine-tunés
 finetuned_model_path = "./tinyllama_cortex_finetuned"
@@ -103,4 +104,5 @@ def generate_response_with_graph(query, db):
 db = Neo4jDatabase()
 user_query = "Qui est Thomas RESPAUT ?"
 response = generate_response_with_graph(user_query, db)
+print(execute_tool(response))
 print(response)
