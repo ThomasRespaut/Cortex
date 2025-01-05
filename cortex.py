@@ -162,6 +162,15 @@ class Cortex:
         except Exception as e:
             print(f"Une erreur est survenue : {e}.")
 
+    def transcrible_audio(self, audio_stream):
+        if self.local_mode == "True":
+            self.transcrible_audio_local(audio_stream)
+        else:
+            self.transcrible_audio(audio_stream)
+
+    def transcrible_audio_local(self, audio_stream):
+        pass
+
     def transcribe_audio_online(self, audio_stream):
         try:
             audio_stream.seek(0)
