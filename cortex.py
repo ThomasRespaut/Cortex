@@ -17,6 +17,10 @@ from assistant.ratp.ratp_assistant import IDFMAssistant
 from assistant import functions
 from assistant.apple.iphone import AppleAssistant
 from assistant.google.google_assistant import GoogleAssistant
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import re
+
+from function_calling import execute_tool
 
 # Instancier les assistants Spotify et Apple
 spotify_assistant = SpotifyAssistant()
@@ -69,34 +73,64 @@ names_to_functions = {
 load_dotenv()
 
 class Cortex:
-    def __init__(self,input_mode="voice",output_mode="voice"):
+    def __init__(self,input_mode="voice",output_mode="voice",local_mode="True"):
+
+        #Choix de la version locale à la version online
+        self.local_mode = local_mode
+
+        #Modèle en local :
+        self.tokenizer = AutoTokenizer.from_pretrained("./tinyllama_cortex_finetuned")
+        self.model = AutoModelForCausalLM.from_pretrained("./tinyllama_cortex_finetuned")
+        print("Modèle fine-tuné TinyCortex chargé avec succès.")
+
+        #Modèle online :
         openai_api_key = os.getenv('OPENAI_API_KEY')
         self.openai_client = OpenAI(api_key=openai_api_key) if openai_api_key else None
         self.voice = "echo"
-        self.first_keyword_detection = True  # Détection du premier ok Cortex
-
         mistral_api_key = os.getenv('MISTRAL_API_KEY')
         self.mistral_client = Mistral(api_key=mistral_api_key) if mistral_api_key else None
         self.mistral_model = "ft:open-mistral-nemo:7771e396:20241004:a1df71c2"
 
+        self.first_keyword_detection = True  # Détection du premier ok Cortex
+
+        #Utilisation des différents outils :
         with open("assistant/tools.json", "r") as file:
             self.tools = json.load(file)
 
+        #Prompt
         self.system = """
         Tu es Cortex, un assistant vocal intelligent et discret. Ton objectif est de fournir des réponses précises, courtes et utiles à l'utilisateur, sans rentrer dans les détails de ton fonctionnement ou de tes capacités. Comporte-toi comme un ami respectueux et serviable, prêt à aider sans donner d'explications inutiles sur toi-même. Réponds de manière simple et directe, sans rappeler que tu es un assistant. Reste concentré sur la question de l'utilisateur et sur la meilleure façon de l'aider immédiatement.
         """
 
+        #Conversation enregistrée dans self.messages
         self.messages = [
             {"role": "system", "content": self.system},
         ]
 
+        #Choix de l'entrée ou de la sortie (texte ou audio)
         self.input_mode = input_mode
         self.output_mode = output_mode
 
+
     def generate_speach(self, text):
-        if self.openai_client is None:
-            print("Please, provide an OpenAPI key.")
-            return None
+
+        #Fonction local :
+        if self.input_mode == "True":
+            self.generate_speach_local(text)
+
+        #Fonction online :
+        if self.local_mode == "False":
+            self.generate_speach_online(text)
+
+    def generate_speach_local(self,text):
+        pass
+
+    def generate_speach_online(self, text):
+        # Fonction online :
+        if self.local_mode == "False":
+            if self.openai_client is None:
+                print("Please, provide an OpenAPI key.")
+                return None
 
         if not text or not isinstance(text, str):  # Vérifier que le texte est un string
             print("Invalid text input for speech generation.")
@@ -130,7 +164,7 @@ class Cortex:
         except Exception as e:
             print(f"Une erreur est survenue : {e}.")
 
-    def transcribe_audio(self, audio_stream):
+    def transcribe_audio_online(self, audio_stream):
         try:
             audio_stream.seek(0)
             transcription = self.openai_client.audio.transcriptions.create(
@@ -200,7 +234,39 @@ class Cortex:
             audio_stream.seek(0)
             return audio_stream
 
-    def generate_text(self, prompt):
+
+    def generate_text(self,prompt):
+
+        #Générer une réponse en local
+        if self.local_mode == "True":
+            self.generate_text_local(prompt)
+
+        #Générer une réponse online
+        else:
+            self.generate_speach_online(prompt)
+    def generate_text_local(self, prompt):
+        """
+        Génère une réponse en utilisant le modèle fine-tuné TinyCortex.
+        """
+        inputs = self.tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512)
+        outputs = self.model.generate(
+            inputs["input_ids"],
+            max_length=512,
+            num_return_sequences=1,
+            temperature=0.7,
+            top_p=0.9,
+            do_sample=True
+        )
+        response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+        match = re.search(r"Réponse :(.*)", response)
+        if match:
+            result = match.group(1).strip()
+            response = result
+        print("Réponse : " + response)
+        print(execute_tool(response))
+        return response
+    def generate_text_online(self, prompt):
         """
         Génère une réponse textuelle à partir d'un prompt en utilisant la RAG (Retrieval-Augmented Generation).
         Les informations du graphe Neo4j sont récupérées et intégrées dans le contexte avant l'appel à Mistral.
@@ -406,6 +472,7 @@ class Cortex:
             return "Désolé, une erreur est survenue lors de la génération de l'utilisation du tool."
 
     def keyword_detection(self):
+
         access_key = os.getenv('picovoice_api_key')
         keyword_path = "porcupine/Ok-Cortex.ppn"
 
@@ -421,7 +488,7 @@ class Cortex:
             frames_per_buffer=porcupine.frame_length
         )
 
-        #print("Conversation initialisé.")
+        # print("Conversation initialisé.")
         while True:
             pcm = audio_stream.read(porcupine.frame_length, exception_on_overflow=False)
             pcm = np.frombuffer(pcm, dtype=np.int16)
@@ -491,5 +558,5 @@ class Cortex:
 
 
 if __name__ == "__main__":
-    cortex = Cortex(input_mode="text",output_mode="voice")
+    cortex = Cortex(input_mode="text",output_mode="voice",local_mode="False")
     cortex.conversation()
