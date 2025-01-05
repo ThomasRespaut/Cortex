@@ -19,7 +19,6 @@ from assistant.apple.iphone import AppleAssistant
 from assistant.google.google_assistant import GoogleAssistant
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import re
-
 from function_calling import execute_tool
 
 # Instancier les assistants Spotify et Apple
@@ -115,11 +114,10 @@ class Cortex:
     def generate_speach(self, text):
 
         #Fonction local :
-        if self.input_mode == "True":
+        if self.local_mode == "True":
             self.generate_speach_local(text)
 
-        #Fonction online :
-        if self.local_mode == "False":
+        else:
             self.generate_speach_online(text)
 
     def generate_speach_local(self,text):
@@ -558,5 +556,5 @@ class Cortex:
 
 
 if __name__ == "__main__":
-    cortex = Cortex(input_mode="text",output_mode="voice",local_mode="False")
+    cortex = Cortex(input_mode="text",output_mode="text",local_mode="True")
     cortex.conversation()
