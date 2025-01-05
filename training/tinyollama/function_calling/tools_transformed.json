@@ -1,5 +1,65 @@
 [
     {
+        "question": "Donne-moi l'heure actuelle.",
+        "response": "[get_current_time]"
+    },
+    {
+        "question": "Peux-tu me dire quel jour on est aujourd'hui ?",
+        "response": "[get_current_date]"
+    },
+    {
+        "question": "Quel est le temps qu'il fait actuellement ?",
+        "response": "[get_weather location='current']"
+    },
+    {
+        "question": "Quel est le cours actuel du Bitcoin ?",
+        "response": "[get_crypto_price symbol='BTC']"
+    },
+    {
+        "question": "Rappelle-moi mon prochain événement dans le calendrier.",
+        "response": "[get_next_calendar_event]"
+    },
+    {
+        "question": "Peux-tu me jouer une chanson au hasard ?",
+        "response": "[play_random_song]"
+    },
+    {
+        "question": "Quelle est la définition du mot 'intelligence' ?",
+        "response": "[get_word_definition word='intelligence']"
+    },
+    {
+        "question": "Fais-moi une conversion de 100 euros en dollars.",
+        "response": "[convert_currency amount=100 from_currency='EUR' to_currency='USD']"
+    },
+    {
+        "question": "Peux-tu me donner une citation inspirante ?",
+        "response": "[get_random_quote]"
+    },
+    {
+        "question": "Quelle est la distance entre Paris et Londres ?",
+        "response": "[get_distance location1='Paris' location2='Londres']"
+    },
+    {
+        "question": "Envoie-moi un rappel pour boire de l'eau dans une heure.",
+        "response": "[set_reminder action='drink_water' time='1h']"
+    },
+    {
+        "question": "Quels sont les titres d'actualité récents ?",
+        "response": "[get_latest_news]"
+    },
+    {
+        "question": "Trouve-moi une recette pour un gâteau au chocolat.",
+        "response": "[get_recipe dish='gâteau au chocolat']"
+    },
+    {
+        "question": "Peux-tu me raconter une blague ?",
+        "response": "[tell_joke]"
+    },
+    {
+        "question": "Donne-moi la température actuelle dans ma ville.",
+        "response": "[get_temperature location='current']"
+    },
+    {
         "question": "Génère un nombre aléatoire entre deux valeurs spécifiées.",
         "response": "[generate_random_number min_value=10 max_value=10]"
     },

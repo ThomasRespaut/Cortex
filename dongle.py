@@ -141,7 +141,7 @@ class DongleManager:
 
 # Exemple d'utilisation de DongleManager
 if __name__ == "__main__":
-    dongle_urls = ["192.168.8.1", "192.168.8.2"]  # Liste des dongles disponibles
+    dongle_urls = ["192.168.8.1"]*10  # Liste des dongles disponibles
     manager = DongleManager(dongle_urls)
     cortex = TinyCortex()
     try:

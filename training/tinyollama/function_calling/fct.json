@@ -1,0 +1,3656 @@
+[
+    {
+        "question": "Pourrais-tu générer un chiffre compris entre 5 et 15 ?",
+        "response": "<function> [generate_random_number min_value=5 max_value=15]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu choisir un nombre aléatoire entre 5 et 20 pour moi ?",
+        "response": "<function> [generate_random_number min_value=5 max_value=20]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner un nombre aléatoire compris entre 10 et 10 s'il te plaît ?",
+        "response": "<function> [generate_random_number min_value=10 max_value=10]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu sélectionner un chiffre aléatoire entre 5 et 20 pour moi ?",
+        "response": "<function> [generate_random_number min_value=5 max_value=20]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Salut Cortex, génère-moi un chiffre aléatoire entre 5 et 15, s'il te plaît.",
+        "response": "<function> [generate_random_number min_value=5 max_value=15]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Trouve-moi un film de science-fiction qui pourrait me plaire.",
+        "response": "<function> [recommend_media title='' genre='science-fiction' media_type='movie']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me suggérer un bon film de science-fiction ?",
+        "response": "<function> [recommend_media title='unknown' genre='science-fiction' media_type='movie']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me suggérer un film d'action palpitant à regarder ce soir ?",
+        "response": "<function> [recommend_media title='' genre='action' media_type='film']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me suggérer un film d'action ?",
+        "response": "<function> [recommend_media title='' genre='action' media_type='film']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me suggérer un film d'action captivant ?",
+        "response": "<function> [recommend_media title='' genre='action' media_type='movie']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu jouer le morceau 'Bohemian Rhapsody' sur Spotify ?",
+        "response": "<function> [play_track track_name='Bohemian Rhapsody']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Lance la chanson 'Shape of You' sur Spotify.",
+        "response": "<function> [play_track track_name='Shape of You']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu jouer 'Imagine' de John Lennon sur mon appareil ?",
+        "response": "<function> [play_track track_name='Imagine']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu lancer la chanson 'Imagine' de John Lennon pour moi ?",
+        "response": "<function> [play_track track_name='Imagine']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu lire la chanson 'Bohemian Rhapsody' de Queen sur mon téléphone ?",
+        "response": "<function> [play_track track_name='Bohemian Rhapsody']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu interrompre la musique en cours sur Spotify ?",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu mettre en pause la chanson qui est en train de jouer sur Spotify, s'il te plaît ?",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu stopper la musique en train d'être jouée sur Spotify ?",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu mettre en pause ce qui est en train de jouer sur Spotify, s'il te plaît ?",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu mettre en pause la musique qui est en train de jouer sur Spotify ?",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu reprendre ma chanson où je l'ai laissée sur Spotify ?",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu reprendre la musique que j'écoutais juste avant sur Spotify ?",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-ce que tu pourrais continuer la playlist que j'écoutais précédemment ?",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu reprendre la lecture de ma playlist sur Spotify ?",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu reprendre là où j'en étais sur Spotify, s'il te plaît ?",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, passe à la chanson suivante sur Spotify.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu passer au morceau suivant, s'il te plaît ?",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify ?",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, peux-tu passer au morceau suivant sur Spotify ?",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Passe à la chanson suivante sur Spotify, s'il te plaît.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu passer à la chanson précédente sur Spotify, s'il te plaît ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu revenir à la chanson précédente sur Spotify, s'il te plaît ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu revenir à la chanson précédente que j'écoutais sur Spotify ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu jouer le morceau juste avant celui-ci sur Spotify ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu revenir au morceau précédent sur Spotify, s'il te plaît ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu augmenter le volume de la lecture à 75 ?",
+        "response": "<function> [set_volume volume_level=75]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ajuste le volume à 15, s'il te plaît.",
+        "response": "<function> [set_volume volume_level=15]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, peux-tu mettre le volume de la chanson à 75, s'il te plaît ?",
+        "response": "<function> [set_volume volume_level=75]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu mettre le volume à 45, s'il te plaît ?",
+        "response": "<function> [set_volume volume_level=45]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu régler le volume à 25, s'il te plaît ?",
+        "response": "<function> [set_volume volume_level=25]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le morceau qui est en train d'être écouté actuellement ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le titre de la chanson en cours de lecture ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me dire ce qui est en train de jouer ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le morceau actuel dans la playlist?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me dire quel morceau joue actuellement ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu jouer des recommandations basées sur le morceau \"Bohemian Rhapsody\" ?",
+        "response": "<function> [play_recommendations_track track_name='Bohemian Rhapsody' artist_name='' genre_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Joue-moi quelque chose qui ressemble à 'Bohemian Rhapsody' de Queen.",
+        "response": "<function> [play_recommendations_track track_name='Bohemian Rhapsody' artist_name='Queen' genre_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu jouer des recommandations basées sur le morceau 'Shape of You' de Ed Sheeran ?",
+        "response": "<function> [play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu jouer des morceaux recommandés basés sur le titre 'Shape of You' ?",
+        "response": "<function> [play_recommendations_track track_name='Shape of You' artist_name='' genre_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu jouer une recommandation basée sur le titre 'Shape of You' ?",
+        "response": "<function> [play_recommendations_track track_name='Shape of You' artist_name='' genre_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le niveau de batterie de mon iPhone actuellement ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est la charge restante de mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est la charge actuelle de la batterie de mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le niveau de charge de l'iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le statut actuel de la batterie de mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me dire où je me trouve actuellement et m'indiquer l'adresse associée ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me donner l'emplacement actuel de mon iPhone et l'adresse associée ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner l'adresse où je me trouve actuellement ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner l'adresse de l'endroit où je me trouve actuellement ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Où suis-je actuellement sur cette planète ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le temps qu'il fait actuellement ici ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel temps fait-il actuellement là où je me trouve avec mon iPhone ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est la météo actuelle ici ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel temps fait-il dehors en ce moment à l'endroit où je suis avec mon téléphone ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel temps fait-il actuellement dans ma région ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu retrouver pour moi le contact ayant le prénom 'Alice' ?",
+        "response": "<function> [get_contacts name='Alice']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me fournir la liste de mes contacts dont le prénom est 'Marie' ?",
+        "response": "<function> [get_contacts name='Marie']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner tous les contacts listés sous le prénom 'Alice' ?",
+        "response": "<function> [get_contacts name='Alice']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me montrer le contact de François ?",
+        "response": "<function> [get_contacts name='François']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu extraire les contacts avec le prénom 'Alice' ?",
+        "response": "<function> [get_contacts name='Alice']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu faire retentir mon iPhone immédiatement ?",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu faire retentir mon iPhone, s'il te plaît ?",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu faire retentir mon iPhone ?",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu faire sonner mon iPhone pour que je puisse le retrouver ?",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu faire retentir un signal sonore sur mon iPhone, s'il te plaît ?",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Active le mode perdu sur mon iPhone et laisse un message disant de me contacter au 123456789 si quelqu'un le trouve.",
+        "response": "<function> [activate_lost_mode phone_number='123456789' message='Si vous trouvez mon iPhone, appelez-moi à ce numéro. Merci.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Active le mode perdu sur mon iPhone et affiche ce message : \"Merci de contacter ce numéro si vous trouvez cet appareil.\"",
+        "response": "<function> [activate_lost_mode phone_number='contact_number_here' message='Merci de contacter ce numéro si vous trouvez cet appareil.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu passer l'iPhone en mode perdu et afficher un message avec le numéro de téléphone ?",
+        "response": "<function> [activate_lost_mode phone_number='123-456-7890' message='Veuillez appeler ce numéro. Merci !']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Hé Cortex, peux-tu passer mon iPhone en mode perdu avec un message pour me contacter ?",
+        "response": "<function> [activate_lost_mode phone_number='1234567890' message='Veuillez me contacter si vous trouvez cet appareil.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu activer le mode perdu sur mon iPhone et y inclure mon numéro de portable et un message d'urgence, s'il te plaît ?",
+        "response": "<function> [activate_lost_mode phone_number='+123456789' message='Urgent: Veuillez me contacter dès que possible !']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Comment puis-je aller de Paris à Lyon ?",
+        "response": "<function> [calculate_route from_city='Paris' to_city='Lyon']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le trajet le plus rapide entre Paris et Lyon ?",
+        "response": "<function> [calculate_route from_city='Paris' to_city='Lyon']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu tracer le chemin entre Paris et Lyon, s'il te plaît ?",
+        "response": "<function> [calculate_route from_city='Paris' to_city='Lyon']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me trouver la route de Paris à Marseille ?",
+        "response": "<function> [calculate_route from_city='Paris' to_city='Marseille']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le chemin le plus rapide pour aller de Paris à Lyon ?",
+        "response": "<function> [calculate_route from_city='Paris' to_city='Lyon']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu ajouter une tâche à ma liste, s'il te plaît, avec le titre \"Acheter du lait\" et une note indiquant \"N'oublie pas la date limite vendredi prochain\" ?",
+        "response": "<function> [create_google_task task_title='Acheter du lait' task_notes=\"N'oublie pas la date limite vendredi prochain\"]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu ajouter une tâche intitulée 'Acheter des courses' dans ma liste ?",
+        "response": "<function> [create_google_task task_title='Acheter des courses' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu ajouter \"Finir le projet de design\" à ma liste de tâches ?",
+        "response": "<function> [create_google_task task_title='Finir le projet de design' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu créer une nouvelle tâche intitulée 'Préparer la réunion'?",
+        "response": "<function> [create_google_task task_title='Préparer la réunion' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu ajouter 'Appeler le vétérinaire' à ma liste de tâches ?",
+        "response": "<function> [create_google_task task_title='Appeler le vétérinaire' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "\"Peux-tu programmer une réunion d'équipe demain matin pour discuter du projet X ?\"",
+        "response": "<function> [create_calendar_event name='Réunion d'équipe projet X' duration='60 minutes' participants=['alice@example.com', 'bob@example.com'] date_preference='demain' time_range='09:00-10:00' location='Salle de conférence 2']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu organiser une réunion d'équipe lundi prochain à 10h du matin au bureau principal ?",
+        "response": "<function> [create_calendar_event name='Réunion d'équipe' duration='1h' participants=['equity@entreprise.com'] date_preference='lundi prochain' time_range='10:00 AM - 11:00 AM' location='bureau principal']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je dois prévoir un rendez-vous pour la semaine prochaine avec Jean et Marie, pourrais-tu t'en occuper ?",
+        "response": "<function> [create_calendar_event name='Meeting with Jean and Marie' duration='1 hour' participants=['Jean', 'Marie'] date_preference='next week' time_range='9 AM - 5 PM' location='Office']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "« Cortex, ajoute un rendez-vous intitulé ‘Réunion d'équipe’ au calendrier, veuillez. »",
+        "response": "<function> [create_calendar_event name='Réunion d\\'équipe' duration='1 heure' participants=['alice@example.com', 'bob@example.com'] date_preference='lundi prochain' time_range='14h-15h' location='Salle B']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Planifie une réunion d'équipe pour discuter du projet Alpha vendredi prochain à 15h.",
+        "response": "<function> [create_calendar_event name='Réunion projet Alpha' duration='60' participants=['john.doe@example.com', 'jane.smith@example.com'] date_preference='prochain vendredi' time_range='15:00' location='Salle de conférence 1']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-ce que tu pourrais me donner un aperçu des emails reçus aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelles sont les nouvelles principales dans mes emails aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, pourrais-tu me donner un récapitulatif des emails que j'ai reçus aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Qu'est-ce qui s'est passé dans mes emails aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, pourrais-tu me faire un résumé des emails reçus aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu lister et classer les emails reçus aujourd'hui selon leur contenu ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu examiner les emails que j'ai reçus aujourd'hui et les classer dans les bons labels ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu examiner les emails reçus aujourd'hui et les organiser en conséquence ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu trier et analyser mes emails reçus aujourd'hui, puis les ranger dans les bons dossiers ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu passer en revue mes emails d'aujourd'hui et les organiser par catégories ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, pourrais-tu récupérer les emails non-lus de ma boîte de réception datant de la semaine dernière ?",
+        "response": "<function> [collect_emails filter_type='unread_inbox' start_date='2023-10-01' end_date='2023-10-07']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu récupérer tous mes emails non lus de la semaine dernière ?",
+        "response": "<function> [collect_emails filter_type='unread' start_date='2023-10-01' end_date='2023-10-07']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, collecte les emails non-lus dans la boîte de réception depuis le 1er janvier 2022.",
+        "response": "<function> [collect_emails filter_type='unread' specific_recipient='inbox' specific_word='' start_date='2022-01-01' end_date='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu récupérer les emails non lus reçus entre le 1er et le 15 mars ?",
+        "response": "<function> [collect_emails filter_type='unread' specific_recipient='' specific_word='' start_date='2023-03-01' end_date='2023-03-15']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu récupérer les emails non-lus de la semaine dernière ?",
+        "response": "<function> [collect_emails filter_type='unread' start_date='2023-10-01' end_date='2023-10-07']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu marquer le message avec l'identifiant 42 comme lu pour moi ?",
+        "response": "<function> [mark_as_read message_id='42' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu marquer le message avec l'ID 456 comme lu pour l'utilisateur John ?",
+        "response": "<function> [mark_as_read message_id='456' user_id='John']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Marque le message de Jean comme lu, s'il te plaît.",
+        "response": "<function> [mark_as_read message_id='12345' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu marquer le message avec l'identifiant 'abc123' comme lu ?",
+        "response": "<function> [mark_as_read message_id='abc123' user_id='current_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-ce que tu peux marquer ce message comme lu pour moi ?",
+        "response": "<function> [mark_as_read message_id='12345' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu déplacer le message identifié par 'abc123' dans la corbeille ?",
+        "response": "<function> [trash_message message_id='abc123' user_id='user42']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, pourrais-tu déplacer mon message intitulé 'Réunion demain' à la corbeille ?",
+        "response": "<function> [trash_message message_id='67890' user_id='user123']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu jeter le message avec l'identifiant 7890 à la corbeille ?",
+        "response": "<function> [trash_message message_id='7890' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, pourrais-tu mettre le message de l'expéditeur 'Jean Dupont' à la corbeille, s'il te plaît ?",
+        "response": "<function> [trash_message message_id='6789' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, pourrais-tu placer le message 'Invitation réunion vendredi' dans la corbeille ?",
+        "response": "<function> [trash_message message_id='56789' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu archiver le message avec l'ID 23456 envoyé par l'utilisateur 78910 ?",
+        "response": "<function> [archive_message message_id='23456' user_id='78910']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu archiver le message avec l'identifiant 98765 pour moi ?",
+        "response": "<function> [archive_message message_id='98765' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu archiver le message avec l'identifiant 'abc123' pour moi ?",
+        "response": "<function> [archive_message message_id='abc123' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu archiver le message ayant l'identifiant 67890 ?",
+        "response": "<function> [archive_message message_id='67890' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu archiver le message avec l'identifiant 'msg1234' que j'ai reçu de Paul ?",
+        "response": "<function> [archive_message message_id='msg1234' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu répondre au message de Jean avec un 'Merci beaucoup pour votre aide !' ?",
+        "response": "<function> [reply_to_message message_id='56789' user_id='jean' reply_body='Merci beaucoup pour votre aide !']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu répondre au message avec l'identifiant '6242' en lui confirmant notre participation ?",
+        "response": "<function> [reply_to_message message_id='6242' user_id='me' reply_body='Nous confirmons notre participation.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu répondre au message de Laura concernant notre réunion de demain ?",
+        "response": "<function> [reply_to_message message_id='msg1234' user_id='laura567' reply_body='Bien sûr, je confirme ma présence à la réunion de demain.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu répondre au message que j'ai reçu hier de Julie concernant le projet X ?",
+        "response": "<function> [reply_to_message message_id='msg123' user_id='jdoe' reply_body='Bonjour Julie, merci pour les informations sur le projet X.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu répondre au message de Martin qui est dans ma boîte de réception ?",
+        "response": "<function> [reply_to_message message_id='67890' user_id='me' reply_body='Sure, Martin! I'll get back to you soon.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me créer un brouillon d'email pour confirmer ma présence à la réunion de demain ?",
+        "response": "<function> [create_email to='contact@example.com' subject='Confirmation de présence à la réunion de demain' additional_info='Bonjour, je vous confirme ma présence à la réunion prévue demain. Merci.' user_id='user123']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu rédiger un e-mail pour inviter Paul à notre réunion de projet jeudi prochain?",
+        "response": "<function> [create_email to='paul@example.com' subject='Invitation à la réunion de projet' additional_info='Réunion prévue jeudi prochain à 14h' user_id='user123']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu rédiger un email à mon collègue avec pour objet 'Réunion de projet' ?",
+        "response": "<function> [create_email to='collegue@example.com' subject='Réunion de projet' additional_info='Discuter des points clés' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me préparer un email de remerciement pour notre ami Paul ?",
+        "response": "<function> [create_email to='paul@example.com' subject='Remerciements' additional_info='Merci pour ton aide précieuse durant notre dernier projet.' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "\"Pourrais-tu créer un brouillon d'email pour Nicolas avec comme sujet 'Réunion de demain' ?\"",
+        "response": "<function> [create_email to='nicolas@example.com' subject='Réunion de demain' additional_info='' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu m'afficher le contenu du brouillon d'email avec l'ID 67890 ?",
+        "response": "<function> [display_draft draft_id='67890' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Montre-moi le brouillon d'email enregistré sous l'ID '67890'.",
+        "response": "<function> [display_draft draft_id='67890' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me montrer le contenu du brouillon d'email avec l'identifiant 56789 ?",
+        "response": "<function> [display_draft draft_id='56789' user_id='current_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, peux-tu montrer le brouillon d'email avec l'identifiant 56789 pour l'utilisateur Anna ?",
+        "response": "<function> [display_draft draft_id='56789' user_id='Anna']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me montrer le contenu du brouillon d'email avec le titre 'Réunion d'équipe' ?",
+        "response": "<function> [display_draft draft_id='A1B2C3' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu créer une ébauche de réponse à ce message, avec les informations supplémentaires fournies ?",
+        "response": "<function> [create_draft_reply message_id='example_msg' additional_info='détails supplémentaires' user_id='123']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, rédige une réponse à l'email de Clara qui parle du projet Alpha.",
+        "response": "<function> [create_draft_reply message_id='56789' additional_info='répondre à propos du projet Alpha' user_id='user_56']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu créer un brouillon de réponse pour le message ID 98765 avec l'info supplémentaire 'Rapport annuel' ?",
+        "response": "<function> [create_draft_reply message_id='98765' additional_info='Rapport annuel' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu rédiger une ébauche de réponse au message électronique que je viens de recevoir ?",
+        "response": "<function> [create_draft_reply message_id='unique_msg_234' additional_info='base_response' user_id='user_789']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu rédiger une réponse de brouillon au message portant l'identifiant 4356 ?",
+        "response": "<function> [create_draft_reply message_id='4356' additional_info='Merci pour votre email. Voici mes suggestions...' user_id='mon_id']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Tu pourrais expédier le brouillon d'email avec l'objet 'Réunion de la semaine prochaine' ?",
+        "response": "<function> [send_draft draft_id='67890' content='Réunion de la semaine prochaine' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu acheminer le brouillon identifié par le numéro 67890 après avoir revu son contenu ?",
+        "response": "<function> [send_draft draft_id='67890' content='Revised Content' user_id='user123']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu envoyer le brouillon d'email intitulé 'Invitation à la réunion' ?",
+        "response": "<function> [send_draft draft_id='67890' content='Invitation à la réunion' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Puis-je envoyer le brouillon \"Résumé du projet\" que j'ai créé ?",
+        "response": "<function> [send_draft draft_id='67890' content='Résumé du projet' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu m'envoyer le brouillon d'email que j'ai préparé pour l'événement annuel ?",
+        "response": "<function> [send_draft draft_id='56789' content='Préparation pour l'événement annuel' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, lance-moi un nombre entre 15 et 25.",
+        "response": "<function> [generate_random_number min_value=15 max_value=25]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai besoin d'un chiffre aléatoire entre 1 et 100, s'il te plaît.",
+        "response": "<function> [generate_random_number min_value=1 max_value=100]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu tirer un numéro entre 5 et 50 ?",
+        "response": "<function> [generate_random_number min_value=5 max_value=50]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Génère un nombre compris entre 0 et 10.",
+        "response": "<function> [generate_random_number min_value=0 max_value=10]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Donne-moi un nombre aléatoire entre 20 et 30.",
+        "response": "<function> [generate_random_number min_value=20 max_value=30]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Choisis un chiffre au hasard dans la plage de 100 à 200.",
+        "response": "<function> [generate_random_number min_value=100 max_value=200]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Tire-moi une valeur aléatoire entre 40 et 60.",
+        "response": "<function> [generate_random_number min_value=40 max_value=60]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ajoute une valeur au hasard comprise entre -5 et 5.",
+        "response": "<function> [generate_random_number min_value=-5 max_value=5]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me recommander un film d'action ?",
+        "response": "<function> [recommend_media title='' genre='action' media_type='movie']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je cherche une série dramatique à regarder.",
+        "response": "<function> [recommend_media title='' genre='drama' media_type='series']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Propose-moi un film d'horreur qui pourrait me plaire.",
+        "response": "<function> [recommend_media title='' genre='horror' media_type='movie']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Aurais-tu une suggestion de série comique ?",
+        "response": "<function> [recommend_media title='' genre='comedy' media_type='series']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais voir un film romantique ce soir. Tu as une idée ?",
+        "response": "<function> [recommend_media title='' genre='romance' media_type='movie']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, propose-moi une série de science-fiction.",
+        "response": "<function> [recommend_media title='' genre='sci-fi' media_type='series']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel film documentaire me conseillerais-tu ?",
+        "response": "<function> [recommend_media title='' genre='documentary' media_type='movie']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu suggérer une mini-série dramatique ?",
+        "response": "<function> [recommend_media title='' genre='drama' media_type='mini-series']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je voudrais une recommandation de film thriller.",
+        "response": "<function> [recommend_media title='' genre='thriller' media_type='movie']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "As-tu une série policière à me recommander ?",
+        "response": "<function> [recommend_media title='' genre='crime' media_type='series']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu lancer la chanson 'Imagine' sur mon appareil ?",
+        "response": "<function> [play_track track_name='Imagine']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Joue 'Bohemian Rhapsody' s'il te plaît.",
+        "response": "<function> [play_track track_name='Bohemian Rhapsody']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fais-moi écouter le morceau 'Despacito'.",
+        "response": "<function> [play_track track_name='Despacito']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Lance le titre 'Blinding Lights' !",
+        "response": "<function> [play_track track_name='Blinding Lights']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Active la piste 'Shape of You'.",
+        "response": "<function> [play_track track_name='Shape of You']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais mettre en pause la chanson que j'écoute actuellement sur Spotify.",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Stoppe la lecture en cours sur Spotify, s'il te plaît.",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu interrompre la musique que j'écoute ?",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Arrête la chanson qui passe en ce moment sur mon Spotify.",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu mettre la lecture sur pause ?",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu reprendre ma lecture en cours sur Spotify ?",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Relance la chanson là où je l'avais arrêtée sur Spotify.",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais écouter la musique que j'avais mise en pause sur Spotify, tu peux la reprendre ?",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, fais reprendre la lecture sur mon Spotify.",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Restaure la lecture de ma playlist sur Spotify.",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu passer à la chanson suivante sur Spotify ?",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais écouter le morceau qui suit sur Spotify.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Sautons à la prochaine chanson, s'il te plaît.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, fais jouer la piste suivante.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu passer au prochain titre sur Spotify ?",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Passe à la musique d'après, s'il te plaît.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Joue-moi la chanson suivante, merci.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Clique sur 'Suivant' pour la piste actuelle.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, avance d'une musique, s'il te plaît.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fais défiler jusqu'au morceau suivant.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu remettre le morceau précédent sur Spotify ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu reculer d'une chanson sur ma playlist actuelle ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Retourne à la piste d'avant sur Spotify, s'il te plaît.",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais réécouter le titre précédent, peux-tu le lancer ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Reviens à la chanson que j'écoutais juste avant.",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu régler le volume à cinquante, s'il te plaît ?",
+        "response": "<function> [set_volume volume_level=50]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ajuste le son à trente-trois, merci.",
+        "response": "<function> [set_volume volume_level=33]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Mets le volume à quatre-vingt-dix pour cent.",
+        "response": "<function> [set_volume volume_level=90]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Abaisse le volume à quinze.",
+        "response": "<function> [set_volume volume_level=15]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Réduis le niveau sonore à zéro.",
+        "response": "<function> [set_volume volume_level=0]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu augmenter le volume jusqu'à soixante-quinze ?",
+        "response": "<function> [set_volume volume_level=75]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Place le volume sur vingt-cinq.",
+        "response": "<function> [set_volume volume_level=25]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Montre le son à cent pour cent.",
+        "response": "<function> [set_volume volume_level=100]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Baisse le volume à cinq dB.",
+        "response": "<function> [set_volume volume_level=5]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ajuste le niveau à quarante-huit.",
+        "response": "<function> [set_volume volume_level=48]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le titre de la chanson que j'écoute actuellement ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peut-on me résumer ce qui est en train d'être diffusé ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, quel artiste est en train de jouer ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Qu'est-ce qui passe en ce moment sur la playlist ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me dire quelle piste est en cours de lecture ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi quel album est en train de tourner ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu jouer des chansons similaires à 'Shape of You' d'Ed Sheeran ?",
+        "response": "<function> [play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me faire écouter des recommandations basées sur le titre 'Blinding Lights' ?",
+        "response": "<function> [play_recommendations_track track_name='Blinding Lights' artist_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Lance une playlist de recommandations à partir des morceaux de Billie Eilish.",
+        "response": "<function> [play_recommendations_track track_name='' artist_name='Billie Eilish']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Joue des titres en lien avec le genre jazz, s'il te plaît.",
+        "response": "<function> [play_recommendations_track track_name='' genre_name='jazz']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu sélectionner des musiques recommandées pour le genre électro ?",
+        "response": "<function> [play_recommendations_track track_name='' genre_name='electro']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est l'état de la batterie de mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, pourrais-tu me dire combien de pourcentage de batterie il me reste sur l'iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai besoin de vérifier le niveau de charge de mon iPhone. Peux-tu me le dire ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Hey Cortex, est-ce que tu pourrais vérifier l'état actuel de la batterie de mon téléphone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi, combien d'énergie reste-t-il sur mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu m'indiquer la charge restante de mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, quel est le pourcentage de batterie actuel de mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu m'informer de l'état de la batterie de mon téléphone Apple ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Combien de batterie y a-t-il actuellement sur mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, télécharge-moi l'information sur la batterie de mon iPhone, s'il te plaît.",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Où suis-je en ce moment ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me donner ma position actuelle ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu localiser mon appareil maintenant ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est mon emplacement précis à cet instant ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je veux savoir où je me trouve. Peux-tu m'aider ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Indique-moi ma localisation actuelle, s'il te plaît.",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me dire quelle est mon adresse actuelle ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais connaître mon emplacement géographique à l'instant.",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-il possible de déterminer où est mon téléphone maintenant ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu vérifier et me donner ma position géographique ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel temps fait-il actuellement là où je me trouve avec mon iPhone ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner les prévisions météo actuelles pour mon emplacement ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je voudrais savoir comment est le ciel à ma position, peux-tu vérifier ça ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi, fait-il beau ici actuellement ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me donner les informations météo pour mon emplacement actuel via mon iPhone ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner les informations de contact de quelqu'un prénommé 'Alice' ?",
+        "response": "<function> [get_contacts name='Alice']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai besoin des coordonnées de la personne dont le prénom est 'Bob'.",
+        "response": "<function> [get_contacts name='Bob']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu trouver les informations de contact associées au prénom 'Sarah' ?",
+        "response": "<function> [get_contacts name='Sarah']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Montre-moi les contacts pour le prénom 'John', s'il te plaît.",
+        "response": "<function> [get_contacts name='John']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je cherche à obtenir le contact d'une personne appelée 'Emily'.",
+        "response": "<function> [get_contacts name='Emily']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu faire sonner mon iPhone s'il te plaît ?",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai égaré mon téléphone, fais-le sonner.",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Lance une sonnerie sur mon iPhone.",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Active un bruit sur mon iPhone pour que je le retrouve.",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai besoin d'entendre mon iPhone, peux-tu le faire sonner ?",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Rends mon iPhone bruyant, je ne le trouve pas.",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fais émettre un son à mon iPhone maintenant.",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu émettre une alerte sonore sur mon iPhone ?",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Sonne mon iPhone, je ne sais pas où il est.",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Aide-moi à localiser mon iPhone en lançant la sonnerie.",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, peux-tu enclencher le mode perdu pour mon iPhone et afficher mon numéro 555-6789 accompagné du message 'Si trouvé, merci de me contacter'?",
+        "response": "<function> [activate_lost_mode phone_number='555-6789' message='Si trouvé, merci de me contacter']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Active immédiatement le mode perdu sur mon iPhone. Indique le numéro 123-456 et ajoute, 'Veuillez appeler ce numéro en cas de découverte'.",
+        "response": "<function> [activate_lost_mode phone_number='123-456' message='Veuillez appeler ce numéro en cas de découverte']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai égaré mon iPhone, active le mode perdu avec le contact 098-7654 et poste le message 'Contactez-moi pour informations'.",
+        "response": "<function> [activate_lost_mode phone_number='098-7654' message='Contactez-moi pour informations']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourriez-vous mettre mon iPhone en mode perdu et inscrire le numéro 222-3333 ainsi que le message 'Merci de me joindre rapidement' sur l'écran?",
+        "response": "<function> [activate_lost_mode phone_number='222-3333' message='Merci de me joindre rapidement']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, déclenche le mode perdu et note mon numéro 321-654 pour celui qui le trouve avec le message 'Rendre à son propriétaire'.",
+        "response": "<function> [activate_lost_mode phone_number='321-654' message='Rendre à son propriétaire']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me calculer le trajet entre Paris et Lyon ?",
+        "response": "<function> [calculate_route from_city='Paris' to_city='Lyon']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Comment rejoindre Bordeaux depuis Toulouse ?",
+        "response": "<function> [calculate_route from_city='Toulouse' to_city='Bordeaux']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Détermine l'itinéraire entre Berlin et Munich pour moi.",
+        "response": "<function> [calculate_route from_city='Berlin' to_city='Munich']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelles étapes dois-je suivre pour aller de Rome à Milan ?",
+        "response": "<function> [calculate_route from_city='Rome' to_city='Milan']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Prends-tu en charge le calcul du chemin de Madrid vers Barcelone ?",
+        "response": "<function> [calculate_route from_city='Madrid' to_city='Barcelona']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ajoute « Acheter du lait » à ma liste de tâches.",
+        "response": "<function> [create_google_task task_title='Acheter du lait' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Planifie un rappel pour appeler le docteur.",
+        "response": "<function> [create_google_task task_title='Appeler le docteur' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu ajouter 'Révision du chapitre 5' à ma liste ?",
+        "response": "<function> [create_google_task task_title='Révision du chapitre 5' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pense à me faire rappeler la réunion à 15h.",
+        "response": "<function> [create_google_task task_title='Rappel réunion 15h' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Prends note de faire les courses demain.",
+        "response": "<function> [create_google_task task_title='Faire les courses' task_notes='Demain']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Planifie une réunion intitulée 'Stratégie 2024' avec l'équipe marketing demain à 14h00 dans la salle B2.",
+        "response": "<function> [create_calendar_event name='Stratégie 2024' duration='1h' participants=['marketing_team@example.com'] date_preference='tomorrow' time_range='14:00-15:00' location='Salle B2']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Organise une séance de brainstorming intitulée 'Innovation Produit' pour vendredi prochain de 10h à 12h avec les responsables produits.",
+        "response": "<function> [create_calendar_event name='Innovation Produit' duration='2h' participants=['product_managers@example.com'] date_preference='next Friday' time_range='10:00-12:00' location='Main Conference Room']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Réserve un créneau pour la présentation 'Nouveaux projets' mercredi à 11h dans la salle principale avec les partenaires externes.",
+        "response": "<function> [create_calendar_event name='Nouveaux projets' duration='1h' participants=['external_partners@example.com'] date_preference='Wednesday' time_range='11:00-12:00' location='Salle principale']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Prévoyez une rencontre intitulée 'Feedback client' pour le 2 novembre à 16h00 avec le service client et les directeurs.",
+        "response": "<function> [create_calendar_event name='Feedback client' duration='1h' participants=['service_client@example.com', 'directors@example.com'] date_preference='November 2' time_range='16:00-17:00' location='Board Room']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Programme une session de formation 'Utilisation des nouvelles technologies' mardi prochain à 9h.",
+        "response": "<function> [create_calendar_event name='Utilisation des nouvelles technologies' duration='2h' participants=['tech_team@example.com'] date_preference='next Tuesday' time_range='09:00-11:00' location='Room A1']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me faire un résumé des emails reçus aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelles sont les nouvelles dans ma boîte de réception pour aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fais-moi un récapitulatif des courriels que j'ai reçus aujourd'hui.",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quels emails importants ai-je à lire aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner les grandes lignes des emails d'aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu classer mes emails d'aujourd'hui par importance et les placer dans les dossiers correspondants ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner un aperçu des emails reçus aujourd'hui et les trier dans les labels adéquats ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je veux que tu examines mes emails d'aujourd'hui et les réorganises dans les bons labels. Peux-tu faire ça ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Serais-tu capable d'analyser les emails récemment reçus et de les ranger dans les étiquettes appropriées ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-il possible de passer en revue mes emails du jour et de les répartir dans les dossiers adéquats ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu vérifier les emails que je n'ai pas encore lus depuis la semaine dernière?",
+        "response": "<function> [collect_emails filter_type='unread' start_date='2023-09-25' end_date='2023-10-02']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Afficher les messages dans ma boîte de réception depuis le 1er octobre.",
+        "response": "<function> [collect_emails filter_type='inbox' start_date='2023-10-01' end_date='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Récupère les emails concernant le projet X que j'ai reçus en septembre.",
+        "response": "<function> [collect_emails filter_type='keyword' specific_word='projet X' start_date='2023-09-01' end_date='2023-09-30']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me montrer les emails envoyés par Alice en octobre?",
+        "response": "<function> [collect_emails filter_type='sender' specific_recipient='Alice' start_date='2023-10-01' end_date='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Liste mes emails professionnels non-lus que j'ai reçus cette semaine.",
+        "response": "<function> [collect_emails filter_type='unread_inbox' start_date='2023-10-02' end_date='2023-10-09']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Marque comme lu le message avec l'identifiant 456 pour l'utilisateur 789.",
+        "response": "<function> [mark_as_read message_id='456' user_id='789']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu indiquer que le message numéro 1234 est lu par l'utilisateur 5678 ?",
+        "response": "<function> [mark_as_read message_id='1234' user_id='5678']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Assure-toi que le message ID 7890 soit considéré comme lu pour l'utilisateur 12345.",
+        "response": "<function> [mark_as_read message_id='7890' user_id='12345']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu confirmer la lecture du message 101112 par l'utilisateur 31415 ?",
+        "response": "<function> [mark_as_read message_id='101112' user_id='31415']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fais en sorte que le message ID 222333 soit marqué lu pour l'utilisateur 444555.",
+        "response": "<function> [mark_as_read message_id='222333' user_id='444555']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu mettre le message portant l'identifiant 'msg54321' à la corbeille ?",
+        "response": "<function> [trash_message message_id='msg54321' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Supprime le courrier électronique dont l'ID est '123xyz'.",
+        "response": "<function> [trash_message message_id='123xyz' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu envoyer le message with ID 'email987' à la corbeille pour moi ?",
+        "response": "<function> [trash_message message_id='email987' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Jette le message avec l'identifiant '456def' dans la corbeille.",
+        "response": "<function> [trash_message message_id='456def' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Place le mail avec l'ID '789abc' dans la corbeille.",
+        "response": "<function> [trash_message message_id='789abc' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu archiver le message avec l'identifiant 'msg123' pour moi ?",
+        "response": "<function> [archive_message message_id='msg123' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais que tu archives immédiatement le message portant l'ID '456ABC'.",
+        "response": "<function> [archive_message message_id='456ABC' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu mettre de côté le message numéro 'XYZ789' ?",
+        "response": "<function> [archive_message message_id='XYZ789' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Il est temps d'archiver ce message : 'message5678'.",
+        "response": "<function> [archive_message message_id='message5678' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Archivons le message avec le code 'archive001', s'il te plaît.",
+        "response": "<function> [archive_message message_id='archive001' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu répondre à ce message avec les détails fournis ?",
+        "response": "<function> [reply_to_message message_id='123' user_id='me' reply_body='Voici les informations demandées.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Réponds à la note de service, s'il te plaît.",
+        "response": "<function> [reply_to_message message_id='456' user_id='me' reply_body='Message concernant la note de service.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Tu pourrais faire une réponse à ce message pour moi ?",
+        "response": "<function> [reply_to_message message_id='789' user_id='me' reply_body='Je vais m'en occuper.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Envoie une réponse rapide à ce message.",
+        "response": "<function> [reply_to_message message_id='321' user_id='me' reply_body='Je prends note, merci.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu accuser réception de ce courrier ?",
+        "response": "<function> [reply_to_message message_id='654' user_id='me' reply_body='Réception confirmée.']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu créer un brouillon d'email pour un rendez-vous d'affaires demain à 10h ?",
+        "response": "<function> [create_email to='business@example.com' subject='Rendez-vous d'affaires' additional_info='Rendez-vous prévu demain à 10h' user_id='user123']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Rédige-moi un brouillon de mail pour inviter mon équipe à un déjeuner de travail.",
+        "response": "<function> [create_email to='team@company.com' subject='Invitation Déjeuner de travail' additional_info='Rejoignez-nous pour un déjeuner de travail ce vendredi à midi' user_id='user456']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu préparer un brouillon d'email pour informer les clients d'une mise à jour produit ?",
+        "response": "<function> [create_email to='clientlist@example.com' subject='Mise à jour produit' additional_info='Nous avons apporté des améliorations à nos produits récemment. Plus de détails dans cet email.' user_id='user789']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Rédige un email de remerciement pour l'entretien d'embauche d'hier.",
+        "response": "<function> [create_email to='hr@example.com' subject='Remerciements entretien' additional_info='Je vous remercie pour l'opportunité d'entretien hier, j'attends avec impatience de vos nouvelles.' user_id='user234']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Prépare un email pour annuler ma réunion de 15h aujourd'hui avec le projet Alpha.",
+        "response": "<function> [create_email to='project_alpha_team@example.com' subject='Annulation de réunion' additional_info='Je dois malheureusement annuler notre réunion prévue aujourd’hui à 15h' user_id='user567']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me montrer le brouillon d'email avec l'ID 98765 ?",
+        "response": "<function> [display_draft draft_id='98765' user_id='example_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Montre-moi le contenu du brouillon d'email dont l'identifiant est 54321.",
+        "response": "<function> [display_draft draft_id='54321' user_id='example_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu afficher l'email en brouillon qui a pour ID 112233 ?",
+        "response": "<function> [display_draft draft_id='112233' user_id='example_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je veux voir ce qu'il y a dans le brouillon identifiant 99887, c'est possible ?",
+        "response": "<function> [display_draft draft_id='99887' user_id='example_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Expose le contenu du brouillon d'email portant l'ID 33445.",
+        "response": "<function> [display_draft draft_id='33445' user_id='example_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu rédiger une réponse au message du client ID 9876 que j'ai marqué comme important hier ?",
+        "response": "<function> [create_draft_reply message_id='9876' additional_info='important' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu préparer une réponse au courriel envoyé par l'utilisateur ID 5432 ?",
+        "response": "<function> [create_draft_reply message_id='5432' additional_info='unknown' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu élaborer une réponse au message référencé sous l'ID 10101 avec des détails supplémentaires ?",
+        "response": "<function> [create_draft_reply message_id='10101' additional_info='supplementary details' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai besoin d'une réponse pour l'email ID 2222 que j'ai reçu ce matin.",
+        "response": "<function> [create_draft_reply message_id='2222' additional_info='received this morning' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-ce que tu pourrais rédiger une réponse à la missive ID 5555 avec des informations additionnelles ?",
+        "response": "<function> [create_draft_reply message_id='5555' additional_info='extra info included' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu expédier l'ébauche nommée 'Présentation projet' ?",
+        "response": "<function> [send_draft draft_id='67890' content='Présentation projet' user_id='utilisateur']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu transmettre l'ébauche de l'email intitulée 'Invitation à la réunion' ?",
+        "response": "<function> [send_draft draft_id='24680' content='Invitation à la réunion' user_id='coordonateur']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Envoie le brouillon de l'email ayant pour objet 'Suivi de commande'.",
+        "response": "<function> [send_draft draft_id='13579' content='Suivi de commande' user_id='moi']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Prêt à envoyer le brouillon marqué 'Rapport final' ?",
+        "response": "<function> [send_draft draft_id='11223' content='Rapport final' user_id='superviseur']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Transmets le brouillon d'email sous le titre 'Programme de la conférence'.",
+        "response": "<function> [send_draft draft_id='44556' content='Programme de la conférence' user_id='conférencier']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle heure est-il maintenant ?",
+        "response": "<function> [get_current_time]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi l'heure qu'il est s'il te plaît.",
+        "response": "<function> [get_current_time]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner l'heure actuelle ?",
+        "response": "<function> [get_current_time]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai besoin de connaître l'heure qu'il est.",
+        "response": "<function> [get_current_time]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est l'heure actuelle ?",
+        "response": "<function> [get_current_time]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, pourrais-je avoir l'heure ?",
+        "response": "<function> [get_current_time]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "En ce moment, quelle heure est-il ?",
+        "response": "<function> [get_current_time]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Aide-moi avec l'heure actuelle.",
+        "response": "<function> [get_current_time]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Donne-moi l'heure qu'il est à présent.",
+        "response": "<function> [get_current_time]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-ce que tu serais capable de me dire l'heure ?",
+        "response": "<function> [get_current_time]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le jour du calendrier aujourd'hui ?",
+        "response": "<function> [get_current_date]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pouvez-vous me dire la date actuelle, s'il vous plaît ?",
+        "response": "<function> [get_current_date]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le jour d'aujourd'hui ?",
+        "response": "<function> [get_current_date]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourriez-vous vérifier la date d'aujourd'hui ?",
+        "response": "<function> [get_current_date]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi quel jour nous sommes aujourd'hui.",
+        "response": "<function> [get_current_date]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais connaître la date du jour, peux-tu me la donner ?",
+        "response": "<function> [get_current_date]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "À quelle date sommes-nous actuellement ?",
+        "response": "<function> [get_current_date]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-il possible de savoir quel jour c'est aujourd'hui ?",
+        "response": "<function> [get_current_date]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu fournir la date d'aujourd'hui ?",
+        "response": "<function> [get_current_date]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "C'est quel jour aujourd'hui ?",
+        "response": "<function> [get_current_date]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le climat en ce moment ici ?",
+        "response": "<function> [get_weather location='current']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me dire quel temps il fait actuellement ?",
+        "response": "<function> [get_weather location='current']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Cortex, comment est la météo par chez moi aujourd'hui ?",
+        "response": "<function> [get_weather location='current']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-ce que tu peux vérifier les conditions météorologiques actuelles ?",
+        "response": "<function> [get_weather location='current']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi, est-il ensoleillé ou nuageux dehors ?",
+        "response": "<function> [get_weather location='current']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner le prix actuel du Bitcoin ?",
+        "response": "<function> [get_crypto_price symbol='BTC']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est la valeur du Bitcoin en ce moment ?",
+        "response": "<function> [get_crypto_price symbol='BTC']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Donne-moi le cours du Bitcoin à l'instant, s'il te plaît.",
+        "response": "<function> [get_crypto_price symbol='BTC']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le tarif du Bitcoin actuellement ?",
+        "response": "<function> [get_crypto_price symbol='BTC']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Aurais-tu connaissance du prix actuel du Bitcoin ?",
+        "response": "<function> [get_crypto_price symbol='BTC']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quand est prévu mon prochain rendez-vous ?",
+        "response": "<function> [get_next_calendar_event]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me rappeler le prochain événement de mon agenda ?",
+        "response": "<function> [get_next_calendar_event]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le prochain événement enregistré dans mon calendrier ?",
+        "response": "<function> [get_next_calendar_event]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quels sont les détails de mon prochain rendez-vous ?",
+        "response": "<function> [get_next_calendar_event]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "As-tu mon prochain rendez-vous de prévu ?",
+        "response": "<function> [get_next_calendar_event]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu vérifier ce que j'ai de planifié ensuite dans mon agenda ?",
+        "response": "<function> [get_next_calendar_event]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J’aimerais savoir ce que j’ai prévu ensuite dans mon calendrier.",
+        "response": "<function> [get_next_calendar_event]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle sera ma prochaine activité planifiée ?",
+        "response": "<function> [get_next_calendar_event]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu dire quel est mon prochain engagement ?",
+        "response": "<function> [get_next_calendar_event]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fais-moi un rappel sur le prochain événement à venir.",
+        "response": "<function> [get_next_calendar_event]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me surprendre avec une chanson que je ne connais pas ?",
+        "response": "<function> [play_random_song]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Joue-moi une musique aléatoire.",
+        "response": "<function> [play_random_song]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "As-tu une chanson au hasard à me proposer ?",
+        "response": "<function> [play_random_song]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu lancer une mélodie surprise ?",
+        "response": "<function> [play_random_song]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Sélectionne une musique au pif et fais-la jouer !",
+        "response": "<function> [play_random_song]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Tu pourrais démarrer une chanson choisie aléatoirement ?",
+        "response": "<function> [play_random_song]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fais-moi écouter une chanson prise au hasard.",
+        "response": "<function> [play_random_song]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu lancer une piste musicale inattendue ?",
+        "response": "<function> [play_random_song]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Choisis une chanson au hasard et joue-la.",
+        "response": "<function> [play_random_song]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Joue une chanson surprise.",
+        "response": "<function> [play_random_song]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner le sens exact du mot 'intelligence', s'il te plaît ?",
+        "response": "<function> [get_word_definition word='intelligence']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais connaître la définition d'« intelligence ». Pourrais-tu la fournir ?",
+        "response": "<function> [get_word_definition word='intelligence']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est l'interprétation officielle du terme intelligence?",
+        "response": "<function> [get_word_definition word='intelligence']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je suis curieux de savoir ce que signifie le mot intelligence. Pourrais-tu m'aider ?",
+        "response": "<function> [get_word_definition word='intelligence']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me dire ce que le dictionnaire dit sur le mot \"intelligence\" ?",
+        "response": "<function> [get_word_definition word='intelligence']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu transformer 100 euros en dollars US ?",
+        "response": "<function> [convert_currency amount=100 from_currency='EUR' to_currency='USD']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais connaître la valeur de 100 euros en dollars, peux-tu m'aider avec ça ?",
+        "response": "<function> [convert_currency amount=100 from_currency='EUR' to_currency='USD']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est la conversion actuelle de 100 euros en dollars américains ?",
+        "response": "<function> [convert_currency amount=100 from_currency='EUR' to_currency='USD']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Convertis-moi 100 euros en devise américaine, merci.",
+        "response": "<function> [convert_currency amount=100 from_currency='EUR' to_currency='USD']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu faire le calcul pour changer 100 euros en dollars ?",
+        "response": "<function> [convert_currency amount=100 from_currency='EUR' to_currency='USD']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me partager une citation motivante, s'il te plaît ?",
+        "response": "<function> [get_random_quote]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Donne-moi une phrase célèbre pour m'inspirer aujourd'hui.",
+        "response": "<function> [get_random_quote]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu trouver une citation inspirante qui illumine ma journée ?",
+        "response": "<function> [get_random_quote]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Aurais-tu une citation inspirante à me proposer ?",
+        "response": "<function> [get_random_quote]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le proverbe motivant du jour ?",
+        "response": "<function> [get_random_quote]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est l'écart kilométrique entre Paris et Londres ?",
+        "response": "<function> [get_distance location1='Paris' location2='Londres']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Combien de kilomètres séparent Paris de Londres ?",
+        "response": "<function> [get_distance location1='Paris' location2='Londres']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me dire la distance entre Paris et Londres ?",
+        "response": "<function> [get_distance location1='Paris' location2='Londres']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Calcule la longueur du trajet entre Paris et Londres.",
+        "response": "<function> [get_distance location1='Paris' location2='Londres']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est la distance parcourue entre Paris et Londres si on voyageait en ligne droite ?",
+        "response": "<function> [get_distance location1='Paris' location2='Londres']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me rappeler de prendre un verre d'eau d'ici une heure ?",
+        "response": "<function> [set_reminder action='drink_water' time='1h']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Organise-moi un rappel pour boire de l'eau dans 60 minutes.",
+        "response": "<function> [set_reminder action='drink_water' time='1h']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu programmer un rappel afin que je m'hydrate dans une heure ?",
+        "response": "<function> [set_reminder action='drink_water' time='1h']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fais en sorte que je reçoive un rappel pour boire de l'eau dans environ une heure.",
+        "response": "<function> [set_reminder action='drink_water' time='1h']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi de boire de l'eau dans une heure, peux-tu faire ça ?",
+        "response": "<function> [set_reminder action='drink_water' time='1h']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me donner les dernières nouvelles du jour ?",
+        "response": "<function> [get_latest_news]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelles sont les nouvelles marquantes du moment ?",
+        "response": "<function> [get_latest_news]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "As-tu des nouvelles récentes à partager ?",
+        "response": "<function> [get_latest_news]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quels sont les événements récents dont tout le monde parle ?",
+        "response": "<function> [get_latest_news]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Actualités du jour : qu’est-ce qui se passe ?",
+        "response": "<function> [get_latest_news]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner une recette de gâteau au chocolat que je puisse essayer ce week-end ?",
+        "response": "<function> [get_recipe dish='gâteau au chocolat']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai envie de faire un dessert chocolaté, as-tu une recette de gâteau au chocolat à me proposer ?",
+        "response": "<function> [get_recipe dish='gâteau au chocolat']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelles sont les étapes pour préparer un bon gâteau au chocolat ?",
+        "response": "<function> [get_recipe dish='gâteau au chocolat']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je recherche une recette de gâteau riche en chocolat, peux-tu m'aider ?",
+        "response": "<function> [get_recipe dish='gâteau au chocolat']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me suggérer une recette de gâteau au chocolat ?",
+        "response": "<function> [get_recipe dish='gâteau au chocolat']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Tu pourrais me raconter une blague drôle ?",
+        "response": "<function> [tell_joke]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-ce que tu peux partager une blague marrante ?",
+        "response": "<function> [tell_joke]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "As-tu une plaisanterie à partager ?",
+        "response": "<function> [tell_joke]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me faire rire avec une anecdote amusante ?",
+        "response": "<function> [tell_joke]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi une blague pour détendre l'atmosphère.",
+        "response": "<function> [tell_joke]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-ce que tu connais une bonne blague ?",
+        "response": "<function> [tell_joke]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu éclairer ma journée avec une blague ?",
+        "response": "<function> [tell_joke]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Raconte-moi quelque chose de drôle !",
+        "response": "<function> [tell_joke]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Aurais-tu une histoire comique à raconter ?",
+        "response": "<function> [tell_joke]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Partage avec moi une blague pour sourire !",
+        "response": "<function> [tell_joke]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me donner la température actuelle ici ?",
+        "response": "<function> [get_temperature location='current']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le temps qu'il fait en ce moment dans ma ville ?",
+        "response": "<function> [get_temperature location='current']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi, quel est le degré extérieur aujourd'hui où je suis ?",
+        "response": "<function> [get_temperature location='current']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Saurais-tu m'informer sur le climat actuel dans ma zone ?",
+        "response": "<function> [get_temperature location='current']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "À combien monte le thermomètre dans ma localité ?",
+        "response": "<function> [get_temperature location='current']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Génère-moi un nombre aléatoire entre 15 et 30.",
+        "response": "<function> [generate_random_number min_value=15 max_value=30]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Trouve un chiffre entre 100 et 200 pour moi.",
+        "response": "<function> [generate_random_number min_value=100 max_value=200]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me donner un nombre aléatoire compris entre 1 et 50, s'il te plaît ?",
+        "response": "<function> [generate_random_number min_value=1 max_value=50]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi un nombre que tu pourrais tirer au hasard entre -10 et 10.",
+        "response": "<function> [generate_random_number min_value=-10 max_value=10]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel nombre choisis-tu de manière aléatoire entre 500 et 1000 ?",
+        "response": "<function> [generate_random_number min_value=500 max_value=1000]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais un nombre pris au hasard et compris entre 20 et 25.",
+        "response": "<function> [generate_random_number min_value=20 max_value=25]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Serais-tu capable de me donner une valeur aléatoire entre 0 et 99 ?",
+        "response": "<function> [generate_random_number min_value=0 max_value=99]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Choisis un numéro entre 250 et 300, je te prie.",
+        "response": "<function> [generate_random_number min_value=250 max_value=300]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Affiche un nombre aléatoire entre 75 et 125 pour moi.",
+        "response": "<function> [generate_random_number min_value=75 max_value=125]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je veux un chiffre généré aléatoirement entre 5 et 15.",
+        "response": "<function> [generate_random_number min_value=5 max_value=15]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me suggérer un film d'aventure à regarder ce week-end ?",
+        "response": "<function> [recommend_media title='' genre='adventure' media_type='film']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Trouve-moi des séries policières intéressantes.",
+        "response": "<function> [recommend_media title='' genre='police' media_type='series']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je cherche un film de science-fiction, as-tu une recommandation ?",
+        "response": "<function> [recommend_media title='' genre='science-fiction' media_type='film']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Que me conseilles-tu comme série dramatique ?",
+        "response": "<function> [recommend_media title='' genre='drama' media_type='series']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai envie de voir un film romantique, que me proposes-tu ?",
+        "response": "<function> [recommend_media title='' genre='romance' media_type='film']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu jouer la chanson 'Imagine' sur mon smartphone, s'il te plaît ?",
+        "response": "<function> [play_track track_name='Imagine']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais écouter 'Bohemian Rhapsody' maintenant, c'est possible ?",
+        "response": "<function> [play_track track_name='Bohemian Rhapsody']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Lance la playlist 'Chill Vibes' sur ma tablette.",
+        "response": "<function> [play_track track_name='Chill Vibes']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Mets 'Shape of You' dans mon salon.",
+        "response": "<function> [play_track track_name='Shape of You']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je veux entendre 'Thriller' tout de suite, tu peux ?",
+        "response": "<function> [play_track track_name='Thriller']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Active la lecture de 'Hotel California' pour moi.",
+        "response": "<function> [play_track track_name='Hotel California']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fais jouer 'Billie Jean' sur mon appareil.",
+        "response": "<function> [play_track track_name='Billie Jean']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Puis-je écouter 'Let it Be' sur mon ordinateur ?",
+        "response": "<function> [play_track track_name='Let it Be']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Mets-moi 'Stairway to Heaven' à fond.",
+        "response": "<function> [play_track track_name='Stairway to Heaven']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je voudrais lancer 'Wonderwall' immédiatement.",
+        "response": "<function> [play_track track_name='Wonderwall']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu arrêter momentanément la musique sur Spotify ?",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Stoppe la lecture de la piste actuelle sur Spotify, s'il te plaît.",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu mettre en pause ce qui est en train de jouer sur Spotify ?",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Interromps la session musicale en cours sur Spotify.",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Mets en pause le morceau en cours sur Spotify maintenant.",
+        "response": "<function> [pause_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu continuer la musique là où je l'avais laissée sur Spotify ?",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais reprendre ma playlist là où je m'étais arrêté sur Spotify.",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu relancer l'écoute en cours sur Spotify ?",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Relance la lecture musicale interrompue sur Spotify, s'il te plaît.",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Remets la chanson en cours depuis le début sur Spotify.",
+        "response": "<function> [resume_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu passer à la prochaine chanson, s'il te plaît ?",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Avance au morceau suivant.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais écouter la piste suivante, peux-tu t'en charger ?",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Passe à la chanson d'après, je voudrais changer l'ambiance.",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu sauter à la prochaine musique ?",
+        "response": "<function> [next_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu revenir à la chanson précédente sur Spotify ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Reviens au morceau d'avant sur Spotify, s'il te plaît.",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu passer à la piste précédente sur mon Spotify ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais écouter la chanson d'avant dans ma playlist Spotify, peux-tu le faire ?",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Active la lecture du morceau qui était juste avant sur Spotify.",
+        "response": "<function> [previous_track]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu régler le son à 25, s'il te plaît ?",
+        "response": "<function> [set_volume volume_level=25]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ajuste le volume sonore à 75.",
+        "response": "<function> [set_volume volume_level=75]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais que le niveau de volume soit à 15, merci !",
+        "response": "<function> [set_volume volume_level=15]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu diminuer le volume à 10 ?",
+        "response": "<function> [set_volume volume_level=10]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Mets le volume à 50, s'il te plaît.",
+        "response": "<function> [set_volume volume_level=50]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me dire quelle musique est en train de jouer sur Spotify ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est la chanson actuellement en lecture sur mon appareil ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Donne-moi les détails de la lecture musicale en cours.",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle piste musicale est en cours de lecture ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Informe-moi sur ce qui est en train d'être diffusé.",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le titre de la chanson qui joue maintenant ?",
+        "response": "<function> [get_current_playback]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me recommander des morceaux similaires à 'Bohemian Rhapsody' de Queen ?",
+        "response": "<function> [play_recommendations_track track_name='Bohemian Rhapsody' artist_name='Queen' genre_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais écouter des titres dérivés du style rock. Tu peux m'aider ?",
+        "response": "<function> [play_recommendations_track track_name='' artist_name='' genre_name='rock']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Suggère-moi des musiques associées à Taylor Swift, s'il te plaît.",
+        "response": "<function> [play_recommendations_track track_name='' artist_name='Taylor Swift' genre_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Joue des chansons dans le style de 'Imagine' de John Lennon.",
+        "response": "<function> [play_recommendations_track track_name='Imagine' artist_name='John Lennon' genre_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Trouve-moi des pistes musicales inspirées du jazz.",
+        "response": "<function> [play_recommendations_track track_name='' artist_name='' genre_name='jazz']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je veux des recommandations basées sur 'Shape of You' par Ed Sheeran.",
+        "response": "<function> [play_recommendations_track track_name='Shape of You' artist_name='Ed Sheeran' genre_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu trouver des morceaux semblables à ceux de Daft Punk ?",
+        "response": "<function> [play_recommendations_track track_name='' artist_name='Daft Punk' genre_name='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Lance des musiques dans la veine du genre pop.",
+        "response": "<function> [play_recommendations_track track_name='' artist_name='' genre_name='pop']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est l'état actuel de ma batterie iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu m'informer du pourcentage de batterie restant sur mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Vérifie la charge actuelle de mon iPhone s'il te plaît.",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J’aimerais connaître la batterie restante de mon iPhone.",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Dis-moi combien de batterie il reste sur mon iPhone.",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu indiquer le niveau de batterie de mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Vérifie à combien est la batterie de mon iPhone actuellement.",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le pourcentage de batterie de mon téléphone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Check la batterie de mon iPhone pour moi.",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me dire quelle est la charge restante de mon iPhone ?",
+        "response": "<function> [get_iphone_battery]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Où suis-je actuellement et quelle est l'adresse exacte à cet endroit ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me dire où je me trouve en ce moment ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais connaître ma position géographique actuelle et l'adresse liée. Peux-tu m'aider ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est l'endroit où je me situe présentement ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Indique-moi l'emplacement exact de mon iPhone ainsi que l'adresse associée.",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me signaler ma localisation actuelle et l'adresse correspondante ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le lieu précis de ma position maintenant ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pouvez-vous me rendre l'adresse du point où je suis situé ?",
+        "response": "<function> [get_location]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est la météo actuelle ici ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me dire le temps qu'il fait là où je suis ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quelle est la météo autour de moi ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le temps en ce moment à ma position ?",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Donne-moi les conditions météorologiques actuelles à ma localisation.",
+        "response": "<function> [get_weather]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Tu pourrais récupérer mes contacts en filtrant par le prénom 'Alice' ?",
+        "response": "<function> [get_contacts name='Alice']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quels sont les contacts que tu as sous le prénom 'Thomas' ?",
+        "response": "<function> [get_contacts name='Thomas']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu m'afficher les informations des contacts dont le prénom est 'Sophie' ?",
+        "response": "<function> [get_contacts name='Sophie']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Trouve les coordonnées de mes contacts appelés 'Emma'.",
+        "response": "<function> [get_contacts name='Emma']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'aimerais obtenir la liste de mes contacts portant le prénom 'Lucas'.",
+        "response": "<function> [get_contacts name='Lucas']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu rechercher dans mes contacts ceux qui s'appellent 'Isabelle' ?",
+        "response": "<function> [get_contacts name='Isabelle']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu montrer les détails pour mes contacts nommés 'Nicolas' ?",
+        "response": "<function> [get_contacts name='Nicolas']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu localiser mon iPhone et le faire sonner s'il te plaît ?",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fais retentir un son sur mon iPhone, je ne le retrouve plus.",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Active le son de mon iPhone pour que je puisse le localiser.",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-ce que tu pourrais déclencher une sonnerie sur mon iPhone ?",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu jouer un son sur mon iPhone ? Je ne sais plus où je l'ai mis.",
+        "response": "<function> [play_sound_on_iphone]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu activer le mode perdu sur mon iPhone et y inclure un message 'Rendez-le moi' avec le numéro de contact 555-4321 s'il te plaît ?",
+        "response": "<function> [activate_lost_mode phone_number='555-4321' message='Rendez-le moi']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai égaré mon téléphone. Mets-le en mode perdu avec mon numéro 987-6543 et le message 'Appelez-moi' dessus.",
+        "response": "<function> [activate_lost_mode phone_number='987-6543' message='Appelez-moi']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu passer mon iPhone en mode perdu ? Utilise le numéro 123-4567 et écris 'Veuillez appeler pour plus d'informations'.",
+        "response": "<function> [activate_lost_mode phone_number='123-4567' message='Veuillez appeler pour plus d'informations']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Active le mode perdu pour mon iPhone, avec le message 'Récompense offerte' et joint le numéro suivant : 321-9876.",
+        "response": "<function> [activate_lost_mode phone_number='321-9876' message='Récompense offerte']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-il possible d'activer le mode perdu sur mon téléphone ? Insère le message 'Retour demandé' et mon numéro 111-2222.",
+        "response": "<function> [activate_lost_mode phone_number='111-2222' message='Retour demandé']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu me donner la direction entre Paris et Lyon ?",
+        "response": "<function> [calculate_route from_city='Paris' to_city='Lyon']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Comment puis-je me rendre de Tokyo à Kyoto ?",
+        "response": "<function> [calculate_route from_city='Tokyo' to_city='Kyoto']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je veux savoir comment aller de New York à Boston, peux-tu m'aider ?",
+        "response": "<function> [calculate_route from_city='New York' to_city='Boston']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Indique-moi le chemin pour aller de Berlin à Munich, s'il te plaît.",
+        "response": "<function> [calculate_route from_city='Berlin' to_city='Munich']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est l'itinéraire à suivre pour voyager entre Delhi et Agra ?",
+        "response": "<function> [calculate_route from_city='Delhi' to_city='Agra']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu ajouter une tâche intitulée 'Finaliser le rapport annuel' dans ma liste ?",
+        "response": "<function> [create_google_task task_title='Finaliser le rapport annuel' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Créer une nouvelle tâche avec pour titre 'Acheter des billets de concert' et notes 'Ne pas oublier le 20 octobre'.",
+        "response": "<function> [create_google_task task_title='Acheter des billets de concert' task_notes='Ne pas oublier le 20 octobre']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ajoute à ma liste une tâche nommée 'Réviser pour l'examen de maths'.",
+        "response": "<function> [create_google_task task_title='Réviser pour l'examen de maths' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Est-il possible d'ajouter la tâche 'Rappel médecin' avec les notes 'Rdv à 10h30' ?",
+        "response": "<function> [create_google_task task_title='Rappel médecin' task_notes='Rdv à 10h30']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ajoute une nouvelle entrée à faire : 'Compléter le formulaire d'inscription'.",
+        "response": "<function> [create_google_task task_title='Compléter le formulaire d'inscription' task_notes='']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Programmez une réunion avec l'équipe de développement pour la semaine prochaine.",
+        "response": "<function> [create_calendar_event name='Réunion équipe développement' duration='1 heure' participants=['Alice', 'Bob', 'Charlie'] date_preference='semaine prochaine' time_range='matin' location='Bureau principal']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Organisez le rendez-vous pour le déjeuner avec le client M. Dupont vendredi.",
+        "response": "<function> [create_calendar_event name='Déjeuner avec M. Dupont' duration='2 heures' participants=['M. Dupont'] date_preference='vendredi prochain' time_range='midi à 14h00' location='Restaurant Le Gourmet']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Planifiez une session brainstorming pour mercredi en fin d'après-midi.",
+        "response": "<function> [create_calendar_event name='Session brainstorming' duration='2 heures' participants=['team1', 'team2'] date_preference='mercredi' time_range='16h-18h' location='Salle de conférence B']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Fixez un appel téléphonique avec Sarah samedi matin.",
+        "response": "<function> [create_calendar_event name='Appel téléphonique avec Sarah' duration='30 minutes' participants=['Sarah'] date_preference='samedi' time_range='matin' location='A distance']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ordonne une réunion hebdomadaire avec le comité de direction le lundi matin.",
+        "response": "<function> [create_calendar_event name='Réunion hebdomadaire comité de direction' duration='1 heure' participants=['comité de direction'] date_preference='chaque lundi' time_range='9h-10h' location='Salle de réunion principale']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu résumer les emails que j'ai reçus aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai besoin d'un aperçu des courriels du jour, tu peux m'aider ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Donne-moi un compte rendu des emails reçus aujourd'hui s'il te plaît.",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le résumé des emails que j'ai obtenus aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu m'offrir une synthèse des messages reçus aujourd'hui ?",
+        "response": "<function> [summarize_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu faire le tri dans mes emails de ce matin et les organiser par label ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Analyse les messages reçus aujourd'hui et range-les dans les dossiers appropriés, s'il te plaît.",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu répertorier et classer les emails de la journée selon leurs étiquettes ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Localise tous les mails d'aujourd'hui et déplace-les dans les catégories adhéquates.",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Vérifie les courriels d'aujourd'hui et mets-les dans les labels correspondants.",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Tu pourrais trier mes mails du jour et les placer dans les labels adéquats ?",
+        "response": "<function> [list_and_analyze_today_emails]",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu récupérer les emails non lus de ma boîte de réception datant de la semaine dernière ?",
+        "response": "<function> [collect_emails filter_type='unread' specific_recipient='inbox' start_date='2023-10-01' end_date='2023-10-07']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Montre-moi les emails de Jean reçus cette année.",
+        "response": "<function> [collect_emails filter_type='received' specific_recipient='Jean' start_date='2023-01-01' end_date='2023-12-31']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Extracte les messages contenant le mot 'urgence' dans les deux derniers mois.",
+        "response": "<function> [collect_emails filter_type='keyword' specific_word='urgence' start_date='2023-08-01' end_date='2023-09-30']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quels sont les courriels que j'ai reçus en avril 2023 ?",
+        "response": "<function> [collect_emails filter_type='received' specific_recipient='inbox' start_date='2023-04-01' end_date='2023-04-30']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Liste les emails envoyés à Marie entre le 5 et le 10 octobre 2023.",
+        "response": "<function> [collect_emails filter_type='sent' specific_recipient='Marie' start_date='2023-10-05' end_date='2023-10-10']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Marque ce message comme vu immédiatement.",
+        "response": "<function> [mark_as_read message_id='123456' user_id='user789']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourras-tu noter comme lu le texte que je viens de recevoir ?",
+        "response": "<function> [mark_as_read message_id='654321' user_id='user456']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Assure-toi que le dernier message est considéré comme déjà lu.",
+        "response": "<function> [mark_as_read message_id='987654' user_id='user123']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu changer l'état de lecture du message que j'ai reçu ce matin ?",
+        "response": "<function> [mark_as_read message_id='112233' user_id='user007']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Marquer le message de notre discussion d'hier comme lu, s'il te plaît.",
+        "response": "<function> [mark_as_read message_id='334455' user_id='user111']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu jeter le message ayant l'identifiant '42' dans la corbeille ?",
+        "response": "<function> [trash_message message_id='42' user_id='user123']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu supprimer le message identifié par '103' de ma boîte de réception ?",
+        "response": "<function> [trash_message message_id='103' user_id='user567']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Mets le message portant le numéro '5589' à la corbeille, s'il te plaît.",
+        "response": "<function> [trash_message message_id='5589' user_id='user890']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu effacer pour moi le message id '987'?",
+        "response": "<function> [trash_message message_id='987' user_id='user345']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu déplacer le mail avec l'identifiant '2040' à la corbeille?",
+        "response": "<function> [trash_message message_id='2040' user_id='user678']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu classer le message avec l'identifiant 'abc123' dans les archives ?",
+        "response": "<function> [archive_message message_id='abc123' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ajoute à l'archive le message portant l'ID 'msg456'.",
+        "response": "<function> [archive_message message_id='msg456' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu archiver le message numéro '789xyz' pour moi ?",
+        "response": "<function> [archive_message message_id='789xyz' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Archivage nécessaire pour le message ayant l'identifiant 'qwe890', peux-tu le faire ?",
+        "response": "<function> [archive_message message_id='qwe890' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Classe dans les archives le message identifié par 'msg002'.",
+        "response": "<function> [archive_message message_id='msg002' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu répondre au message de Sarah que je viens de lire avec \"Merci beaucoup pour votre aide\" ?",
+        "response": "<function> [reply_to_message message_id='78910' user_id='Sarah' reply_body='Merci beaucoup pour votre aide']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu poster une réponse à l'email d'invitation de Paul en acceptant le rendez-vous ?",
+        "response": "<function> [reply_to_message message_id='112233' user_id='Paul' reply_body='J'accepte avec plaisir le rendez-vous']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu envoyer une réponse au dernier message que m'a envoyé Kevin, en disant que je vais réfléchir ?",
+        "response": "<function> [reply_to_message message_id='445566' user_id='Kevin' reply_body='Je vais y réfléchir']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu répondre au message dans lequel Emma demande confirmation du projet par un \"C'est d'accord pour moi\" ?",
+        "response": "<function> [reply_to_message message_id='778899' user_id='Emma' reply_body='C'est d'accord pour moi']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Réponds au message récent de l'équipe marketing avec \"Je vais examiner le plan et vous revenir dessus\".",
+        "response": "<function> [reply_to_message message_id='101112' user_id='marketing_team' reply_body='Je vais examiner le plan et vous revenir dessus']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu rédiger un email pour moi avec l'objet 'Réunion de jeudi' ?",
+        "response": "<function> [create_email to='colleague@example.com' subject='Réunion de jeudi' additional_info='Discuter de la présentation finale' user_id='user123']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu créer un brouillon de mail avec le sujet 'Invitation à la fête' ?",
+        "response": "<function> [create_email to='friends@example.com' subject='Invitation à la fête' additional_info='Rejoignez-moi pour célébrer' user_id='user456']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai besoin d'un email avec l'objet 'Compte rendu de la réunion'. Pourrais-tu m'aider ?",
+        "response": "<function> [create_email to='manager@example.com' subject='Compte rendu de la réunion' additional_info='Voici un résumé des points clés' user_id='user789']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Prépare un email sur le thème 'Confirmation de rendez-vous', s'il te plaît.",
+        "response": "<function> [create_email to='client@example.com' subject='Confirmation de rendez-vous' additional_info='Rendez-vous confirmé pour le 20 mai à 10h' user_id='user321']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Rédige un email intitulé 'Demande de devis', merci.",
+        "response": "<function> [create_email to='vendor@example.com' subject='Demande de devis' additional_info='Je voudrais connaître vos tarifs' user_id='user654']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu me montrer le brouillon de l'email dont l'identifiant est '56789' ?",
+        "response": "<function> [display_draft draft_id='56789' user_id='current_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Quel est le contenu du brouillon d'email avec l'ID 'abc123' ?",
+        "response": "<function> [display_draft draft_id='abc123' user_id='current_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Affiche-moi le brouillon d'email dont le code est '987zyx'.",
+        "response": "<function> [display_draft draft_id='987zyx' user_id='current_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je veux voir le brouillon du mail en référence par l'identifiant '112233'.",
+        "response": "<function> [display_draft draft_id='112233' user_id='current_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Ouvre le brouillon d'email associé à l'ID 'draft42'.",
+        "response": "<function> [display_draft draft_id='draft42' user_id='current_user']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu rédiger un brouillon de réponse à l'email que j'ai reçu concernant le projet ?",
+        "response": "<function> [create_draft_reply message_id='34567' additional_info='projet' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Je souhaite répondre au message de Juliette, peux-tu créer un brouillon ?",
+        "response": "<function> [create_draft_reply message_id='67890' additional_info='Juliette' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Génère un brouillon pour l'email de réclamation que j'ai reçu.",
+        "response": "<function> [create_draft_reply message_id='11223' additional_info='réclamation' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu préparer une réponse pour le courriel sur la réunion de demain ?",
+        "response": "<function> [create_draft_reply message_id='44556' additional_info='réunion de demain' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "J'ai besoin d'un brouillon de réponse à l'email de confirmation que j'ai reçu.",
+        "response": "<function> [create_draft_reply message_id='78901' additional_info='confirmation' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Pourrais-tu expédier le brouillon nommé 'Invitation à la conférence' ?",
+        "response": "<function> [send_draft draft_id='67890' content='Invitation à la conférence' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Envoie-moi le brouillon de l'email concernant la réunion annuelle.",
+        "response": "<function> [send_draft draft_id='11223' content='Réunion annuelle' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Peux-tu transmettre le brouillon sur le lancement du produit ?",
+        "response": "<function> [send_draft draft_id='33445' content='Lancement du produit' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Envoie le brouillon d'email dont le sujet est 'Feedback client'.",
+        "response": "<function> [send_draft draft_id='55667' content='Feedback client' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    },
+    {
+        "question": "Transmets-moi le brouillon intitulé 'Suivi de commande'.",
+        "response": "<function> [send_draft draft_id='77889' content='Suivi de commande' user_id='me']",
+        "is_rag": false,
+        "is_function": true
+    }
+]

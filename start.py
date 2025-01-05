@@ -48,11 +48,6 @@ class TinyCortex:
                 break
             else:
                 response = self.generate_response(user_question)
-                match = re.search(r"Réponse :(.*)", response)
-                if match:
-                    result = match.group(1).strip()
-                    response = result
-                print("Réponse : " + response)
                 print(execute_tool(response))
 
 # Exemple d'utilisation de la classe TinyCortex

@@ -4,48 +4,58 @@ from openai import OpenAI
 from pydantic import BaseModel
 import os
 
-class GeneratedFctCalling(BaseModel):
+
+class FctCalling(BaseModel):
     question:str
     response:str
 
-def convert_to_serializable(obj):
-    """
-    Convertit récursivement un objet (Pydantic, liste, dict, etc.)
-    en un type Python nativement sérialisable (dict, list, str, etc.)
-    """
-    if isinstance(obj, BaseModel):
-        return obj.dict()
-    elif isinstance(obj, list):
-        return [convert_to_serializable(item) for item in obj]
-    elif isinstance(obj, dict):
-        return {k: convert_to_serializable(v) for k, v in obj.items()}
-    else:
-        return obj  # Types primitifs (str, int, float, bool, None) restent tels quels
+class GeneratedFctCalling(BaseModel):
+    fcts: list[FctCalling]
 
-def save_to_json(file_path, new_data):
+def convert_fct_calling_to_dict(fct_calling):
     """
-    Sauvegarde directement les nouvelles données dans le fichier JSON
+    Convertit un objet FctCalling en dictionnaire sérialisable.
     """
-    # Lire les données existantes
-    try:
-        if os.path.exists(file_path):
-            with open(file_path, "r", encoding="utf-8") as f:
-                try:
-                    existing_data = json.load(f)
-                except json.JSONDecodeError:
-                    existing_data = []
+    return {
+        "question": fct_calling.question,
+        "response": fct_calling.response
+    }
+
+def process_results(results):
+    """
+    Traite les résultats pour extraire et convertir les données en format JSON sérialisable.
+    """
+    serialized_data = []
+    for result in results:
+        if isinstance(result, tuple) and len(result) == 2 and isinstance(result[1], list):
+            # Parcourir la liste d'objets FctCalling
+            for item in result[1]:
+                if isinstance(item, FctCalling):
+                    serialized_data.append(convert_fct_calling_to_dict(item))
+                else:
+                    print(f"Objet inattendu dans la liste : {item}")
         else:
-            existing_data = []
+            print(f"Format inattendu pour result : {result}")
+    return serialized_data
 
-        # Ajouter les nouvelles données
-        existing_data.append(new_data)
+def save_to_json(output_file, data):
+    """
+    Sauvegarde les données dans un fichier JSON existant en ajoutant les nouvelles données.
+    """
+    try:
+        # Charger le contenu existant du fichier
+        with open(output_file, 'r', encoding="utf-8") as f:
+            existing_data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        # Si le fichier n'existe pas ou est vide, initialiser une liste vide
+        existing_data = []
 
-        # Sauvegarder dans le fichier
-        with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(existing_data, f, indent=4, ensure_ascii=False)
-    except Exception as e:
-        print(f"Erreur lors de la sauvegarde dans le fichier JSON: {e}")
+    # Ajouter les nouvelles données
+    existing_data.extend(data)
 
+    # Sauvegarder le fichier mis à jour
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(existing_data, f, indent=4, ensure_ascii=False)
 
 # Initialiser le client OpenAI
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -65,7 +75,7 @@ for item in data:
     compteur = compteur + 1
     print(f"{compteur}/{taille} : {question}")
 
-    for index in range(5):  # Nombre d'itérations pour générer les données
+    for index in range(1):  # Nombre d'itérations pour générer les données
 
         try:
             # Appel API OpenAI pour générer des données
@@ -112,29 +122,19 @@ Avec ce modèle, remplace simplement le thème, la question type et la réponse 
                 response_format=GeneratedFctCalling,
             )
 
-            # Récupération du format (liste de tuples): [("input", ...), ("output", ...)]
+            # Récupération des résultats
             result = list(completion.choices[0].message.parsed)
-            print(f"Résultat {index + 1}:", result)
 
-            # Conversion pour la sauvegarde
-            input_tuple, output_tuple = result
-            input_data = convert_to_serializable(input_tuple[1])
-            output_data = convert_to_serializable(output_tuple[1])
+            # Traiter et convertir les résultats en format sérialisable
+            new_data = process_results(result)
 
-            # Sauvegarde immédiate
-            save_to_json(output_file, {"question": input_data, "response": output_data})
+            output_file = "training_function_calling.json"
+            # Sauvegarder les nouvelles données dans le fichier JSON existant
+            save_to_json(output_file, new_data)
 
-        except AttributeError as e:
-            print(f"Erreur lors de la génération des données à l'index {index + 1}: {e}")
-            continue
+            print(f"Les données ont été sauvegardées avec succès dans {output_file}.")
 
-
-
-
-
-
-
-
-
+        except Exception as e:
+            print(f"Erreur critique : {e}")
 
 
