@@ -1,6 +1,7 @@
 from openai import OpenAI  # Pour TTS et STT
 from mistralai import Mistral
 import io
+import subprocess
 from pydub import AudioSegment
 from pydub.playback import play
 import pvporcupine
@@ -10,6 +11,8 @@ import os
 from dotenv import load_dotenv
 import time
 import json
+import vosk
+import wave
 from database.database import Neo4jDatabase
 from assistant.films_and_series import films_and_series
 from assistant.spotify.spotify_assistant import SpotifyAssistant
@@ -82,6 +85,17 @@ class Cortex:
         self.model = AutoModelForCausalLM.from_pretrained("./tinyllama_cortex_finetuned")
         print("Modèle fine-tuné TinyCortex chargé avec succès.")
 
+        # Charger le modèle Vosk pour la transcription locale
+        vosk_model_path = "vosk-model-small-fr-0.22"  # Chemin du modèle Vosk
+        if os.path.exists(vosk_model_path):
+            self.model_stt = vosk.Model(vosk_model_path)
+            self.recognizer = vosk.KaldiRecognizer(self.model_stt, 16000)  
+            print("Modèle Vosk chargé avec succès.")  
+
+        voice_model_path = "piper/fr_FR-upmc-medium.onnx"
+        if os.path.exists(voice_model_path):
+            self.voice_model_path = voice_model_path
+         
         #Modèle online :
         openai_api_key = os.getenv('OPENAI_API_KEY')
         self.openai_client = OpenAI(api_key=openai_api_key) if openai_api_key else None
@@ -120,15 +134,69 @@ class Cortex:
         else:
             self.generate_speach_online(text)
 
-    def generate_speach_local(self,text):
-        pass
+    def generate_speach_local(self,text,sample_rate=22050, chunk_size=1024):
+        if not text or not isinstance(text, str):  # Vérifier que le texte est un string
+            print("Invalid text input for speech generation.")
+            return None
+        piper_path = "piper/piper.exe"
+        model_path = self.model_voice_path
+        try:
+            # Commande Piper pour streamer l'audio brut
+            piper_command = [
+                piper_path,            # Chemin vers l'exécutable Piper
+                "--model", model_path, # Modèle ONNX
+                "--output-raw"         # Streamer l'audio brut via stdout
+            ]
+
+            # Lancer Piper avec le texte fourni en entrée
+            process = subprocess.Popen(
+                piper_command,
+                stdin=subprocess.PIPE,   # Fournir le texte via l'entrée standard
+                stdout=subprocess.PIPE,  # Capturer l'audio brut
+                stderr=subprocess.PIPE   # Capturer les erreurs
+            )
+
+            # Fournir le texte à Piper (texte long)
+            process.stdin.write(text.encode("utf-8"))
+            process.stdin.close()
+
+            # Jouer l'audio brut avec PyAudio
+            p = pyaudio.PyAudio()
+            stream = p.open(format=pyaudio.paInt16,
+                            channels=1,
+                            rate=sample_rate,
+                            output=True)
+
+            print("Lecture de l'audio en cours...")
+
+            # Lire et jouer l'audio par chunks au fur et à mesure qu'ils sont générés
+            while True:
+                chunk = process.stdout.read(chunk_size)
+                if not chunk:
+                    break  # Si il n'y a plus de données, on arrête la lecture
+                stream.write(chunk)
+
+            # Fermer le flux PyAudio
+            stream.stop_stream()
+            stream.close()
+            p.terminate()
+
+            # Vérifier si des erreurs sont survenues dans le processus
+            stderr = process.stderr.read()
+            if stderr:
+                print(f"Erreur lors de l'exécution de Piper : {stderr.decode()}")
+
+            process.wait()  # Attendre la fin du processus
+            return -1
+        except Exception as e:
+            print(f"Une erreur est survenue : {e}")
+    
 
     def generate_speach_online(self, text):
         # Fonction online :
-        if self.local_mode == "False":
-            if self.openai_client is None:
-                print("Please, provide an OpenAPI key.")
-                return None
+        if self.openai_client is None:
+            print("Please, provide an OpenAPI key.")
+            return None
 
         if not text or not isinstance(text, str):  # Vérifier que le texte est un string
             print("Invalid text input for speech generation.")
@@ -168,8 +236,29 @@ class Cortex:
         else:
             self.transcrible_audio(audio_stream)
 
-    def transcrible_audio_local(self, audio_stream):
-        pass
+    def transcrible_audio_local(self, filename):
+
+        if not os.path.exists(filename):
+            return f"Erreur : Le fichier {filename} est introuvable."
+
+        try:
+            with wave.open(filename, "rb") as wf:
+                if wf.getnchannels() != 1:
+                    return "Erreur : Le fichier audio doit être mono (1 canal)."
+                
+                data = wf.readframes(wf.getnframes())  # Lire tout le fichier d'un coup
+
+                if self.recognizer.AcceptWaveform(data):
+                    result = self.recognizer.Result()
+                    transcription = eval(result).get("text", "")
+                    return transcription
+
+                final_result = self.recognizer.FinalResult()
+                final_text = eval(final_result).get("text", "")
+                return final_text if final_text else "Aucune transcription n'a pu être générée."
+
+        except Exception as e:
+            return f"Une erreur est survenue lors du traitement de l'audio : {e}"
 
     def transcribe_audio_online(self, audio_stream):
         try:
@@ -195,7 +284,7 @@ class Cortex:
     def is_silent(self, data, threshold=500):
         return np.abs(np.frombuffer(data, np.int16)).mean() < threshold
 
-    def record_audio(self, rate=44100, chunk=1024, silent_limit=2, threshold=1000, save_to_file=False,
+    def record_audio(self, rate=44100, chunk=1024, silent_limit=2, threshold=1000, save_to_file=True,
                      filename="output.wav"):
         p = pyaudio.PyAudio()
         stream = p.open(format=pyaudio.paInt16, channels=1, rate=rate, input=True, frames_per_buffer=chunk)
@@ -247,10 +336,10 @@ class Cortex:
         #Générer une réponse en local
         if self.local_mode == "True":
             self.generate_text_local(prompt)
-
         #Générer une réponse online
         else:
             self.generate_speach_online(prompt)
+
     def generate_text_local(self, prompt):
         """
         Génère une réponse en utilisant le modèle fine-tuné TinyCortex.
@@ -273,6 +362,7 @@ class Cortex:
         print("Réponse : " + response)
         print(execute_tool(response))
         return response
+    
     def generate_text_online(self, prompt):
         """
         Génère une réponse textuelle à partir d'un prompt en utilisant la RAG (Retrieval-Augmented Generation).
@@ -557,7 +647,8 @@ class Cortex:
                     if isinstance(ai_response, str) and ai_response.strip():
                         audio_stream = self.generate_speach(ai_response)
                         if audio_stream:
-                            self.play_audio(audio_stream)
+                            if audio_stream != -1:
+                                self.play_audio(audio_stream)
                         else:
                             print("Impossible de générer l'audio.")
 
