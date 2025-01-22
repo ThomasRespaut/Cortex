@@ -81,8 +81,8 @@ class Cortex:
         #Choix de la version locale à la version online
         self.local_mode = local_mode
         #Modèle en local :
-        #self.tokenizer = AutoTokenizer.from_pretrained("./tinyllama_cortex_finetuned")
-        #self.model = AutoModelForCausalLM.from_pretrained("./tinyllama_cortex_finetuned")
+        self.tokenizer = AutoTokenizer.from_pretrained("./tinyllama_cortex_finetuned")
+        self.model = AutoModelForCausalLM.from_pretrained("./tinyllama_cortex_finetuned")
         print("Modèle fine-tuné TinyCortex chargé avec succès.")
         self.rate_in = rate_in
         self.rate_out = rate_out
@@ -327,14 +327,14 @@ class Cortex:
         else: # pas de nécessité de changer de format pour piper
             return audio_segment
 
+    import re
 
-
-    def generate_text(self,prompt):
-
-        #Générer une réponse en local
-        if self.local_mode == True:
+    def generate_text(self, prompt):
+        """
+        Génère une réponse en fonction du mode sélectionné (local ou online).
+        """
+        if self.local_mode:
             return self.generate_text_local(prompt)
-        #Générer une réponse online
         else:
             return self.generate_text_online(prompt)
 
@@ -342,25 +342,35 @@ class Cortex:
         """
         Génère une réponse en utilisant le modèle fine-tuné TinyCortex.
         """
-        inputs = self.tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512)
-        outputs = self.model.generate(
-            inputs["input_ids"],
-            max_length=512,
-            num_return_sequences=1,
-            temperature=0.7,
-            to3p_p=0.9,
-            do_sample=True
-        )
-        response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+        try:
+            # Préparer l'entrée du modèle avec la gestion de la troncature
+            inputs = self.tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512)
 
-        match = re.search(r"Réponse :(.*)", response)
-        if match:
-            result = match.group(1).strip()
-            response = result
-        print("Réponse : " + response)
-        print(execute_tool(response))
-        return response
-    
+            # Générer la réponse en supprimant l'argument non reconnu
+            outputs = self.model.generate(
+                inputs["input_ids"],
+                max_length=512,
+                num_return_sequences=1,
+                temperature=0.7,
+                do_sample=True  # Suppression de l'argument to3p_p
+            )
+
+            # Décodage de la réponse générée
+            response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+            # Extraction de la réponse pertinente à l'aide de regex
+            match = re.search(r"Réponse\s*:\s*(.*)", response, re.IGNORECASE)
+            if match:
+                response = match.group(1).strip()
+
+            print("Réponse : " + response)
+            print(execute_tool(response))
+            return response
+
+        except Exception as e:
+            print(f"Erreur lors de la génération de texte : {e}")
+            return "Une erreur s'est produite lors du traitement de votre requête."
+
     def generate_text_online(self, prompt):
         """
         Génère une réponse textuelle à partir d'un prompt en utilisant la RAG (Retrieval-Augmented Generation).
