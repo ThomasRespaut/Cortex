@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 import time
 import json
 import vosk
+from vosk import SetLogLevel
 import wave
 from database.database import Neo4jDatabase
 from assistant.films_and_series import films_and_series
@@ -75,27 +76,35 @@ names_to_functions = {
 load_dotenv()
 
 class Cortex:
-    def __init__(self,input_mode="voice",output_mode="voice",local_mode="True"):
+    def __init__(self,input_mode="voice",output_mode="voice",local_mode=True,rate_in=44100,rate_out=22050):
 
         #Choix de la version locale à la version online
         self.local_mode = local_mode
-
         #Modèle en local :
-        self.tokenizer = AutoTokenizer.from_pretrained("./tinyllama_cortex_finetuned")
-        self.model = AutoModelForCausalLM.from_pretrained("./tinyllama_cortex_finetuned")
+        #self.tokenizer = AutoTokenizer.from_pretrained("./tinyllama_cortex_finetuned")
+        #self.model = AutoModelForCausalLM.from_pretrained("./tinyllama_cortex_finetuned")
         print("Modèle fine-tuné TinyCortex chargé avec succès.")
-
+        self.rate_in = rate_in
+        self.rate_out = rate_out
         # Charger le modèle Vosk pour la transcription locale
         vosk_model_path = "vosk-model-small-fr-0.22"  # Chemin du modèle Vosk
         if os.path.exists(vosk_model_path):
+            SetLogLevel(-1)
             self.model_stt = vosk.Model(vosk_model_path)
-            self.recognizer = vosk.KaldiRecognizer(self.model_stt, 16000)  
+            self.recognizer = vosk.KaldiRecognizer(self.model_stt, rate_in)  
             print("Modèle Vosk chargé avec succès.")  
 
         voice_model_path = "piper/fr_FR-upmc-medium.onnx"
         if os.path.exists(voice_model_path):
             self.voice_model_path = voice_model_path
-         
+            piper_path = "piper/piper.exe"
+            self.piper_command = [
+                piper_path,           
+                "--model", self.voice_model_path, 
+                "--output-raw"        
+            ]
+            print("Modèle Piper chargé avec succès.")  
+
         #Modèle online :
         openai_api_key = os.getenv('OPENAI_API_KEY')
         self.openai_client = OpenAI(api_key=openai_api_key) if openai_api_key else None
@@ -125,32 +134,25 @@ class Cortex:
         self.output_mode = output_mode
 
 
-    def generate_speach(self, text):
+    def generate_speech(self, text):
 
         #Fonction local :
-        if self.local_mode == "True":
-            self.generate_speach_local(text)
+        if self.local_mode == True:
+            return self.generate_speech_local(text)
 
         else:
-            self.generate_speach_online(text)
+            return self.generate_speech_online(text)
 
-    def generate_speach_local(self,text,sample_rate=22050, chunk_size=1024):
+    def generate_speech_local(self,text,sample_rate=22050, chunk_size=1024):
         if not text or not isinstance(text, str):  # Vérifier que le texte est un string
             print("Invalid text input for speech generation.")
             return None
-        piper_path = "piper/piper.exe"
-        model_path = self.model_voice_path
         try:
-            # Commande Piper pour streamer l'audio brut
-            piper_command = [
-                piper_path,            # Chemin vers l'exécutable Piper
-                "--model", model_path, # Modèle ONNX
-                "--output-raw"         # Streamer l'audio brut via stdout
-            ]
+
 
             # Lancer Piper avec le texte fourni en entrée
             process = subprocess.Popen(
-                piper_command,
+                self.piper_command,
                 stdin=subprocess.PIPE,   # Fournir le texte via l'entrée standard
                 stdout=subprocess.PIPE,  # Capturer l'audio brut
                 stderr=subprocess.PIPE   # Capturer les erreurs
@@ -192,7 +194,7 @@ class Cortex:
             print(f"Une erreur est survenue : {e}")
     
 
-    def generate_speach_online(self, text):
+    def generate_speech_online(self, text):
         # Fonction online :
         if self.openai_client is None:
             print("Please, provide an OpenAPI key.")
@@ -230,47 +232,46 @@ class Cortex:
         except Exception as e:
             print(f"Une erreur est survenue : {e}.")
 
-    def transcrible_audio(self, audio_stream):
-        if self.local_mode == "True":
-            self.transcrible_audio_local(audio_stream)
+    def transcribe_audio(self, audio_stream):
+        if self.local_mode == True:
+            return self.transcribe_audio_local(audio_stream)
         else:
-            self.transcrible_audio(audio_stream)
+            return self.transcribe_audio_online(audio_stream)
 
-    def transcrible_audio_local(self, filename):
-
-        if not os.path.exists(filename):
-            return f"Erreur : Le fichier {filename} est introuvable."
+    def transcribe_audio_local(self, audio_stream):
 
         try:
-            with wave.open(filename, "rb") as wf:
-                if wf.getnchannels() != 1:
-                    return "Erreur : Le fichier audio doit être mono (1 canal)."
-                
-                data = wf.readframes(wf.getnframes())  # Lire tout le fichier d'un coup
+            wf = audio_stream
+            data = wf.raw_data
+            if self.recognizer.AcceptWaveform(data):
+                result = self.recognizer.Result()
+                transcription = eval(result).get("text", "")
+                return transcription
 
-                if self.recognizer.AcceptWaveform(data):
-                    result = self.recognizer.Result()
-                    transcription = eval(result).get("text", "")
-                    return transcription
+            final_result = self.recognizer.FinalResult()
+            final_text = eval(final_result).get("text", "")
 
-                final_result = self.recognizer.FinalResult()
-                final_text = eval(final_result).get("text", "")
-                return final_text if final_text else "Aucune transcription n'a pu être générée."
+            if final_text:
+                return final_text 
+            else:
+                print("Aucune transcription n'a pu être générée.")
+                return None
 
         except Exception as e:
-            return f"Une erreur est survenue lors du traitement de l'audio : {e}"
-
-    def transcribe_audio_online(self, audio_stream):
+            print(f"Une erreur est survenue lors du traitement de l'audio : {e}")
+            return None
+        
+    def transcribe_audio_online(self, filename):
         try:
-            audio_stream.seek(0)
+            audio_file = open(filename, "rb")
             transcription = self.openai_client.audio.transcriptions.create(
                 model="whisper-1",
-                file=audio_stream,
+                file=audio_file,
                 response_format="text",
                 language="fr"
             )
             if transcription:
-                if transcription.strip() == "Sous-titres réalisés para la communauté d'Amara.org":
+                if transcription.strip() == "Sous-titres réalisés para la communauté d'Amara.org" or transcription.strip() == "...":
                     print("Transcription indésirable détectée.")
                     return None
                 return transcription
@@ -284,28 +285,27 @@ class Cortex:
     def is_silent(self, data, threshold=500):
         return np.abs(np.frombuffer(data, np.int16)).mean() < threshold
 
-    def record_audio(self, rate=44100, chunk=1024, silent_limit=2, threshold=1000, save_to_file=True,
+    def record_audio(self, chunk=1024, silent_limit=2, threshold=1000, save_to_file=False,
                      filename="output.wav"):
         p = pyaudio.PyAudio()
-        stream = p.open(format=pyaudio.paInt16, channels=1, rate=rate, input=True, frames_per_buffer=chunk)
+        stream = p.open(format=pyaudio.paInt16, channels=1, rate=self.rate_in, input=True, frames_per_buffer=chunk)
         print("Enregistrement en cours.")
         frames = []
         silent_chunks = 0
         recording = True
-        min_recording_duration = 1  # Durée minimale d'enregistrement en secondes
+        min_recording_duration = 2.5  # Durée minimale d'enregistrement en secondes
         start_time = time.time()
 
         while recording:
             data = stream.read(chunk)
             frames.append(data)
-
             if time.time() - start_time > min_recording_duration:
                 if self.is_silent(data, threshold):
                     silent_chunks += 1
                 else:
                     silent_chunks = 0
 
-                if silent_chunks > int(silent_limit * rate / chunk):
+                if silent_chunks > int(silent_limit * self.rate_in / chunk):
                     print("Silence détecté, arrêt de l'enregistrement.")
                     recording = False
 
@@ -317,28 +317,26 @@ class Cortex:
         audio_segment = AudioSegment(
             data=b''.join(frames),
             sample_width=p.get_sample_size(pyaudio.paInt16),
-            frame_rate=rate,
+            frame_rate=self.rate_in,
             channels=1
         )
 
-        if save_to_file:
+        if save_to_file: # changement en format wav nécessaire pour whisper
             audio_segment.export(filename, format="wav")
             return filename
-        else:
-            audio_stream = io.BytesIO()
-            audio_segment.export(audio_stream, format="wav")
-            audio_stream.seek(0)
-            return audio_stream
+        else: # pas de nécessité de changer de format pour piper
+            return audio_segment
+
 
 
     def generate_text(self,prompt):
 
         #Générer une réponse en local
-        if self.local_mode == "True":
-            self.generate_text_local(prompt)
+        if self.local_mode == True:
+            return self.generate_text_local(prompt)
         #Générer une réponse online
         else:
-            self.generate_speach_online(prompt)
+            return self.generate_text_online(prompt)
 
     def generate_text_local(self, prompt):
         """
@@ -350,7 +348,7 @@ class Cortex:
             max_length=512,
             num_return_sequences=1,
             temperature=0.7,
-            top_p=0.9,
+            to3p_p=0.9,
             do_sample=True
         )
         response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
@@ -374,23 +372,25 @@ class Cortex:
         self.messages.append({"role": "user", "content": prompt})
 
         # Étape 1 : Récupérer les informations de la base Neo4j (RAG)
-        try:
-            db = Neo4jDatabase()
-            graph_data = db.recuperer_informations_graph()
+        database = False
+        if database : 
+            try:
+                db = Neo4jDatabase()
+                graph_data = db.recuperer_informations_graph()
 
-            # Ajouter les informations pertinentes récupérées du graphe dans le contexte
-            if graph_data and "noeuds" in graph_data and "relations" in graph_data:
-                noeuds_info = "\n".join([f"{n['proprietes'].get('nom', 'Nœud sans nom')}: {n['proprietes']}" for n in
-                                         graph_data["noeuds"].values()])
-                relations_info = "\n".join(
-                    [f"{rel['type']} entre {rel['de']} et {rel['vers']}" for rel in graph_data["relations"]])
-                contexte_rag = f"Voici des informations provenant de la base de données:\nNœuds:\n{noeuds_info}\nRelations:\n{relations_info}"
-                self.messages.append({"role": "system", "content": contexte_rag})
+                # Ajouter les informations pertinentes récupérées du graphe dans le contexte
+                if graph_data and "noeuds" in graph_data and "relations" in graph_data:
+                    noeuds_info = "\n".join([f"{n['proprietes'].get('nom', 'Nœud sans nom')}: {n['proprietes']}" for n in
+                                            graph_data["noeuds"].values()])
+                    relations_info = "\n".join(
+                        [f"{rel['type']} entre {rel['de']} et {rel['vers']}" for rel in graph_data["relations"]])
+                    contexte_rag = f"Voici des informations provenant de la base de données:\nNœuds:\n{noeuds_info}\nRelations:\n{relations_info}"
+                    self.messages.append({"role": "system", "content": contexte_rag})
 
-                #print(self.messages)
+                    #print(self.messages)
 
-        except Exception as e:
-            print(f"Erreur lors de la récupération des informations du graphe : {e}")
+            except Exception as e:
+                print(f"Erreur lors de la récupération des informations du graphe : {e}")
 
         # Étape 2 : Appel à Mistral pour générer la réponse basée sur le contexte
         try:
@@ -441,7 +441,7 @@ class Cortex:
                 ai_response = chat_response.choices[0].message.content
                 self.messages.append({"role": "assistant", "content": ai_response})
                 return ai_response
-
+            print(ai_response)
             return ai_response
 
         except Exception as e:
@@ -585,7 +585,6 @@ class Cortex:
             frames_per_buffer=porcupine.frame_length
         )
 
-        # print("Conversation initialisé.")
         while True:
             pcm = audio_stream.read(porcupine.frame_length, exception_on_overflow=False)
             pcm = np.frombuffer(pcm, dtype=np.int16)
@@ -595,26 +594,26 @@ class Cortex:
                 porcupine.delete()
                 return True
 
-    def wait_for_response(self, timeout=5):
+    def wait_for_response(self, silent_limit=1):
         print("Le micro est activé, attente d'une réponse de l'utilisateur...")
-        filename = self.record_audio(save_to_file=True, silent_limit=2, threshold=500)
-        if filename:
-            with open(filename, "rb") as audio_file:
-                user_response = self.transcribe_audio(audio_file)
-                if user_response and user_response.strip():
-                    return user_response
+        save_to_file = not self.local_mode
+        audiosegment = self.record_audio(save_to_file=save_to_file, silent_limit=silent_limit, threshold=500)
+        if audiosegment:
+            user_response = self.transcribe_audio(audiosegment)
+            if user_response and user_response.strip():
+                return user_response
 
         print("Aucune réponse détectée pendant 5 secondes, retour à la détection du mot clé.")
         return None
 
     def conversation(self):
 
-        print("Ok Cortex pour démarrer...")  # Message de démarrage
         while True:
             user_response = None
 
             if self.input_mode == "voice":
                 if self.first_keyword_detection:
+                    print("Ok Cortex pour démarrer...")  # Message de démarrage
                     if not self.keyword_detection():
                         continue
                     self.first_keyword_detection = False
@@ -623,11 +622,12 @@ class Cortex:
 
                 if user_response:
                     print(f"Utilisateur : {user_response}")
+                    
                 else:
                     self.first_keyword_detection = True
                     continue
-
-            if self.input_mode == "text":
+                
+            else : 
                 user_response = input("Utilisateur : ")
 
                 if user_response.lower() in ["quit", "stop", "exit"]:
@@ -636,7 +636,7 @@ class Cortex:
 
             if not user_response:
                 continue
-
+            
             ai_response = self.generate_text(user_response)
 
             if ai_response:
@@ -645,16 +645,17 @@ class Cortex:
 
                 if self.output_mode == "voice":
                     if isinstance(ai_response, str) and ai_response.strip():
-                        audio_stream = self.generate_speach(ai_response)
+                        audio_stream = self.generate_speech(ai_response)
                         if audio_stream:
                             if audio_stream != -1:
                                 self.play_audio(audio_stream)
+
                         else:
                             print("Impossible de générer l'audio.")
-
             print("-" * 100)
 
 
 if __name__ == "__main__":
-    cortex = Cortex(input_mode="text",output_mode="text",local_mode="True")
+    cortex = Cortex(input_mode="voice",output_mode="voice",local_mode=True)
     cortex.conversation()
+    

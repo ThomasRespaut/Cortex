@@ -9,6 +9,7 @@ if not os.path.exists(MODEL_PATH):
 
 print("Chargement du modèle...")
 model = vosk.Model(MODEL_PATH)
+recognizer = vosk.KaldiRecognizer(model, 44100)
 
 def transcribe_audio_whole(filename):
     """
@@ -28,7 +29,8 @@ def transcribe_audio_whole(filename):
             if wf.getnchannels() != 1:
                 return "Erreur : Le fichier audio doit être mono (1 canal)."
             
-            recognizer = vosk.KaldiRecognizer(model, wf.getframerate())
+            #recognizer = vosk.KaldiRecognizer(model, 44100)
+            print(wf.getframerate())
             data = wf.readframes(wf.getnframes())  # Lire tout le fichier d'un coup
 
             if recognizer.AcceptWaveform(data):
