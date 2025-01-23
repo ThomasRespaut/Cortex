@@ -81,8 +81,8 @@ def conversation(cortex, screen, background, boutton_1, screen_width, screen_hei
 
         if ai_response:
             # Efface la zone où "Réponse" sera affichée
-            #clear_rect = pygame.Rect(0, screen_height / 6 * 3 - 50, screen_width, 100)  # Rect pour effacer
-            #screen.blit(background, clear_rect, clear_rect)
+            clear_rect = pygame.Rect(0, screen_height / 6 * 2 - 50, screen_width, 1000)  # Rect pour effacer
+            screen.blit(background, clear_rect, clear_rect)
 
             display_text_letter_by_letter(screen, f"Réponse : {ai_response}", screen_width, screen_height,
                                           (screen_width / 2, screen_height / 6 * 3), boutton_quitter, delay=10, text_size = 40)
@@ -90,7 +90,7 @@ def conversation(cortex, screen, background, boutton_1, screen_width, screen_hei
 
             if cortex.output_mode == "voice":
                 if isinstance(ai_response, str) and ai_response.strip():
-                    audio_stream = cortex.generate_speach(ai_response)
+                    audio_stream = cortex.generate_speech(ai_response)
                     if audio_stream:
                         cortex.play_audio(audio_stream)
                     else:
@@ -221,7 +221,7 @@ def launch_cortex(screen, cortex, screen_width, screen_height):
     boutton_1 = pygame.Rect(boutton_1_centre[0]-boutton_1_diam, boutton_1_centre[1]-boutton_1_diam, boutton_1_diam*2, boutton_1_diam*2)
     #pygame.draw.rect(screen, border_color, boutton_1, width=border_width)
     #pygame.draw.circle(screen, border_color, boutton_1_centre, boutton_1_diam, width=border_width)
-    sprite_1 = pygame.image.load("app/Images/cortex_sprite/sprite1.png")
+    sprite_1 = pygame.image.load("app/images/cortex_sprite/sprite1.png")
     sprite_1 = pygame.transform.scale(sprite_1, (boutton_1_diam * 2, boutton_1_diam * 2))
     boutton_1_centre = (boutton_1_centre[0] - boutton_1_diam, boutton_1_centre[1] - boutton_1_diam)
     screen.blit(sprite_1, boutton_1_centre)

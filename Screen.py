@@ -21,7 +21,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Importer cortex.py
 from cortex import Cortex
 
-cortex = Cortex(input_mode="voice", output_mode="text")
+cortex = Cortex(input_mode="voice", output_mode="voice")
 
 pygame.init()
 
@@ -29,8 +29,8 @@ clock = pygame.time.Clock()
 FPS = 60
 
 # Dimensions de l'écran
-screen_width = 1000
-screen_height = 1000
+screen_width = 900
+screen_height = 900
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Cortex")
 #bg = pygame.image.load("images/backgrounds/background.png").convert()
