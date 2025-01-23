@@ -1,7 +1,7 @@
 import pygame
 import os
 
-def launch_messaging(screen, screen_width, screen_height):
+def launch_messaging(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Messagerie."""
     clock = pygame.time.Clock()
     running = True

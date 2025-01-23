@@ -1,13 +1,13 @@
 import pygame
 import os
 
-def launch_music(screen, screen_width, screen_height):
+def launch_music(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Musique."""
     clock = pygame.time.Clock()
     running = True
 
     # Charger l'image de fond
-    background_path = os.path.join("images", "backgrounds", "musique.png")
+    background_path = os.path.join("app","images", "backgrounds", "musique.png")
     try:
         background = pygame.image.load(background_path)
         background = pygame.transform.scale(background, (screen_width, screen_height))

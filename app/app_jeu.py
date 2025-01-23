@@ -1,12 +1,12 @@
 import pygame
 import os
 
-def launch_game(screen, screen_width, screen_height):
+def launch_game(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Jeux."""
     clock = pygame.time.Clock()
     running = True
 
-    background_path = os.path.join("images", "backgrounds", "jeu.png")
+    background_path = os.path.join("app","images", "backgrounds", "jeu.png")
     try:
         background = pygame.image.load(background_path)
         background = pygame.transform.scale(background, (screen_width, screen_height))

@@ -1,7 +1,7 @@
 import pygame
 import os
 
-def launch_clock(screen, screen_width, screen_height):
+def launch_clock(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Horloge."""
     clock = pygame.time.Clock()
     running = True

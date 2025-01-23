@@ -1,7 +1,7 @@
 import pygame
 import os
 
-def launch_health(screen, screen_width, screen_height):
+def launch_health(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Santé."""
     clock = pygame.time.Clock()
     running = True

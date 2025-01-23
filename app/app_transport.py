@@ -1,7 +1,7 @@
 import pygame
 import os
 
-def launch_transport(screen, screen_width, screen_height):
+def launch_transport(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Transport."""
     clock = pygame.time.Clock()
     running = True

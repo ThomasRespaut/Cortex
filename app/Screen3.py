@@ -2,6 +2,7 @@
 import pygame
 import math
 import time
+import pandas as pd
 from app_calendrier import launch_calendar
 from app_transport import launch_transport
 from app_jeu import launch_game
@@ -12,11 +13,17 @@ from app_musique import launch_music
 
 pygame.init()
 
-# Dimensions de l'écran
-screen_width = 600
-screen_height = 600
-screen = pygame.display.set_mode((screen_width, screen_height))
+clock = pygame.time.Clock()
+FPS = 60
 
+# Dimensions de l'écran
+screen_width = 800
+screen_height = 800
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Cortex")
+
+temps_fonctions = pd.DataFrame()
+temps_fonctions[['total','fonctions_de_fin','generate_applications','current_time','boucle_events','handle_dragging','draw_applications','pygame.display.flip()']] = [[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]]
 
 # Couleurs
 WHITE = (255, 255, 255)
@@ -39,7 +46,7 @@ mouse_start_pos = None  # Position de départ du clic pour différencier entre u
 mouse_movement_threshold = 30  # Seuil de mouvement de la souris pour considérer un drag
 mouse_pos = (0, 0)  # Position initiale de la souris
 last_mouse_update_time = 0  # Temps écoulé depuis la dernière mise à jour de la position de la souris
-mouse_update_interval = 100  # Intervalle de 100ms (0.1 seconde)
+mouse_update_interval = 10  # Intervalle de 100ms (0.1 seconde)
 time_limit=0.2
 
 #list_application = [("Horloge", "/images/Horloges.png")]
@@ -67,6 +74,7 @@ list_application = [
 
 
 icon_app = pygame.image.load("Images/Horloge.png")
+
 
 
 # Générer les applications en forme de cercle
@@ -100,8 +108,7 @@ def generate_applications(num_apps):
         icon_width, icon_height = icon_app_resized.get_size()
         apps.append([x, y, size_app,icon_app_resized])
     end_time = time.time()
-    if((end_time - start_time)>time_limit):
-        print(f"generate_applications a pris {end_time - start_time} secondes")
+    temps_fonctions.loc[0,'generate_applications'] += end_time - start_time
 
 
 # Fonction pour dessiner les applications
@@ -123,8 +130,7 @@ def draw_applications():
 
         screen.blit(app[3], (app[0] - size_app // 2, app[1] - size_app // 2))
     end_time = time.time()
-    if ((end_time - start_time) > time_limit):
-        print(f"draw_applications a pris {end_time - start_time} secondes")
+    temps_fonctions.loc[0,'draw_applications'] += end_time - start_time
 
 # Fonction pour gérer le déplacement des applications
 def handle_dragging(mouse_pos):
@@ -144,8 +150,7 @@ def handle_dragging(mouse_pos):
         # Mettre à jour la position de départ du drag
         drag_start_pos = mouse_pos
     end_time = time.time()
-    if ((end_time - start_time) > 50):
-        print(f"handle_dragging a pris {end_time - start_time} secondes")
+    temps_fonctions.loc[0,'handle_dragging'] += end_time - start_time
 
 def launch_app(app_name):
     global app_launched, current_app
@@ -168,7 +173,7 @@ def launch_app(app_name):
 
 
 def check_app_click(mouse_pos):
-    #start_time = time.time()
+    start_time = time.time()
     global selected_app, app_launched, current_app
 
     for i, app in enumerate(apps):
@@ -181,28 +186,31 @@ def check_app_click(mouse_pos):
                 current_app = selected_app
                 launch_app(selected_app)  # Appelle la fonction pour lancer l'application
             break
-    '''
     end_time = time.time()
-    if ((end_time - start_time) > time_limit):
-        print(f"check_app_click a pris {end_time - start_time} secondes")
-    '''
+    temps_fonctions.loc[0,'check_app_click'] += end_time - start_time
 # Fonction principale
 def main():
+    start_prog = time.time()
     global dragging, drag_start_pos, app_launched, current_app, mouse_start_pos, mouse_pos, last_mouse_update_time
     clock = pygame.time.Clock()
     running = True
 
 
     # Générer les applications
-    generate_applications(12)  # Créer 12 applications
+    generate_applications(12)
 
     while running:
+
+        clock.tick(FPS)
+
         start_time = time.time()  # Temps de début
         current_time = pygame.time.get_ticks()
+        end_time = time.time()
+        temps_fonctions.loc[0,'current_time'] += end_time - start_time
         if current_time - last_mouse_update_time >= mouse_update_interval:
             mouse_pos = pygame.mouse.get_pos()
             last_mouse_update_time = current_time
-
+        start_time = time.time()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -253,28 +261,136 @@ def main():
                 # Réinitialiser les variables de glissement et de clic
                 dragging = False
                 #mouse_start_pos = None
-        #end_time = time.time()
-        #print(f"get_event a pris {end_time - start_time} secondes")
+        end_time = time.time()
+        temps_fonctions.loc[0,'boucle_events'] += end_time - start_time
+        start_time = time.time()
 
         # Si on fait glisser, déplacer les applications
         handle_dragging(mouse_pos)
 
-        # Remplir l'écran avec une couleur de fond
         screen.fill(WHITE)
-
-        # Dessiner les applications
         draw_applications()
 
-        # Mettre à jour l'affichage
-        pygame.display.flip()
-        # Limiter à 60 FPS
-        clock.tick(60)
+        start_time = time.time()
+        pygame.display.update() #pygame.display.flip()
+        end_time = time.time()
+        temps_fonctions.loc[0, 'pygame.display.flip()'] += end_time - start_time
+        #clock.tick(60)
         #print(current_app)
 
         end_time = time.time()
+        temps_fonctions.loc[0,'fonctions_de_fin'] += end_time - start_time
         if((end_time - start_time) >time_limit) :
             print(f"main while {end_time - start_time}")
     pygame.quit()
+    end_time = time.time()
+    temps_fonctions.loc[0, 'total'] += end_time - start_prog
+    for i in temps_fonctions :
+        print(f'{i} : {temps_fonctions[i].iloc[0]}')
+
+
+def main_page(screen, event):
+    """
+    Affiche la page principale et gère les événements.
+
+    :param screen: La surface de la fenêtre principale
+    :param event: L'événement capturé (pour les interactions utilisateur)
+    :return: "calendar" si le bouton pour aller à la page calendrier est cliqué, sinon "main"
+    """
+    start_prog = time.time()
+    global dragging, drag_start_pos, app_launched, current_app, mouse_start_pos, mouse_pos, last_mouse_update_time
+    clock = pygame.time.Clock()
+    running = True
+
+
+    # Générer les applications
+    generate_applications(12)
+
+    while running:
+
+        clock.tick(FPS)
+
+        start_time = time.time()  # Temps de début
+        current_time = pygame.time.get_ticks()
+        end_time = time.time()
+        temps_fonctions.loc[0,'current_time'] += end_time - start_time
+        if current_time - last_mouse_update_time >= mouse_update_interval:
+            mouse_pos = pygame.mouse.get_pos()
+            last_mouse_update_time = current_time
+        start_time = time.time()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            # Gestion du clic souris pour commencer le glissement
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                start_time_drag = time.time()
+                mouse_start_pos = mouse_pos
+                dragging = True
+                drag_start_pos = mouse_pos
+
+            elif event.type == pygame.MOUSEMOTION:
+                if dragging is True:
+                    current_pos = mouse_pos
+                    dx = current_pos[0] - drag_start_pos[0]
+                    dy = current_pos[1] - drag_start_pos[1]
+
+                    # Si la souris a bougé au-delà du seuil, on considère que c'est un glissement
+                    if abs(dx) > mouse_movement_threshold or abs(dy) > mouse_movement_threshold:
+                        dragging = True
+                        # Mettre à jour la position des applications si on glisse
+                        for app in apps:
+                            app[0] += dx
+                            app[1] += dy
+
+                        # Mettre à jour la position de départ du drag
+                        drag_start_pos = current_pos
+
+
+            # Relâcher la souris pour arrêter le glissement
+            elif event.type == pygame.MOUSEBUTTONUP:
+                end_time_drag = time.time()
+                dragging = False
+                mouse_end_pos = mouse_pos
+                # Si la souris n'a presque pas bougé, considérer que c'est un clic
+                if mouse_start_pos is not None:
+                    dx = mouse_end_pos[0] - mouse_start_pos[0]
+                    dy = mouse_end_pos[1] - mouse_start_pos[1]
+                    #print(f"Position de départ : {drag_start_pos}")
+                    #print(f"Distance parcouru : {abs(dx) + abs(dy)}")
+                    if abs(dx) < mouse_movement_threshold and abs(dy) < mouse_movement_threshold and (end_time_drag-start_time_drag) <0.5 :
+                        print("click")
+                        print(f"time clicked {end_time_drag-start_time_drag}")
+                        check_app_click(mouse_end_pos)
+                    else :
+                        print("drag")
+
+                # Réinitialiser les variables de glissement et de clic
+                dragging = False
+                #mouse_start_pos = None
+        end_time = time.time()
+        temps_fonctions.loc[0,'boucle_events'] += end_time - start_time
+        start_time = time.time()
+
+        # Si on fait glisser, déplacer les applications
+        handle_dragging(mouse_pos)
+
+        screen.fill(WHITE)
+        draw_applications()
+
+        start_time = time.time()
+        pygame.display.update() #pygame.display.flip()
+        end_time = time.time()
+        temps_fonctions.loc[0, 'pygame.display.flip()'] += end_time - start_time
+        #clock.tick(60)
+        #print(current_app)
+
+        end_time = time.time()
+        temps_fonctions.loc[0,'fonctions_de_fin'] += end_time - start_time
+        if((end_time - start_time) >time_limit) :
+            print(f"main while {end_time - start_time}")
+    return "main"  # Rester sur la page principale
+
 
 # Lancer l'application
 if __name__ == "__main__":
