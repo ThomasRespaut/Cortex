@@ -6,7 +6,7 @@ def launch_clock(screen, cortex, screen_width, screen_height):
     clock = pygame.time.Clock()
     running = True
 
-    background_path = os.path.join("images", "backgrounds", "horloge.png")
+    background_path = os.path.join("app","images", "backgrounds", "horloge.png")
     try:
         background = pygame.image.load(background_path)
         background = pygame.transform.scale(background, (screen_width, screen_height))

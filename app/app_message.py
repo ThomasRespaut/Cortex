@@ -6,7 +6,7 @@ def launch_messaging(screen, cortex, screen_width, screen_height):
     clock = pygame.time.Clock()
     running = True
 
-    background_path = os.path.join("images", "backgrounds", "message.png")
+    background_path = os.path.join("app","images", "backgrounds", "message.png")
     try:
         background = pygame.image.load(background_path)
         background = pygame.transform.scale(background, (screen_width, screen_height))

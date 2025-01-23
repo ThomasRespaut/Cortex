@@ -6,7 +6,7 @@ def launch_health(screen, cortex, screen_width, screen_height):
     clock = pygame.time.Clock()
     running = True
 
-    background_path = os.path.join("images", "backgrounds", "sante.png")
+    background_path = os.path.join("app","images", "backgrounds", "sante.png")
     try:
         background = pygame.image.load(background_path)
         background = pygame.transform.scale(background, (screen_width, screen_height))

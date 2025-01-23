@@ -6,7 +6,7 @@ def launch_transport(screen, cortex, screen_width, screen_height):
     clock = pygame.time.Clock()
     running = True
 
-    background_path = os.path.join("images", "backgrounds", "transport.png")
+    background_path = os.path.join("app","images", "backgrounds", "transport.png")
     try:
         background = pygame.image.load(background_path)
         background = pygame.transform.scale(background, (screen_width, screen_height))
