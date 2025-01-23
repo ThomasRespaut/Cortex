@@ -114,6 +114,7 @@ class Cortex:
         self.mistral_model = "ft:open-mistral-nemo:7771e396:20241004:a1df71c2"
 
         self.first_keyword_detection = True  # Détection du premier ok Cortex
+        self.db = Neo4jDatabase()
 
         #Utilisation des différents outils :
         with open("assistant/tools.json", "r") as file:
@@ -133,6 +134,10 @@ class Cortex:
         self.input_mode = input_mode
         self.output_mode = output_mode
 
+
+    def visualiser_database(self):
+        db=Neo4jDatabase()
+        db.visualiser_graph_interactif()
 
     def generate_speech(self, text):
 

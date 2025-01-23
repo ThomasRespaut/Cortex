@@ -199,8 +199,11 @@ def launch_cortex(screen, cortex, screen_width, screen_height):
     # Charger l'image de fond
     background_path = os.path.join("app","images", "backgrounds", "cortex.png")
     try:
+        infoObject = pygame.display.Info()
         background = pygame.image.load(background_path)
-        background = pygame.transform.scale(background, (screen_width, screen_height))
+        background = pygame.transform.scale(background, (infoObject.current_w, infoObject.current_h))
+        screen_width = infoObject.current_w
+        screen_height = infoObject.current_h
     except pygame.error as e:
         print(f"Erreur lors du chargement de l'image de fond : {e}")
         running = False

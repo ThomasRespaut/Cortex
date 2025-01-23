@@ -6,7 +6,9 @@ def launch_calendar(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Calendrier."""
     clock = pygame.time.Clock()
     running = True
-
+    infoObject = pygame.display.Info()
+    screen_width = infoObject.current_w
+    screen_height = infoObject.current_h
     # Charger l'image de fond
     background_path = os.path.join("app", "images", "backgrounds", "calendrier.png")
     try:

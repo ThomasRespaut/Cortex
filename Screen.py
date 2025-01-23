@@ -11,6 +11,7 @@ from app.app_horloge import launch_clock
 from app.app_sante import launch_health
 from app.app_musique import launch_music
 from app.app_cortex import launch_cortex
+from app.app_bdd import launch_bdd
 
 import sys
 import os
@@ -21,7 +22,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # Importer cortex.py
 from cortex import Cortex
 
-cortex = Cortex(input_mode="voice", output_mode="voice")
+
 
 pygame.init()
 
@@ -32,6 +33,11 @@ FPS = 60
 screen_width = 900
 screen_height = 900
 screen = pygame.display.set_mode((screen_width, screen_height))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+infoObject = pygame.display.Info()
+screen_width = infoObject.current_w
+screen_height = infoObject.current_h
+cortex = Cortex(input_mode="voice", output_mode="voice")
 pygame.display.set_caption("Cortex")
 #bg = pygame.image.load("images/backgrounds/background.png").convert()
 #bg = pygame.transform.scale(bg, (screen_width, screen_height))
@@ -193,6 +199,8 @@ def launch_app(app_name):
         launch_messaging(screen, cortex, screen_width, screen_height)
     elif app_name == "Jeux":
         launch_game(screen, cortex, screen_width, screen_height)
+    elif app_name == "BDD":
+        launch_bdd(screen, cortex, screen_width, screen_height)
     else:
         print(f"L'application {app_name} n'est pas encore implémentée.")
 
@@ -216,104 +224,107 @@ def check_app_click(mouse_pos):
 # Fonction principale
 def main():
     start_prog = time.time()
-    global dragging, drag_start_pos, app_launched, current_app, mouse_start_pos, mouse_pos, last_mouse_update_time
+    global dragging, drag_start_pos, app_launched, current_app, touch_start_pos, touch_pos
+
+    # Initialize touch-related variables
+    touch_start_pos = None
+    drag_start_pos = None  # Initialize drag_start_pos
+    touch_pos = (0, 0)
+    last_touch_update_time = 0
+    touch_update_interval = 16  # roughly 60 FPS update interval
+
     clock = pygame.time.Clock()
     running = True
 
+    # Touch-specific variables
+    touch_start_time = 0
+    tap_threshold = 0.3  # seconds
+    drag_threshold = 10  # pixels
 
     # Générer les applications
     generate_applications(28)
 
     while running:
-
         clock.tick(FPS)
 
-        start_time = time.time()  # Temps de début
         current_time = pygame.time.get_ticks()
-        end_time = time.time()
-        temps_fonctions.loc[0,'current_time'] += end_time - start_time
-        if current_time - last_mouse_update_time >= mouse_update_interval:
-            mouse_pos = pygame.mouse.get_pos()
-            last_mouse_update_time = current_time
-        start_time = time.time()
+
+        # Update touch position
+        if current_time - last_touch_update_time >= touch_update_interval:
+            touch_pos = pygame.mouse.get_pos()
+            last_touch_update_time = current_time
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-            # Gestion du clic souris pour commencer le glissement
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                start_time_drag = time.time()
-                mouse_start_pos = mouse_pos
-                dragging = True
-                drag_start_pos = mouse_pos
+            # Touch down event (equivalent to mouse button down)
+            elif event.type == pygame.FINGERDOWN:
+                touch_pos = pygame.mouse.get_pos()
+                touch_start_pos = touch_pos
+                drag_start_pos = touch_pos  # Set drag_start_pos
+                touch_start_time = time.time()
+                dragging = False
 
-            elif event.type == pygame.MOUSEMOTION:
-                if dragging is True:
-                    current_pos = mouse_pos
-                    dx = current_pos[0] - drag_start_pos[0]
-                    dy = current_pos[1] - drag_start_pos[1]
+            # Touch move event
+            elif event.type == pygame.FINGERMOTION:
+                if touch_start_pos is not None and drag_start_pos is not None:
+                    dx = touch_pos[0] - drag_start_pos[0]
+                    dy = touch_pos[1] - drag_start_pos[1]
 
-                    # Si la souris a bougé au-delà du seuil, on considère que c'est un glissement
-                    if abs(dx) > mouse_movement_threshold or abs(dy) > mouse_movement_threshold:
+                    # Check if movement exceeds drag threshold
+                    if abs(dx) > drag_threshold or abs(dy) > drag_threshold:
                         dragging = True
-                        # Mettre à jour la position des applications si on glisse
+                        # Move applications
                         for app in apps:
                             app[0] += dx
                             app[1] += dy
 
-                        # Mettre à jour la position de départ du drag
-                        drag_start_pos = current_pos
+                        # Update drag start position
+                        drag_start_pos = touch_pos
 
+            # Touch up event (equivalent to mouse button up)
+            elif event.type == pygame.FINGERUP:
+                touch_end_time = time.time()
+                touch_end_pos = touch_pos
 
-            # Relâcher la souris pour arrêter le glissement
-            elif event.type == pygame.MOUSEBUTTONUP:
-                end_time_drag = time.time()
+                # Determine if it's a tap or drag
+                if touch_start_pos is not None:
+                    dx = touch_end_pos[0] - touch_start_pos[0]
+                    dy = touch_end_pos[1] - touch_start_pos[1]
+
+                    # Check for tap (short duration and small movement)
+                    if (not dragging and
+                            abs(dx) < drag_threshold and
+                            abs(dy) < drag_threshold and
+                            (touch_end_time - touch_start_time) < tap_threshold):
+                        print("Tap detected")
+                        check_app_click(touch_end_pos)
+                    elif dragging:
+                        print("Drag completed")
+
+                # Reset touch variables
                 dragging = False
-                mouse_end_pos = mouse_pos
-                # Si la souris n'a presque pas bougé, considérer que c'est un clic
-                if mouse_start_pos is not None:
-                    dx = mouse_end_pos[0] - mouse_start_pos[0]
-                    dy = mouse_end_pos[1] - mouse_start_pos[1]
-                    #print(f"Position de départ : {drag_start_pos}")
-                    #print(f"Distance parcouru : {abs(dx) + abs(dy)}")
-                    if abs(dx) < mouse_movement_threshold and abs(dy) < mouse_movement_threshold and (end_time_drag-start_time_drag) <0.5 :
-                        print("click")
-                        print(f"time clicked {end_time_drag-start_time_drag}")
-                        check_app_click(mouse_end_pos)
-                    else :
-                        print("drag")
+                touch_start_pos = None
+                drag_start_pos = None
 
-                # Réinitialiser les variables de glissement et de clic
-                dragging = False
-                #mouse_start_pos = None
-        end_time = time.time()
-        temps_fonctions.loc[0,'boucle_events'] += end_time - start_time
-        start_time = time.time()
+        # Handle any ongoing dragging
+        if drag_start_pos is not None:
+            handle_dragging(touch_pos)
 
-        # Si on fait glisser, déplacer les applications
-        handle_dragging(mouse_pos)
-
-        #screen.blit(bg,(0, 0))
+        # Render screen
         screen.fill(WHITE)
         draw_applications()
 
-        start_time = time.time()
-        pygame.display.update() #pygame.display.flip()
-        end_time = time.time()
-        temps_fonctions.loc[0, 'pygame.display.flip()'] += end_time - start_time
-        #clock.tick(60)
-        #print(current_app)
+        pygame.display.update()
 
-        end_time = time.time()
-        temps_fonctions.loc[0,'fonctions_de_fin'] += end_time - start_time
-        if((end_time - start_time) >time_limit) :
-            print(f"main while {end_time - start_time}")
     pygame.quit()
+
+    # Performance tracking (unchanged from original)
     end_time = time.time()
     temps_fonctions.loc[0, 'total'] += end_time - start_prog
-    for i in temps_fonctions :
+    for i in temps_fonctions:
         print(f'{i} : {temps_fonctions[i].iloc[0]}')
-
 
 
 # Lancer l'application
