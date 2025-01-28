@@ -359,7 +359,7 @@ class GoogleAssistant:
                     model="ft:gpt-4o-mini-2024-07-18:personal:t-o-m:9w6Mhcn0",
                     messages=[
                         {"role": "system",
-                         "content": "Tu es TOM, un assistant polyvalent qui aide les utilisateurs à gérer leurs mails et bien d'autres choses."},
+                         "content": "Tu es Cortex, un assistant polyvalent qui aide les utilisateurs à gérer leurs mails et bien d'autres choses."},
                         {"role": "user", "content": prompt}
                     ],
                     max_tokens=150
@@ -408,7 +408,7 @@ class GoogleAssistant:
                     model="ft:gpt-4o-mini-2024-07-18:personal:t-o-m:9w6Mhcn0",
                     messages=[
                         {"role": "system",
-                         "content": "Tu es TOM, un assistant polyvalent qui aide les utilisateurs à gérer leurs mails et bien d'autres choses."},
+                         "content": "Tu es Cortex, un assistant polyvalent qui aide les utilisateurs à gérer leurs mails et bien d'autres choses."},
                         {"role": "user", "content": prompt}
                     ],
                     max_tokens=150
@@ -461,7 +461,7 @@ class GoogleAssistant:
             "Voici l'email :\n"
             f"Expéditeur : {email.get('sender', 'Inconnu')}\n"
             f"Destinataire : {email.get('recipient', 'Inconnu')}\n"
-            f"Objet : {email.get('subject', 'Pas d\'objet')}\n"
+            f"Objet : {email.get('subject', 'Pas d objet')}\n"
             f"Date : {email.get('date', 'Inconnue')}\n\n"
             f"Corps : {email['body']}\n"
         )

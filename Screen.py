@@ -12,6 +12,7 @@ from app.app_sante import launch_health
 from app.app_musique import launch_music
 from app.app_cortex import launch_cortex
 from app.app_bdd import launch_bdd
+from app.app_reglage import launch_reglage
 
 import sys
 import os
@@ -201,6 +202,8 @@ def launch_app(app_name):
         launch_game(screen, cortex, screen_width, screen_height)
     elif app_name == "BDD":
         launch_bdd(screen, cortex, screen_width, screen_height)
+    elif app_name == "Réglage":
+        launch_reglage(screen, cortex, screen_width, screen_height)
     else:
         print(f"L'application {app_name} n'est pas encore implémentée.")
 
@@ -224,19 +227,21 @@ def check_app_click(mouse_pos):
 # Fonction principale
 def main():
     start_prog = time.time()
-    global dragging, drag_start_pos, app_launched, current_app, touch_start_pos, touch_pos
+    global dragging, drag_start_pos, app_launched, current_app, touch_start_pos, touch_pos, mouse_dragging
 
-    # Initialize touch-related variables
+    # Initialize touch and mouse variables
     touch_start_pos = None
-    drag_start_pos = None  # Initialize drag_start_pos
+    drag_start_pos = None
     touch_pos = (0, 0)
     last_touch_update_time = 0
     touch_update_interval = 16  # roughly 60 FPS update interval
+    mouse_dragging = False
+    mouse_start_pos = None
 
     clock = pygame.time.Clock()
     running = True
 
-    # Touch-specific variables
+    # Touch and mouse specific variables
     touch_start_time = 0
     tap_threshold = 0.3  # seconds
     drag_threshold = 10  # pixels
@@ -258,42 +263,72 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-            # Touch down event (equivalent to mouse button down)
+            # Mouse events
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left click
+                    mouse_start_pos = pygame.mouse.get_pos()
+                    drag_start_pos = mouse_start_pos
+                    mouse_dragging = True
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:  # Left click release
+                    mouse_end_pos = pygame.mouse.get_pos()
+
+                    if mouse_start_pos is not None:
+                        dx = mouse_end_pos[0] - mouse_start_pos[0]
+                        dy = mouse_end_pos[1] - mouse_start_pos[1]
+
+                        # Check for click (small movement)
+                        if abs(dx) < drag_threshold and abs(dy) < drag_threshold:
+                            print("Click detected")
+                            check_app_click(mouse_end_pos)
+
+                    mouse_dragging = False
+                    mouse_start_pos = None
+                    drag_start_pos = None
+
+            elif event.type == pygame.MOUSEMOTION:
+                if mouse_dragging and drag_start_pos is not None:
+                    current_pos = pygame.mouse.get_pos()
+                    dx = current_pos[0] - drag_start_pos[0]
+                    dy = current_pos[1] - drag_start_pos[1]
+
+                    # Move applications
+                    for app in apps:
+                        app[0] += dx
+                        app[1] += dy
+
+                    drag_start_pos = current_pos
+
+            # Touch events
             elif event.type == pygame.FINGERDOWN:
                 touch_pos = pygame.mouse.get_pos()
                 touch_start_pos = touch_pos
-                drag_start_pos = touch_pos  # Set drag_start_pos
+                drag_start_pos = touch_pos
                 touch_start_time = time.time()
                 dragging = False
 
-            # Touch move event
             elif event.type == pygame.FINGERMOTION:
                 if touch_start_pos is not None and drag_start_pos is not None:
                     dx = touch_pos[0] - drag_start_pos[0]
                     dy = touch_pos[1] - drag_start_pos[1]
 
-                    # Check if movement exceeds drag threshold
                     if abs(dx) > drag_threshold or abs(dy) > drag_threshold:
                         dragging = True
-                        # Move applications
                         for app in apps:
                             app[0] += dx
                             app[1] += dy
 
-                        # Update drag start position
                         drag_start_pos = touch_pos
 
-            # Touch up event (equivalent to mouse button up)
             elif event.type == pygame.FINGERUP:
                 touch_end_time = time.time()
                 touch_end_pos = touch_pos
 
-                # Determine if it's a tap or drag
                 if touch_start_pos is not None:
                     dx = touch_end_pos[0] - touch_start_pos[0]
                     dy = touch_end_pos[1] - touch_start_pos[1]
 
-                    # Check for tap (short duration and small movement)
                     if (not dragging and
                             abs(dx) < drag_threshold and
                             abs(dy) < drag_threshold and
@@ -303,14 +338,13 @@ def main():
                     elif dragging:
                         print("Drag completed")
 
-                # Reset touch variables
                 dragging = False
                 touch_start_pos = None
                 drag_start_pos = None
 
-        # Handle any ongoing dragging
+        # Handle any ongoing dragging (touch or mouse)
         if drag_start_pos is not None:
-            handle_dragging(touch_pos)
+            handle_dragging(touch_pos if dragging else pygame.mouse.get_pos())
 
         # Render screen
         screen.fill(WHITE)
@@ -320,7 +354,7 @@ def main():
 
     pygame.quit()
 
-    # Performance tracking (unchanged from original)
+    # Performance tracking
     end_time = time.time()
     temps_fonctions.loc[0, 'total'] += end_time - start_prog
     for i in temps_fonctions:

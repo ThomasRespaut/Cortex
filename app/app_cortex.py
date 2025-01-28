@@ -95,12 +95,13 @@ def conversation(cortex, screen, background, boutton_1, screen_width, screen_hei
                         cortex.play_audio(audio_stream)
                     else:
                         print("Impossible de générer l'audio.")
+            running_conversation=False
 
         print("-" * 100)
 
 def discussion(screen, text, cortex, background, boutton_1, screen_width, screen_height, pos, boutton_quitter) :
     conversation(cortex, screen, background, (boutton_1[0], boutton_1[1], boutton_1[2]), screen_width, screen_height, boutton_quitter)
-    display_text_letter_by_letter(screen, text, screen_width, screen_height, pos,  boutton_quitter, delay = 50)
+    #display_text_letter_by_letter(screen, text, screen_width, screen_height, pos,  boutton_quitter, delay = 50)
 
 
 def display_text_letter_by_letter(screen, text, screen_width, screen_height, pos, boutton_quitter, delay=250, clock=None, text_size= 50):
@@ -237,8 +238,7 @@ def launch_cortex(screen, cortex, screen_width, screen_height):
     text = "Comment puis-je vous aider, Que Puis-je faire pour vous ? "
 
     # Utiliser une variable pour savoir si on doit continuer l'animation du texte
-    displaying_text = True
-    rendered_text = ""
+    initialization = True
 
 
     while running:
@@ -252,14 +252,41 @@ def launch_cortex(screen, cortex, screen_width, screen_height):
                     running = False
                 if boutton_1.collidepoint(event.pos):
                     screen.blit(background, (0, 0))
-                    discussion(screen, "Démarrage de la discussion", cortex, background, (sprite_1,boutton_1_centre,boutton_1), screen_width, screen_height, (screen_width // 2, screen_height // 2), boutton_quitter)
-            else:
-                displaying_text = False  # Arrêter l'animation si une autre action est effectuée
+                    discussion(screen, "", cortex, background, (sprite_1,boutton_1_centre,boutton_1), screen_width, screen_height, (screen_width // 2, screen_height // 2), boutton_quitter)
+                    initialization = False
+        if initialization == False :
+            background_path = os.path.join("app", "images", "backgrounds", "cortex.png")
+            try:
+                infoObject = pygame.display.Info()
+                background = pygame.image.load(background_path)
+                background = pygame.transform.scale(background, (infoObject.current_w, infoObject.current_h))
+                screen_width = infoObject.current_w
+                screen_height = infoObject.current_h
+            except pygame.error as e:
+                print(f"Erreur lors du chargement de l'image de fond : {e}")
+                running = False
 
-        if displaying_text:
-            # Afficher le texte lettre par lettre
-            display_text_letter_by_letter(screen, text, screen_width, screen_height,(screen_width // 2, screen_height // 2), boutton_quitter, delay=10, clock=clock)
-            displaying_text = False  # Texte entièrement affiché, arrêter l'animation
+            screen.blit(background, (0, 0))
 
+            # Bouton Quitter
+            boutton_quitter = pygame.Rect(screen_width / 2 - 75, 0, 150, 50)
+            border_color = (0, 200, 0)
+            border_width = 3
+            # pygame.draw.rect(screen, border_color, boutton_quitter, width=border_width)
+
+            # Bouton 1
+            boutton_1_centre = (screen_width / 2, screen_height / 5 * 4)
+            boutton_1_diam = 100
+            border_color = (0, 200, 0)
+            border_width = 3
+            boutton_1 = pygame.Rect(boutton_1_centre[0] - boutton_1_diam, boutton_1_centre[1] - boutton_1_diam,
+                                    boutton_1_diam * 2, boutton_1_diam * 2)
+            # pygame.draw.rect(screen, border_color, boutton_1, width=border_width)
+            # pygame.draw.circle(screen, border_color, boutton_1_centre, boutton_1_diam, width=border_width)
+            sprite_1 = pygame.image.load("app/images/cortex_sprite/sprite1.png")
+            sprite_1 = pygame.transform.scale(sprite_1, (boutton_1_diam * 2, boutton_1_diam * 2))
+            boutton_1_centre = (boutton_1_centre[0] - boutton_1_diam, boutton_1_centre[1] - boutton_1_diam)
+            screen.blit(sprite_1, boutton_1_centre)
+            initialization = True
         pygame.display.flip()
         clock.tick(60)
