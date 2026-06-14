@@ -227,6 +227,53 @@ class RepositoryHygieneTests(unittest.TestCase):
         self.assertIn("google_secret", assistant.error_message)
         from_client_secrets_file.assert_not_called()
 
+    def test_google_assistant_handles_invalid_token_file(self):
+        required_modules = [
+            "google_auth_oauthlib",
+            "googleapiclient",
+            "mistralai",
+            "openai",
+        ]
+        missing_modules = [
+            name for name in required_modules
+            if importlib.util.find_spec(name) is None
+        ]
+        if missing_modules:
+            self.skipTest(
+                "Dépendances Google/OpenAI absentes: "
+                + ", ".join(missing_modules)
+            )
+
+        import assistant.google.google_assistant as google_assistant
+
+        token_file = Path("tests/tmp_invalid_google_token.json")
+        token_file.write_text("{invalid json", encoding="utf-8")
+        try:
+            with (
+                mock.patch.object(
+                    google_assistant,
+                    "TOKEN_FILE",
+                    str(token_file),
+                ),
+                mock.patch.object(
+                    google_assistant,
+                    "CREDENTIALS_FILE",
+                    "tests/missing_google_secret.json",
+                ),
+                mock.patch.object(
+                    google_assistant.InstalledAppFlow,
+                    "from_client_secrets_file",
+                ) as from_client_secrets_file,
+            ):
+                assistant = google_assistant.GoogleAssistant()
+        finally:
+            token_file.unlink(missing_ok=True)
+
+        self.assertIsNone(assistant.creds)
+        self.assertIsNone(assistant.gmail_service)
+        self.assertIn("google_secret", assistant.error_message)
+        from_client_secrets_file.assert_not_called()
+
     def test_apple_assistant_skips_login_without_credentials(self):
         if importlib.util.find_spec("pyicloud") is None:
             self.skipTest("Dépendance pyicloud absente.")
@@ -518,6 +565,50 @@ class RepositoryHygieneTests(unittest.TestCase):
             "Authentification Spotify interactive indisponible.",
             assistant.error_message,
         )
+        input_prompt.assert_not_called()
+
+    def test_spotify_assistant_handles_invalid_token_file(self):
+        if importlib.util.find_spec("spotipy") is None:
+            self.skipTest("Dépendance spotipy absente.")
+
+        import assistant.spotify.spotify_assistant as spotify_assistant
+
+        class FakeOAuth:
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+
+            def is_token_expired(self, token_info):
+                return True
+
+        token_file = Path("tests/tmp_invalid_spotify_token.json")
+        token_file.write_text("{invalid json", encoding="utf-8")
+        try:
+            with (
+                mock.patch.object(spotify_assistant, "SPOTIPY_CLIENT_ID", "client"),
+                mock.patch.object(
+                    spotify_assistant,
+                    "SPOTIPY_CLIENT_SECRET",
+                    "secret",
+                ),
+                mock.patch.object(
+                    spotify_assistant,
+                    "TOKEN_FILE",
+                    str(token_file),
+                ),
+                mock.patch.object(spotify_assistant, "SpotifyOAuth", FakeOAuth),
+                mock.patch.object(
+                    spotify_assistant.sys.stdin,
+                    "isatty",
+                    return_value=False,
+                ),
+                mock.patch("builtins.input") as input_prompt,
+            ):
+                assistant = spotify_assistant.SpotifyAssistant()
+        finally:
+            token_file.unlink(missing_ok=True)
+
+        self.assertIsNone(assistant.sp)
+        self.assertIn("interactive indisponible", assistant.error_message)
         input_prompt.assert_not_called()
 
 

@@ -46,8 +46,12 @@ class SpotifyAssistant:
 
         token_info = None
         if os.path.exists(TOKEN_FILE):
-            with open(TOKEN_FILE, "r") as f:
-                token_info = json.load(f)
+            try:
+                with open(TOKEN_FILE, "r") as f:
+                    token_info = json.load(f)
+            except (OSError, json.JSONDecodeError) as error:
+                self.error_message = f"Token Spotify invalide: {error}"
+                token_info = None
 
         if not token_info or self.sp_oauth.is_token_expired(token_info):
             if token_info and 'refresh_token' in token_info:

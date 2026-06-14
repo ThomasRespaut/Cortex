@@ -45,9 +45,13 @@ class GoogleAssistant:
 
     def load_token(self):
         if os.path.exists(TOKEN_FILE):
-            with open(TOKEN_FILE, 'r') as token_file:
-                token_data = json.load(token_file)
-                return self.from_token_info(token_data)
+            try:
+                with open(TOKEN_FILE, 'r') as token_file:
+                    token_data = json.load(token_file)
+                    return self.from_token_info(token_data)
+            except (OSError, json.JSONDecodeError, KeyError, ValueError) as error:
+                self.error_message = f"Token Google invalide: {error}"
+                return None
         return None
 
     def from_token_info(self, token_info):
