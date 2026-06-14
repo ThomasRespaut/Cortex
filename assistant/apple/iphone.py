@@ -12,6 +12,12 @@ class AppleAssistant:
         self.password = os.getenv("apple_password")
         self.maps_api_key = os.getenv("MAPS_API_KEY")
         self.openweathermap_api_key = os.getenv("OPENWEATHERMAP_API_KEY")
+        self.client = None
+        self.error_message = ""
+
+        if not self.username or not self.password:
+            self.error_message = "Identifiants iCloud non configurés."
+            return
 
         try:
             self.client = PyiCloudService(self.username, self.password)

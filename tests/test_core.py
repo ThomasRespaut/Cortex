@@ -182,6 +182,29 @@ class RepositoryHygieneTests(unittest.TestCase):
         )
         self.assertEqual("", result.stderr)
 
+    def test_apple_assistant_skips_login_without_credentials(self):
+        if importlib.util.find_spec("pyicloud") is None:
+            self.skipTest("Dépendance pyicloud absente.")
+
+        environment = os.environ.copy()
+        environment["apple_username"] = ""
+        environment["apple_password"] = ""
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "from assistant.apple.iphone import AppleAssistant; "
+                "assistant = AppleAssistant(); "
+                "assert assistant.client is None; "
+                "assert 'non configurés' in assistant.error_message",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            env=environment,
+        )
+        self.assertEqual("", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
