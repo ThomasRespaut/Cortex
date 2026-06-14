@@ -1,3 +1,4 @@
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -100,6 +101,36 @@ class ToolingDefaultsTests(unittest.TestCase):
             ),
             expected,
         )
+
+
+class RepositoryHygieneTests(unittest.TestCase):
+    def test_generated_and_sensitive_files_are_not_tracked(self):
+        result = subprocess.run(
+            ["git", "ls-files"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        tracked_files = [path.replace("\\", "/") for path in result.stdout.splitlines()]
+        forbidden = []
+
+        for path in tracked_files:
+            path_with_slashes = f"/{path}"
+            name = Path(path).name
+            if (
+                path == ".env"
+                or path == ".cache"
+                or path == "oauth2/.cache"
+                or path == "output.wav"
+                or path.startswith("logs/")
+                or path.endswith("/token_info.json")
+                or path == "token_info.json"
+                or "/__pycache__/" in path_with_slashes
+                or name.endswith((".pyc", ".pyo", ".log"))
+            ):
+                forbidden.append(path)
+
+        self.assertEqual([], forbidden)
 
 
 if __name__ == "__main__":

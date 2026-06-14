@@ -22,6 +22,7 @@ venv/
 # Generated files
 output.wav
 *.log
+logs/
 dist/
 
 # Local models and archives
