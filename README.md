@@ -69,7 +69,11 @@ externe :
 
 ```bash
 python -m unittest discover -s tests -v
+python tools\validate_finetune_dataset.py --dataset-dir training\finetune_cortex_v3
 ```
+
+Ces vérifications sont aussi exécutées par GitHub Actions sur les pull requests
+et les pushes vers `master` ou `codex/**`.
 
 Pour mesurer rapidement les réponses du modèle local sans lancer l'interface :
 

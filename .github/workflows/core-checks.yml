@@ -1,0 +1,31 @@
+name: Core checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - "codex/**"
+
+jobs:
+  local-core:
+    name: Local core tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile local Python files
+        run: python -m compileall -q function_calling.py model_loader.py tools tests
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Validate fine-tuning dataset
+        run: python tools/validate_finetune_dataset.py --dataset-dir training/finetune_cortex_v3
