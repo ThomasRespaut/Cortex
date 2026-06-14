@@ -611,6 +611,67 @@ class RepositoryHygieneTests(unittest.TestCase):
         self.assertIn("interactive indisponible", assistant.error_message)
         input_prompt.assert_not_called()
 
+    def test_spotify_assistant_reports_refresh_failure(self):
+        if importlib.util.find_spec("spotipy") is None:
+            self.skipTest("Dépendance spotipy absente.")
+
+        import assistant.spotify.spotify_assistant as spotify_assistant
+
+        class FakeOAuth:
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+
+            def is_token_expired(self, token_info):
+                return True
+
+            def refresh_access_token(self, refresh_token):
+                raise RuntimeError("refresh failed")
+
+        token_file = Path("tests/tmp_expired_spotify_token.json")
+        token_file.write_text(
+            '{"refresh_token": "refresh-placeholder"}',
+            encoding="utf-8",
+        )
+        try:
+            with (
+                mock.patch.object(spotify_assistant, "SPOTIPY_CLIENT_ID", "client"),
+                mock.patch.object(
+                    spotify_assistant,
+                    "SPOTIPY_CLIENT_SECRET",
+                    "secret",
+                ),
+                mock.patch.object(
+                    spotify_assistant,
+                    "TOKEN_FILE",
+                    str(token_file),
+                ),
+                mock.patch.object(spotify_assistant, "SpotifyOAuth", FakeOAuth),
+            ):
+                assistant = spotify_assistant.SpotifyAssistant()
+        finally:
+            token_file.unlink(missing_ok=True)
+
+        self.assertIsNone(assistant.sp)
+        self.assertIn("rafraîchissement Spotify", assistant.error_message)
+
+    def test_spotify_assistant_reports_token_without_access_token(self):
+        if importlib.util.find_spec("spotipy") is None:
+            self.skipTest("Dépendance spotipy absente.")
+
+        import assistant.spotify.spotify_assistant as spotify_assistant
+
+        assistant = spotify_assistant.SpotifyAssistant.__new__(
+            spotify_assistant.SpotifyAssistant
+        )
+        assistant.token_info = {"refresh_token": "refresh-placeholder"}
+        assistant.error_message = ""
+
+        self.assertIsNone(assistant._build_spotify_client())
+        self.assertEqual(
+            "Token Spotify sans access_token.",
+            assistant.error_message,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

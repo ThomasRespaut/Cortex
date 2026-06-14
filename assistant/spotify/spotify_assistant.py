@@ -38,7 +38,18 @@ class SpotifyAssistant:
             scope=SPOTIPY_SCOPE
         )
         self.token_info = self.get_token()
-        self.sp = spotipy.Spotify(auth=self.token_info['access_token']) if self.token_info else None
+        self.sp = self._build_spotify_client()
+
+    def _build_spotify_client(self):
+        if not self.token_info:
+            return None
+
+        access_token = self.token_info.get("access_token")
+        if not access_token:
+            self.error_message = "Token Spotify sans access_token."
+            return None
+
+        return spotipy.Spotify(auth=access_token)
 
     def get_token(self):
         if not self.sp_oauth:
@@ -55,7 +66,15 @@ class SpotifyAssistant:
 
         if not token_info or self.sp_oauth.is_token_expired(token_info):
             if token_info and 'refresh_token' in token_info:
-                token_info = self.sp_oauth.refresh_access_token(token_info['refresh_token'])
+                try:
+                    token_info = self.sp_oauth.refresh_access_token(
+                        token_info['refresh_token']
+                    )
+                except Exception as error:
+                    self.error_message = (
+                        f"Erreur lors du rafraîchissement Spotify: {error}"
+                    )
+                    return None
             else:
                 if not sys.stdin.isatty():
                     self.error_message = (
@@ -78,7 +97,7 @@ class SpotifyAssistant:
             return None
         if not self.sp:
             self.token_info = self.get_token()
-            self.sp = spotipy.Spotify(auth=self.token_info['access_token']) if self.token_info else None
+            self.sp = self._build_spotify_client()
         return self.sp
 
     def play_track(self, track_name):
