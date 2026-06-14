@@ -1,4 +1,7 @@
+import importlib.util
+import os
 import subprocess
+import sys
 import unittest
 from pathlib import Path
 
@@ -145,6 +148,39 @@ class RepositoryHygieneTests(unittest.TestCase):
                 forbidden.append(path)
 
         self.assertEqual([], forbidden)
+
+    def test_google_assistant_imports_without_openai_key(self):
+        required_modules = [
+            "google_auth_oauthlib",
+            "googleapiclient",
+            "mistralai",
+            "openai",
+        ]
+        missing_modules = [
+            name for name in required_modules
+            if importlib.util.find_spec(name) is None
+        ]
+        if missing_modules:
+            self.skipTest(
+                "Dépendances Google/OpenAI absentes: "
+                + ", ".join(missing_modules)
+            )
+
+        environment = os.environ.copy()
+        environment["OPENAI_API_KEY"] = ""
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "import assistant.google.google_assistant as module; "
+                "assert module.client is None",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            env=environment,
+        )
+        self.assertEqual("", result.stderr)
 
 
 if __name__ == "__main__":

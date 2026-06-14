@@ -19,10 +19,16 @@ from mistralai import Mistral
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 mistral_api_key = os.getenv("MISTRAL_API_KEY")
 mistral_client = Mistral(api_key=mistral_api_key) if mistral_api_key else None
+
+
+def create_chat_completion(**kwargs):
+    if client is None:
+        raise RuntimeError("OPENAI_API_KEY n'est pas configurée.")
+    return client.chat.completions.create(**kwargs)
 
 
 # Chemin vers les fichiers credentials et token
@@ -355,7 +361,7 @@ class GoogleAssistant:
                     f"Fournis un résumé de cet email en tenant compte du sujet et du corps."
                 )
 
-                response = client.chat.completions.create(
+                response = create_chat_completion(
                     model="ft:gpt-4o-mini-2024-07-18:personal:t-o-m:9w6Mhcn0",
                     messages=[
                         {"role": "system",
@@ -404,7 +410,7 @@ class GoogleAssistant:
                     f"Fournis un résumé de cet email en tenant compte du sujet et du corps."
                 )
 
-                response = client.chat.completions.create(
+                response = create_chat_completion(
                     model="ft:gpt-4o-mini-2024-07-18:personal:t-o-m:9w6Mhcn0",
                     messages=[
                         {"role": "system",
@@ -441,6 +447,18 @@ class GoogleAssistant:
 
     def analyze_email(self, email):
         """Analyse un email pour le catégoriser, attribuer un score de priorité, et extraire les tâches."""
+        if client is None:
+            return {
+                "category": "Inconnu",
+                "priority_score": 0,
+                "tasks": [],
+                "meetings": [],
+                "sender": email.get('sender', 'Inconnu'),
+                "recipient": email.get('recipient', 'Inconnu'),
+                "subject": email.get('subject', 'Pas d\'objet'),
+                "date": email.get('date', 'Inconnue')
+            }
+
         prompt = (
             "Tu es un assistant IA nommé TOM qui aide les utilisateurs à gérer leurs emails. "
             "Analyse l'email suivant et retourne un objet JSON avec les clés suivantes : "
@@ -466,7 +484,7 @@ class GoogleAssistant:
             f"Corps : {email['body']}\n"
         )
 
-        response = client.chat.completions.create(
+        response = create_chat_completion(
             model="ft:gpt-4o-mini-2024-07-18:personal:t-o-m:9w6Mhcn0",
             messages=[
                 {"role": "system", "content": "Tu es TOM, un assistant polyvalent qui aide les utilisateurs à gérer leurs mails et bien d'autres choses."},
@@ -758,7 +776,7 @@ class GoogleAssistant:
             prompt += "Contenu de l'email :"
 
             # Utiliser GPT pour générer le corps de l'email
-            response = client.chat.completions.create(
+            response = create_chat_completion(
                 model="ft:gpt-4o-mini-2024-07-18:personal:t-o-m:9w6Mhcn0",
                 messages=[
                     {"role": "system", "content": "Tu es un assistant IA qui aide à rédiger des emails professionnels."},
@@ -796,6 +814,9 @@ class GoogleAssistant:
 
         except HttpError as error:
             result.append(f"Une erreur s'est produite lors de la création du brouillon : {error}")
+            return result
+        except RuntimeError as error:
+            result.append(str(error))
             return result
 
     def display_draft(self, draft_id, user_id='me'):
@@ -882,7 +903,7 @@ class GoogleAssistant:
             prompt += "Réponse :"
 
             # Utiliser GPT pour générer le corps de la réponse
-            response = client.chat.completions.create(
+            response = create_chat_completion(
                 model="ft:gpt-4o-mini-2024-07-18:personal:t-o-m:9w6Mhcn0",
                 messages=[
                     {"role": "system", "content": "Tu es un assistant IA qui aide à rédiger des emails professionnels."},
@@ -920,6 +941,9 @@ class GoogleAssistant:
 
         except HttpError as error:
             result.append(f"Une erreur s'est produite lors de la création du brouillon : {error}")
+            return result
+        except RuntimeError as error:
+            result.append(str(error))
             return result
 
     def send_draft(self, draft_id, content=None, user_id='me'):
