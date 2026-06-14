@@ -205,6 +205,28 @@ class RepositoryHygieneTests(unittest.TestCase):
         )
         self.assertEqual("", result.stderr)
 
+    def test_idfm_assistant_reports_missing_api_key(self):
+        if importlib.util.find_spec("requests") is None:
+            self.skipTest("Dépendance requests absente.")
+
+        environment = os.environ.copy()
+        environment["IDFM_API_KEY"] = ""
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "from assistant.ratp.ratp_assistant import IDFMAssistant; "
+                "assistant = IDFMAssistant(); "
+                "assert assistant.get_coords('Paris') is None; "
+                "assert assistant.calculate_route('Paris', 'Lyon') == assistant.error_message",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            env=environment,
+        )
+        self.assertEqual("", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -10,10 +10,16 @@ load_dotenv()
 class IDFMAssistant:
     def __init__(self):
         self.idfm_api_key = os.getenv('IDFM_API_KEY')
+        self.error_message = (
+            "" if self.idfm_api_key else "IDFM_API_KEY n'est pas configurée."
+        )
 
 
     # Fonction pour obtenir les coordonnées GPS d'une ville donnée
     def get_coords(self,city_name):
+        if not self.idfm_api_key:
+            return None
+
         url_places = "https://prim.iledefrance-mobilites.fr/marketplace/v2/navitia/places"
 
         # Paramètres de la requête
@@ -59,6 +65,9 @@ class IDFMAssistant:
     from datetime import datetime
 
     def calculate_route(self, from_city, to_city):
+        if not self.idfm_api_key:
+            return self.error_message
+
         # Récupérer les coordonnées GPS des villes
         from_coords = self.get_coords(from_city)
         to_coords = self.get_coords(to_city)
