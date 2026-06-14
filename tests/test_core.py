@@ -51,6 +51,20 @@ class ToolCallTests(unittest.TestCase):
         )
         self.assertEqual(result, 7)
 
+    def test_execute_tool_ignores_unexpected_arguments(self):
+        result = execute_tool(
+            "[add left=2 right=5 unused='ignored']",
+            tools={"add": lambda left, right: left + right},
+        )
+        self.assertEqual(result, 7)
+
+    def test_execute_tool_still_reports_missing_required_arguments(self):
+        result = execute_tool(
+            "[add left=2]",
+            tools={"add": lambda left, right: left + right},
+        )
+        self.assertIn("Arguments invalides pour l'outil 'add'", result)
+
     def test_execute_tool_maps_legacy_music_alias(self):
         result = execute_tool(
             "[play_music genre='pop']",

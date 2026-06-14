@@ -1,4 +1,5 @@
 import importlib
+import inspect
 import json
 import shlex
 from functools import lru_cache
@@ -110,6 +111,35 @@ def _recommend_media(**kwargs):
     return module.recommend_media(**kwargs)
 
 
+def _call_tool(tool, arguments):
+    try:
+        signature = inspect.signature(tool)
+    except (TypeError, ValueError):
+        return tool(**arguments)
+
+    if any(
+        parameter.kind == inspect.Parameter.VAR_KEYWORD
+        for parameter in signature.parameters.values()
+    ):
+        return tool(**arguments)
+
+    accepted_names = {
+        name
+        for name, parameter in signature.parameters.items()
+        if parameter.kind
+        in {
+            inspect.Parameter.POSITIONAL_OR_KEYWORD,
+            inspect.Parameter.KEYWORD_ONLY,
+        }
+    }
+    compatible_arguments = {
+        name: value
+        for name, value in arguments.items()
+        if name in accepted_names
+    }
+    return tool(**compatible_arguments)
+
+
 @lru_cache(maxsize=1)
 def get_tools():
     """Build the registry without authenticating external providers."""
@@ -200,7 +230,7 @@ def execute_tool(response, tools=None):
         return f"Outil '{tool_name}' non reconnu."
 
     try:
-        return tool(**arguments)
+        return _call_tool(tool, arguments)
     except TypeError as error:
         return f"Arguments invalides pour l'outil '{tool_name}': {error}"
     except Exception as error:
