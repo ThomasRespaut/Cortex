@@ -250,6 +250,37 @@ class RepositoryHygieneTests(unittest.TestCase):
         )
         self.assertEqual("", result.stderr)
 
+    def test_apple_assistant_skips_2fa_prompt_when_non_interactive(self):
+        if importlib.util.find_spec("pyicloud") is None:
+            self.skipTest("Dépendance pyicloud absente.")
+
+        import assistant.apple.iphone as iphone
+
+        class FakePyiCloudService:
+            requires_2fa = True
+
+            def __init__(self, username, password):
+                self.username = username
+                self.password = password
+
+        with (
+            mock.patch.object(iphone, "PyiCloudService", FakePyiCloudService),
+            mock.patch.object(iphone.sys.stdin, "isatty", return_value=False),
+            mock.patch.dict(
+                os.environ,
+                {
+                    "apple_username": "user@example.test",
+                    "apple_password": "password-placeholder",
+                },
+            ),
+            mock.patch("builtins.input") as input_prompt,
+        ):
+            assistant = iphone.AppleAssistant()
+
+        self.assertIsNone(assistant.client)
+        self.assertIn("2FA interactive indisponible", assistant.error_message)
+        input_prompt.assert_not_called()
+
     def test_apple_location_skips_maps_without_api_key(self):
         if importlib.util.find_spec("pyicloud") is None:
             self.skipTest("Dépendance pyicloud absente.")

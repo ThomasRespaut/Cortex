@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 from pyicloud import PyiCloudService
 from pyicloud.exceptions import PyiCloudFailedLoginException, PyiCloudAPIResponseException
@@ -26,6 +27,10 @@ class AppleAssistant:
             self.client = PyiCloudService(self.username, self.password)
 
             if self.client.requires_2fa:
+                if not sys.stdin.isatty():
+                    raise ValueError(
+                        "Authentification iCloud 2FA interactive indisponible."
+                    )
                 code = input("Entrez le code reçu : ")
                 result = self.client.validate_2fa_code(code)
                 if not result:
