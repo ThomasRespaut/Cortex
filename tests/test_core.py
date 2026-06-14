@@ -2,6 +2,7 @@ import importlib.util
 import os
 import subprocess
 import sys
+import tempfile
 import unittest
 from unittest import mock
 from pathlib import Path
@@ -121,17 +122,16 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
 
     def test_dataset_validator_reports_malformed_jsonl(self):
-        dataset_dir = Path("tests/tmp_bad_dataset")
-        dataset_dir.mkdir(exist_ok=True)
-        (dataset_dir / "train.jsonl").write_text(
-            "{invalid json\n",
-            encoding="utf-8",
-        )
-        (dataset_dir / "eval.jsonl").write_text(
-            '{"text": 123}\n',
-            encoding="utf-8",
-        )
-        try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            dataset_dir = Path(temp_dir)
+            (dataset_dir / "train.jsonl").write_text(
+                "{invalid json\n",
+                encoding="utf-8",
+            )
+            (dataset_dir / "eval.jsonl").write_text(
+                '{"text": 123}\n',
+                encoding="utf-8",
+            )
             result = subprocess.run(
                 [
                     sys.executable,
@@ -142,10 +142,6 @@ class ToolingDefaultsTests(unittest.TestCase):
                 capture_output=True,
                 text=True,
             )
-        finally:
-            for path in dataset_dir.glob("*"):
-                path.unlink()
-            dataset_dir.rmdir()
 
         self.assertEqual(1, result.returncode)
         self.assertIn("JSON invalide", result.stdout)
@@ -278,9 +274,9 @@ class RepositoryHygieneTests(unittest.TestCase):
 
         import assistant.google.google_assistant as google_assistant
 
-        credentials_file = Path("tests/tmp_google_secret.json")
-        credentials_file.write_text("{}", encoding="utf-8")
-        try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            credentials_file = Path(temp_dir) / "google_secret.json"
+            credentials_file.write_text("{}", encoding="utf-8")
             with (
                 mock.patch.object(
                     google_assistant,
@@ -303,8 +299,6 @@ class RepositoryHygieneTests(unittest.TestCase):
                 ) as from_client_secrets_file,
             ):
                 assistant = google_assistant.GoogleAssistant()
-        finally:
-            credentials_file.unlink(missing_ok=True)
 
         self.assertIsNone(assistant.creds)
         self.assertIsNone(assistant.gmail_service)
@@ -330,9 +324,9 @@ class RepositoryHygieneTests(unittest.TestCase):
 
         import assistant.google.google_assistant as google_assistant
 
-        token_file = Path("tests/tmp_invalid_google_token.json")
-        token_file.write_text("{invalid json", encoding="utf-8")
-        try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            token_file = Path(temp_dir) / "token_google.json"
+            token_file.write_text("{invalid json", encoding="utf-8")
             with (
                 mock.patch.object(
                     google_assistant,
@@ -350,8 +344,6 @@ class RepositoryHygieneTests(unittest.TestCase):
                 ) as from_client_secrets_file,
             ):
                 assistant = google_assistant.GoogleAssistant()
-        finally:
-            token_file.unlink(missing_ok=True)
 
         self.assertIsNone(assistant.creds)
         self.assertIsNone(assistant.gmail_service)
@@ -693,9 +685,9 @@ class RepositoryHygieneTests(unittest.TestCase):
             def is_token_expired(self, token_info):
                 return True
 
-        token_file = Path("tests/tmp_invalid_spotify_token.json")
-        token_file.write_text("{invalid json", encoding="utf-8")
-        try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            token_file = Path(temp_dir) / "token_info.json"
+            token_file.write_text("{invalid json", encoding="utf-8")
             with (
                 mock.patch.object(spotify_assistant, "SPOTIPY_CLIENT_ID", "client"),
                 mock.patch.object(
@@ -717,8 +709,6 @@ class RepositoryHygieneTests(unittest.TestCase):
                 mock.patch("builtins.input") as input_prompt,
             ):
                 assistant = spotify_assistant.SpotifyAssistant()
-        finally:
-            token_file.unlink(missing_ok=True)
 
         self.assertIsNone(assistant.sp)
         self.assertIn("interactive indisponible", assistant.error_message)
@@ -740,12 +730,12 @@ class RepositoryHygieneTests(unittest.TestCase):
             def refresh_access_token(self, refresh_token):
                 raise RuntimeError("refresh failed")
 
-        token_file = Path("tests/tmp_expired_spotify_token.json")
-        token_file.write_text(
-            '{"refresh_token": "refresh-placeholder"}',
-            encoding="utf-8",
-        )
-        try:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            token_file = Path(temp_dir) / "token_info.json"
+            token_file.write_text(
+                '{"refresh_token": "refresh-placeholder"}',
+                encoding="utf-8",
+            )
             with (
                 mock.patch.object(spotify_assistant, "SPOTIPY_CLIENT_ID", "client"),
                 mock.patch.object(
@@ -761,8 +751,6 @@ class RepositoryHygieneTests(unittest.TestCase):
                 mock.patch.object(spotify_assistant, "SpotifyOAuth", FakeOAuth),
             ):
                 assistant = spotify_assistant.SpotifyAssistant()
-        finally:
-            token_file.unlink(missing_ok=True)
 
         self.assertIsNone(assistant.sp)
         self.assertIn("rafraîchissement Spotify", assistant.error_message)
