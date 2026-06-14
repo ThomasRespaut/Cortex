@@ -183,6 +183,50 @@ class RepositoryHygieneTests(unittest.TestCase):
         )
         self.assertEqual("", result.stderr)
 
+    def test_google_assistant_skips_oauth_without_client_secret(self):
+        required_modules = [
+            "google_auth_oauthlib",
+            "googleapiclient",
+            "mistralai",
+            "openai",
+        ]
+        missing_modules = [
+            name for name in required_modules
+            if importlib.util.find_spec(name) is None
+        ]
+        if missing_modules:
+            self.skipTest(
+                "Dépendances Google/OpenAI absentes: "
+                + ", ".join(missing_modules)
+            )
+
+        import assistant.google.google_assistant as google_assistant
+
+        with (
+            mock.patch.object(
+                google_assistant,
+                "CREDENTIALS_FILE",
+                "tests/missing_google_secret.json",
+            ),
+            mock.patch.object(
+                google_assistant,
+                "TOKEN_FILE",
+                "tests/missing_token_google.json",
+            ),
+            mock.patch.object(
+                google_assistant.InstalledAppFlow,
+                "from_client_secrets_file",
+            ) as from_client_secrets_file,
+        ):
+            assistant = google_assistant.GoogleAssistant()
+
+        self.assertIsNone(assistant.creds)
+        self.assertIsNone(assistant.gmail_service)
+        self.assertIsNone(assistant.calendar_service)
+        self.assertIsNone(assistant.tasks_service)
+        self.assertIn("google_secret", assistant.error_message)
+        from_client_secrets_file.assert_not_called()
+
     def test_apple_assistant_skips_login_without_credentials(self):
         if importlib.util.find_spec("pyicloud") is None:
             self.skipTest("Dépendance pyicloud absente.")

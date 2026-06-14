@@ -37,6 +37,7 @@ TOKEN_FILE = "assistant/google/token_google.json"
 
 class GoogleAssistant:
     def __init__(self):
+        self.error_message = ""
         self.creds = self.get_google_token()
         self.gmail_service = self.get_service('gmail', 'v1')
         self.calendar_service = self.get_service('calendar', 'v3')
@@ -80,6 +81,12 @@ class GoogleAssistant:
                 creds = None
 
         if not creds or not creds.valid:
+            if not os.path.exists(CREDENTIALS_FILE):
+                self.error_message = (
+                    f"Fichier d'identifiants Google introuvable: {CREDENTIALS_FILE}"
+                )
+                return None
+
             flow = InstalledAppFlow.from_client_secrets_file(
                 CREDENTIALS_FILE,
                 scopes=[
