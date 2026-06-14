@@ -120,6 +120,38 @@ class ToolingDefaultsTests(unittest.TestCase):
             expected,
         )
 
+    def test_dataset_validator_reports_malformed_jsonl(self):
+        dataset_dir = Path("tests/tmp_bad_dataset")
+        dataset_dir.mkdir(exist_ok=True)
+        (dataset_dir / "train.jsonl").write_text(
+            "{invalid json\n",
+            encoding="utf-8",
+        )
+        (dataset_dir / "eval.jsonl").write_text(
+            '{"text": 123}\n',
+            encoding="utf-8",
+        )
+        try:
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "tools/validate_finetune_dataset.py",
+                    "--dataset-dir",
+                    str(dataset_dir),
+                ],
+                capture_output=True,
+                text=True,
+            )
+        finally:
+            for path in dataset_dir.glob("*"):
+                path.unlink()
+            dataset_dir.rmdir()
+
+        self.assertEqual(1, result.returncode)
+        self.assertIn("JSON invalide", result.stdout)
+        self.assertIn("champ text invalide", result.stdout)
+        self.assertNotIn("Traceback", result.stderr)
+
 
 class RepositoryHygieneTests(unittest.TestCase):
     def test_generated_and_sensitive_files_are_not_tracked(self):

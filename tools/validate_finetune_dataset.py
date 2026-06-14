@@ -18,11 +18,19 @@ def load_allowed_tools():
     return set(function_calling.get_tools().keys())
 
 
-def iter_jsonl(path):
+def iter_jsonl(path, errors):
     with path.open(encoding="utf-8") as source:
         for line_number, line in enumerate(source, start=1):
             if line.strip():
-                yield line_number, json.loads(line)
+                try:
+                    row = json.loads(line)
+                except json.JSONDecodeError as error:
+                    errors.append(f"{path}:{line_number}: JSON invalide: {error}")
+                    continue
+                if not isinstance(row, dict):
+                    errors.append(f"{path}:{line_number}: objet JSON attendu")
+                    continue
+                yield line_number, row
 
 
 def response_part(text):
@@ -48,9 +56,12 @@ def main():
         if not path.exists():
             errors.append(f"Fichier manquant: {path}")
             continue
-        for line_number, row in iter_jsonl(path):
+        for line_number, row in iter_jsonl(path, errors):
             total += 1
             text = row.get("text", "")
+            if not isinstance(text, str):
+                errors.append(f"{path}:{line_number}: champ text invalide")
+                continue
             if "Question:" not in text or "Réponse :" not in text:
                 errors.append(f"{path}:{line_number}: format prompt/réponse incomplet")
             for name in TOOL_CALL_RE.findall(response_part(text)):
