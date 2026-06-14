@@ -14,64 +14,14 @@ import json
 import vosk
 from vosk import SetLogLevel
 import wave
+import unicodedata
 from database.database import Neo4jDatabase
-from assistant.films_and_series import films_and_series
-from assistant.spotify.spotify_assistant import SpotifyAssistant
-from assistant.ratp.ratp_assistant import IDFMAssistant
-from assistant import functions
-from assistant.apple.iphone import AppleAssistant
-from assistant.google.google_assistant import GoogleAssistant
-from transformers import AutoTokenizer, AutoModelForCausalLM
 import re
-from function_calling import execute_tool
+from function_calling import execute_tool, get_tools, parse_tool_call
+from model_loader import build_local_prompt, load_local_cortex_model
 
-# Instancier les assistants Spotify et Apple
-spotify_assistant = SpotifyAssistant()
-apple_assistant = AppleAssistant()
-idfm_assistant = IDFMAssistant()
-google_assistant = GoogleAssistant()
-
-# Créer le dictionnaire de fonctions en utilisant les instances des assistants
-names_to_functions = {
-    # Spotify Functions
-    'get_current_time': functions.get_current_time,
-    'generate_random_number': functions.generate_random_number,
-    'recommend_media': films_and_series.recommend_media,
-    'play_track': spotify_assistant.play_track,
-    'pause_playback': spotify_assistant.pause_playback,
-    'resume_playback': spotify_assistant.resume_playback,
-    'next_track': spotify_assistant.next_track,
-    'previous_track': spotify_assistant.previous_track,
-    'set_volume': spotify_assistant.set_volume,
-    'get_current_playback': spotify_assistant.get_current_playback,
-    'play_recommendations_track': spotify_assistant.play_recommendations_track,
-
-    # Apple Functions
-    'get_iphone_battery': apple_assistant.get_iphone_battery,
-    'get_location': apple_assistant.get_location,
-    'get_weather': apple_assistant.get_weather,
-    'get_contacts': apple_assistant.get_contacts,
-    'play_sound_on_iphone': apple_assistant.play_sound_on_iphone,
-    'activate_lost_mode': apple_assistant.activate_lost_mode,
-
-    # IDFM Assistant Functions
-    'calculate_route': idfm_assistant.calculate_route,
-
-    # Google Assistant Functions
-    'create_google_task': google_assistant.create_google_task,
-    'create_calendar_event': google_assistant.create_calendar_event,
-    'summarize_today_emails': google_assistant.summarize_today_emails,
-    'list_and_analyze_today_emails': google_assistant.list_and_analyze_today_emails,
-    'collect_emails': google_assistant.collect_emails,
-    'mark_as_read': google_assistant.mark_as_read,
-    'trash_message': google_assistant.trash_message,
-    'archive_message': google_assistant.archive_message,
-    'reply_to_message': google_assistant.reply_to_message,
-    'create_email': google_assistant.create_email,
-    'display_draft': google_assistant.display_draft,
-    'create_draft_reply': google_assistant.create_draft_reply,
-    'send_draft': google_assistant.send_draft
-}
+# Les fournisseurs externes ne sont initialisés qu'au premier appel d'un outil.
+names_to_functions = get_tools()
 
 load_dotenv()
 
@@ -81,9 +31,13 @@ class Cortex:
         #Choix de la version locale à la version online
         self.local_mode = local_mode
         #Modèle en local :
-        self.tokenizer = AutoTokenizer.from_pretrained("./tinyllama_cortex_finetuned")
-        self.model = AutoModelForCausalLM.from_pretrained("./tinyllama_cortex_finetuned")
-        print("Modèle fine-tuné TinyCortex chargé avec succès.")
+        (
+            self.tokenizer,
+            self.model,
+            self.local_model_path,
+            self.local_model_device,
+        ) = load_local_cortex_model()
+        print(f"Modèle TinyCortex chargé: {self.local_model_path}")
         self.rate_in = rate_in
         self.rate_out = rate_out
         # Charger le modèle Vosk pour la transcription locale
@@ -114,7 +68,8 @@ class Cortex:
         self.mistral_model = "ft:open-mistral-nemo:7771e396:20241004:a1df71c2"
 
         self.first_keyword_detection = True  # Détection du premier ok Cortex
-        self.db = Neo4jDatabase()
+        # Neo4j est chargé uniquement quand une fonctionnalité BDD est ouverte.
+        self.db = None
 
         #Utilisation des différents outils :
         with open("assistant/tools.json", "r") as file:
@@ -250,11 +205,11 @@ class Cortex:
             data = wf.raw_data
             if self.recognizer.AcceptWaveform(data):
                 result = self.recognizer.Result()
-                transcription = eval(result).get("text", "")
+                transcription = json.loads(result).get("text", "")
                 return transcription
 
             final_result = self.recognizer.FinalResult()
-            final_text = eval(final_result).get("text", "")
+            final_text = json.loads(final_result).get("text", "")
 
             if final_text:
                 return final_text 
@@ -343,21 +298,106 @@ class Cortex:
         else:
             return self.generate_text_online(prompt)
 
+    def _normalize_intent_text(self, text):
+        text = text.lower().strip()
+        text = "".join(
+            char
+            for char in unicodedata.normalize("NFD", text)
+            if unicodedata.category(char) != "Mn"
+        )
+        return text
+
+    def _local_shortcut_response(self, prompt):
+        text = self._normalize_intent_text(prompt)
+
+        if any(phrase in text for phrase in ("quelle heure", "donne moi l'heure", "il est quelle heure")):
+            return execute_tool("[get_current_time]")
+
+        if any(phrase in text for phrase in ("quelle meteo", "quel temps", "meteo aujourd")):
+            return str(execute_tool("[get_weather]"))
+
+        if "batterie" in text and "iphone" in text:
+            return str(execute_tool("[get_iphone_battery]"))
+
+        if any(phrase in text for phrase in ("ou est mon iphone", "localise mon iphone", "position de mon iphone")):
+            return str(execute_tool("[get_location]"))
+
+        if "sonner" in text and "iphone" in text:
+            return str(execute_tool("[play_sound_on_iphone]"))
+
+        if any(phrase in text for phrase in ("pause la musique", "mets pause", "pause spotify")):
+            return str(execute_tool("[pause_playback]"))
+
+        if any(phrase in text for phrase in ("reprends la musique", "continue la musique", "relance la musique")):
+            return str(execute_tool("[resume_playback]"))
+
+        if any(phrase in text for phrase in ("musique suivante", "chanson suivante", "titre suivant")):
+            return str(execute_tool("[next_track]"))
+
+        if any(phrase in text for phrase in ("musique precedente", "chanson precedente", "titre precedent")):
+            return str(execute_tool("[previous_track]"))
+
+        volume_match = re.search(r"(?:volume|son).*?(\d{1,3})", text)
+        if volume_match:
+            volume = max(0, min(100, int(volume_match.group(1))))
+            return str(execute_tool(f"[set_volume volume_level={volume}]"))
+
+        task_match = re.search(
+            r"(?:ajoute|cree|crée)\s+(.*?)\s+(?:a|à)\s+(?:mes\s+)?(?:taches|tâches|todo|to do)",
+            prompt,
+            flags=re.IGNORECASE,
+        )
+        if task_match:
+            task_title = task_match.group(1).strip(" .\"'")
+            return str(
+                execute_tool(
+                    f"[create_google_task task_title={task_title!r} task_notes='']"
+                )
+            )
+
+        play_match = re.search(
+            r"^(?:joue|mets|lance)\s+(.+?)(?:\s+sur spotify)?[.!?]?$",
+            prompt.strip(),
+            flags=re.IGNORECASE,
+        )
+        if play_match and "musique" not in self._normalize_intent_text(play_match.group(1)):
+            track_name = play_match.group(1).strip(" .\"'")
+            return str(execute_tool(f"[play_track track_name={track_name!r}]"))
+
+        if any(phrase in text for phrase in ("jouer de la musique", "mets de la musique", "lance de la musique")):
+            return "Dis-moi le titre ou l'artiste, et je lance la musique."
+
+        return None
+
     def generate_text_local(self, prompt):
         """
         Génère une réponse en utilisant le modèle fine-tuné TinyCortex.
         """
         try:
+            shortcut = self._local_shortcut_response(prompt)
+            if shortcut is not None:
+                print("Réponse rapide : " + str(shortcut))
+                return str(shortcut)
+
+            model_prompt = prompt
+            if "Réponse" not in model_prompt:
+                model_prompt = build_local_prompt(prompt)
+
             # Préparer l'entrée du modèle avec la gestion de la troncature
-            inputs = self.tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512)
+            inputs = self.tokenizer(model_prompt, return_tensors="pt", truncation=True, max_length=512)
+            inputs = {
+                key: value.to(self.local_model_device)
+                for key, value in inputs.items()
+            }
 
             # Générer la réponse en supprimant l'argument non reconnu
             outputs = self.model.generate(
-                inputs["input_ids"],
-                max_length=512,
+                **inputs,
+                max_new_tokens=96,
                 num_return_sequences=1,
-                temperature=0.7,
-                do_sample=True  # Suppression de l'argument to3p_p
+                do_sample=False,
+                repetition_penalty=1.08,
+                pad_token_id=self.tokenizer.eos_token_id,
             )
 
             # Décodage de la réponse générée
@@ -369,7 +409,14 @@ class Cortex:
                 response = match.group(1).strip()
 
             print("Réponse : " + response)
-            print(execute_tool(response))
+            try:
+                tool_call = parse_tool_call(response)
+            except ValueError:
+                tool_call = None
+            if tool_call:
+                tool_result = execute_tool(response)
+                print(tool_result)
+                return str(tool_result)
             return response
 
         except Exception as e:
@@ -588,17 +635,37 @@ class Cortex:
         access_key = os.getenv('picovoice_api_key')
         keyword_path = "porcupine/Ok-Cortex.ppn"
 
-        porcupine = pvporcupine.create(access_key=access_key, keyword_paths=[keyword_path],
-                                       model_path="porcupine/porcupine_params_fr.pv")
+        if not access_key:
+            print(
+                "Clé Picovoice absente : détection 'Ok Cortex' ignorée. "
+                "Le clic lance directement l'écoute."
+            )
+            return True
+
+        try:
+            porcupine = pvporcupine.create(
+                access_key=access_key,
+                keyword_paths=[keyword_path],
+                model_path="porcupine/porcupine_params_fr.pv",
+            )
+        except Exception as error:
+            print(f"Détection du mot-clé indisponible ({error}). Écoute directe.")
+            return True
 
         pa = pyaudio.PyAudio()
-        audio_stream = pa.open(
-            rate=porcupine.sample_rate,
-            channels=1,
-            format=pyaudio.paInt16,
-            input=True,
-            frames_per_buffer=porcupine.frame_length
-        )
+        try:
+            audio_stream = pa.open(
+                rate=porcupine.sample_rate,
+                channels=1,
+                format=pyaudio.paInt16,
+                input=True,
+                frames_per_buffer=porcupine.frame_length
+            )
+        except Exception as error:
+            porcupine.delete()
+            pa.terminate()
+            print(f"Microphone indisponible ({error}).")
+            return False
 
         while True:
             pcm = audio_stream.read(porcupine.frame_length, exception_on_overflow=False)
@@ -606,6 +673,7 @@ class Cortex:
             result = porcupine.process(pcm)
             if result >= 0:
                 audio_stream.close()
+                pa.terminate()
                 porcupine.delete()
                 return True
 

@@ -1,366 +1,417 @@
-# main.py
-import pygame
 import math
-import time
-import pandas as pd
-from app.app_calendrier import launch_calendar
-from app.app_transport import launch_transport
-from app.app_jeu import launch_game
-from app.app_message import launch_messaging
-from app.app_horloge import launch_clock
-from app.app_sante import launch_health
-from app.app_musique import launch_music
-from app.app_cortex import launch_cortex
-from app.app_bdd import launch_bdd
-from app.app_reglage import launch_reglage
-
-import sys
 import os
+import sys
+import threading
+from dataclasses import dataclass
 
-# Ajouter le dossier parent à sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import pygame
 
-# Importer cortex.py
+from app.app_cortex import launch_cortex
+from app.feature_shell import launch_feature
 from cortex import Cortex
 
 
-
-pygame.init()
-
-clock = pygame.time.Clock()
 FPS = 60
+BACKGROUND = (8, 15, 35)
+RING = (76, 98, 145)
+TEXT = (242, 245, 255)
+MUTED = (148, 157, 184)
+ACCENT = (88, 214, 255)
 
-# Dimensions de l'écran
-screen_width = 900
-screen_height = 900
-screen = pygame.display.set_mode((screen_width, screen_height))
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-infoObject = pygame.display.Info()
-screen_width = infoObject.current_w
-screen_height = infoObject.current_h
-cortex = Cortex(input_mode="voice", output_mode="voice")
-pygame.display.set_caption("Cortex")
-#bg = pygame.image.load("images/backgrounds/background.png").convert()
-#bg = pygame.transform.scale(bg, (screen_width, screen_height))
 
-temps_fonctions = pd.DataFrame()
-temps_fonctions[['total','fonctions_de_fin','generate_applications','current_time','boucle_events','handle_dragging','draw_applications','pygame.display.flip()']] = [[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]]
+@dataclass
+class AppItem:
+    name: str
+    icon_path: str
+    grid_x: float
+    grid_y: float
+    enabled: bool = True
 
-# Couleurs
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-BLUE = (0, 122, 255)
 
-# Variables globales
-center_x = screen_width // 2
-center_y = screen_height // 2
-app_radius = min(screen_width,screen_height)/2  # Rayon maximal pour les applications proches du centre
-distance_between_apps = 80  # Distance entre les centres des applications
-size_app = 250
-apps = []  # Liste pour stocker les positions des applications
-dragging = False  # Variable pour vérifier si on fait glisser les applications
-drag_start_pos = None
-selected_app = None  # Application actuellement sélectionnée
-app_launched = False  # Indicateur pour savoir si une application est lancée
-current_app = None  # Stocker l'application en cours
-mouse_start_pos = None  # Position de départ du clic pour différencier entre un glissement et un clic
-mouse_movement_threshold = 30  # Seuil de mouvement de la souris pour considérer un drag
-mouse_pos = (0, 0)  # Position initiale de la souris
-last_mouse_update_time = 0  # Temps écoulé depuis la dernière mise à jour de la position de la souris
-mouse_update_interval = 10  # Intervalle de 100ms (0.1 seconde)
-time_limit=0.2
-
-#list_application = [("Horloge", "/images/Horloges.png")]
-
-list_application = [
-    ("Cortex", "app/images/app_icons/icone_cortex.png"),
-    ("Horloge", "app/images/app_icons/icone_horloge.png"),
-    ("Musique", "app/images/app_icons/icone_musique.png"),
-    ("Transport", "app/images/app_icons/icone_transport.png"),
-    ("Santé", "app/images/app_icons/icone_sante.png"),
-    ("Réseaux Sociaux", "app/images/app_icons/icone_reseau_social.png"),
-    ("Calendrier", "app/images/app_icons/icone_calendrier.png"),
-    ("Messagerie", "app/images/app_icons/icone_message.png"),
-    ("Jeux", "app/images/app_icons/icone_jeu.png"),
-    ("Actualités", "app/images/app_icons/icone_actualites.png"),
-    ("BDD", "app/images/app_icons/icone_bdd.png"),
-    ("Divertissement", "app/images/app_icons/icone_divertissement.png"),
-    ("Domotique", "app/images/app_icons/icone_domotique.png"),
-    ("Finance", "app/images/app_icons/icone_finance.png"),
-    ("Mot De Passe", "app/images/app_icons/icone_mot_de_passe.png"),
-    ("Réglage", "app/images/app_icons/icone_reglage.png"),
-    ("Restauration", "app/images/app_icons/icone_restauration.png"),
-    ("Vetement", "app/images/app_icons/icone_vetement.png"),
-    ("Eduction", "app/images/app_icons/icone_education.png"),
-    ("Météo", "app/images/app_icons/icone_meteo.png"),
-    ("Supermarché", "app/images/app_icons/icone_supermarche.png"),
-    ("Traduction", "app/images/app_icons/icone_traduction.png"),
+APP_DEFINITIONS = [
+    ("Cortex", "icone_cortex.png"),
+    ("Horloge", "icone_horloge.png"),
+    ("Musique", "icone_musique.png"),
+    ("Transport", "icone_transport.png"),
+    ("Santé", "icone_sante.png"),
+    ("Réseaux", "icone_reseau_social.png"),
+    ("Calendrier", "icone_calendrier.png"),
+    ("Messages", "icone_message.png"),
+    ("Jeux", "icone_jeu.png"),
+    ("Actualités", "icone_actualites.png"),
+    ("Données", "icone_bdd.png"),
+    ("Divertissement", "icone_divertissement.png"),
+    ("Maison", "icone_domotique.png"),
+    ("Finance", "icone_finance.png"),
+    ("Mots de passe", "icone_mot_de_passe.png"),
+    ("Réglages", "icone_reglage.png"),
+    ("Restaurants", "icone_restauration.png"),
+    ("Vêtements", "icone_vetement.png"),
+    ("Éducation", "icone_education.png"),
+    ("Météo", "icone_meteo.png"),
+    ("Courses", "icone_supermarche.png"),
+    ("Traduction", "icone_traduction.png"),
 ]
 
 
-#icon_app = pygame.image.load("app/Images/Horloge.png")
+def build_honeycomb(items):
+    positions = [(0, 0)]
+    radius = 1
+    while len(positions) < len(items):
+        q, r = -radius, radius
+        directions = [(1, 0), (1, -1), (0, -1), (-1, 0), (-1, 1), (0, 1)]
+        for dq, dr in directions:
+            for _ in range(radius):
+                if len(positions) >= len(items):
+                    break
+                positions.append((q, r))
+                q += dq
+                r += dr
+        radius += 1
+
+    result = []
+    for (name, filename), (q, r) in zip(items, positions):
+        x = math.sqrt(3) * (q + r / 2)
+        y = 1.5 * r
+        result.append(
+            AppItem(
+                name=name,
+                icon_path=os.path.join("app", "Images", "app_icons_v2", filename),
+                grid_x=x,
+                grid_y=y,
+            )
+        )
+    return result
 
 
-
-# Générer les applications en forme de cercle
-def generate_applications(num_apps):
-    start_time = time.time()  # Temps de début
-    for i in range(0,len(list_application)) :
-        distance_from_center = 0
-        radian_angle = 0
-        if(i==0) :
-            x = center_x
-            y = center_y
-
-        #1er anneau
-        elif (i < 8):
-            radian_angle = math.radians(i * 360/7)
-            distance_from_center = 330
-
-        #2e anneau
-        elif (i < 22):
-            radian_angle = math.radians(i * 360/14)
-            if(i%2==0) :
-                distance_from_center = 620
-            else :
-                distance_from_center = 550
-        else :
-            distance_from_center = 0
-            radian_angle = 0
-        x = center_x - math.sin(radian_angle) * distance_from_center
-        y = center_y - math.cos(radian_angle) * distance_from_center
-        if i != 0 :
-            icon_app_resized = pygame.transform.scale(pygame.image.load(list_application[i][1]), (size_app, size_app))
-            apps.append([x, y, size_app, icon_app_resized])
-        else :
-            coef = 1.4
-            icon_app_resized = pygame.transform.scale(pygame.image.load(list_application[i][1]), (size_app*coef, size_app*coef))
-            apps.append([x - (size_app//2 * coef - size_app//2), y - (size_app//2 * coef - size_app//2), size_app*coef, icon_app_resized])
-
-    end_time = time.time()
-    temps_fonctions.loc[0,'generate_applications'] += end_time - start_time
+def circular_icon(source, size):
+    scaled = pygame.transform.smoothscale(source, (size, size))
+    result = pygame.Surface((size, size), pygame.SRCALPHA)
+    mask = pygame.Surface((size, size), pygame.SRCALPHA)
+    pygame.draw.circle(mask, (255, 255, 255, 255), (size // 2, size // 2), size // 2)
+    scaled.blit(mask, (0, 0), special_flags=pygame.BLEND_RGBA_MIN)
+    result.blit(scaled, (0, 0))
+    return result
 
 
-# Fonction pour dessiner les applications
+class CortexHome:
+    def __init__(self):
+        pygame.init()
+        pygame.display.set_caption("Cortex")
 
-def is_pixel_in_app(x, y, apps):
-    for app in apps:
-        app_x, app_y = app[0], app[1]
-        radius = size_app // 2
-        if (x - app_x) ** 2 + (y - app_y) ** 2 <= radius ** 2:
-            return True
-    return False
+        fullscreen = os.getenv("CORTEX_FULLSCREEN", "true").lower() == "true"
+        if fullscreen:
+            self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        else:
+            preview_size = int(os.getenv("CORTEX_PREVIEW_SIZE", "900"))
+            self.screen = pygame.display.set_mode((preview_size, preview_size), pygame.RESIZABLE)
 
-def draw_applications():
-    start_time = time.time()  # Temps de début
+        self.clock = pygame.time.Clock()
+        self.cortex = None
+        self.loading_error = None
+        self.loading_thread = threading.Thread(
+            target=self.load_cortex,
+            name="cortex-loader",
+            daemon=True,
+        )
+        self.loading_thread.start()
+        self.apps = build_honeycomb(APP_DEFINITIONS)
+        self.icons = {
+            app.name: pygame.image.load(app.icon_path).convert_alpha()
+            for app in self.apps
+        }
+        self.icon_cache = {}
+        self.offset = pygame.Vector2()
+        self.velocity = pygame.Vector2()
+        self.zoom = 1.0
+        self.dragging = False
+        self.drag_origin = pygame.Vector2()
+        self.last_pointer = pygame.Vector2()
+        self.press_position = pygame.Vector2()
+        self.selected = None
+        self.rendered_apps = []
+        self.screenshot_saved = False
+        self.title_font = pygame.font.SysFont("Segoe UI", 30, bold=True)
+        self.label_font = pygame.font.SysFont("Segoe UI", 22, bold=True)
+        self.small_font = pygame.font.SysFont("Segoe UI", 16)
 
-    for i, app in enumerate(apps):
-        #pygame.draw.circle(screen, BLUE, (int(app[0]), int(app[1])), size)
-        #icon_app = pygame.image.load("Images/Horloge.png")
+    def load_cortex(self):
+        try:
+            self.cortex = Cortex(
+                input_mode=os.getenv("CORTEX_INPUT_MODE", "voice"),
+                output_mode=os.getenv("CORTEX_OUTPUT_MODE", "voice"),
+                local_mode=os.getenv("CORTEX_LOCAL_MODE", "true").lower() == "true",
+            )
+        except Exception as error:
+            self.loading_error = str(error)
+            print(f"Impossible d'initialiser Cortex : {error}")
 
-        screen.blit(app[3], (app[0] - size_app // 2, app[1] - size_app // 2))
-    end_time = time.time()
-    temps_fonctions.loc[0,'draw_applications'] += end_time - start_time
+    def viewport(self):
+        width, height = self.screen.get_size()
+        diameter = min(width, height)
+        center = pygame.Vector2(width / 2, height / 2)
+        return center, diameter / 2
 
-# Fonction pour gérer le déplacement des applications
-def handle_dragging(mouse_pos):
-    start_time = time.time()  # Temps de début
-    global dragging, drag_start_pos
+    def icon_for(self, app, size):
+        cache_key = (app.name, size)
+        if cache_key not in self.icon_cache:
+            self.icon_cache[cache_key] = circular_icon(self.icons[app.name], size)
+        return self.icon_cache[cache_key]
 
-    if dragging:
-        # Calculer le décalage entre la position actuelle et la position de départ du drag
-        dx = mouse_pos[0] - drag_start_pos[0]
-        dy = mouse_pos[1] - drag_start_pos[1]
+    def app_position(self, app, center, spacing):
+        return center + self.offset + pygame.Vector2(
+            app.grid_x * spacing,
+            app.grid_y * spacing,
+        )
 
-        # Déplacer toutes les applications en fonction de ce décalage
-        for app in apps:
-            app[0] += dx
-            app[1] += dy
+    def draw_background(self, center, radius):
+        width, height = self.screen.get_size()
+        background = pygame.Surface((width, height))
+        top = (22, 43, 88)
+        bottom = (6, 10, 28)
+        for y in range(height):
+            ratio = y / max(1, height - 1)
+            color = tuple(
+                int(top[channel] * (1 - ratio) + bottom[channel] * ratio)
+                for channel in range(3)
+            )
+            pygame.draw.line(background, color, (0, y), (width, y))
+        self.screen.blit(background, (0, 0))
 
-        # Mettre à jour la position de départ du drag
-        drag_start_pos = mouse_pos
-    end_time = time.time()
-    temps_fonctions.loc[0,'handle_dragging'] += end_time - start_time
+        glow = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
 
-def launch_app(app_name):
-    global app_launched, current_app
-    if app_name == "Calendrier":
-        launch_calendar(screen, cortex, screen_width, screen_height)
-    elif app_name == "Cortex":
-        launch_cortex(screen, cortex, screen_width, screen_height)
-    elif app_name == "Horloge":
-        launch_clock(screen, cortex, screen_width, screen_height)
-    elif app_name == "Musique":
-        launch_music(screen, cortex, screen_width, screen_height)
-    elif app_name == "Transport":
-        launch_transport(screen, cortex, screen_width, screen_height)
-    elif app_name == "Santé":
-        launch_health(screen, cortex, screen_width, screen_height)
-    elif app_name == "Messagerie":
-        launch_messaging(screen, cortex, screen_width, screen_height)
-    elif app_name == "Jeux":
-        launch_game(screen, cortex, screen_width, screen_height)
-    elif app_name == "BDD":
-        launch_bdd(screen, cortex, screen_width, screen_height)
-    elif app_name == "Réglage":
-        launch_reglage(screen, cortex, screen_width, screen_height)
-    else:
-        print(f"L'application {app_name} n'est pas encore implémentée.")
+        def radial_glow(position, glow_radius, color, max_alpha):
+            steps = 24
+            for step in range(steps, 0, -1):
+                ratio = step / steps
+                alpha = int(max_alpha * (1 - ratio) ** 2)
+                pygame.draw.circle(
+                    glow,
+                    (*color, alpha),
+                    position,
+                    int(glow_radius * ratio),
+                )
+
+        radial_glow(
+            (center.x - radius * 0.4, center.y - radius * 0.42),
+            radius * 0.72,
+            (77, 116, 255),
+            34,
+        )
+        radial_glow(
+            (center.x + radius * 0.48, center.y - radius * 0.22),
+            radius * 0.62,
+            (190, 78, 255),
+            22,
+        )
+        radial_glow(
+            (center.x + radius * 0.08, center.y + radius * 0.62),
+            radius * 0.68,
+            (22, 206, 204),
+            20,
+        )
+        self.screen.blit(glow, (0, 0))
+
+        inner = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+        pygame.draw.circle(inner, (3, 7, 20, 60), center, radius * 0.98)
+        self.screen.blit(inner, (0, 0))
+
+        pygame.draw.circle(self.screen, RING, center, radius, max(2, int(radius * 0.009)))
+        pygame.draw.circle(
+            self.screen,
+            (151, 174, 225),
+            center,
+            radius - max(4, int(radius * 0.018)),
+            max(1, int(radius * 0.003)),
+        )
+
+    def draw_status(self, center, radius):
+        if self.loading_error:
+            mode = "ERREUR"
+            mode_color = (255, 105, 125)
+        elif self.cortex is None:
+            mode = "INITIALISATION"
+            mode_color = (255, 194, 92)
+        else:
+            mode = "LOCAL" if self.cortex.local_mode else "EN LIGNE"
+            mode_color = ACCENT
+        mode_surface = self.small_font.render(mode, True, mode_color)
+        mode_rect = mode_surface.get_rect(center=(center.x, center.y - radius * 0.9))
+        pill = mode_rect.inflate(24, 10)
+        pygame.draw.rect(self.screen, (12, 31, 44), pill, border_radius=pill.height // 2)
+        pygame.draw.rect(self.screen, (28, 103, 128), pill, 1, border_radius=pill.height // 2)
+        self.screen.blit(mode_surface, mode_rect)
+
+    def draw_apps(self, center, radius):
+        spacing = radius * 0.245 * self.zoom
+        base_size = radius * 0.285 * self.zoom
+        self.rendered_apps = []
+
+        visible = []
+        for app in self.apps:
+            position = self.app_position(app, center, spacing)
+            distance = position.distance_to(center)
+            if distance > radius * 1.05:
+                continue
+
+            focus = max(0.0, 1.0 - distance / (radius * 0.92))
+            edge_fade = max(0.15, min(1.0, (radius - distance) / (radius * 0.24)))
+            size = int(base_size * (0.72 + 0.56 * focus))
+            size = max(62, min(size, int(radius * 0.37)))
+            visible.append((distance, app, position, size, edge_fade, focus))
+
+        for distance, app, position, size, edge_fade, focus in sorted(
+            visible,
+            key=lambda entry: entry[0],
+            reverse=True,
+        ):
+            shadow = pygame.Surface((size + 24, size + 24), pygame.SRCALPHA)
+            pygame.draw.circle(
+                shadow,
+                (0, 0, 0, int(90 * edge_fade)),
+                (shadow.get_width() // 2, shadow.get_height() // 2 + 5),
+                size // 2 + 5,
+            )
+            self.screen.blit(shadow, shadow.get_rect(center=position))
+
+            icon = self.icon_for(app, size).copy()
+            icon.set_alpha(int(255 * edge_fade))
+            self.screen.blit(icon, icon.get_rect(center=position))
+
+            self.rendered_apps.append((app, position, size))
+
+        focused = min(visible, default=None, key=lambda entry: entry[0])
+        if focused and focused[0] < radius * 0.25:
+            _, app, position, size, _, _ = focused
+            label = self.label_font.render(app.name, True, TEXT)
+            label_rect = label.get_rect(center=(center.x, center.y + radius * 0.56))
+            label_bg = label_rect.inflate(30, 14)
+            pygame.draw.rect(
+                self.screen,
+                (8, 11, 21),
+                label_bg,
+                border_radius=label_bg.height // 2,
+            )
+            self.screen.blit(label, label_rect)
+
+    def constrain_offset(self, radius):
+        limit = radius * 1.4
+        if self.offset.length() > limit:
+            self.offset.scale_to_length(limit)
+
+    def app_at(self, position):
+        for app, center, size in reversed(self.rendered_apps):
+            if pygame.Vector2(position).distance_to(center) <= size / 2:
+                return app
+        return None
+
+    def center_app(self, app):
+        center, radius = self.viewport()
+        spacing = radius * 0.245 * self.zoom
+        target = pygame.Vector2(app.grid_x * spacing, app.grid_y * spacing)
+        self.offset = -target
+        self.velocity.update(0, 0)
+
+    def launch_app(self, name):
+        if self.cortex is None:
+            print("Cortex est encore en cours d'initialisation.")
+            return
+        width, height = self.screen.get_size()
+        if name == "Cortex":
+            launch_cortex(self.screen, self.cortex, width, height)
+        else:
+            app = next(item for item in self.apps if item.name == name)
+            launch_feature(self.screen, self.cortex, name, app.icon_path)
+
+    def handle_pointer_down(self, position):
+        self.dragging = True
+        self.press_position = pygame.Vector2(position)
+        self.last_pointer = pygame.Vector2(position)
+        self.velocity.update(0, 0)
+        self.selected = self.app_at(position)
+
+    def handle_pointer_move(self, position):
+        if not self.dragging:
+            return
+        pointer = pygame.Vector2(position)
+        delta = pointer - self.last_pointer
+        self.offset += delta
+        self.velocity = delta * 0.75
+        self.last_pointer = pointer
+
+    def handle_pointer_up(self, position):
+        if not self.dragging:
+            return
+        release = pygame.Vector2(position)
+        moved = release.distance_to(self.press_position)
+        tapped = self.app_at(position)
+        self.dragging = False
+        if moved < 14 and tapped:
+            center, radius = self.viewport()
+            spacing = radius * 0.245 * self.zoom
+            app_center = self.app_position(tapped, center, spacing)
+            self.launch_app(tapped.name)
+
+    def handle_event(self, event):
+        if event.type == pygame.QUIT:
+            return False
+        if event.type == pygame.KEYDOWN:
+            if event.key in (pygame.K_ESCAPE, pygame.K_q):
+                return False
+            if event.key == pygame.K_HOME:
+                self.offset.update(0, 0)
+                self.velocity.update(0, 0)
+        if event.type == pygame.MOUSEWHEEL:
+            self.zoom = max(0.72, min(1.28, self.zoom + event.y * 0.07))
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            self.handle_pointer_down(event.pos)
+        if event.type == pygame.MOUSEMOTION:
+            self.handle_pointer_move(event.pos)
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            self.handle_pointer_up(event.pos)
+        if event.type == pygame.FINGERDOWN:
+            width, height = self.screen.get_size()
+            self.handle_pointer_down((event.x * width, event.y * height))
+        if event.type == pygame.FINGERMOTION:
+            width, height = self.screen.get_size()
+            self.handle_pointer_move((event.x * width, event.y * height))
+        if event.type == pygame.FINGERUP:
+            width, height = self.screen.get_size()
+            self.handle_pointer_up((event.x * width, event.y * height))
+        return True
+
+    def run(self):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                running = self.handle_event(event)
+                if not running:
+                    break
+
+            if not self.dragging:
+                self.offset += self.velocity
+                self.velocity *= 0.9
+                if self.velocity.length_squared() < 0.02:
+                    self.velocity.update(0, 0)
+
+            center, radius = self.viewport()
+            self.constrain_offset(radius)
+            self.draw_background(center, radius)
+            self.draw_apps(center, radius)
+            self.draw_status(center, radius)
+            pygame.display.flip()
+            screenshot_path = os.getenv("CORTEX_SCREENSHOT_PATH")
+            if screenshot_path and not self.screenshot_saved:
+                pygame.image.save(self.screen, screenshot_path)
+                self.screenshot_saved = True
+            self.clock.tick(FPS)
+
+        pygame.quit()
 
 
-def check_app_click(mouse_pos):
-    start_time = time.time()
-    global selected_app, app_launched, current_app
-
-    for i, app in enumerate(apps):
-        distance = math.sqrt((app[0] - mouse_pos[0]) ** 2 + (app[1] - mouse_pos[1]) ** 2)
-        if distance < app[2] / 2:
-            selected_app = list_application[i][0]
-            print(f"App Launched : {list_application[i][0]}")
-            if selected_app:
-                app_launched = True
-                current_app = selected_app
-                launch_app(selected_app)
-            break
-    end_time = time.time()
-    #temps_fonctions.loc[0,'check_app_click'] += end_time - start_time # A ne pas mettre
-# Fonction principale
 def main():
-    start_prog = time.time()
-    global dragging, drag_start_pos, app_launched, current_app, touch_start_pos, touch_pos, mouse_dragging
-
-    # Initialize touch and mouse variables
-    touch_start_pos = None
-    drag_start_pos = None
-    touch_pos = (0, 0)
-    last_touch_update_time = 0
-    touch_update_interval = 16  # roughly 60 FPS update interval
-    mouse_dragging = False
-    mouse_start_pos = None
-
-    clock = pygame.time.Clock()
-    running = True
-
-    # Touch and mouse specific variables
-    touch_start_time = 0
-    tap_threshold = 0.3  # seconds
-    drag_threshold = 10  # pixels
-
-    # Générer les applications
-    generate_applications(28)
-
-    while running:
-        clock.tick(FPS)
-
-        current_time = pygame.time.get_ticks()
-
-        # Update touch position
-        if current_time - last_touch_update_time >= touch_update_interval:
-            touch_pos = pygame.mouse.get_pos()
-            last_touch_update_time = current_time
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-            # Mouse events
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:  # Left click
-                    mouse_start_pos = pygame.mouse.get_pos()
-                    drag_start_pos = mouse_start_pos
-                    mouse_dragging = True
-
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1:  # Left click release
-                    mouse_end_pos = pygame.mouse.get_pos()
-
-                    if mouse_start_pos is not None:
-                        dx = mouse_end_pos[0] - mouse_start_pos[0]
-                        dy = mouse_end_pos[1] - mouse_start_pos[1]
-
-                        # Check for click (small movement)
-                        if abs(dx) < drag_threshold and abs(dy) < drag_threshold:
-                            print("Click detected")
-                            check_app_click(mouse_end_pos)
-
-                    mouse_dragging = False
-                    mouse_start_pos = None
-                    drag_start_pos = None
-
-            elif event.type == pygame.MOUSEMOTION:
-                if mouse_dragging and drag_start_pos is not None:
-                    current_pos = pygame.mouse.get_pos()
-                    dx = current_pos[0] - drag_start_pos[0]
-                    dy = current_pos[1] - drag_start_pos[1]
-
-                    # Move applications
-                    for app in apps:
-                        app[0] += dx
-                        app[1] += dy
-
-                    drag_start_pos = current_pos
-
-            # Touch events
-            elif event.type == pygame.FINGERDOWN:
-                touch_pos = pygame.mouse.get_pos()
-                touch_start_pos = touch_pos
-                drag_start_pos = touch_pos
-                touch_start_time = time.time()
-                dragging = False
-
-            elif event.type == pygame.FINGERMOTION:
-                if touch_start_pos is not None and drag_start_pos is not None:
-                    dx = touch_pos[0] - drag_start_pos[0]
-                    dy = touch_pos[1] - drag_start_pos[1]
-
-                    if abs(dx) > drag_threshold or abs(dy) > drag_threshold:
-                        dragging = True
-                        for app in apps:
-                            app[0] += dx
-                            app[1] += dy
-
-                        drag_start_pos = touch_pos
-
-            elif event.type == pygame.FINGERUP:
-                touch_end_time = time.time()
-                touch_end_pos = touch_pos
-
-                if touch_start_pos is not None:
-                    dx = touch_end_pos[0] - touch_start_pos[0]
-                    dy = touch_end_pos[1] - touch_start_pos[1]
-
-                    if (not dragging and
-                            abs(dx) < drag_threshold and
-                            abs(dy) < drag_threshold and
-                            (touch_end_time - touch_start_time) < tap_threshold):
-                        print("Tap detected")
-                        check_app_click(touch_end_pos)
-                    elif dragging:
-                        print("Drag completed")
-
-                dragging = False
-                touch_start_pos = None
-                drag_start_pos = None
-
-        # Handle any ongoing dragging (touch or mouse)
-        if drag_start_pos is not None:
-            handle_dragging(touch_pos if dragging else pygame.mouse.get_pos())
-
-        # Render screen
-        screen.fill(WHITE)
-        draw_applications()
-
-        pygame.display.update()
-
-    pygame.quit()
-
-    # Performance tracking
-    end_time = time.time()
-    temps_fonctions.loc[0, 'total'] += end_time - start_prog
-    for i in temps_fonctions:
-        print(f'{i} : {temps_fonctions[i].iloc[0]}')
+    CortexHome().run()
 
 
-# Lancer l'application
 if __name__ == "__main__":
     main()

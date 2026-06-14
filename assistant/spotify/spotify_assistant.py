@@ -1,18 +1,33 @@
 import json
 import os
 import spotipy
+from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
 
-# Configuration OAuth2
-SPOTIPY_CLIENT_ID = "e63d4210d0154cceb13bc3c9552dbed7"
-SPOTIPY_CLIENT_SECRET = "b127ca139a524d4fa1045ba4202c0f1e"
-SPOTIPY_REDIRECT_URI = "http://localhost:8888/callback_spotify"
+load_dotenv()
+
+SPOTIPY_CLIENT_ID = os.getenv("SPOTIPY_CLIENT_ID")
+SPOTIPY_CLIENT_SECRET = os.getenv("SPOTIPY_CLIENT_SECRET")
+SPOTIPY_REDIRECT_URI = os.getenv(
+    "SPOTIPY_REDIRECT_URI",
+    "http://localhost:8888/callback_spotify",
+)
 SPOTIPY_SCOPE = "user-read-playback-state user-modify-playback-state streaming"
 
-TOKEN_FILE = "token_info.json"
+TOKEN_FILE = os.getenv(
+    "SPOTIFY_TOKEN_FILE",
+    os.path.join(os.path.dirname(__file__), "token_info.json"),
+)
 
 class SpotifyAssistant:
     def __init__(self):
+        self.sp_oauth = None
+        self.token_info = None
+        self.sp = None
+
+        if not SPOTIPY_CLIENT_ID or not SPOTIPY_CLIENT_SECRET:
+            return
+
         self.sp_oauth = SpotifyOAuth(
             client_id=SPOTIPY_CLIENT_ID,
             client_secret=SPOTIPY_CLIENT_SECRET,
@@ -23,6 +38,9 @@ class SpotifyAssistant:
         self.sp = spotipy.Spotify(auth=self.token_info['access_token']) if self.token_info else None
 
     def get_token(self):
+        if not self.sp_oauth:
+            return None
+
         token_info = None
         if os.path.exists(TOKEN_FILE):
             with open(TOKEN_FILE, "r") as f:
@@ -44,6 +62,8 @@ class SpotifyAssistant:
         return token_info
 
     def get_spotify_instance(self):
+        if not self.sp_oauth:
+            return None
         if not self.sp:
             self.token_info = self.get_token()
             self.sp = spotipy.Spotify(auth=self.token_info['access_token']) if self.token_info else None

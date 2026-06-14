@@ -1,13 +1,30 @@
+# Local configuration and credentials
 .env
+.env.*
+!.env.example
 assistant/google/google_secret.json
 assistant/google/token_google.json
-tinyllama_cortex_finetuned
-tinyllama_cortex_finetuned.zip
-tinyllama_cortex_finetuned/config.json
-tinyllama_cortex_finetuned/generation_config.json
-tinyllama_cortex_finetuned/model.safetensors
-tinyllama_cortex_finetuned/special_tokens_map.json
-tinyllama_cortex_finetuned/tokenizer.json
-tinyllama_cortex_finetuned/tokenizer.model
-tinyllama_cortex_finetuned/tokenizer_config.json
-tinyllama_cortex_finetuned/training_args.bin
+token_info.json
+**/token_info.json
+.cache
+**/.cache
+
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Generated files
+output.wav
+*.log
+dist/
+
+# Local models and archives
+tinyllama_cortex_finetuned/
+tinyllama_cortex_finetuned*/
+tinyllama_cortex_finetuned*.zip

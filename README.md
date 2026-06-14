@@ -34,7 +34,7 @@ Cortex est un projet étudiant visant à développer un homepod utilisant l'inte
 ## Installation
 
 ### Prérequis
-- Python 3.8 ou supérieur
+- Python 3.12
 - Environnement virtuel Python (recommandé)
 - Modules Python : `keras`, `opencv-python`, `neo4j`, `requests`
 - Accès aux clés API des services intégrés (Gmail, Google Calendar, etc.)
@@ -52,11 +52,70 @@ Cortex est un projet étudiant visant à développer un homepod utilisant l'inte
    ```bash
    pip install -r requirements.txt
    ```
-4. Configurer les fichiers `.env` avec vos clés API et informations personnelles.
+4. Copier `.env.example` vers `.env`, puis renseigner uniquement les services
+   utilisés. Les jetons OAuth et mots de passe ne doivent jamais être commités.
 5. Lancer le projet :
    ```bash
-   python cortex.py
+   .venv\Scripts\python.exe Screen.py
    ```
+
+Le mot-clé « Ok Cortex » nécessite une clé Picovoice. Sans cette clé, un clic
+sur le bouton Cortex lance directement l'écoute du microphone.
+
+### Tests rapides
+
+Les tests du cœur local ne nécessitent ni modèle IA, ni microphone, ni compte
+externe :
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+Pour mesurer rapidement les réponses du modèle local sans lancer l'interface :
+
+```bash
+.venv\Scripts\python.exe tools\evaluate_local_model.py
+```
+
+Si le dossier `tinyllama_cortex_finetuned_v3_lora/` est présent, Cortex charge
+automatiquement cet adaptateur LoRA par-dessus le modèle de base
+`tinyllama_cortex_finetuned/`. Sinon, il utilise le LoRA v2 local
+`tinyllama_cortex_finetuned_v2_lora/` quand il existe. Pour comparer avec le
+modèle de base seul :
+
+```bash
+.venv\Scripts\python.exe tools\evaluate_local_model.py --no-adapter --limit 3
+```
+
+### Fine-tuning Cortex
+
+Le modèle local se trouve dans `tinyllama_cortex_finetuned/`. Avant de
+réentraîner, générez un dataset v3 aligné avec les vrais outils Cortex :
+
+```bash
+.venv\Scripts\python.exe tools\build_finetune_dataset.py --output-dir training\finetune_cortex_v3
+.venv\Scripts\python.exe tools\validate_finetune_dataset.py --dataset-dir training\finetune_cortex_v3
+```
+
+Le script supprime les exemples qui appellent des outils inexistants, afin
+d'éviter les sorties comme `play_music`, `send_message` ou `set_alarm` si ces
+fonctions ne sont pas branchées dans `function_calling.py`.
+
+Pour vérifier la chaîne LoRA sur CPU sans lancer un vrai entraînement :
+
+```bash
+.venv\Scripts\python.exe tools\train_cortex_lora.py --max-steps 1 --allow-cpu --output-dir tinyllama_cortex_finetuned_v2_lora_smoke --max-length 128
+```
+
+Pour un vrai fine-tuning TinyLlama, utilisez un environnement PyTorch avec CUDA
+ou une machine GPU. La venv CPU Windows fonctionne pour valider la chaîne, mais
+elle est trop lente pour un entraînement complet.
+
+### Sécurité
+
+Les identifiants sont chargés depuis l'environnement. Si un jeton ou un secret a
+déjà été publié dans l'historique Git, le supprimer du dernier commit ne suffit
+pas : il faut aussi le révoquer auprès du fournisseur concerné.
 
 ## Utilisation
 

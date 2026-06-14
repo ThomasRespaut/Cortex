@@ -1,140 +1,226 @@
-import re
-from assistant.films_and_series import films_and_series
-from assistant.spotify.spotify_assistant import SpotifyAssistant
-from assistant.ratp.ratp_assistant import IDFMAssistant
-from assistant import functions
-from assistant.apple.iphone import AppleAssistant
-from assistant.google.google_assistant import GoogleAssistant
+import importlib
 import json
+import shlex
+from functools import lru_cache
 
-# Instancier les assistants Spotify, Apple, IDFM et Google
-spotify_assistant = SpotifyAssistant()
-apple_assistant = AppleAssistant()
-idfm_assistant = IDFMAssistant()
-google_assistant = GoogleAssistant()
+from assistant import functions
 
-# Créer le dictionnaire de fonctions en utilisant les instances des assistants
-TOOLS = {
-    # Spotify Functions
-    'get_current_time': functions.get_current_time,
-    'generate_random_number': functions.generate_random_number,
-    'recommend_media': films_and_series.recommend_media,
-    'play_track': spotify_assistant.play_track,
-    'pause_playback': spotify_assistant.pause_playback,
-    'resume_playback': spotify_assistant.resume_playback,
-    'next_track': spotify_assistant.next_track,
-    'previous_track': spotify_assistant.previous_track,
-    'set_volume': spotify_assistant.set_volume,
-    'get_current_playback': spotify_assistant.get_current_playback,
-    'play_recommendations_track': spotify_assistant.play_recommendations_track,
 
-    # Apple Functions
-    'get_iphone_battery': apple_assistant.get_iphone_battery,
-    'get_location': apple_assistant.get_location,
-    # Adapter l'appel de get_weather pour gérer les arguments non prévus
-    'get_weather': lambda **kwargs: apple_assistant.get_weather(),
-    'get_contacts': apple_assistant.get_contacts,
-    'play_sound_on_iphone': apple_assistant.play_sound_on_iphone,
-    'activate_lost_mode': apple_assistant.activate_lost_mode,
+def _coerce_value(value):
+    lowered = value.lower()
+    if lowered == "true":
+        return True
+    if lowered == "false":
+        return False
+    if lowered in {"none", "null"}:
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        try:
+            return float(value)
+        except ValueError:
+            return value
 
-    # IDFM Assistant Functions
-    'calculate_route': idfm_assistant.calculate_route,
 
-    # Google Assistant Functions
-    'create_google_task': google_assistant.create_google_task,
-    'create_calendar_event': google_assistant.create_calendar_event,
-    'summarize_today_emails': google_assistant.summarize_today_emails,
-    'list_and_analyze_today_emails': google_assistant.list_and_analyze_today_emails,
-    'collect_emails': google_assistant.collect_emails,
-    'mark_as_read': google_assistant.mark_as_read,
-    'trash_message': google_assistant.trash_message,
-    'archive_message': google_assistant.archive_message,
-    'reply_to_message': google_assistant.reply_to_message,
-    'create_email': google_assistant.create_email,
-    'display_draft': google_assistant.display_draft,
-    'create_draft_reply': google_assistant.create_draft_reply,
-    'send_draft': google_assistant.send_draft
-}
+def parse_tool_call(response):
+    """Parse a model tool call formatted as ``[tool_name key='value']``."""
+    start = response.find("[")
+    end = response.find("]", start + 1)
+    if start == -1 or end == -1:
+        return None
 
-def execute_tool(response):
-    """
-    Analyse et exécute la commande reçue dans la réponse.
-    :param response: Chaîne contenant une phrase et une commande au format [tool_name arguments]
-    """
-    # Extraire la commande de la réponse
-    match = re.search(r'\[(\w+)(.*?)\]', response)
-    if not match:
+    try:
+        parts = shlex.split(response[start + 1:end])
+    except ValueError as error:
+        raise ValueError(f"Commande d'outil invalide: {error}") from error
+
+    if not parts:
+        return None
+
+    tool_name = parts[0]
+    if not tool_name.replace("_", "").isalnum():
+        raise ValueError("Nom d'outil invalide")
+
+    arguments = {}
+    for part in parts[1:]:
+        if "=" not in part:
+            raise ValueError(f"Argument invalide: {part}")
+        key, value = part.split("=", 1)
+        if not key or not key.replace("_", "").isalnum():
+            raise ValueError(f"Nom d'argument invalide: {key}")
+        arguments[key] = _coerce_value(value)
+
+    return tool_name, arguments
+
+
+@lru_cache(maxsize=None)
+def _provider(module_name, class_name):
+    module = importlib.import_module(module_name)
+    return getattr(module, class_name)()
+
+
+def _lazy_method(module_name, class_name, method_name):
+    def call(**kwargs):
+        instance = _provider(module_name, class_name)
+        return getattr(instance, method_name)(**kwargs)
+
+    return call
+
+
+def _normalize_tool_call(tool_name, arguments):
+    """Map common legacy model tool names to the current Cortex registry."""
+    if tool_name == "play_music":
+        track_name = (
+            arguments.get("track_name")
+            or arguments.get("title")
+            or arguments.get("song")
+            or arguments.get("query")
+        )
+        if track_name:
+            return "play_track", {"track_name": track_name}
+
+        genre = arguments.get("genre") or arguments.get("genre_name")
+        if genre:
+            return "play_recommendations_track", {"genre_name": genre}
+
+        return "resume_playback", {}
+
+    if tool_name in {"add_task", "add_to_do", "create_task"}:
+        task_title = (
+            arguments.get("task_title")
+            or arguments.get("title")
+            or arguments.get("task")
+            or arguments.get("list")
+        )
+        task_notes = arguments.get("task_notes") or arguments.get("notes") or ""
+        if task_title:
+            return "create_google_task", {
+                "task_title": task_title,
+                "task_notes": task_notes,
+            }
+
+    return tool_name, arguments
+
+
+def _recommend_media(**kwargs):
+    module = importlib.import_module(
+        "assistant.films_and_series.films_and_series"
+    )
+    return module.recommend_media(**kwargs)
+
+
+@lru_cache(maxsize=1)
+def get_tools():
+    """Build the registry without authenticating external providers."""
+    tools = {
+        "get_current_time": functions.get_current_time,
+        "generate_random_number": functions.generate_random_number,
+        "recommend_media": _recommend_media,
+    }
+
+    providers = {
+        "spotify": (
+            "assistant.spotify.spotify_assistant",
+            "SpotifyAssistant",
+            [
+                "play_track",
+                "pause_playback",
+                "resume_playback",
+                "next_track",
+                "previous_track",
+                "set_volume",
+                "get_current_playback",
+                "play_recommendations_track",
+            ],
+        ),
+        "apple": (
+            "assistant.apple.iphone",
+            "AppleAssistant",
+            [
+                "get_iphone_battery",
+                "get_location",
+                "get_weather",
+                "get_contacts",
+                "play_sound_on_iphone",
+                "activate_lost_mode",
+            ],
+        ),
+        "ratp": (
+            "assistant.ratp.ratp_assistant",
+            "IDFMAssistant",
+            ["calculate_route"],
+        ),
+        "google": (
+            "assistant.google.google_assistant",
+            "GoogleAssistant",
+            [
+                "create_google_task",
+                "create_calendar_event",
+                "summarize_today_emails",
+                "list_and_analyze_today_emails",
+                "collect_emails",
+                "mark_as_read",
+                "trash_message",
+                "archive_message",
+                "reply_to_message",
+                "create_email",
+                "display_draft",
+                "create_draft_reply",
+                "send_draft",
+            ],
+        ),
+    }
+
+    for module_name, class_name, methods in providers.values():
+        for method_name in methods:
+            tools[method_name] = _lazy_method(
+                module_name,
+                class_name,
+                method_name,
+            )
+
+    return tools
+
+
+def execute_tool(response, tools=None):
+    """Parse and execute one tool call from a model response."""
+    try:
+        parsed = parse_tool_call(response)
+    except ValueError as error:
+        return f"Commande invalide: {error}"
+
+    if not parsed:
         return "Aucune commande reconnue dans la réponse."
 
+    tool_name, arguments = _normalize_tool_call(*parsed)
+    registry = tools if tools is not None else get_tools()
+    tool = registry.get(tool_name)
+    if tool is None:
+        return f"Outil '{tool_name}' non reconnu."
 
-    # Récupérer le nom de l'outil et les arguments
-    tool_name = match.group(1)
-    raw_args = match.group(2).strip()
+    try:
+        return tool(**arguments)
+    except TypeError as error:
+        return f"Arguments invalides pour l'outil '{tool_name}': {error}"
+    except Exception as error:
+        return f"Erreur d'exécution pour l'outil '{tool_name}': {error}"
 
-    # Convertir les arguments en dictionnaire si présents
-    args = {}
-    if raw_args:
-        matches = re.findall(r"(\w+)=([\'\"].+?[\'\"]|[^\s]+)", raw_args)
-        args = {
-            key: int(value.strip().strip("'\"")) if value.strip().strip("'\"").isdigit() else value.strip().strip("'\"")
-            for key, value in matches
-        }
 
-    # Debugging :
-    #for arg, value in args.items():
-    #    print(f"{arg}: {value}")
-
-    print(f"Arguments extraits: {args}")  # Debugging des arguments
-
-    # Exécute la commande si l'outil est reconnu
-    if tool_name in TOOLS:
-        try:
-            result = TOOLS[tool_name](**args)
-            return result
-        except TypeError as e:
-            # Réessayer sans arguments si l'outil ne les accepte pas
-            try:
-                result = TOOLS[tool_name]()
-                return result
-            except Exception as retry_e:
-                print(f"Erreur d'exécution pour l'outil '{tool_name}' lors de la nouvelle tentative: {retry_e}")
-        except Exception as e:
-            print(f"Erreur d'exécution pour l'outil '{tool_name}': {e}")
-    else:
-        print(f"Outil '{tool_name}' non reconnu.")
-
-def execute_file(input_file,output_file):
-    # Récupérer les données:
-    data = json.load(open(input_file, encoding="utf-8"))
-
-    taille = len(data)
-    compteur = 0
+def execute_file(input_file):
+    with open(input_file, encoding="utf-8") as source:
+        data = json.load(source)
 
     for item in data:
         response = item["response"]
-        print(response)
-
-        # Demander une confirmation utilisateur avant d'exécuter
-        user_input = input(f"Voulez-vous exécuter cette commande : {response} ? (oui/non)\n")
-        if user_input.strip().lower() == 'oui':
-            # Exécution de l'exemple concret
-            result = execute_tool(response)
-            print(result)
+        user_input = input(
+            f"Voulez-vous exécuter cette commande : {response} ? (oui/non)\n"
+        )
+        if user_input.strip().lower() == "oui":
+            print(execute_tool(response))
         else:
             print("Commande ignorée.")
 
-        print()
 
 if __name__ == "__main__":
-
-    # Générer et sauvegarder des questions/réponses
-    input_file = "training/tinyollama/function_calling/training_function_calling.json"
-    output_file = "training_function_calling.json"
-    #execute_file(input_file,output_file)
-
-    # Message utilisateur : Quelle est la météo à Paris ?
-    response = "[play_track track_name='sois pas timide']"
-    print(execute_tool(response))
-
-
-
+    print(execute_tool("[generate_random_number min_value=1 max_value=10]"))
