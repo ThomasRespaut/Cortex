@@ -274,6 +274,35 @@ class RepositoryHygieneTests(unittest.TestCase):
         self.assertIn("google_secret", assistant.error_message)
         from_client_secrets_file.assert_not_called()
 
+    def test_google_decode_message_body_ignores_invalid_base64(self):
+        required_modules = [
+            "google_auth_oauthlib",
+            "googleapiclient",
+            "mistralai",
+            "openai",
+        ]
+        missing_modules = [
+            name for name in required_modules
+            if importlib.util.find_spec(name) is None
+        ]
+        if missing_modules:
+            self.skipTest(
+                "Dépendances Google/OpenAI absentes: "
+                + ", ".join(missing_modules)
+            )
+
+        import assistant.google.google_assistant as google_assistant
+
+        assistant = google_assistant.GoogleAssistant.__new__(
+            google_assistant.GoogleAssistant
+        )
+
+        self.assertIsNone(assistant.decode_message_body("***", "text/plain"))
+        self.assertIsNone(
+            assistant.decode_message_body("__8=", "text/plain")
+        )
+        self.assertIsNone(assistant.decode_message_body("PGI+", "text/html"))
+
     def test_apple_assistant_skips_login_without_credentials(self):
         if importlib.util.find_spec("pyicloud") is None:
             self.skipTest("Dépendance pyicloud absente.")

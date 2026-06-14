@@ -1,6 +1,7 @@
 import os
 import json
 import base64
+import binascii
 from html import unescape
 from datetime import datetime, timedelta
 from email.mime.text import MIMEText
@@ -117,9 +118,16 @@ class GoogleAssistant:
 
     def decode_message_body(self, encoded_body, mime_type):
         """Décode le corps du message en fonction du type MIME."""
-        decoded_bytes = base64.urlsafe_b64decode(encoded_body)
         if mime_type == "text/plain":
-            return decoded_bytes.decode('utf-8')
+            try:
+                decoded_bytes = base64.b64decode(
+                    encoded_body,
+                    altchars=b"-_",
+                    validate=True,
+                )
+                return decoded_bytes.decode('utf-8')
+            except (binascii.Error, ValueError, UnicodeDecodeError):
+                return None
         else:
             return None  # Ignore le HTML et les autres types MIME
 
