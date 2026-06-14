@@ -9,7 +9,24 @@ api_key = os.getenv('API_KEY_MOVIE')
 
 base_url = 'https://api.themoviedb.org/3'
 
+MEDIA_TYPE_ALIASES = {
+    "film": "movie",
+    "movie": "movie",
+    "serie": "tv",
+    "series": "tv",
+    "série": "tv",
+    "tv": "tv",
+}
+
+
+def normalize_media_type(media_type):
+    return MEDIA_TYPE_ALIASES.get(str(media_type).strip().lower(), media_type)
+
+
 def make_request(endpoint, params):
+    if not api_key:
+        return {"error": "API_KEY_MOVIE n'est pas configurée."}
+
     params['api_key'] = api_key
     params['language'] = 'fr-FR'
     response = requests.get(f"{base_url}/{endpoint}", params=params)
@@ -60,8 +77,9 @@ def recommend_media(title=None, genre=None, media_type='movie'):
     Si le genre est fourni et ne correspond pas directement, on cherche le genre le plus proche.
     """
 
-    if media_type == 'film':
-        media_type = 'movie'
+    media_type = normalize_media_type(media_type)
+    if not api_key:
+        return "API_KEY_MOVIE n'est pas configurée."
 
     if media_type == 'tv':
         genre_list = ["Action & adventure", "Animation", "Comédie", "Crime", "Documentaire", "Drame", "Familial","Kids", "Mystère", "News", "Reality","Science - fiction & fantastique","Soap","Talk","War & politics","Western"]

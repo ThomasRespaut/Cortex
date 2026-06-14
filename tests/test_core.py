@@ -227,6 +227,28 @@ class RepositoryHygieneTests(unittest.TestCase):
         )
         self.assertEqual("", result.stderr)
 
+    def test_media_recommendations_report_missing_api_key(self):
+        if importlib.util.find_spec("requests") is None:
+            self.skipTest("Dépendance requests absente.")
+
+        environment = os.environ.copy()
+        environment["API_KEY_MOVIE"] = ""
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "from assistant.films_and_series.films_and_series "
+                "import recommend_media; "
+                "assert recommend_media(genre='action', media_type='film') "
+                "== \"API_KEY_MOVIE n'est pas configurée.\"",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            env=environment,
+        )
+        self.assertEqual("", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
