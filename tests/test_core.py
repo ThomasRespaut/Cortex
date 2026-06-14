@@ -227,6 +227,58 @@ class RepositoryHygieneTests(unittest.TestCase):
         self.assertIn("google_secret", assistant.error_message)
         from_client_secrets_file.assert_not_called()
 
+    def test_google_assistant_skips_oauth_when_non_interactive(self):
+        required_modules = [
+            "google_auth_oauthlib",
+            "googleapiclient",
+            "mistralai",
+            "openai",
+        ]
+        missing_modules = [
+            name for name in required_modules
+            if importlib.util.find_spec(name) is None
+        ]
+        if missing_modules:
+            self.skipTest(
+                "Dépendances Google/OpenAI absentes: "
+                + ", ".join(missing_modules)
+            )
+
+        import assistant.google.google_assistant as google_assistant
+
+        credentials_file = Path("tests/tmp_google_secret.json")
+        credentials_file.write_text("{}", encoding="utf-8")
+        try:
+            with (
+                mock.patch.object(
+                    google_assistant,
+                    "CREDENTIALS_FILE",
+                    str(credentials_file),
+                ),
+                mock.patch.object(
+                    google_assistant,
+                    "TOKEN_FILE",
+                    "tests/missing_token_google.json",
+                ),
+                mock.patch.object(
+                    google_assistant.sys.stdin,
+                    "isatty",
+                    return_value=False,
+                ),
+                mock.patch.object(
+                    google_assistant.InstalledAppFlow,
+                    "from_client_secrets_file",
+                ) as from_client_secrets_file,
+            ):
+                assistant = google_assistant.GoogleAssistant()
+        finally:
+            credentials_file.unlink(missing_ok=True)
+
+        self.assertIsNone(assistant.creds)
+        self.assertIsNone(assistant.gmail_service)
+        self.assertIn("interactive indisponible", assistant.error_message)
+        from_client_secrets_file.assert_not_called()
+
     def test_google_assistant_handles_invalid_token_file(self):
         required_modules = [
             "google_auth_oauthlib",

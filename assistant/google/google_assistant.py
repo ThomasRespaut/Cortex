@@ -2,6 +2,7 @@ import os
 import json
 import base64
 import binascii
+import sys
 from html import unescape
 from datetime import datetime, timedelta
 from email.mime.text import MIMEText
@@ -89,6 +90,12 @@ class GoogleAssistant:
             if not os.path.exists(CREDENTIALS_FILE):
                 self.error_message = (
                     f"Fichier d'identifiants Google introuvable: {CREDENTIALS_FILE}"
+                )
+                return None
+
+            if not sys.stdin.isatty():
+                self.error_message = (
+                    "Authentification Google interactive indisponible."
                 )
                 return None
 
