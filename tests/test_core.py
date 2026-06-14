@@ -427,6 +427,68 @@ class RepositoryHygieneTests(unittest.TestCase):
             get.call_args.kwargs["timeout"],
         )
 
+    def test_spotify_assistant_reports_missing_credentials(self):
+        if importlib.util.find_spec("spotipy") is None:
+            self.skipTest("Dépendance spotipy absente.")
+
+        import assistant.spotify.spotify_assistant as spotify_assistant
+
+        with (
+            mock.patch.object(spotify_assistant, "SPOTIPY_CLIENT_ID", ""),
+            mock.patch.object(spotify_assistant, "SPOTIPY_CLIENT_SECRET", ""),
+        ):
+            assistant = spotify_assistant.SpotifyAssistant()
+
+        self.assertIsNone(assistant.sp)
+        self.assertEqual(
+            "Identifiants Spotify non configurés.",
+            assistant.play_track("Song"),
+        )
+
+    def test_spotify_assistant_skips_oauth_prompt_when_non_interactive(self):
+        if importlib.util.find_spec("spotipy") is None:
+            self.skipTest("Dépendance spotipy absente.")
+
+        import assistant.spotify.spotify_assistant as spotify_assistant
+
+        class FakeOAuth:
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+
+            def is_token_expired(self, token_info):
+                return True
+
+            def get_authorize_url(self):
+                return "https://example.test/authorize"
+
+            def refresh_access_token(self, refresh_token):
+                return {"access_token": "refreshed"}
+
+        with (
+            mock.patch.object(spotify_assistant, "SPOTIPY_CLIENT_ID", "client"),
+            mock.patch.object(
+                spotify_assistant,
+                "SPOTIPY_CLIENT_SECRET",
+                "secret",
+            ),
+            mock.patch.object(
+                spotify_assistant,
+                "TOKEN_FILE",
+                "tests/missing_spotify_token.json",
+            ),
+            mock.patch.object(spotify_assistant, "SpotifyOAuth", FakeOAuth),
+            mock.patch.object(spotify_assistant.sys.stdin, "isatty", return_value=False),
+            mock.patch("builtins.input") as input_prompt,
+        ):
+            assistant = spotify_assistant.SpotifyAssistant()
+
+        self.assertIsNone(assistant.sp)
+        self.assertEqual(
+            "Authentification Spotify interactive indisponible.",
+            assistant.error_message,
+        )
+        input_prompt.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()

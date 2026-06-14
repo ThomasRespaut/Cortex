@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import spotipy
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
@@ -24,8 +25,10 @@ class SpotifyAssistant:
         self.sp_oauth = None
         self.token_info = None
         self.sp = None
+        self.error_message = ""
 
         if not SPOTIPY_CLIENT_ID or not SPOTIPY_CLIENT_SECRET:
+            self.error_message = "Identifiants Spotify non configurés."
             return
 
         self.sp_oauth = SpotifyOAuth(
@@ -50,6 +53,11 @@ class SpotifyAssistant:
             if token_info and 'refresh_token' in token_info:
                 token_info = self.sp_oauth.refresh_access_token(token_info['refresh_token'])
             else:
+                if not sys.stdin.isatty():
+                    self.error_message = (
+                        "Authentification Spotify interactive indisponible."
+                    )
+                    return None
                 auth_url = self.sp_oauth.get_authorize_url()
                 print(f"Veuillez autoriser l'application en visitant ce lien : {auth_url}")
                 redirect_response = input("Collez l'URL de redirection après l'autorisation : ")
@@ -72,7 +80,7 @@ class SpotifyAssistant:
     def play_track(self, track_name):
         sp = self.get_spotify_instance()
         if not sp:
-            return "Impossible de jouer le morceau."
+            return self.error_message or "Impossible de jouer le morceau."
 
         try:
             result = sp.search(q=track_name, type="track", limit=1)
@@ -88,7 +96,7 @@ class SpotifyAssistant:
     def pause_playback(self):
         sp = self.get_spotify_instance()
         if not sp:
-            return "Impossible de mettre en pause."
+            return self.error_message or "Impossible de mettre en pause."
 
         try:
             sp.pause_playback()
@@ -99,7 +107,7 @@ class SpotifyAssistant:
     def resume_playback(self):
         sp = self.get_spotify_instance()
         if not sp:
-            return "Impossible de reprendre la lecture."
+            return self.error_message or "Impossible de reprendre la lecture."
 
         try:
             sp.start_playback()
@@ -110,7 +118,7 @@ class SpotifyAssistant:
     def next_track(self):
         sp = self.get_spotify_instance()
         if not sp:
-            return "Impossible de passer au morceau suivant."
+            return self.error_message or "Impossible de passer au morceau suivant."
 
         try:
             sp.next_track()
@@ -121,7 +129,7 @@ class SpotifyAssistant:
     def previous_track(self):
         sp = self.get_spotify_instance()
         if not sp:
-            return "Impossible de revenir au morceau précédent."
+            return self.error_message or "Impossible de revenir au morceau précédent."
 
         try:
             sp.previous_track()
@@ -132,7 +140,7 @@ class SpotifyAssistant:
     def set_volume(self, volume_level):
         sp = self.get_spotify_instance()
         if not sp:
-            return "Impossible de régler le volume."
+            return self.error_message or "Impossible de régler le volume."
 
         try:
             sp.volume(volume_level)
@@ -143,7 +151,10 @@ class SpotifyAssistant:
     def get_current_playback(self):
         sp = self.get_spotify_instance()
         if not sp:
-            return "Impossible de récupérer les informations de lecture."
+            return (
+                self.error_message
+                or "Impossible de récupérer les informations de lecture."
+            )
 
         try:
             current_playback = sp.current_playback()
@@ -158,7 +169,7 @@ class SpotifyAssistant:
     def play_recommendations_track(self, track_name=None, artist_name=None, genre_name=None):
         sp = self.get_spotify_instance()
         if not sp:
-            return "Impossible de se connecter à Spotify."
+            return self.error_message or "Impossible de se connecter à Spotify."
 
         seed_tracks = self.get_track_id(track_name) if track_name else None
         seed_artists = self.get_artist_seed(artist_name) if artist_name else None
