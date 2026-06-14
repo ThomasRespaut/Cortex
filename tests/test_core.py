@@ -205,6 +205,46 @@ class RepositoryHygieneTests(unittest.TestCase):
         )
         self.assertEqual("", result.stderr)
 
+    def test_apple_location_skips_maps_without_api_key(self):
+        if importlib.util.find_spec("pyicloud") is None:
+            self.skipTest("Dépendance pyicloud absente.")
+
+        from assistant.apple.iphone import AppleAssistant
+
+        class FakePhone:
+            def location(self):
+                return {"latitude": 48.8566, "longitude": 2.3522}
+
+        class FakeClient:
+            iphone = FakePhone()
+
+        assistant = AppleAssistant.__new__(AppleAssistant)
+        assistant.client = FakeClient()
+        assistant.maps_api_key = ""
+        result = assistant.get_location()
+        self.assertEqual("success", result["status"])
+        self.assertEqual("MAPS_API_KEY n'est pas configurée.", result["address"])
+
+    def test_apple_weather_reports_missing_api_key(self):
+        if importlib.util.find_spec("pyicloud") is None:
+            self.skipTest("Dépendance pyicloud absente.")
+
+        from assistant.apple.iphone import AppleAssistant
+
+        assistant = AppleAssistant.__new__(AppleAssistant)
+        assistant.openweathermap_api_key = ""
+        assistant.get_location = lambda: {
+            "status": "success",
+            "latitude": 48.8566,
+            "longitude": 2.3522,
+        }
+        result = assistant.get_weather()
+        self.assertEqual("error", result["status"])
+        self.assertEqual(
+            "OPENWEATHERMAP_API_KEY n'est pas configurée.",
+            result["message"],
+        )
+
     def test_idfm_assistant_reports_missing_api_key(self):
         if importlib.util.find_spec("requests") is None:
             self.skipTest("Dépendance requests absente.")

@@ -50,6 +50,13 @@ class AppleAssistant:
             self.location = self.client.iphone.location()
             latitude = self.location.get("latitude", "0")
             longitude = self.location.get("longitude", "0")
+            if not self.maps_api_key:
+                return {
+                    "status": "success",
+                    "latitude": latitude,
+                    "longitude": longitude,
+                    "address": "MAPS_API_KEY n'est pas configurée.",
+                }
             url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={self.maps_api_key}"
             response = requests.get(url)
             address_data = response.json()
@@ -65,6 +72,11 @@ class AppleAssistant:
         try:
             latitude = location_result["latitude"]
             longitude = location_result["longitude"]
+            if not self.openweathermap_api_key:
+                return {
+                    "status": "error",
+                    "message": "OPENWEATHERMAP_API_KEY n'est pas configurée.",
+                }
             url = f"http://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={self.openweathermap_api_key}&units=metric"
             response = requests.get(url)
             weather = response.json()
