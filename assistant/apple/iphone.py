@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+DEFAULT_REQUEST_TIMEOUT = 10
+
+
 class AppleAssistant:
     def __init__(self):
         self.username = os.getenv("apple_username")
@@ -58,7 +61,7 @@ class AppleAssistant:
                     "address": "MAPS_API_KEY n'est pas configurée.",
                 }
             url = f"https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={self.maps_api_key}"
-            response = requests.get(url)
+            response = requests.get(url, timeout=DEFAULT_REQUEST_TIMEOUT)
             address_data = response.json()
             address = address_data["results"][0]["formatted_address"] if address_data["status"] == "OK" else "Adresse inconnue"
             return {"status": "success", "latitude": latitude, "longitude": longitude, "address": address}
@@ -78,7 +81,7 @@ class AppleAssistant:
                     "message": "OPENWEATHERMAP_API_KEY n'est pas configurée.",
                 }
             url = f"http://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={self.openweathermap_api_key}&units=metric"
-            response = requests.get(url)
+            response = requests.get(url, timeout=DEFAULT_REQUEST_TIMEOUT)
             weather = response.json()
             if weather['cod'] == 200:
                 weather_main = weather['weather'][0]['main']

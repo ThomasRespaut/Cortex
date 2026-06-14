@@ -8,6 +8,7 @@ load_dotenv()
 api_key = os.getenv('API_KEY_MOVIE')
 
 base_url = 'https://api.themoviedb.org/3'
+DEFAULT_REQUEST_TIMEOUT = 10
 
 MEDIA_TYPE_ALIASES = {
     "film": "movie",
@@ -29,7 +30,11 @@ def make_request(endpoint, params):
 
     params['api_key'] = api_key
     params['language'] = 'fr-FR'
-    response = requests.get(f"{base_url}/{endpoint}", params=params)
+    response = requests.get(
+        f"{base_url}/{endpoint}",
+        params=params,
+        timeout=DEFAULT_REQUEST_TIMEOUT,
+    )
     return response.json() if response.status_code == 200 else {}
 
 def get_genre_list(media_type='movie'):

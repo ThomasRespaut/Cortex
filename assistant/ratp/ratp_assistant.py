@@ -6,6 +6,8 @@ from datetime import datetime
 # Charger les variables d'environnement depuis le fichier .env
 load_dotenv()
 
+DEFAULT_REQUEST_TIMEOUT = 10
+
 
 class IDFMAssistant:
     def __init__(self):
@@ -33,7 +35,12 @@ class IDFMAssistant:
         }
 
         # Envoyer la requête
-        response_places = requests.get(url_places, params=params_places, headers=headers)
+        response_places = requests.get(
+            url_places,
+            params=params_places,
+            headers=headers,
+            timeout=DEFAULT_REQUEST_TIMEOUT,
+        )
 
         # Vérifier si la requête a réussi
         if response_places.status_code == 200:
@@ -95,7 +102,12 @@ class IDFMAssistant:
             }
 
             # Envoi de la requête pour calculer l'itinéraire
-            response_journey = requests.get(url_journey, params=params_journey, headers=headers)
+            response_journey = requests.get(
+                url_journey,
+                params=params_journey,
+                headers=headers,
+                timeout=DEFAULT_REQUEST_TIMEOUT,
+            )
 
             # Vérification du statut de la requête
             if response_journey.status_code == 200:

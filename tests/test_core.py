@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from assistant.functions import generate_random_number
@@ -245,6 +246,35 @@ class RepositoryHygieneTests(unittest.TestCase):
             result["message"],
         )
 
+    def test_apple_location_request_uses_timeout(self):
+        if importlib.util.find_spec("pyicloud") is None:
+            self.skipTest("Dépendance pyicloud absente.")
+
+        from assistant.apple import iphone
+
+        class FakePhone:
+            def location(self):
+                return {"latitude": 48.8566, "longitude": 2.3522}
+
+        class FakeClient:
+            iphone = FakePhone()
+
+        class FakeResponse:
+            def json(self):
+                return {
+                    "status": "OK",
+                    "results": [{"formatted_address": "Paris, France"}],
+                }
+
+        assistant = iphone.AppleAssistant.__new__(iphone.AppleAssistant)
+        assistant.client = FakeClient()
+        assistant.maps_api_key = "maps-key"
+        with mock.patch.object(iphone.requests, "get", return_value=FakeResponse()) as get:
+            result = assistant.get_location()
+
+        self.assertEqual("success", result["status"])
+        self.assertEqual(iphone.DEFAULT_REQUEST_TIMEOUT, get.call_args.kwargs["timeout"])
+
     def test_idfm_assistant_reports_missing_api_key(self):
         if importlib.util.find_spec("requests") is None:
             self.skipTest("Dépendance requests absente.")
@@ -267,6 +297,41 @@ class RepositoryHygieneTests(unittest.TestCase):
         )
         self.assertEqual("", result.stderr)
 
+    def test_idfm_places_request_uses_timeout(self):
+        if importlib.util.find_spec("requests") is None:
+            self.skipTest("Dépendance requests absente.")
+
+        from assistant.ratp import ratp_assistant
+
+        class FakeResponse:
+            status_code = 200
+
+            def json(self):
+                return {
+                    "places": [
+                        {
+                            "name": "Paris",
+                            "embedded_type": "address",
+                            "coord": {"lat": "48.8566", "lon": "2.3522"},
+                        }
+                    ]
+                }
+
+        assistant = ratp_assistant.IDFMAssistant()
+        assistant.idfm_api_key = "idfm-key"
+        with mock.patch.object(
+            ratp_assistant.requests,
+            "get",
+            return_value=FakeResponse(),
+        ) as get:
+            coords = assistant.get_coords("Paris")
+
+        self.assertEqual({"lat": "48.8566", "lon": "2.3522"}, coords)
+        self.assertEqual(
+            ratp_assistant.DEFAULT_REQUEST_TIMEOUT,
+            get.call_args.kwargs["timeout"],
+        )
+
     def test_media_recommendations_report_missing_api_key(self):
         if importlib.util.find_spec("requests") is None:
             self.skipTest("Dépendance requests absente.")
@@ -288,6 +353,35 @@ class RepositoryHygieneTests(unittest.TestCase):
             env=environment,
         )
         self.assertEqual("", result.stderr)
+
+    def test_media_request_uses_timeout(self):
+        if (
+            importlib.util.find_spec("requests") is None
+            or importlib.util.find_spec("dotenv") is None
+        ):
+            self.skipTest("Dépendances média absentes.")
+
+        from assistant.films_and_series import films_and_series
+
+        class FakeResponse:
+            status_code = 200
+
+            def json(self):
+                return {"results": []}
+
+        with mock.patch.object(films_and_series, "api_key", "movie-key"):
+            with mock.patch.object(
+                films_and_series.requests,
+                "get",
+                return_value=FakeResponse(),
+            ) as get:
+                response = films_and_series.make_request("search/movie", {})
+
+        self.assertEqual({"results": []}, response)
+        self.assertEqual(
+            films_and_series.DEFAULT_REQUEST_TIMEOUT,
+            get.call_args.kwargs["timeout"],
+        )
 
 
 if __name__ == "__main__":
