@@ -320,6 +320,18 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertLessEqual(font.size(fitted)[0], 180)
         self.assertTrue(fitted.endswith("..."))
 
+    def test_wrap_text_keeps_unbroken_words_inside_width(self):
+        import pygame
+        from app.screen_config import wrap_text
+
+        pygame.font.init()
+        font = pygame.font.SysFont("Segoe UI", 23)
+        lines = wrap_text(font, "supercalifragilisticexpialidocious", 120, max_lines=2)
+
+        self.assertTrue(lines)
+        self.assertTrue(all(font.size(line)[0] <= 120 for line in lines))
+        self.assertTrue(lines[0].endswith("..."))
+
     def test_home_menu_keeps_rendered_icons_inside_round_viewport(self):
         content = Path("Screen.py").read_text(encoding="utf-8")
 
@@ -332,11 +344,15 @@ class InterfaceAssetTests(unittest.TestCase):
         helper_content = Path("app/screen_config.py").read_text(encoding="utf-8")
 
         self.assertIn("def fit_text(", helper_content)
+        self.assertIn("def wrap_text(", helper_content)
         for module in (Path("app/app_cortex.py"), Path("app/feature_shell.py")):
             content = module.read_text(encoding="utf-8")
 
             self.assertIn("fit_text", content, module)
             self.assertNotIn("def fit_text(", content, module)
+        cortex_content = Path("app/app_cortex.py").read_text(encoding="utf-8")
+        self.assertIn("wrap_text", cortex_content)
+        self.assertNotIn("def wrap_text(", cortex_content)
 
     def test_modern_back_buttons_use_round_safe_position(self):
         for module in (Path("app/app_cortex.py"), Path("app/feature_shell.py")):

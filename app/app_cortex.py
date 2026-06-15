@@ -6,7 +6,13 @@ import time
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
-from app.screen_config import env_bool, fit_text, pointer_down_position, round_safe_point
+from app.screen_config import (
+    env_bool,
+    fit_text,
+    pointer_down_position,
+    round_safe_point,
+    wrap_text,
+)
 
 
 BACKGROUND_TOP = (18, 38, 86)
@@ -22,27 +28,6 @@ SUGGESTIONS = [
     "Mes prochains RDV",
     "Trajet maison",
 ]
-
-
-def wrap_text(font, text, max_width, max_lines=3):
-    words = text.split()
-    lines = []
-    current = ""
-    for word in words:
-        candidate = f"{current} {word}".strip()
-        if font.size(candidate)[0] <= max_width:
-            current = candidate
-        else:
-            if current:
-                lines.append(current)
-            current = word
-        if len(lines) >= max_lines:
-            break
-    if current and len(lines) < max_lines:
-        lines.append(current)
-    if len(lines) == max_lines and " ".join(lines) != text:
-        lines[-1] = fit_text(font, lines[-1], max_width)
-    return lines
 
 
 class CortexView:

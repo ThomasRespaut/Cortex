@@ -60,6 +60,34 @@ def fit_text(font, text, max_width, ellipsis="..."):
     return ellipsis
 
 
+def wrap_text(font, text, max_width, max_lines=3, ellipsis="..."):
+    if max_lines <= 0:
+        return []
+
+    words = text.split()
+    if not words:
+        return []
+
+    lines = []
+    current = ""
+    for word in words:
+        fitted_word = fit_text(font, word, max_width, ellipsis=ellipsis)
+        candidate = f"{current} {fitted_word}".strip()
+        if current and font.size(candidate)[0] > max_width:
+            lines.append(current)
+            current = fitted_word
+        else:
+            current = candidate
+        if len(lines) >= max_lines:
+            break
+
+    if current and len(lines) < max_lines:
+        lines.append(current)
+    if len(lines) == max_lines and " ".join(lines) != text:
+        lines[-1] = fit_text(font, lines[-1], max_width, ellipsis=ellipsis)
+    return lines
+
+
 def display_flags(fullscreen):
     import pygame
 
