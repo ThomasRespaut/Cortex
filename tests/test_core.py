@@ -299,6 +299,20 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertIn("clock.tick(env_fps())", content, module)
             self.assertNotIn("clock.tick(60)", content, module)
 
+    def test_screen_entrypoint_disables_sdl_touch_mouse_duplication(self):
+        content = Path("Screen.py").read_text(encoding="utf-8")
+
+        self.assertIn('os.environ.setdefault("SDL_TOUCH_MOUSE_EVENTS", "0")', content)
+        self.assertIn('os.environ.setdefault("SDL_MOUSE_TOUCH_EVENTS", "0")', content)
+        self.assertLess(
+            content.index('os.environ.setdefault("SDL_TOUCH_MOUSE_EVENTS", "0")'),
+            content.index("import pygame"),
+        )
+        self.assertLess(
+            content.index('os.environ.setdefault("SDL_MOUSE_TOUCH_EVENTS", "0")'),
+            content.index("import pygame"),
+        )
+
     def test_bdd_screen_uses_responsive_touch_layout(self):
         content = Path("app/app_bdd.py").read_text(encoding="utf-8")
 

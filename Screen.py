@@ -5,6 +5,8 @@ import threading
 from dataclasses import dataclass
 
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
+os.environ.setdefault("SDL_TOUCH_MOUSE_EVENTS", "0")
+os.environ.setdefault("SDL_MOUSE_TOUCH_EVENTS", "0")
 import pygame
 try:
     from dotenv import load_dotenv
