@@ -1638,6 +1638,19 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertEqual(str(target), prepare_screenshot_path(target))
             self.assertTrue(target.parent.is_dir())
 
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with mock.patch.dict(
+                os.environ,
+                {"HOME": temp_dir, "USERPROFILE": temp_dir},
+            ):
+                target = Path(temp_dir) / "screens" / "screen.png"
+
+                self.assertEqual(
+                    str(target),
+                    prepare_screenshot_path("~/screens/screen.png"),
+                )
+                self.assertTrue(target.parent.is_dir())
+
     def test_cortex_view_activation_supports_touch_suggestions(self):
         import pygame
         from app.app_cortex import CortexView
