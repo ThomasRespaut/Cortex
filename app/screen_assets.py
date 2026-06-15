@@ -8,15 +8,42 @@ def asset_path(*parts):
     return os.path.join("app", "Images", *parts)
 
 
+def safe_icon_size(size, default=1):
+    try:
+        if isinstance(size, str):
+            normalized = size.strip().lower().replace("*", "x")
+            size = normalized.split("x", 1)[0]
+        return max(default, int(size))
+    except (TypeError, ValueError):
+        return default
+
+
 def safe_surface_size(size, default=1):
-    if isinstance(size, int):
-        return max(default, size)
-    width, height = size
-    return max(default, int(width)), max(default, int(height))
+    if isinstance(size, str):
+        normalized = size.strip().lower().replace("*", "x")
+        if "x" in normalized:
+            width_text, height_text = normalized.split("x", 1)
+            try:
+                return (
+                    max(default, int(width_text.strip())),
+                    max(default, int(height_text.strip())),
+                )
+            except ValueError:
+                return default, default
+
+    if isinstance(size, (int, float)):
+        safe_size = safe_icon_size(size, default=default)
+        return safe_size, safe_size
+
+    try:
+        width, height = size
+        return max(default, int(width)), max(default, int(height))
+    except (TypeError, ValueError):
+        return default, default
 
 
 def make_icon_fallback(label, size=128, accent=(88, 214, 255)):
-    size = safe_surface_size(size)
+    size = safe_icon_size(size)
     surface = pygame.Surface((size, size), pygame.SRCALPHA)
     pygame.draw.circle(surface, (10, 17, 35), (size // 2, size // 2), size // 2)
     pygame.draw.circle(surface, accent, (size // 2, size // 2), size // 2 - 4, 4)
