@@ -8,8 +8,6 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.verify_screen_smoke import validate_screen_image
-
 
 REQUIRED_FILES = [
     ".env.example",
@@ -118,6 +116,10 @@ REQUIRED_TEXT_SNIPPETS = {
     "scripts/setup_raspberry_pi.sh": [
         "bash -n scripts/launch_raspberry_pi.sh",
         "bash -n deploy/raspberry-pi/install_service.sh",
+        "tools/raspberry_pi_preflight.py \\",
+        "--project-root .",
+        "--skip-pygame-import",
+        "--skip-executable-check",
         "\"$VENV_DIR/bin/python\" -m pip check",
         "chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh",
         "tools/validate_raspberry_pi_ui.py",
@@ -276,6 +278,8 @@ def collect_preflight_errors(
         if not screenshot_path.is_absolute():
             screenshot_path = root / screenshot_path
         try:
+            from tools.verify_screen_smoke import validate_screen_image
+
             validate_screen_image(
                 screenshot_path,
                 min_width=400,

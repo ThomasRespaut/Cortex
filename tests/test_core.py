@@ -1555,6 +1555,12 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("set -euo pipefail", content)
         self.assertIn("bash -n scripts/launch_raspberry_pi.sh", content)
         self.assertIn("bash -n deploy/raspberry-pi/install_service.sh", content)
+        self.assertIn(
+            "tools/raspberry_pi_preflight.py \\\n  --project-root .",
+            content,
+        )
+        self.assertIn("--skip-pygame-import", content)
+        self.assertIn("--skip-executable-check", content)
         self.assertIn("requirements-raspberry-pi.txt", content)
         self.assertIn("\"$VENV_DIR/bin/python\" -m pip check", content)
         self.assertIn(
@@ -1716,6 +1722,15 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
 
         self.assertEqual(["vosk"], missing_raspberry_pi_requirements(requirements))
+
+    def test_raspberry_pi_preflight_imports_screenshot_validator_lazily(self):
+        content = Path("tools/raspberry_pi_preflight.py").read_text(encoding="utf-8")
+
+        self.assertNotIn(
+            "from tools.verify_screen_smoke import validate_screen_image\n\n\nREQUIRED_FILES",
+            content,
+        )
+        self.assertIn("from tools.verify_screen_smoke import validate_screen_image", content)
 
     def test_raspberry_pi_preflight_reports_missing_apt_package(self):
         from tools.raspberry_pi_preflight import missing_raspberry_pi_apt_packages

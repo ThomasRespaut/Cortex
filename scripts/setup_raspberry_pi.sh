@@ -11,6 +11,11 @@ PYTHON_BIN="${PYTHON_BIN:-python3}"
 VENV_DIR="${CORTEX_VENV_DIR:-.venv}"
 APT_INSTALL="${CORTEX_APT_INSTALL:-true}"
 
+"$PYTHON_BIN" tools/raspberry_pi_preflight.py \
+  --project-root . \
+  --skip-pygame-import \
+  --skip-executable-check
+
 if command -v apt-get >/dev/null 2>&1 && [ "$APT_INSTALL" = "true" ]; then
   sudo apt-get update
   sudo apt-get install -y \
