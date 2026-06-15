@@ -135,24 +135,18 @@ sudo systemctl start cortex.service
 Le script active le service au démarrage. Il ne le démarre immédiatement que si
 `CORTEX_START_SERVICE=true` est fourni.
 
-Avant de l'activer sur la Raspberry Pi, lancez le préflight local :
+Avant de l'activer sur la Raspberry Pi, lancez la validation locale complète.
+Elle vérifie le préflight, capture `Screen.py` en mode headless, puis rend les
+écrans Pygame anciens et modernes en 480x480 :
+
+```bash
+python tools/validate_raspberry_pi_ui.py --project-root . --size 480x480
+```
+
+Pour ne lancer que le préflight de configuration, sans rendu Pygame :
 
 ```bash
 python tools/raspberry_pi_preflight.py --project-root .
-```
-
-Après une capture headless, le même outil peut vérifier que l'écran rendu n'est
-pas vide :
-
-```bash
-python tools/raspberry_pi_preflight.py --project-root . --screenshot artifacts/screen-smoke.png
-```
-
-Pour vérifier aussi les anciens sous-écrans Pygame sans interaction :
-
-```bash
-python tools/smoke_legacy_pygame_screens.py --size 480x480
-python tools/smoke_modern_pygame_screens.py --size 480x480
 ```
 
 ### Tests rapides

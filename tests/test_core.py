@@ -520,20 +520,62 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertTrue(content.startswith("#!/usr/bin/env bash"))
         self.assertIn("set -euo pipefail", content)
         self.assertIn("requirements-raspberry-pi.txt", content)
-        self.assertIn("tools/raspberry_pi_preflight.py", content)
-        self.assertIn("CORTEX_SCREENSHOT_PATH=artifacts/screen-smoke.png", content)
-        self.assertIn("tools/smoke_legacy_pygame_screens.py", content)
-        self.assertIn("tools/smoke_modern_pygame_screens.py", content)
+        self.assertIn("tools/validate_raspberry_pi_ui.py", content)
+        self.assertIn("--screenshot artifacts/screen-smoke.png", content)
+        self.assertIn("--legacy-output-dir artifacts/legacy-screen-smoke", content)
+        self.assertIn("--modern-output-dir artifacts/modern-screen-smoke", content)
 
     def test_github_actions_runs_pygame_smokes(self):
         workflow = Path(".github/workflows/core-checks.yml")
         content = workflow.read_text(encoding="utf-8")
 
-        self.assertIn("python Screen.py", content)
-        self.assertIn("tools/verify_screen_smoke.py", content)
-        self.assertIn("tools/raspberry_pi_preflight.py", content)
-        self.assertIn("tools/smoke_legacy_pygame_screens.py", content)
-        self.assertIn("tools/smoke_modern_pygame_screens.py", content)
+        self.assertIn("tools/validate_raspberry_pi_ui.py", content)
+        self.assertIn("--size 480x480", content)
+
+    def test_raspberry_pi_ui_validator_runs_full_headless_chain(self):
+        from tools.validate_raspberry_pi_ui import build_validation_steps, parse_size
+
+        steps = build_validation_steps(
+            "python",
+            ".",
+            parse_size("480x480"),
+            "artifacts/screen-smoke.png",
+            "artifacts/legacy-screen-smoke",
+            "artifacts/modern-screen-smoke",
+        )
+        step_commands = [" ".join(step.command) for step in steps]
+
+        self.assertEqual(
+            [
+                "Préflight Raspberry Pi",
+                "Capture Screen.py headless",
+                "Validation capture Screen.py",
+                "Préflight avec capture",
+                "Smokes anciens écrans Pygame",
+                "Smokes écrans Pygame modernes",
+            ],
+            [step.name for step in steps],
+        )
+        self.assertIn("python Screen.py", step_commands)
+        self.assertIn(
+            "python tools/verify_screen_smoke.py artifacts/screen-smoke.png --min-width 400 --min-height 400",
+            step_commands,
+        )
+        self.assertIn(
+            "python tools/raspberry_pi_preflight.py --project-root . --screenshot artifacts/screen-smoke.png",
+            step_commands,
+        )
+        self.assertIn(
+            "python tools/smoke_legacy_pygame_screens.py --size 480x480 --output-dir artifacts/legacy-screen-smoke",
+            step_commands,
+        )
+        self.assertIn(
+            "python tools/smoke_modern_pygame_screens.py --size 480x480 --output-dir artifacts/modern-screen-smoke",
+            step_commands,
+        )
+        self.assertEqual("dummy", steps[1].env["SDL_VIDEODRIVER"])
+        self.assertEqual("false", steps[1].env["CORTEX_FULLSCREEN"])
+        self.assertEqual("480x480", steps[1].env["CORTEX_SCREEN_SIZE"])
 
     def test_raspberry_pi_requirements_exclude_heavy_local_model_stack(self):
         requirements = Path("requirements-raspberry-pi.txt").read_text(encoding="utf-8")
@@ -734,6 +776,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "scripts/setup_raspberry_pi.sh",
                 "deploy/raspberry-pi/install_service.sh",
                 "deploy/raspberry-pi/cortex.service.example",
+                "tools/validate_raspberry_pi_ui.py",
                 "tools/smoke_legacy_pygame_screens.py",
                 "tools/smoke_modern_pygame_screens.py",
             ):
@@ -762,6 +805,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "scripts/setup_raspberry_pi.sh",
                 "deploy/raspberry-pi/install_service.sh",
                 "deploy/raspberry-pi/cortex.service.example",
+                "tools/validate_raspberry_pi_ui.py",
                 "tools/smoke_legacy_pygame_screens.py",
                 "tools/smoke_modern_pygame_screens.py",
             ):

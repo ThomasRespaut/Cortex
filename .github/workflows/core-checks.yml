@@ -36,27 +36,8 @@ jobs:
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
 
-      - name: Render Screen.py smoke screenshot
-        env:
-          SDL_VIDEODRIVER: dummy
-          CORTEX_FULLSCREEN: "false"
-          CORTEX_PREVIEW_SIZE: "480"
-          CORTEX_SKIP_CORTEX_LOAD: "true"
-          CORTEX_SCREENSHOT_PATH: artifacts/screen-smoke.png
-          CORTEX_EXIT_AFTER_SCREENSHOT: "true"
-        run: python Screen.py
-
-      - name: Verify Screen.py smoke screenshot
-        run: python tools/verify_screen_smoke.py artifacts/screen-smoke.png --min-width 400 --min-height 400
-
-      - name: Run Raspberry Pi preflight
-        run: python tools/raspberry_pi_preflight.py --project-root . --screenshot artifacts/screen-smoke.png
-
-      - name: Render legacy Pygame screen smoke screenshots
-        run: python tools/smoke_legacy_pygame_screens.py --size 480x480 --output-dir artifacts/legacy-screen-smoke
-
-      - name: Render modern Pygame screen smoke screenshots
-        run: python tools/smoke_modern_pygame_screens.py --size 480x480 --output-dir artifacts/modern-screen-smoke
+      - name: Run Raspberry Pi UI validation
+        run: python tools/validate_raspberry_pi_ui.py --project-root . --size 480x480
 
       - name: Validate fine-tuning dataset
         run: python tools/validate_finetune_dataset.py --dataset-dir training/finetune_cortex_v3
