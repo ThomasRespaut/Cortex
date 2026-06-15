@@ -604,6 +604,32 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_status_handles_minimal_cortex_object(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                center, radius = home.viewport()
+                home.skip_cortex_load = False
+
+                home.cortex = object()
+                home.draw_status(center, radius)
+
+                home.cortex = mock.Mock(local_mode=False)
+                home.draw_status(center, radius)
+            finally:
+                pygame.quit()
+
     def test_home_menu_clamps_invalid_preview_size_before_creating_window(self):
         import pygame
         from Screen import CortexHome

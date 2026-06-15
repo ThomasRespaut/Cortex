@@ -313,7 +313,7 @@ class CortexHome:
             mode = "INITIALISATION"
             mode_color = (255, 194, 92)
         else:
-            mode = "LOCAL" if self.cortex.local_mode else "EN LIGNE"
+            mode = "LOCAL" if getattr(self.cortex, "local_mode", True) else "EN LIGNE"
             mode_color = ACCENT
         mode_surface = self.small_font.render(mode, True, mode_color)
         mode_rect = mode_surface.get_rect()
