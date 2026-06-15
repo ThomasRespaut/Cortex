@@ -426,6 +426,54 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("TAP_MOVE_LIMIT", content)
         self.assertIn("app == self.selected", content)
 
+    def test_home_menu_round_mask_blacks_out_square_corners(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                center, radius = home.viewport()
+                home.screen.fill((210, 30, 30))
+                home.draw_round_mask(center, radius)
+
+                self.assertEqual((0, 0, 0), home.screen.get_at((0, 0))[:3])
+                self.assertEqual((210, 30, 30), home.screen.get_at((120, 120))[:3])
+            finally:
+                pygame.quit()
+
+    def test_home_menu_round_mask_can_be_disabled_for_square_preview(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_ROUND_MASK": "false",
+            },
+        ):
+            home = CortexHome()
+            try:
+                center, radius = home.viewport()
+                home.screen.fill((210, 30, 30))
+                home.draw_round_mask(center, radius)
+
+                self.assertEqual((210, 30, 30), home.screen.get_at((0, 0))[:3])
+            finally:
+                pygame.quit()
+
     def test_home_menu_shows_notice_when_app_is_not_ready(self):
         import pygame
         from Screen import CortexHome
@@ -1061,6 +1109,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             "CORTEX_TOUCH_EDGE_MARGIN=\"${CORTEX_TOUCH_EDGE_MARGIN:-0}\"",
             content,
         )
+        self.assertIn("CORTEX_ROUND_MASK=\"${CORTEX_ROUND_MASK:-true}\"", content)
         self.assertIn("CORTEX_TAP_MOVE_LIMIT=\"${CORTEX_TAP_MOVE_LIMIT:-14}\"", content)
         self.assertIn(
             "CORTEX_EMPTY_DOUBLE_TAP_MS=\"${CORTEX_EMPTY_DOUBLE_TAP_MS:-500}\"",
@@ -1414,6 +1463,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("CORTEX_TOUCH_EDGE_MARGIN=0", content)
+        self.assertIn("CORTEX_ROUND_MASK=true", content)
         self.assertIn("CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)

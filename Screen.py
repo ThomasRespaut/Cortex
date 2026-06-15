@@ -318,6 +318,15 @@ class CortexHome:
         )
         self.screen.blit(notice_surface, notice_rect)
 
+    def draw_round_mask(self, center, radius):
+        if not env_bool("CORTEX_ROUND_MASK", True):
+            return
+
+        mask = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+        mask.fill((0, 0, 0, 255))
+        pygame.draw.circle(mask, (0, 0, 0, 0), center, radius)
+        self.screen.blit(mask, (0, 0))
+
     def draw_apps(self, center, radius):
         width, height = self.screen.get_size()
         spacing = radius * 0.245 * self.zoom
@@ -639,6 +648,7 @@ class CortexHome:
             self.draw_apps(center, radius)
             self.draw_status(center, radius)
             self.draw_notice(center, radius)
+            self.draw_round_mask(center, radius)
             pygame.display.flip()
             screenshot_path = os.getenv("CORTEX_SCREENSHOT_PATH")
             if screenshot_path and not self.screenshot_saved:
