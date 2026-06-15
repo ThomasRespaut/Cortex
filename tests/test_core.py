@@ -840,7 +840,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual("480x480", steps[1].env["CORTEX_SCREEN_SIZE"])
 
     def test_local_check_runner_covers_autonomous_validation_chain(self):
-        from tools.run_local_checks import build_check_steps
+        from tools.run_local_checks import build_check_steps, secret_findings
 
         steps = build_check_steps(
             "python",
@@ -851,6 +851,8 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertEqual(
             [
+                "Contrôle whitespace Git",
+                "Scan secrets fichiers modifiés",
                 "Compilation Python",
                 "Tests unitaires",
                 "Vérification dépendances",
@@ -858,6 +860,11 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "Validation Raspberry Pi/Pygame",
             ],
             [step.name for step in steps],
+        )
+        self.assertIn("git diff --check", step_commands)
+        self.assertIn(
+            "python tools/run_local_checks.py --project-root . --secrets-only",
+            step_commands,
         )
         self.assertIn(
             "python -m compileall -q Screen.py app function_calling.py model_loader.py tools tests",
@@ -873,6 +880,26 @@ class ToolingDefaultsTests(unittest.TestCase):
             "python tools/validate_raspberry_pi_ui.py --project-root . --size 480x480",
             step_commands,
         )
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            secret_file = root / "secrets.env"
+            secret_file.write_text(
+                "OPENAI_API_KEY=" + "sk-" + ("a" * 32) + "\n",
+                encoding="utf-8",
+            )
+            placeholder_file = root / "example.env"
+            placeholder_file.write_text(
+                "OPENAI_API_KEY=your-key-here\n",
+                encoding="utf-8",
+            )
+
+            findings = secret_findings(
+                root,
+                ["secrets.env", "example.env"],
+            )
+
+        self.assertEqual([("secrets.env", 1, "OpenAI-style API key")], findings)
 
     def test_raspberry_pi_requirements_exclude_heavy_local_model_stack(self):
         requirements = Path("requirements-raspberry-pi.txt").read_text(encoding="utf-8")

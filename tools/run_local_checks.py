@@ -1,5 +1,6 @@
 import argparse
 import os
+import re
 import subprocess
 import sys
 from dataclasses import dataclass, field
@@ -16,6 +17,83 @@ class CheckStep:
     env: dict[str, str] = field(default_factory=dict)
 
 
+SECRET_PATTERNS = [
+    ("AWS access key", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
+    ("OpenAI-style API key", re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b")),
+    ("GitHub token", re.compile(r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{20,}\b")),
+    ("GitHub fine-grained token", re.compile(r"\bgithub_pat_[A-Za-z0-9_]{40,}\b")),
+    ("Google API key", re.compile(r"\bAIza[0-9A-Za-z_-]{30,}\b")),
+    (
+        "Private key block",
+        re.compile(r"BEGIN (?:RSA |OPENSSH |EC |DSA )?PRIVATE KEY"),
+    ),
+    (
+        "OAuth token value",
+        re.compile(
+            r"(?i)\b(?:access_token|refresh_token|client_secret)\b"
+            r"\s*[:=]\s*[\"'][A-Za-z0-9._~+/=-]{24,}[\"']"
+        ),
+    ),
+]
+
+
+def git_output(project_root, *args):
+    result = subprocess.run(
+        ["git", *args],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return []
+    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+
+def changed_files(project_root):
+    paths = set(
+        git_output(
+            project_root,
+            "diff",
+            "--name-only",
+            "--diff-filter=ACMRTUXB",
+            "HEAD",
+        )
+    )
+    paths.update(git_output(project_root, "ls-files", "--others", "--exclude-standard"))
+    return sorted(paths)
+
+
+def secret_findings(project_root, paths):
+    root = Path(project_root)
+    findings = []
+    for relative_path in paths:
+        path = root / relative_path
+        if not path.is_file() or path.stat().st_size > 1_000_000:
+            continue
+        try:
+            content = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
+        for line_number, line in enumerate(content.splitlines(), start=1):
+            for label, pattern in SECRET_PATTERNS:
+                if pattern.search(line):
+                    findings.append((relative_path, line_number, label))
+    return findings
+
+
+def run_secret_scan(project_root):
+    findings = secret_findings(project_root, changed_files(project_root))
+    if not findings:
+        print("Scan secrets OK.")
+        return 0
+
+    print("Secrets potentiels détectés dans les fichiers modifiés:")
+    for path, line_number, label in findings:
+        print(f"- {path}:{line_number} ({label})")
+    return 1
+
+
 def build_check_steps(
     python_bin,
     dataset_dir,
@@ -23,6 +101,20 @@ def build_check_steps(
     project_root=".",
 ):
     return [
+        CheckStep(
+            "Contrôle whitespace Git",
+            ["git", "diff", "--check"],
+        ),
+        CheckStep(
+            "Scan secrets fichiers modifiés",
+            [
+                python_bin,
+                "tools/run_local_checks.py",
+                "--project-root",
+                project_root,
+                "--secrets-only",
+            ],
+        ),
         CheckStep(
             "Compilation Python",
             [
@@ -95,6 +187,11 @@ def parse_args():
         default="480x480",
         help="Taille utilisée par les smokes Raspberry Pi/Pygame.",
     )
+    parser.add_argument(
+        "--secrets-only",
+        action="store_true",
+        help="Ne lance que le scan de secrets des fichiers modifiés.",
+    )
     return parser.parse_args()
 
 
@@ -104,6 +201,9 @@ def main():
     if not project_root.is_dir():
         print(f"Projet introuvable: {project_root}")
         return 1
+
+    if args.secrets_only:
+        return run_secret_scan(project_root)
 
     steps = build_check_steps(
         sys.executable,
