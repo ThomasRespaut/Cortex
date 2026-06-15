@@ -341,6 +341,49 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("champ text invalide", result.stdout)
         self.assertNotIn("Traceback", result.stderr)
 
+    def test_screen_smoke_validator_accepts_rich_capture(self):
+        import pygame
+        from tools.verify_screen_smoke import validate_screen_image
+
+        pygame.init()
+        try:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                target = Path(temp_dir) / "screen.png"
+                surface = pygame.Surface((320, 320))
+                surface.fill((6, 10, 28))
+                for index in range(10):
+                    pygame.draw.circle(
+                        surface,
+                        (40 + index * 20, 90 + index * 9, 180),
+                        (32 + index * 28, 160),
+                        18,
+                    )
+                pygame.image.save(surface, target)
+
+                stats = validate_screen_image(target, min_width=300, min_height=300)
+        finally:
+            pygame.quit()
+
+        self.assertGreaterEqual(stats["unique_colors"], 8)
+        self.assertGreaterEqual(stats["bright_pixels"], 12)
+
+    def test_screen_smoke_validator_rejects_blank_capture(self):
+        import pygame
+        from tools.verify_screen_smoke import validate_screen_image
+
+        pygame.init()
+        try:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                target = Path(temp_dir) / "blank.png"
+                surface = pygame.Surface((320, 320))
+                surface.fill((0, 0, 0))
+                pygame.image.save(surface, target)
+
+                with self.assertRaises(ValueError):
+                    validate_screen_image(target, min_width=300, min_height=300)
+        finally:
+            pygame.quit()
+
 
 class RepositoryHygieneTests(unittest.TestCase):
     def test_generated_and_sensitive_files_are_not_tracked(self):

@@ -43,5 +43,8 @@ jobs:
           CORTEX_EXIT_AFTER_SCREENSHOT: "true"
         run: python Screen.py
 
+      - name: Verify Screen.py smoke screenshot
+        run: python tools/verify_screen_smoke.py artifacts/screen-smoke.png --min-width 400 --min-height 400
+
       - name: Validate fine-tuning dataset
         run: python tools/validate_finetune_dataset.py --dataset-dir training/finetune_cortex_v3
