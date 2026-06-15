@@ -1717,6 +1717,23 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertEqual(["vosk"], missing_raspberry_pi_requirements(requirements))
 
+    def test_raspberry_pi_preflight_reports_missing_apt_package(self):
+        from tools.raspberry_pi_preflight import missing_raspberry_pi_apt_packages
+
+        setup_script = "\n".join(
+            [
+                "sudo apt-get install -y \\",
+                "  python3-venv \\",
+                "  python3-dev \\",
+                "  portaudio19-dev \\",
+                "  libasound2-dev \\",
+                "  libsdl2-2.0-0 \\",
+                "  libffi-dev",
+            ]
+        )
+
+        self.assertEqual(["libsdl2-dev"], missing_raspberry_pi_apt_packages(setup_script))
+
     def test_raspberry_pi_systemd_service_uses_launcher(self):
         service = Path("deploy/raspberry-pi/cortex.service.example")
         content = service.read_text(encoding="utf-8")

@@ -64,6 +64,16 @@ REQUIRED_RASPBERRY_PI_REQUIREMENTS = [
     "vosk",
 ]
 
+REQUIRED_RASPBERRY_PI_APT_PACKAGES = [
+    "python3-venv",
+    "python3-dev",
+    "portaudio19-dev",
+    "libasound2-dev",
+    "libsdl2-2.0-0",
+    "libsdl2-dev",
+    "libffi-dev",
+]
+
 REQUIRED_SERVICE_ENV_SNIPPETS = [
     "Environment=SDL_VIDEODRIVER=kmsdrm",
     "Environment=SDL_TOUCH_MOUSE_EVENTS=0",
@@ -152,6 +162,14 @@ def missing_raspberry_pi_requirements(requirements_text):
     ]
 
 
+def missing_raspberry_pi_apt_packages(setup_script_text):
+    return [
+        package
+        for package in REQUIRED_RASPBERRY_PI_APT_PACKAGES
+        if package not in setup_script_text
+    ]
+
+
 def has_lf_line_endings(path):
     content = Path(path).read_bytes()
     return b"\r\n" not in content
@@ -200,6 +218,17 @@ def collect_preflight_errors(
             errors.append(
                 "Dépendance Raspberry Pi absente de requirements-raspberry-pi.txt: "
                 f"{requirement}"
+            )
+
+    setup_script = root / "scripts/setup_raspberry_pi.sh"
+    if setup_script.is_file():
+        missing_apt_packages = missing_raspberry_pi_apt_packages(
+            setup_script.read_text(encoding="utf-8")
+        )
+        for package in missing_apt_packages:
+            errors.append(
+                "Paquet apt Raspberry Pi absent de scripts/setup_raspberry_pi.sh: "
+                f"{package}"
             )
 
     for relative_path, snippets in REQUIRED_TEXT_SNIPPETS.items():
