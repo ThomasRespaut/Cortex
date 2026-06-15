@@ -81,6 +81,7 @@ CORTEX_TOUCH_HIT_SLOP=10
 CORTEX_TAP_MOVE_LIMIT=14
 CORTEX_EMPTY_DOUBLE_TAP_MS=500
 CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36
+CORTEX_VALIDATE_STEP_TIMEOUT=120
 ```
 
 `CORTEX_TOUCH_ROTATION` accepte `0`, `90`, `180` ou `270` pour aligner les
@@ -98,8 +99,10 @@ icônes pour compenser l'imprécision du tactile.
 `CORTEX_TAP_MOVE_LIMIT` règle la tolérance entre un tap et un drag si le
 tactile génère du jitter. Un double-tap sur une zone vide recentre le menu;
 `CORTEX_EMPTY_DOUBLE_TAP_MS` et `CORTEX_EMPTY_DOUBLE_TAP_DISTANCE` ajustent ce
-geste si le panneau tactile est plus lent ou moins précis. Sur un poste de
-développement, utilisez plutôt :
+geste si le panneau tactile est plus lent ou moins précis.
+`CORTEX_VALIDATE_STEP_TIMEOUT` limite chaque étape de validation Pygame pendant
+le setup Raspberry Pi; augmentez-le si la Pi est très lente au premier rendu.
+Sur un poste de développement, utilisez plutôt :
 
 ```bash
 CORTEX_FULLSCREEN=false

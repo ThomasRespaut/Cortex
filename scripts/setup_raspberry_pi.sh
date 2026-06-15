@@ -37,6 +37,7 @@ chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh
 "$VENV_DIR/bin/python" tools/validate_raspberry_pi_ui.py \
   --project-root . \
   --size "${CORTEX_SCREEN_SIZE:-480x480}" \
+  --step-timeout "${CORTEX_VALIDATE_STEP_TIMEOUT:-120}" \
   --screenshot artifacts/screen-smoke.png \
   --legacy-output-dir artifacts/legacy-screen-smoke \
   --modern-output-dir artifacts/modern-screen-smoke

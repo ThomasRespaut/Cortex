@@ -1570,6 +1570,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             content,
         )
         self.assertIn("tools/validate_raspberry_pi_ui.py", content)
+        self.assertIn("--step-timeout \"${CORTEX_VALIDATE_STEP_TIMEOUT:-120}\"", content)
         self.assertIn("--screenshot artifacts/screen-smoke.png", content)
         self.assertIn("--legacy-output-dir artifacts/legacy-screen-smoke", content)
         self.assertIn("--modern-output-dir artifacts/modern-screen-smoke", content)
@@ -2060,6 +2061,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
+        self.assertIn("CORTEX_VALIDATE_STEP_TIMEOUT=120", content)
 
     def test_env_example_documents_oauth_token_overrides(self):
         content = Path(".env.example").read_text(encoding="utf-8")
