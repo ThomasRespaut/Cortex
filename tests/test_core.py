@@ -696,6 +696,50 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_ignores_synthetic_mouse_events_after_touch(self):
+        import pygame
+        from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                app = build_honeycomb(APP_DEFINITIONS)[0]
+                home.rendered_apps = [(app, pygame.Vector2(120, 120), 60)]
+                finger_down = pygame.event.Event(
+                    pygame.FINGERDOWN,
+                    {"x": 0.5, "y": 0.5, "finger_id": 1},
+                )
+                finger_up = pygame.event.Event(
+                    pygame.FINGERUP,
+                    {"x": 0.5, "y": 0.5, "finger_id": 1},
+                )
+                synthetic_mouse_down = pygame.event.Event(
+                    pygame.MOUSEBUTTONDOWN,
+                    {"button": 1, "pos": (120, 120), "touch": True},
+                )
+                synthetic_mouse_up = pygame.event.Event(
+                    pygame.MOUSEBUTTONUP,
+                    {"button": 1, "pos": (120, 120), "touch": True},
+                )
+
+                with mock.patch.object(home, "launch_app") as launch_app:
+                    home.handle_event(finger_down)
+                    home.handle_event(finger_up)
+                    home.handle_event(synthetic_mouse_down)
+                    home.handle_event(synthetic_mouse_up)
+
+                launch_app.assert_called_once_with(app.name)
+            finally:
+                pygame.quit()
+
     def test_home_menu_drag_clears_pressed_icon_selection(self):
         import pygame
         from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb
@@ -1304,6 +1348,18 @@ class InterfaceAssetTests(unittest.TestCase):
             pygame.MOUSEBUTTONDOWN,
             {"button": 2, "pos": (12, 34)},
         )
+        synthetic_touch_mouse_down = pygame.event.Event(
+            pygame.MOUSEBUTTONDOWN,
+            {"button": 1, "pos": (200, 200), "touch": True},
+        )
+        synthetic_touch_mouse_motion = pygame.event.Event(
+            pygame.MOUSEMOTION,
+            {"pos": (200, 200), "touch": True},
+        )
+        synthetic_touch_mouse_up = pygame.event.Event(
+            pygame.MOUSEBUTTONUP,
+            {"button": 1, "pos": (200, 200), "touch": True},
+        )
         clipped_corner_event = pygame.event.Event(
             pygame.MOUSEBUTTONDOWN,
             {"button": 1, "pos": (12, 34)},
@@ -1328,6 +1384,9 @@ class InterfaceAssetTests(unittest.TestCase):
                 screen_config.is_inside_round_viewport(clipped_mouse_up, 400, 400)
             )
             self.assertIsNone(pointer_down_position(ignored_mouse_event, 400, 400))
+            self.assertIsNone(pointer_down_position(synthetic_touch_mouse_down, 400, 400))
+            self.assertIsNone(pointer_move_position(synthetic_touch_mouse_motion, 400, 400))
+            self.assertIsNone(pointer_up_position(synthetic_touch_mouse_up, 400, 400))
             self.assertEqual(
                 (300.0, 100.0),
                 pointer_down_position(touch_event, 400, 400),

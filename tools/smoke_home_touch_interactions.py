@@ -75,6 +75,23 @@ def smoke_home_touch_interactions(size):
         dispatch_quietly(home, finger_event(pygame.FINGERUP, start, size))
         if home.notice_text != "Aperçu: Cortex non chargé":
             raise RuntimeError("Le tap tactile sur une app indisponible n'affiche pas de notice.")
+        home.notice_text = ""
+        dispatch_quietly(
+            home,
+            pygame.event.Event(
+                pygame.MOUSEBUTTONDOWN,
+                {"button": 1, "pos": start, "touch": True},
+            ),
+        )
+        dispatch_quietly(
+            home,
+            pygame.event.Event(
+                pygame.MOUSEBUTTONUP,
+                {"button": 1, "pos": start, "touch": True},
+            ),
+        )
+        if home.notice_text:
+            raise RuntimeError("Un événement souris synthétique tactile relance une app.")
 
         home.offset.update(0, 0)
         dispatch_quietly(home, finger_event(pygame.FINGERDOWN, start, size))

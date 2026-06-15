@@ -106,6 +106,10 @@ def display_flags(fullscreen):
     return pygame.RESIZABLE
 
 
+def is_synthetic_touch_mouse_event(event):
+    return bool(getattr(event, "touch", False))
+
+
 def rotated_touch_position(x, y, width, height, rotation=None):
     rotation = env_int("CORTEX_TOUCH_ROTATION", 0) if rotation is None else rotation
     rotation %= 360
@@ -244,6 +248,8 @@ def pointer_down_position(event, width, height):
     import pygame
 
     position = None
+    if is_synthetic_touch_mouse_event(event):
+        return None
     if event.type == pygame.MOUSEBUTTONDOWN and getattr(event, "button", 1) == 1:
         position = event.pos
     elif event.type == pygame.FINGERDOWN:
@@ -265,6 +271,8 @@ def pointer_move_position(event, width, height):
     import pygame
 
     position = None
+    if is_synthetic_touch_mouse_event(event):
+        return None
     if event.type == pygame.MOUSEMOTION:
         position = event.pos
     elif event.type == pygame.FINGERMOTION:
@@ -289,6 +297,8 @@ def pointer_up_position(event, width, height):
     import pygame
 
     position = None
+    if is_synthetic_touch_mouse_event(event):
+        return None
     if event.type == pygame.MOUSEBUTTONUP and getattr(event, "button", 1) == 1:
         position = event.pos
     elif event.type == pygame.FINGERUP:
