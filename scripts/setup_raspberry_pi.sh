@@ -4,6 +4,9 @@ set -euo pipefail
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_DIR"
 
+bash -n scripts/launch_raspberry_pi.sh
+bash -n deploy/raspberry-pi/install_service.sh
+
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 VENV_DIR="${CORTEX_VENV_DIR:-.venv}"
 APT_INSTALL="${CORTEX_APT_INSTALL:-true}"
