@@ -114,6 +114,13 @@ CORTEX_FULLSCREEN=false
 CORTEX_PREVIEW_SIZE=900
 ```
 
+Pour retirer la barre de fenêtre sur un aperçu desktop cadré comme le kiosk,
+activez aussi :
+
+```bash
+CORTEX_FRAMELESS=true
+```
+
 Pour forcer une taille exacte de fenêtre, par exemple le panneau circulaire
 Raspberry Pi en 480x480, utilisez :
 
@@ -127,6 +134,10 @@ Pour tester le rendu sans modèle, sans micro et sans fenêtre réelle :
 ```bash
 SDL_VIDEODRIVER=dummy CORTEX_FULLSCREEN=false CORTEX_SKIP_CORTEX_LOAD=true CORTEX_SCREENSHOT_PATH=artifacts/screen.png CORTEX_EXIT_AFTER_SCREENSHOT=true python Screen.py
 ```
+
+`CORTEX_SCREENSHOT_PATH` choisit le fichier PNG de sortie, et
+`CORTEX_EXIT_AFTER_SCREENSHOT=true` ferme automatiquement l'application après la
+première capture pour les smokes locaux ou CI.
 
 Sur Raspberry Pi, le script de lancement kiosk applique des valeurs plein écran
 adaptées à l'écran tactile, puis lance `Screen.py`, qui charge `.env` via

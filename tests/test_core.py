@@ -2658,6 +2658,8 @@ class ToolingDefaultsTests(unittest.TestCase):
                 'export CORTEX_FULLSCREEN="${CORTEX_FULLSCREEN:-true}"',
                 "Environment=CORTEX_HIDE_CURSOR=true",
                 "Environment=CORTEX_FRAMELESS=false",
+                "Environment=CORTEX_EXIT_AFTER_SCREENSHOT=off",
+                "Environment=CORTEX_SKIP_CORTEX_LOAD=oui",
                 "Environment=CORTEX_TOUCH_ROUND_CLIP=oui",
                 "Environment=CORTEX_TOUCH_EDGE_CLAMP=non",
                 "Environment=CORTEX_ROUND_MASK=1",
@@ -2666,6 +2668,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         invalid_content = "\n".join(
             [
                 "Environment=CORTEX_FULLSCREEN=fullscreen",
+                "Environment=CORTEX_EXIT_AFTER_SCREENSHOT=close",
                 'export CORTEX_ROUND_MASK="${CORTEX_ROUND_MASK:-maybe}"',
             ]
         )
@@ -2673,6 +2676,9 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual([], invalid_boolean_config_values("service", valid_content))
         errors = invalid_boolean_config_values("service", invalid_content)
         self.assertTrue(any("CORTEX_FULLSCREEN=fullscreen" in error for error in errors))
+        self.assertTrue(
+            any("CORTEX_EXIT_AFTER_SCREENSHOT=close" in error for error in errors)
+        )
         self.assertTrue(any("CORTEX_ROUND_MASK=maybe" in error for error in errors))
 
     def test_env_example_documents_raspberry_pi_screen_settings(self):
@@ -2680,6 +2686,7 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertIn("CORTEX_FULLSCREEN=true", content)
         self.assertIn("CORTEX_PREVIEW_SIZE=900", content)
+        self.assertIn("CORTEX_FRAMELESS=false", content)
         self.assertIn("CORTEX_HIDE_CURSOR=true", content)
         self.assertIn("CORTEX_FPS=60", content)
         self.assertIn("CORTEX_SCREEN_SIZE=", content)
@@ -2695,6 +2702,9 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
         self.assertIn("CORTEX_VALIDATE_STEP_TIMEOUT=120", content)
+        self.assertIn("CORTEX_SCREENSHOT_PATH=", content)
+        self.assertIn("CORTEX_EXIT_AFTER_SCREENSHOT=false", content)
+        self.assertIn("CORTEX_SKIP_CORTEX_LOAD=false", content)
 
     def test_env_example_documents_oauth_token_overrides(self):
         content = Path(".env.example").read_text(encoding="utf-8")
