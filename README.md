@@ -62,6 +62,27 @@ Cortex est un projet étudiant visant à développer un homepod utilisant l'inte
 Le mot-clé « Ok Cortex » nécessite une clé Picovoice. Sans cette clé, un clic
 sur le bouton Cortex lance directement l'écoute du microphone.
 
+### Raspberry Pi et écran circulaire tactile
+
+L'interface principale est [Screen.py](Screen.py). Pour un écran circulaire
+tactile, gardez Cortex en plein écran et ajustez uniquement les variables
+d'environnement nécessaires dans `.env` :
+
+```bash
+CORTEX_FULLSCREEN=true
+CORTEX_HIDE_CURSOR=true
+CORTEX_TOUCH_ROTATION=0
+```
+
+`CORTEX_TOUCH_ROTATION` accepte `0`, `90`, `180` ou `270` pour aligner les
+coordonnées tactiles avec l'orientation réelle de l'écran. Sur un poste de
+développement, utilisez plutôt :
+
+```bash
+CORTEX_FULLSCREEN=false
+CORTEX_PREVIEW_SIZE=900
+```
+
 ### Tests rapides
 
 Les tests du cœur local ne nécessitent ni modèle IA, ni microphone, ni compte

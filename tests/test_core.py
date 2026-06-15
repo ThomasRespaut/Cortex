@@ -104,6 +104,48 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertEqual(len(icons), 22)
         self.assertTrue(all(icon.stat().st_size > 0 for icon in icons))
 
+    def test_touch_rotation_maps_circular_screen_coordinates(self):
+        from app.screen_config import rotated_touch_position
+
+        width = 400
+        height = 400
+        self.assertEqual(
+            (100.0, 300.0),
+            rotated_touch_position(0.25, 0.75, width, height, 0),
+        )
+        self.assertEqual(
+            (100.0, 100.0),
+            rotated_touch_position(0.25, 0.75, width, height, 90),
+        )
+        self.assertEqual(
+            (300.0, 100.0),
+            rotated_touch_position(0.25, 0.75, width, height, 180),
+        )
+        self.assertEqual(
+            (300.0, 300.0),
+            rotated_touch_position(0.25, 0.75, width, height, 270),
+        )
+
+    def test_screen_config_parses_environment_defaults(self):
+        from app import screen_config
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "CORTEX_TEST_TRUE": "oui",
+                "CORTEX_TEST_FALSE": "off",
+                "CORTEX_TEST_INT": "abc",
+                "CORTEX_TOUCH_ROTATION": "180",
+            },
+        ):
+            self.assertTrue(screen_config.env_bool("CORTEX_TEST_TRUE"))
+            self.assertFalse(screen_config.env_bool("CORTEX_TEST_FALSE", True))
+            self.assertEqual(7, screen_config.env_int("CORTEX_TEST_INT", 7))
+            self.assertEqual(
+                (300.0, 100.0),
+                screen_config.rotated_touch_position(0.25, 0.75, 400, 400),
+            )
+
 
 class ToolingDefaultsTests(unittest.TestCase):
     def test_finetune_tooling_defaults_to_v3_dataset(self):

@@ -4,10 +4,17 @@ import sys
 import threading
 from dataclasses import dataclass
 
+os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
 from app.app_cortex import launch_cortex
 from app.feature_shell import launch_feature
+from app.screen_config import (
+    display_flags,
+    env_bool,
+    env_int,
+    rotated_touch_position,
+)
 from cortex import Cortex
 
 
@@ -99,12 +106,16 @@ class CortexHome:
         pygame.init()
         pygame.display.set_caption("Cortex")
 
-        fullscreen = os.getenv("CORTEX_FULLSCREEN", "true").lower() == "true"
+        fullscreen = env_bool("CORTEX_FULLSCREEN", True)
+        pygame.mouse.set_visible(not env_bool("CORTEX_HIDE_CURSOR", fullscreen))
         if fullscreen:
-            self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+            self.screen = pygame.display.set_mode((0, 0), display_flags(fullscreen))
         else:
-            preview_size = int(os.getenv("CORTEX_PREVIEW_SIZE", "900"))
-            self.screen = pygame.display.set_mode((preview_size, preview_size), pygame.RESIZABLE)
+            preview_size = env_int("CORTEX_PREVIEW_SIZE", 900)
+            self.screen = pygame.display.set_mode(
+                (preview_size, preview_size),
+                display_flags(fullscreen),
+            )
 
         self.clock = pygame.time.Clock()
         self.cortex = None
@@ -140,7 +151,7 @@ class CortexHome:
             self.cortex = Cortex(
                 input_mode=os.getenv("CORTEX_INPUT_MODE", "voice"),
                 output_mode=os.getenv("CORTEX_OUTPUT_MODE", "voice"),
-                local_mode=os.getenv("CORTEX_LOCAL_MODE", "true").lower() == "true",
+                local_mode=env_bool("CORTEX_LOCAL_MODE", True),
             )
         except Exception as error:
             self.loading_error = str(error)
@@ -371,13 +382,13 @@ class CortexHome:
             self.handle_pointer_up(event.pos)
         if event.type == pygame.FINGERDOWN:
             width, height = self.screen.get_size()
-            self.handle_pointer_down((event.x * width, event.y * height))
+            self.handle_pointer_down(rotated_touch_position(event.x, event.y, width, height))
         if event.type == pygame.FINGERMOTION:
             width, height = self.screen.get_size()
-            self.handle_pointer_move((event.x * width, event.y * height))
+            self.handle_pointer_move(rotated_touch_position(event.x, event.y, width, height))
         if event.type == pygame.FINGERUP:
             width, height = self.screen.get_size()
-            self.handle_pointer_up((event.x * width, event.y * height))
+            self.handle_pointer_up(rotated_touch_position(event.x, event.y, width, height))
         return True
 
     def run(self):

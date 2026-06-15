@@ -2,6 +2,8 @@ import os
 
 import pygame
 
+from app.screen_config import rotated_touch_position
+
 
 FEATURE_CONTENT = {
     "Horloge": ("Aujourd'hui", ["16:45", "Aucune alarme", "Minuteur"]),
@@ -167,7 +169,7 @@ def launch_feature(screen, cortex, app_name, icon_path):
                     cortex.local_mode = not cortex.local_mode
                     cards[0] = "Mode local" if cortex.local_mode else "Mode en ligne"
             elif event.type == pygame.FINGERDOWN:
-                position = (event.x * width, event.y * height)
+                position = rotated_touch_position(event.x, event.y, width, height)
                 if pygame.Vector2(position).distance_to(back_center) <= back_radius:
                     running = False
 

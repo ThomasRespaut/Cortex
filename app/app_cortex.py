@@ -4,6 +4,8 @@ import time
 
 import pygame
 
+from app.screen_config import rotated_touch_position
+
 
 BACKGROUND_TOP = (18, 38, 86)
 BACKGROUND_BOTTOM = (4, 7, 22)
@@ -277,7 +279,9 @@ class CortexView:
                                 break
                 elif event.type == pygame.FINGERDOWN:
                     width, height = self.screen.get_size()
-                    pos = pygame.Vector2(event.x * width, event.y * height)
+                    pos = pygame.Vector2(
+                        rotated_touch_position(event.x, event.y, width, height)
+                    )
                     if pos.distance_to(back_center) <= back_radius:
                         self.running = False
                     elif pos.distance_to(orb_center) <= orb_radius:
