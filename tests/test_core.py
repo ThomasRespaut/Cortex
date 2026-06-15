@@ -2409,6 +2409,9 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
+        self.assertIn("Environment=CORTEX_INPUT_MODE=voice", content)
+        self.assertIn("Environment=CORTEX_OUTPUT_MODE=voice", content)
+        self.assertIn("Environment=CORTEX_LOCAL_MODE=true", content)
         self.assertIn("Restart=on-failure", content)
 
     def test_raspberry_pi_service_installer_generates_systemd_unit(self):
@@ -2438,6 +2441,9 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
+        self.assertIn("Environment=CORTEX_INPUT_MODE=voice", content)
+        self.assertIn("Environment=CORTEX_OUTPUT_MODE=voice", content)
+        self.assertIn("Environment=CORTEX_LOCAL_MODE=true", content)
         self.assertIn("systemd-analyze verify \"${SERVICE_FILE}\"", content)
         self.assertIn("systemctl daemon-reload", content)
         self.assertIn("CORTEX_START_SERVICE:-false", content)

@@ -50,6 +50,9 @@ Environment=CORTEX_TOUCH_HIT_SLOP=10
 Environment=CORTEX_TAP_MOVE_LIMIT=14
 Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500
 Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36
+Environment=CORTEX_INPUT_MODE=voice
+Environment=CORTEX_OUTPUT_MODE=voice
+Environment=CORTEX_LOCAL_MODE=true
 ExecStart=${LAUNCHER}
 Restart=on-failure
 RestartSec=5
