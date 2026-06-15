@@ -37,6 +37,7 @@ RING = (76, 98, 145)
 TEXT = (242, 245, 255)
 MUTED = (148, 157, 184)
 ACCENT = (88, 214, 255)
+TAP_MOVE_LIMIT = 14
 
 
 @dataclass
@@ -351,6 +352,14 @@ class CortexHome:
             icon = self.icon_for(app, size).copy()
             icon.set_alpha(int(255 * edge_fade))
             self.screen.blit(icon, icon.get_rect(center=position))
+            if app == self.selected:
+                pygame.draw.circle(
+                    self.screen,
+                    ACCENT,
+                    position,
+                    size // 2 + max(4, int(radius * 0.015)),
+                    max(2, int(radius * 0.01)),
+                )
 
             self.rendered_apps.append((app, position, size))
 
@@ -420,6 +429,8 @@ class CortexHome:
         self.offset += delta
         self.velocity = delta * 0.75
         self.last_pointer = pointer
+        if pointer.distance_to(self.press_position) >= TAP_MOVE_LIMIT:
+            self.selected = None
 
     def handle_pointer_up(self, position):
         if not self.dragging:
@@ -430,7 +441,7 @@ class CortexHome:
         selected = self.selected
         self.dragging = False
         self.selected = None
-        if moved < 14 and tapped and tapped == selected:
+        if moved < TAP_MOVE_LIMIT and tapped and tapped == selected:
             self.launch_app(tapped.name)
 
     def handle_event(self, event):

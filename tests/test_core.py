@@ -339,6 +339,8 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("safe_margin", content)
         self.assertIn("size / 2", content)
         self.assertIn("fit_text(self.label_font", content)
+        self.assertIn("TAP_MOVE_LIMIT", content)
+        self.assertIn("app == self.selected", content)
 
     def test_home_menu_shows_notice_when_app_is_not_ready(self):
         import pygame
@@ -386,6 +388,30 @@ class InterfaceAssetTests(unittest.TestCase):
                     home.handle_pointer_up((120, 120))
 
                 launch_app.assert_not_called()
+            finally:
+                pygame.quit()
+
+    def test_home_menu_drag_clears_pressed_icon_selection(self):
+        import pygame
+        from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                app = build_honeycomb(APP_DEFINITIONS)[0]
+                home.rendered_apps = [(app, pygame.Vector2(120, 120), 60)]
+                home.handle_pointer_down((120, 120))
+                home.handle_pointer_move((160, 120))
+
+                self.assertIsNone(home.selected)
             finally:
                 pygame.quit()
 
