@@ -6,7 +6,7 @@ import time
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
-from app.screen_config import env_bool, pointer_down_position
+from app.screen_config import env_bool, pointer_down_position, round_safe_point
 
 
 BACKGROUND_TOP = (18, 38, 86)
@@ -113,8 +113,15 @@ class CortexView:
         pygame.draw.circle(self.screen, (235, 242, 255), center, radius - 8, 1)
 
     def draw_back_button(self, center, radius):
-        position = pygame.Vector2(center.x - radius * 0.72, center.y - radius * 0.72)
         button_radius = max(26, int(radius * 0.07))
+        position = round_safe_point(
+            center,
+            radius,
+            -0.72,
+            -0.72,
+            item_radius=button_radius,
+            margin=max(6, int(radius * 0.025)),
+        )
         pygame.draw.circle(self.screen, (17, 25, 45), position, button_radius)
         pygame.draw.circle(self.screen, (73, 91, 130), position, button_radius, 1)
         pygame.draw.line(self.screen, TEXT, (position.x + 7, position.y - 11), (position.x - 5, position.y), 3)

@@ -4,7 +4,7 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
 from app.screen_assets import load_icon_or_fallback
-from app.screen_config import env_bool, pointer_down_position
+from app.screen_config import env_bool, pointer_down_position, round_safe_point
 
 
 FEATURE_CONTENT = {
@@ -95,8 +95,15 @@ def launch_feature(screen, cortex, app_name, icon_path):
         pygame.draw.circle(screen, (28, 34, 51), center, radius, max(2, int(radius * 0.008)))
         pygame.draw.circle(screen, accent, center, radius - 6, 2)
 
-        back_center = (center.x - radius * 0.68, center.y - radius * 0.68)
         back_radius = max(25, int(radius * 0.075))
+        back_center = round_safe_point(
+            center,
+            radius,
+            -0.68,
+            -0.68,
+            item_radius=back_radius,
+            margin=max(6, int(radius * 0.025)),
+        )
         pygame.draw.circle(screen, (18, 23, 38), back_center, back_radius)
         pygame.draw.line(
             screen,

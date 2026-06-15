@@ -78,6 +78,20 @@ def is_inside_round_viewport(position, width, height, edge_margin=0):
     return (px - center_x) ** 2 + (py - center_y) ** 2 <= radius**2
 
 
+def round_safe_point(center, radius, dx_ratio, dy_ratio, item_radius=0, margin=0):
+    import pygame
+
+    origin = pygame.Vector2(center)
+    vector = pygame.Vector2(dx_ratio, dy_ratio)
+    if vector.length_squared() == 0:
+        return origin
+
+    target_distance = radius * vector.length()
+    max_distance = max(0, radius - item_radius - margin)
+    vector.scale_to_length(min(target_distance, max_distance))
+    return origin + vector
+
+
 def circular_menu_layout(width, height, item_count=4):
     import pygame
 

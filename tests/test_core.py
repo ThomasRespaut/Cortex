@@ -273,6 +273,37 @@ class InterfaceAssetTests(unittest.TestCase):
                     rect,
                 )
 
+    def test_round_safe_point_keeps_back_button_inside_circle(self):
+        import pygame
+        from app.screen_config import round_safe_point
+
+        center = pygame.Vector2(240, 240)
+        radius = 240
+        button_radius = 26
+        margin = 6
+
+        position = round_safe_point(
+            center,
+            radius,
+            -0.72,
+            -0.72,
+            item_radius=button_radius,
+            margin=margin,
+        )
+
+        self.assertLessEqual(
+            position.distance_to(center) + button_radius + margin,
+            radius,
+        )
+
+    def test_modern_back_buttons_use_round_safe_position(self):
+        for module in (Path("app/app_cortex.py"), Path("app/feature_shell.py")):
+            content = module.read_text(encoding="utf-8")
+
+            self.assertIn("round_safe_point", content, module)
+            self.assertNotIn("center.x - radius * 0.72", content, module)
+            self.assertNotIn("center.x - radius * 0.68", content, module)
+
     def test_touch_rotation_maps_circular_screen_coordinates(self):
         from app.screen_config import rotated_touch_position
 
