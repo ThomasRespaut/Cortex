@@ -149,7 +149,18 @@ def is_synthetic_touch_mouse_event(event):
 
 
 def _mouse_event_position(event):
-    return getattr(event, "pos", None)
+    position = getattr(event, "pos", None)
+    if position is None or isinstance(position, (str, bytes)):
+        return None
+    try:
+        x, y = position
+        x = float(x)
+        y = float(y)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(x) or not math.isfinite(y):
+        return None
+    return x, y
 
 
 def _touch_event_position(event, width, height):

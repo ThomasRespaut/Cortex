@@ -1895,6 +1895,18 @@ class InterfaceAssetTests(unittest.TestCase):
         malformed_touch_down = pygame.event.Event(pygame.FINGERDOWN, {"x": 0.5})
         malformed_touch_motion = pygame.event.Event(pygame.FINGERMOTION, {"y": 0.5})
         malformed_touch_up = pygame.event.Event(pygame.FINGERUP, {})
+        text_mouse_down = pygame.event.Event(
+            pygame.MOUSEBUTTONDOWN,
+            {"button": 1, "pos": "12"},
+        )
+        short_mouse_motion = pygame.event.Event(
+            pygame.MOUSEMOTION,
+            {"pos": (12,)},
+        )
+        infinite_mouse_up = pygame.event.Event(
+            pygame.MOUSEBUTTONUP,
+            {"button": 1, "pos": (float("inf"), 20)},
+        )
 
         self.assertIsNone(pointer_down_position(malformed_mouse_down, 400, 400))
         self.assertIsNone(pointer_move_position(malformed_mouse_motion, 400, 400))
@@ -1902,6 +1914,9 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIsNone(pointer_down_position(malformed_touch_down, 400, 400))
         self.assertIsNone(pointer_move_position(malformed_touch_motion, 400, 400))
         self.assertIsNone(pointer_up_position(malformed_touch_up, 400, 400))
+        self.assertIsNone(pointer_down_position(text_mouse_down, 400, 400))
+        self.assertIsNone(pointer_move_position(short_mouse_motion, 400, 400))
+        self.assertIsNone(pointer_up_position(infinite_mouse_up, 400, 400))
 
     def test_prepare_screenshot_path_creates_parent_directory(self):
         from app.screen_config import prepare_screenshot_path
