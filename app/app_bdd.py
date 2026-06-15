@@ -8,7 +8,6 @@ from app.screen_config import (
     pointer_move_position,
     pointer_up_position,
 )
-from database.database import Neo4jDatabase
 
 def launch_bdd(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Jeux."""
@@ -205,6 +204,8 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
                                         continue
                                     for button_name, button_rect in buttons.items():
                                         if button_rect.collidepoint(click_pos):
+                                            from database.database import Neo4jDatabase
+
                                             if button_name == "Ajouter":
                                                 # Ajouter une relation
                                                 cible_relation = Neo4jDatabase.afficher_formulaire(

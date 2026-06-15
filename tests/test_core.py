@@ -657,6 +657,11 @@ class ToolingDefaultsTests(unittest.TestCase):
             [spec.name for spec in FEATURE_SPECS if not spec.name.isascii()],
         )
 
+    def test_legacy_screen_smoke_tool_covers_bdd_view(self):
+        from tools.smoke_legacy_pygame_screens import SCREEN_SPECS
+
+        self.assertIn("bdd", [spec.name for spec in SCREEN_SPECS])
+
     def test_raspberry_pi_preflight_accepts_repo_layout(self):
         from tools.raspberry_pi_preflight import collect_preflight_errors
 
