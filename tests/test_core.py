@@ -918,6 +918,41 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_release_at_round_edge_ends_drag(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_TOUCH_ROUND_CLIP": "true",
+                "CORTEX_TOUCH_EDGE_CLAMP": "false",
+            },
+        ):
+            home = CortexHome()
+            try:
+                home.handle_event(
+                    pygame.event.Event(
+                        pygame.MOUSEBUTTONDOWN,
+                        {"button": 1, "pos": (120, 120)},
+                    )
+                )
+                self.assertTrue(home.dragging)
+
+                home.handle_event(
+                    pygame.event.Event(
+                        pygame.MOUSEBUTTONUP,
+                        {"button": 1, "pos": (0, 0)},
+                    )
+                )
+                self.assertFalse(home.dragging)
+            finally:
+                pygame.quit()
+
     def test_screen_text_helpers_are_shared(self):
         helper_content = Path("app/screen_config.py").read_text(encoding="utf-8")
 
@@ -968,6 +1003,7 @@ class InterfaceAssetTests(unittest.TestCase):
             clamp_to_round_viewport,
             pointer_down_position,
             pointer_move_position,
+            pointer_up_position,
         )
 
         clipped_down = pygame.event.Event(
@@ -978,14 +1014,21 @@ class InterfaceAssetTests(unittest.TestCase):
             pygame.FINGERMOTION,
             {"x": 0.0, "y": 0.0},
         )
+        clipped_up = pygame.event.Event(
+            pygame.FINGERUP,
+            {"x": 0.0, "y": 0.0},
+        )
 
         with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROUND_CLIP": "true"}):
             self.assertIsNone(pointer_down_position(clipped_down, 400, 400))
             clamped = pointer_move_position(clipped_motion, 400, 400)
+            clamped_up = pointer_up_position(clipped_up, 400, 400)
 
         expected = clamp_to_round_viewport((0, 0), 400, 400)
         self.assertAlmostEqual(expected[0], clamped[0], places=5)
         self.assertAlmostEqual(expected[1], clamped[1], places=5)
+        self.assertAlmostEqual(expected[0], clamped_up[0], places=5)
+        self.assertAlmostEqual(expected[1], clamped_up[1], places=5)
 
         with mock.patch.dict(
             os.environ,
@@ -995,6 +1038,9 @@ class InterfaceAssetTests(unittest.TestCase):
             },
         ):
             self.assertIsNone(pointer_move_position(clipped_motion, 400, 400))
+            clamped_up = pointer_up_position(clipped_up, 400, 400)
+            self.assertAlmostEqual(expected[0], clamped_up[0], places=5)
+            self.assertAlmostEqual(expected[1], clamped_up[1], places=5)
 
     def test_screen_config_parses_environment_defaults(self):
         from app import screen_config
@@ -1063,6 +1109,10 @@ class InterfaceAssetTests(unittest.TestCase):
             pygame.MOUSEBUTTONUP,
             {"button": 1, "pos": (90, 123)},
         )
+        clipped_mouse_up_event = pygame.event.Event(
+            pygame.MOUSEBUTTONUP,
+            {"button": 1, "pos": (12, 34)},
+        )
         touch_event = pygame.event.Event(
             pygame.FINGERDOWN,
             {"x": 0.25, "y": 0.75},
@@ -1078,6 +1128,10 @@ class InterfaceAssetTests(unittest.TestCase):
         touch_up_event = pygame.event.Event(
             pygame.FINGERUP,
             {"x": 0.75, "y": 0.5},
+        )
+        clipped_touch_up_event = pygame.event.Event(
+            pygame.FINGERUP,
+            {"x": 0.0, "y": 0.0},
         )
         ignored_mouse_event = pygame.event.Event(
             pygame.MOUSEBUTTONDOWN,
@@ -1101,6 +1155,11 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertIsNotNone(clipped_mouse)
             self.assertTrue(screen_config.is_inside_round_viewport(clipped_mouse, 400, 400))
             self.assertEqual((90, 123), pointer_up_position(mouse_up_event, 400, 400))
+            clipped_mouse_up = pointer_up_position(clipped_mouse_up_event, 400, 400)
+            self.assertIsNotNone(clipped_mouse_up)
+            self.assertTrue(
+                screen_config.is_inside_round_viewport(clipped_mouse_up, 400, 400)
+            )
             self.assertIsNone(pointer_down_position(ignored_mouse_event, 400, 400))
             self.assertEqual(
                 (300.0, 100.0),
@@ -1113,6 +1172,11 @@ class InterfaceAssetTests(unittest.TestCase):
             clipped_touch = pointer_move_position(clipped_touch_motion_event, 400, 400)
             self.assertIsNotNone(clipped_touch)
             self.assertTrue(screen_config.is_inside_round_viewport(clipped_touch, 400, 400))
+            clipped_touch_up = pointer_up_position(clipped_touch_up_event, 400, 400)
+            self.assertIsNotNone(clipped_touch_up)
+            self.assertTrue(
+                screen_config.is_inside_round_viewport(clipped_touch_up, 400, 400)
+            )
             self.assertEqual(
                 (100.0, 200.0),
                 pointer_up_position(touch_up_event, 400, 400),
@@ -1128,8 +1192,18 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertIsNone(
                 pointer_move_position(clipped_mouse_motion_event, 400, 400)
             )
+            clipped_mouse_up = pointer_up_position(clipped_mouse_up_event, 400, 400)
+            self.assertIsNotNone(clipped_mouse_up)
+            self.assertTrue(
+                screen_config.is_inside_round_viewport(clipped_mouse_up, 400, 400)
+            )
             self.assertIsNone(
                 pointer_move_position(clipped_touch_motion_event, 400, 400)
+            )
+            clipped_touch_up = pointer_up_position(clipped_touch_up_event, 400, 400)
+            self.assertIsNotNone(clipped_touch_up)
+            self.assertTrue(
+                screen_config.is_inside_round_viewport(clipped_touch_up, 400, 400)
             )
 
         with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROUND_CLIP": "false"}):

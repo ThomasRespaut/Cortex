@@ -284,11 +284,23 @@ def pointer_move_position(event, width, height):
 def pointer_up_position(event, width, height):
     import pygame
 
+    position = None
     if event.type == pygame.MOUSEBUTTONUP and getattr(event, "button", 1) == 1:
-        return event.pos
-    if event.type == pygame.FINGERUP:
-        return rotated_touch_position(event.x, event.y, width, height)
-    return None
+        position = event.pos
+    elif event.type == pygame.FINGERUP:
+        position = rotated_touch_position(event.x, event.y, width, height)
+
+    if position is None:
+        return None
+    edge_margin = env_int("CORTEX_TOUCH_EDGE_MARGIN", 0)
+    if env_bool("CORTEX_TOUCH_ROUND_CLIP", True) and not is_inside_round_viewport(
+        position,
+        width,
+        height,
+        edge_margin,
+    ):
+        return clamp_to_round_viewport(position, width, height, edge_margin)
+    return position
 
 
 def prepare_screenshot_path(path):
