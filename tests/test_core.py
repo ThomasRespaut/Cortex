@@ -1630,6 +1630,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
         self.assertIn("tools/validate_raspberry_pi_ui.py", content)
         self.assertIn("--step-timeout \"${CORTEX_VALIDATE_STEP_TIMEOUT:-120}\"", content)
+        self.assertIn("--touch-rotation \"${CORTEX_TOUCH_ROTATION:-0}\"", content)
         self.assertIn("--screenshot artifacts/screen-smoke.png", content)
         self.assertIn("--legacy-output-dir artifacts/legacy-screen-smoke", content)
         self.assertIn("--modern-output-dir artifacts/modern-screen-smoke", content)
@@ -1652,6 +1653,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             "artifacts/screen-smoke.png",
             "artifacts/legacy-screen-smoke",
             "artifacts/modern-screen-smoke",
+            touch_rotation=90,
         )
         step_commands = [" ".join(step.command) for step in steps]
 
@@ -1678,11 +1680,11 @@ class ToolingDefaultsTests(unittest.TestCase):
             step_commands,
         )
         self.assertIn(
-            "python tools/smoke_home_touch_interactions.py --size 480x480",
+            "python tools/smoke_home_touch_interactions.py --size 480x480 --touch-rotation 90",
             step_commands,
         )
         self.assertIn(
-            "python tools/smoke_modern_touch_interactions.py --size 480x480",
+            "python tools/smoke_modern_touch_interactions.py --size 480x480 --touch-rotation 90",
             step_commands,
         )
         self.assertIn(
@@ -1698,11 +1700,13 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual("0", steps[1].env["SDL_MOUSE_TOUCH_EVENTS"])
         self.assertEqual("false", steps[1].env["CORTEX_FULLSCREEN"])
         self.assertEqual("480x480", steps[1].env["CORTEX_SCREEN_SIZE"])
+        self.assertEqual("90", steps[1].env["CORTEX_TOUCH_ROTATION"])
         for index in (4, 5, 6, 7):
             self.assertEqual("dummy", steps[index].env["SDL_VIDEODRIVER"])
             self.assertEqual("0", steps[index].env["SDL_TOUCH_MOUSE_EVENTS"])
             self.assertEqual("0", steps[index].env["SDL_MOUSE_TOUCH_EVENTS"])
             self.assertEqual("480x480", steps[index].env["CORTEX_SCREEN_SIZE"])
+            self.assertEqual("90", steps[index].env["CORTEX_TOUCH_ROTATION"])
 
     def test_raspberry_pi_ui_validator_times_out_stuck_steps(self):
         from tools.validate_raspberry_pi_ui import ValidationStep, run_step
@@ -1722,11 +1726,14 @@ class ToolingDefaultsTests(unittest.TestCase):
             self.assertEqual(124, run_step(step, ".", 1))
 
     def test_raspberry_pi_ui_validator_rejects_invalid_step_timeout(self):
-        from tools.validate_raspberry_pi_ui import positive_int
+        from tools.validate_raspberry_pi_ui import positive_int, touch_rotation
 
         self.assertEqual(5, positive_int("5"))
         with self.assertRaises(argparse.ArgumentTypeError):
             positive_int("0")
+        self.assertEqual(270, touch_rotation("270"))
+        with self.assertRaises(argparse.ArgumentTypeError):
+            touch_rotation("45")
 
     def test_local_check_runner_covers_autonomous_validation_chain(self):
         from tools.run_local_checks import build_check_steps, secret_findings
@@ -1770,6 +1777,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             step_commands[-1],
         )
         self.assertIn("--step-timeout 300", step_commands[-1])
+        self.assertIn("--touch-rotation 0", step_commands[-1])
 
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
@@ -1809,11 +1817,14 @@ class ToolingDefaultsTests(unittest.TestCase):
             self.assertEqual(124, run_step(step, ".", 1))
 
     def test_local_check_runner_rejects_invalid_step_timeout(self):
-        from tools.run_local_checks import positive_int
+        from tools.run_local_checks import positive_int, touch_rotation
 
         self.assertEqual(5, positive_int("5"))
         with self.assertRaises(argparse.ArgumentTypeError):
             positive_int("0")
+        self.assertEqual(90, touch_rotation("90"))
+        with self.assertRaises(argparse.ArgumentTypeError):
+            touch_rotation("45")
 
     def test_raspberry_pi_requirements_exclude_heavy_local_model_stack(self):
         requirements = Path("requirements-raspberry-pi.txt").read_text(encoding="utf-8")

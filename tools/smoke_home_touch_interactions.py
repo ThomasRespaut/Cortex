@@ -31,12 +31,32 @@ def render_home_once(home):
     pygame.display.flip()
 
 
-def finger_event(event_type, position, size, finger_id=1):
+def touch_fraction_for_screen_position(position, size, rotation):
+    rotation %= 360
+    screen_x, screen_y = position
+    width, height = size
+    if rotation == 90:
+        x = screen_y / width
+        y = (width - screen_x) / height
+    elif rotation == 180:
+        x = (width - screen_x) / width
+        y = (height - screen_y) / height
+    elif rotation == 270:
+        x = (height - screen_y) / width
+        y = screen_x / height
+    else:
+        x = screen_x / width
+        y = screen_y / height
+    return max(0.0, min(1.0, x)), max(0.0, min(1.0, y))
+
+
+def finger_event(event_type, position, size, finger_id=1, touch_rotation=0):
+    x, y = touch_fraction_for_screen_position(position, size, touch_rotation)
     return pygame.event.Event(
         event_type,
         {
-            "x": position[0] / size[0],
-            "y": position[1] / size[1],
+            "x": x,
+            "y": y,
             "finger_id": finger_id,
         },
     )
@@ -60,8 +80,9 @@ def empty_touch_point(home, size):
     raise RuntimeError("Aucune zone vide disponible pour le double-tap.")
 
 
-def smoke_home_touch_interactions(size):
+def smoke_home_touch_interactions(size, touch_rotation=0):
     os.environ["CORTEX_SCREEN_SIZE"] = f"{size[0]}x{size[1]}"
+    os.environ["CORTEX_TOUCH_ROTATION"] = str(touch_rotation)
     home = CortexHome()
     try:
         render_home_once(home)
@@ -71,8 +92,14 @@ def smoke_home_touch_interactions(size):
         app, position, _ = home.rendered_apps[-1]
         start = (int(position.x), int(position.y))
 
-        dispatch_quietly(home, finger_event(pygame.FINGERDOWN, start, size))
-        dispatch_quietly(home, finger_event(pygame.FINGERUP, start, size))
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERDOWN, start, size, touch_rotation=touch_rotation),
+        )
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERUP, start, size, touch_rotation=touch_rotation),
+        )
         if home.notice_text != "Aperçu: Cortex non chargé":
             raise RuntimeError("Le tap tactile sur une app indisponible n'affiche pas de notice.")
         home.notice_text = ""
@@ -94,17 +121,39 @@ def smoke_home_touch_interactions(size):
             raise RuntimeError("Un événement souris synthétique tactile relance une app.")
 
         home.offset.update(0, 0)
-        dispatch_quietly(home, finger_event(pygame.FINGERDOWN, start, size))
-        dispatch_quietly(home, finger_event(pygame.FINGERMOTION, (1, 1), size))
-        if not home.panning or home.offset.length() <= 0:
-            raise RuntimeError("Un drag tactile vers le bord rond ne déplace pas la grille.")
-        dispatch_quietly(home, finger_event(pygame.FINGERUP, start, size))
-
-        home.offset.update(0, 0)
-        dispatch_quietly(home, finger_event(pygame.FINGERDOWN, start, size))
         dispatch_quietly(
             home,
-            finger_event(pygame.FINGERMOTION, (start[0] + 48, start[1]), size),
+            finger_event(pygame.FINGERDOWN, start, size, touch_rotation=touch_rotation),
+        )
+        dispatch_quietly(
+            home,
+            finger_event(
+                pygame.FINGERMOTION,
+                (1, 1),
+                size,
+                touch_rotation=touch_rotation,
+            ),
+        )
+        if not home.panning or home.offset.length() <= 0:
+            raise RuntimeError("Un drag tactile vers le bord rond ne déplace pas la grille.")
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERUP, start, size, touch_rotation=touch_rotation),
+        )
+
+        home.offset.update(0, 0)
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERDOWN, start, size, touch_rotation=touch_rotation),
+        )
+        dispatch_quietly(
+            home,
+            finger_event(
+                pygame.FINGERMOTION,
+                (start[0] + 48, start[1]),
+                size,
+                touch_rotation=touch_rotation,
+            ),
         )
         if not home.panning:
             raise RuntimeError("Le drag tactile du menu principal ne démarre pas le pan.")
@@ -114,7 +163,12 @@ def smoke_home_touch_interactions(size):
             raise RuntimeError("La sélection d'app reste active pendant un drag.")
         dispatch_quietly(
             home,
-            finger_event(pygame.FINGERUP, (start[0] + 48, start[1]), size),
+            finger_event(
+                pygame.FINGERUP,
+                (start[0] + 48, start[1]),
+                size,
+                touch_rotation=touch_rotation,
+            ),
         )
 
         home.offset.update(0, 0)
@@ -125,21 +179,48 @@ def smoke_home_touch_interactions(size):
         wider = (center[0] + 95, center[1])
         dispatch_quietly(
             home,
-            finger_event(pygame.FINGERDOWN, left, size, finger_id=1),
+            finger_event(
+                pygame.FINGERDOWN,
+                left,
+                size,
+                finger_id=1,
+                touch_rotation=touch_rotation,
+            ),
         )
         dispatch_quietly(
             home,
-            finger_event(pygame.FINGERDOWN, right, size, finger_id=2),
+            finger_event(
+                pygame.FINGERDOWN,
+                right,
+                size,
+                finger_id=2,
+                touch_rotation=touch_rotation,
+            ),
         )
         dispatch_quietly(
             home,
-            finger_event(pygame.FINGERMOTION, wider, size, finger_id=2),
+            finger_event(
+                pygame.FINGERMOTION,
+                wider,
+                size,
+                finger_id=2,
+                touch_rotation=touch_rotation,
+            ),
         )
         if home.zoom <= 1.0:
             raise RuntimeError("Le pinch tactile du menu principal ne zoome pas.")
         if home.dragging:
             raise RuntimeError("Le pinch tactile laisse un drag actif.")
-        dispatch_quietly(home, finger_event(pygame.FINGERUP, wider, size, finger_id=2))
+        dispatch_quietly(
+            home,
+            finger_event(
+                pygame.FINGERUP,
+                wider,
+                size,
+                finger_id=2,
+                touch_rotation=touch_rotation,
+            ),
+        )
         dispatch_quietly(
             home,
             finger_event(
@@ -147,21 +228,43 @@ def smoke_home_touch_interactions(size):
                 (left[0] - 40, left[1]),
                 size,
                 finger_id=1,
+                touch_rotation=touch_rotation,
             ),
         )
         if not home.panning or home.offset.length() <= 0:
             raise RuntimeError("Le pan ne reprend pas après un pinch tactile.")
-        dispatch_quietly(home, finger_event(pygame.FINGERUP, left, size, finger_id=1))
+        dispatch_quietly(
+            home,
+            finger_event(
+                pygame.FINGERUP,
+                left,
+                size,
+                finger_id=1,
+                touch_rotation=touch_rotation,
+            ),
+        )
 
         render_home_once(home)
         empty = empty_touch_point(home, size)
         home.offset.update(36, -24)
         home.velocity.update(6, 2)
         home.zoom = 1.18
-        dispatch_quietly(home, finger_event(pygame.FINGERDOWN, empty, size))
-        dispatch_quietly(home, finger_event(pygame.FINGERUP, empty, size))
-        dispatch_quietly(home, finger_event(pygame.FINGERDOWN, empty, size))
-        dispatch_quietly(home, finger_event(pygame.FINGERUP, empty, size))
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERDOWN, empty, size, touch_rotation=touch_rotation),
+        )
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERUP, empty, size, touch_rotation=touch_rotation),
+        )
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERDOWN, empty, size, touch_rotation=touch_rotation),
+        )
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERUP, empty, size, touch_rotation=touch_rotation),
+        )
         if home.offset.length() > 0 or home.velocity.length() > 0 or home.zoom != 1.0:
             raise RuntimeError("Le double-tap vide ne recentre pas le menu principal.")
     finally:
@@ -179,13 +282,20 @@ def parse_args():
         type=parse_size,
         help="Taille de surface Pygame à tester, par exemple 480x480.",
     )
+    parser.add_argument(
+        "--touch-rotation",
+        default=0,
+        type=int,
+        choices=(0, 90, 180, 270),
+        help="Rotation tactile Cortex à valider.",
+    )
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
     try:
-        app_name = smoke_home_touch_interactions(args.size)
+        app_name = smoke_home_touch_interactions(args.size, args.touch_rotation)
     except Exception as error:
         print(f"Smoke interactions menu principal échoué: {error}")
         return 1

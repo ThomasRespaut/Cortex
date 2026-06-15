@@ -126,6 +126,7 @@ REQUIRED_TEXT_SNIPPETS = {
         "chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh",
         "tools/validate_raspberry_pi_ui.py",
         "--step-timeout \"${CORTEX_VALIDATE_STEP_TIMEOUT:-120}\"",
+        "--touch-rotation \"${CORTEX_TOUCH_ROTATION:-0}\"",
     ],
     "deploy/raspberry-pi/cortex.service.example": REQUIRED_SERVICE_ENV_SNIPPETS,
     "deploy/raspberry-pi/install_service.sh": [

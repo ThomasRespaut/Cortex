@@ -38,6 +38,7 @@ chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh
   --project-root . \
   --size "${CORTEX_SCREEN_SIZE:-480x480}" \
   --step-timeout "${CORTEX_VALIDATE_STEP_TIMEOUT:-120}" \
+  --touch-rotation "${CORTEX_TOUCH_ROTATION:-0}" \
   --screenshot artifacts/screen-smoke.png \
   --legacy-output-dir artifacts/legacy-screen-smoke \
   --modern-output-dir artifacts/modern-screen-smoke

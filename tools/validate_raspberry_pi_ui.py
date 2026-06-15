@@ -41,6 +41,16 @@ def positive_int(value):
     return parsed
 
 
+def touch_rotation(value):
+    try:
+        parsed = int(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("La rotation doit être un entier") from error
+    if parsed not in (0, 90, 180, 270):
+        raise argparse.ArgumentTypeError("La rotation tactile doit être 0, 90, 180 ou 270")
+    return parsed
+
+
 def relative_or_absolute(path):
     return str(path) if Path(path).is_absolute() else path
 
@@ -65,11 +75,13 @@ def build_validation_steps(
     screenshot,
     legacy_output_dir,
     modern_output_dir,
+    touch_rotation=0,
 ):
     width, height = size
     screen_size = f"{width}x{height}"
     min_width = str(min(width, 400))
     min_height = str(min(height, 400))
+    touch_env = {"CORTEX_TOUCH_ROTATION": str(touch_rotation)}
 
     return [
         ValidationStep(
@@ -86,6 +98,7 @@ def build_validation_steps(
             [python_bin, "Screen.py"],
             env=pygame_headless_env(
                 screen_size,
+                **touch_env,
                 CORTEX_SCREENSHOT_PATH=relative_or_absolute(screenshot),
                 CORTEX_EXIT_AFTER_SCREENSHOT="true",
             ),
@@ -121,8 +134,10 @@ def build_validation_steps(
                 "tools/smoke_home_touch_interactions.py",
                 "--size",
                 screen_size,
+                "--touch-rotation",
+                str(touch_rotation),
             ],
-            env=pygame_headless_env(screen_size),
+            env=pygame_headless_env(screen_size, **touch_env),
         ),
         ValidationStep(
             "Interactions tactiles écrans modernes",
@@ -131,8 +146,10 @@ def build_validation_steps(
                 "tools/smoke_modern_touch_interactions.py",
                 "--size",
                 screen_size,
+                "--touch-rotation",
+                str(touch_rotation),
             ],
-            env=pygame_headless_env(screen_size),
+            env=pygame_headless_env(screen_size, **touch_env),
         ),
         ValidationStep(
             "Smokes anciens écrans Pygame",
@@ -145,7 +162,7 @@ def build_validation_steps(
                 relative_or_absolute(legacy_output_dir),
                 "--require-round-mask",
             ],
-            env=pygame_headless_env(screen_size),
+            env=pygame_headless_env(screen_size, **touch_env),
         ),
         ValidationStep(
             "Smokes écrans Pygame modernes",
@@ -158,7 +175,7 @@ def build_validation_steps(
                 relative_or_absolute(modern_output_dir),
                 "--require-round-mask",
             ],
-            env=pygame_headless_env(screen_size),
+            env=pygame_headless_env(screen_size, **touch_env),
         ),
     ]
 
@@ -222,6 +239,12 @@ def parse_args():
         type=positive_int,
         help="Durée maximale en secondes pour chaque étape de validation.",
     )
+    parser.add_argument(
+        "--touch-rotation",
+        default=0,
+        type=touch_rotation,
+        help="Rotation tactile Cortex à valider: 0, 90, 180 ou 270.",
+    )
     return parser.parse_args()
 
 
@@ -239,6 +262,7 @@ def main():
         args.screenshot,
         args.legacy_output_dir,
         args.modern_output_dir,
+        touch_rotation=args.touch_rotation,
     )
     for step in steps:
         returncode = run_step(step, project_root, args.step_timeout)

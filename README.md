@@ -86,6 +86,7 @@ CORTEX_VALIDATE_STEP_TIMEOUT=120
 
 `CORTEX_TOUCH_ROTATION` accepte `0`, `90`, `180` ou `270` pour aligner les
 coordonnées tactiles avec l'orientation réelle de l'écran.
+La validation Raspberry Pi rejoue aussi les smokes tactiles avec cette rotation.
 `CORTEX_TOUCH_ROUND_CLIP=true` ignore les appuis hors du disque utile de
 l'écran circulaire, et `CORTEX_TOUCH_EDGE_MARGIN` retire quelques pixels au
 rayon tactile si la bordure physique déclenche des appuis parasites.
