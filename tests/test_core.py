@@ -1478,6 +1478,12 @@ class InterfaceAssetTests(unittest.TestCase):
     def test_screen_config_rejects_invalid_screen_size(self):
         from app import screen_config
 
+        with mock.patch.dict(os.environ, {"CORTEX_SCREEN_SIZE": "480×480"}):
+            self.assertEqual(
+                (480, 480),
+                screen_config.env_screen_size("CORTEX_SCREEN_SIZE", (900, 900)),
+            )
+
         for value in ("large", "480", "0x480", "480x0", "480xabc"):
             with mock.patch.dict(os.environ, {"CORTEX_SCREEN_SIZE": value}):
                 self.assertEqual(

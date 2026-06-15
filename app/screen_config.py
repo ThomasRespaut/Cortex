@@ -60,7 +60,7 @@ def env_screen_size(name, default):
     value = os.getenv(name)
     if not value:
         return default
-    normalized = value.strip().lower().replace("*", "x")
+    normalized = value.strip().lower().replace("*", "x").replace("×", "x")
     if "x" not in normalized:
         return default
     width_text, height_text = normalized.split("x", 1)
