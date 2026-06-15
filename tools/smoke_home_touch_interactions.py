@@ -125,6 +125,17 @@ def finger_event(
     )
 
 
+def raw_finger_event(event_type, x, y, finger_id=1):
+    return pygame.event.Event(
+        event_type,
+        {
+            "x": x,
+            "y": y,
+            "finger_id": finger_id,
+        },
+    )
+
+
 def dispatch_quietly(home, event):
     with contextlib.redirect_stdout(io.StringIO()):
         return home.handle_event(event)
@@ -213,6 +224,18 @@ def smoke_home_touch_interactions(
             home,
             finger_event(pygame.FINGERUP, start, size, touch_rotation=touch_rotation),
         )
+
+        home.offset.update(0, 0)
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERDOWN, start, size, touch_rotation=touch_rotation),
+        )
+        dispatch_quietly(home, raw_finger_event(pygame.FINGERMOTION, 1.02, -0.01))
+        if not home.panning or home.offset.length() <= 0:
+            raise RuntimeError(
+                "Un drag tactile brut hors bornes SDL ne déplace pas la grille."
+            )
+        dispatch_quietly(home, raw_finger_event(pygame.FINGERUP, 1.02, -0.01))
 
         home.offset.update(0, 0)
         dispatch_quietly(
