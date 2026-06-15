@@ -658,9 +658,10 @@ class CortexHome:
         if event.type == pygame.QUIT:
             return False
         if event.type == pygame.KEYDOWN:
-            if event.key in (pygame.K_ESCAPE, pygame.K_q):
+            key = getattr(event, "key", None)
+            if key in (pygame.K_ESCAPE, pygame.K_q):
                 return False
-            if event.key == pygame.K_HOME:
+            if key == pygame.K_HOME:
                 self.offset.update(0, 0)
                 self.velocity.update(0, 0)
         width, height = self.screen.get_size()

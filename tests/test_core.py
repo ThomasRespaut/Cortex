@@ -654,6 +654,49 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIs(screen_surface, home.screen)
         set_mode.assert_called_once_with((320, 240), pygame.NOFRAME)
 
+    def test_home_menu_handles_keyboard_events_safely(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                home.offset.update(14, -7)
+                home.velocity.update(3, 2)
+
+                self.assertTrue(home.handle_event(pygame.event.Event(pygame.KEYDOWN, {})))
+                self.assertEqual((14, -7), tuple(home.offset))
+                self.assertEqual((3, 2), tuple(home.velocity))
+
+                self.assertTrue(
+                    home.handle_event(
+                        pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_HOME})
+                    )
+                )
+                self.assertEqual((0, 0), tuple(home.offset))
+                self.assertEqual((0, 0), tuple(home.velocity))
+
+                self.assertFalse(
+                    home.handle_event(
+                        pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_ESCAPE})
+                    )
+                )
+                self.assertFalse(
+                    home.handle_event(
+                        pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_q})
+                    )
+                )
+            finally:
+                pygame.quit()
+
     def test_home_menu_loads_cortex_with_runtime_mode_overrides(self):
         from types import ModuleType
 
