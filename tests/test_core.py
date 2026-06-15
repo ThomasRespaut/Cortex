@@ -1665,6 +1665,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "Préflight avec capture",
                 "Interactions tactiles menu principal",
                 "Interactions tactiles écrans modernes",
+                "Interactions tactiles toutes rotations",
                 "Smokes anciens écrans Pygame",
                 "Smokes écrans Pygame modernes",
             ],
@@ -1688,6 +1689,10 @@ class ToolingDefaultsTests(unittest.TestCase):
             step_commands,
         )
         self.assertIn(
+            "python tools/smoke_touch_rotations.py --size 480x480",
+            step_commands,
+        )
+        self.assertIn(
             "python tools/smoke_legacy_pygame_screens.py --size 480x480 --output-dir artifacts/legacy-screen-smoke --require-round-mask",
             step_commands,
         )
@@ -1701,11 +1706,12 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual("false", steps[1].env["CORTEX_FULLSCREEN"])
         self.assertEqual("480x480", steps[1].env["CORTEX_SCREEN_SIZE"])
         self.assertEqual("90", steps[1].env["CORTEX_TOUCH_ROTATION"])
-        for index in (4, 5, 6, 7):
+        for index in (4, 5, 6, 7, 8):
             self.assertEqual("dummy", steps[index].env["SDL_VIDEODRIVER"])
             self.assertEqual("0", steps[index].env["SDL_TOUCH_MOUSE_EVENTS"])
             self.assertEqual("0", steps[index].env["SDL_MOUSE_TOUCH_EVENTS"])
             self.assertEqual("480x480", steps[index].env["CORTEX_SCREEN_SIZE"])
+        for index in (4, 5, 7, 8):
             self.assertEqual("90", steps[index].env["CORTEX_TOUCH_ROTATION"])
 
     def test_raspberry_pi_ui_validator_times_out_stuck_steps(self):
@@ -2099,6 +2105,11 @@ class ToolingDefaultsTests(unittest.TestCase):
             [spec.name for spec in FEATURE_SPECS if not spec.name.isascii()],
         )
 
+    def test_touch_rotation_smoke_tool_covers_all_quadrants(self):
+        from tools.smoke_touch_rotations import TOUCH_ROTATIONS
+
+        self.assertEqual((0, 90, 180, 270), TOUCH_ROTATIONS)
+
     def test_legacy_screen_smoke_tool_covers_bdd_view(self):
         from tools.smoke_legacy_pygame_screens import SCREEN_SPECS
 
@@ -2156,6 +2167,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "tools/validate_raspberry_pi_ui.py",
                 "tools/smoke_home_touch_interactions.py",
                 "tools/smoke_modern_touch_interactions.py",
+                "tools/smoke_touch_rotations.py",
                 "tools/smoke_legacy_pygame_screens.py",
                 "tools/smoke_modern_pygame_screens.py",
             ):
@@ -2187,6 +2199,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "tools/validate_raspberry_pi_ui.py",
                 "tools/smoke_home_touch_interactions.py",
                 "tools/smoke_modern_touch_interactions.py",
+                "tools/smoke_touch_rotations.py",
                 "tools/smoke_legacy_pygame_screens.py",
                 "tools/smoke_modern_pygame_screens.py",
             ):
