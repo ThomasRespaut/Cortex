@@ -9,13 +9,28 @@ from dotenv import load_dotenv
 # Charger les variables d'environnement depuis le fichier .env
 load_dotenv()
 
+
+def env_flag(name, default=False):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 app = Flask(__name__)
 
-app.secret_key = os.urandom(24)
-app.config['SESSION_COOKIE_NAME'] = 'session-cookie'
+app.secret_key = os.getenv("FLASK_SECRET_KEY") or os.urandom(24)
+app.config["SESSION_COOKIE_NAME"] = "session-cookie"
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_SECURE"] = env_flag(
+    "OAUTH2_SESSION_COOKIE_SECURE",
+    default=False,
+)
 
 # Pour autoriser les transports non sécurisés (http) pendant le développement
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+if env_flag("OAUTHLIB_INSECURE_TRANSPORT", default=True):
+    os.environ.setdefault("OAUTHLIB_INSECURE_TRANSPORT", "1")
 
 # Spotify credentials
 SPOTIPY_CLIENT_ID = os.getenv("SPOTIPY_CLIENT_ID")
@@ -206,5 +221,8 @@ def credentials_to_dict(credentials):
     }
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8888)
+    app.run(
+        debug=env_flag("FLASK_DEBUG", default=False),
+        port=int(os.getenv("PORT", "8888")),
+    )
 

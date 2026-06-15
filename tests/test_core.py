@@ -2900,6 +2900,10 @@ class ToolingDefaultsTests(unittest.TestCase):
         content = Path(".env.example").read_text(encoding="utf-8")
 
         self.assertIn("SPOTIFY_TOKEN_FILE=", content)
+        self.assertIn("FLASK_SECRET_KEY=", content)
+        self.assertIn("FLASK_DEBUG=false", content)
+        self.assertIn("OAUTHLIB_INSECURE_TRANSPORT=1", content)
+        self.assertIn("OAUTH2_SESSION_COOKIE_SECURE=false", content)
         self.assertIn("GOOGLE_CREDENTIALS_FILE=", content)
         self.assertIn("GOOGLE_TOKEN_FILE=", content)
 
@@ -3011,6 +3015,21 @@ class ToolingDefaultsTests(unittest.TestCase):
 
 
 class RepositoryHygieneTests(unittest.TestCase):
+    def test_oauth_helper_uses_safe_runtime_defaults(self):
+        content = Path("oauth2/app.py").read_text(encoding="utf-8")
+
+        self.assertIn('os.getenv("FLASK_SECRET_KEY")', content)
+        self.assertIn('app.config["SESSION_COOKIE_HTTPONLY"] = True', content)
+        self.assertIn('app.config["SESSION_COOKIE_SAMESITE"] = "Lax"', content)
+        self.assertIn('app.config["SESSION_COOKIE_SECURE"] = env_flag(', content)
+        self.assertIn(
+            'os.environ.setdefault("OAUTHLIB_INSECURE_TRANSPORT", "1")',
+            content,
+        )
+        self.assertIn('debug=env_flag("FLASK_DEBUG", default=False)', content)
+        self.assertNotIn("os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'", content)
+        self.assertNotIn("app.run(debug=True", content)
+
     def test_generated_and_sensitive_files_are_not_tracked(self):
         result = subprocess.run(
             ["git", "ls-files"],
