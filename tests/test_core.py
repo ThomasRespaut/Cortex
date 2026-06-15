@@ -927,6 +927,35 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_shows_notice_for_unknown_app(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            home.cortex = mock.Mock(local_mode=True)
+            try:
+                with (
+                    mock.patch("Screen.launch_feature") as launch_feature,
+                    mock.patch("builtins.print") as printed,
+                ):
+                    home.launch_app("Inconnue")
+
+                self.assertEqual("Application indisponible", home.notice_text)
+                self.assertGreater(home.notice_until, pygame.time.get_ticks())
+                launch_feature.assert_not_called()
+                printed.assert_called_with("Application indisponible")
+            finally:
+                pygame.quit()
+
     def test_home_menu_only_launches_app_pressed_at_pointer_down(self):
         import pygame
         from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb

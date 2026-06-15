@@ -503,11 +503,16 @@ class CortexHome:
             self.show_notice(message)
             print(message)
             return
-        width, height = self.screen.get_size()
         if name == "Cortex":
+            width, height = self.screen.get_size()
             launch_cortex(self.screen, self.cortex, width, height)
         else:
-            app = next(item for item in self.apps if item.name == name)
+            app = next((item for item in self.apps if item.name == name), None)
+            if app is None:
+                message = "Application indisponible"
+                self.show_notice(message)
+                print(message)
+                return
             launch_feature(self.screen, self.cortex, name, app.icon_path)
 
     def handle_pointer_down(self, position):
