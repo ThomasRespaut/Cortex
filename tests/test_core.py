@@ -157,6 +157,37 @@ class InterfaceAssetTests(unittest.TestCase):
 
 
 class ToolingDefaultsTests(unittest.TestCase):
+    def test_raspberry_pi_launcher_defaults_to_screen_kiosk(self):
+        launcher = Path("scripts/launch_raspberry_pi.sh")
+        content = launcher.read_text(encoding="utf-8")
+
+        self.assertTrue(content.startswith("#!/usr/bin/env bash"))
+        self.assertIn("set -euo pipefail", content)
+        self.assertIn("exec \"$PYTHON_BIN\" Screen.py", content)
+        self.assertIn("CORTEX_FULLSCREEN=\"${CORTEX_FULLSCREEN:-true}\"", content)
+        self.assertIn("CORTEX_HIDE_CURSOR=\"${CORTEX_HIDE_CURSOR:-true}\"", content)
+        self.assertIn("SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"", content)
+        self.assertNotIn(". \".env\"", content)
+        self.assertNotIn("source .env", content)
+        self.assertNotIn("OPENAI_API_KEY=", content)
+        self.assertNotIn("MISTRAL_API_KEY=", content)
+
+    def test_raspberry_pi_launcher_uses_lf_line_endings(self):
+        content = Path("scripts/launch_raspberry_pi.sh").read_bytes()
+
+        self.assertNotIn(b"\r\n", content)
+
+    def test_raspberry_pi_systemd_service_uses_launcher(self):
+        service = Path("deploy/raspberry-pi/cortex.service.example")
+        content = service.read_text(encoding="utf-8")
+
+        self.assertIn("WorkingDirectory=/home/pi/Cortex", content)
+        self.assertIn(
+            "ExecStart=/home/pi/Cortex/scripts/launch_raspberry_pi.sh",
+            content,
+        )
+        self.assertIn("Restart=on-failure", content)
+
     def test_finetune_tooling_defaults_to_v3_dataset(self):
         expected = Path("training/finetune_cortex_v3")
         self.assertEqual(

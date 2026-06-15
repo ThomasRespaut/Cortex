@@ -6,6 +6,11 @@ from dataclasses import dataclass
 
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    def load_dotenv(*args, **kwargs):
+        return False
 
 from app.app_cortex import launch_cortex
 from app.feature_shell import launch_feature
@@ -16,6 +21,8 @@ from app.screen_config import (
     prepare_screenshot_path,
     rotated_touch_position,
 )
+
+load_dotenv()
 
 
 FPS = 60

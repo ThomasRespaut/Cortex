@@ -24,6 +24,9 @@ jobs:
       - name: Compile local Python files
         run: python -m compileall -q Screen.py app function_calling.py model_loader.py tools tests
 
+      - name: Check Raspberry Pi launcher shell syntax
+        run: bash -n scripts/launch_raspberry_pi.sh
+
       - name: Install Pygame smoke dependency
         run: python -m pip install pygame==2.6.1
 

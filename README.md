@@ -89,6 +89,20 @@ Pour tester le rendu sans modèle, sans micro et sans fenêtre réelle :
 SDL_VIDEODRIVER=dummy CORTEX_FULLSCREEN=false CORTEX_SKIP_CORTEX_LOAD=true CORTEX_SCREENSHOT_PATH=artifacts/screen.png CORTEX_EXIT_AFTER_SCREENSHOT=true python Screen.py
 ```
 
+Sur Raspberry Pi, le script de lancement kiosk applique des valeurs plein écran
+adaptées à l'écran tactile, puis lance `Screen.py`, qui charge `.env` via
+`python-dotenv` :
+
+```bash
+chmod +x scripts/launch_raspberry_pi.sh
+scripts/launch_raspberry_pi.sh
+```
+
+Un exemple de service de démarrage est disponible dans
+`deploy/raspberry-pi/cortex.service.example`. Copiez-le vers
+`/etc/systemd/system/cortex.service`, adaptez `User`, `WorkingDirectory` et
+`ExecStart`, puis activez-le avec `sudo systemctl enable --now cortex.service`.
+
 ### Tests rapides
 
 Les tests du cœur local ne nécessitent ni modèle IA, ni microphone, ni compte

@@ -1,0 +1,17 @@
+[Unit]
+Description=Cortex circular touchscreen interface
+After=network-online.target sound.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/Cortex
+Environment=PYTHONUNBUFFERED=1
+Environment=SDL_VIDEODRIVER=kmsdrm
+ExecStart=/home/pi/Cortex/scripts/launch_raspberry_pi.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

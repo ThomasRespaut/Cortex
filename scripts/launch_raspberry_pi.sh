@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$PROJECT_DIR"
+
+export SDL_VIDEODRIVER="${SDL_VIDEODRIVER:-kmsdrm}"
+export PYTHONUNBUFFERED="${PYTHONUNBUFFERED:-1}"
+export CORTEX_FULLSCREEN="${CORTEX_FULLSCREEN:-true}"
+export CORTEX_HIDE_CURSOR="${CORTEX_HIDE_CURSOR:-true}"
+export CORTEX_FRAMELESS="${CORTEX_FRAMELESS:-false}"
+export CORTEX_TOUCH_ROTATION="${CORTEX_TOUCH_ROTATION:-0}"
+export CORTEX_INPUT_MODE="${CORTEX_INPUT_MODE:-voice}"
+export CORTEX_OUTPUT_MODE="${CORTEX_OUTPUT_MODE:-voice}"
+export CORTEX_LOCAL_MODE="${CORTEX_LOCAL_MODE:-true}"
+
+if [ -z "${PYTHON_BIN:-}" ]; then
+  if [ -x ".venv/bin/python" ]; then
+    PYTHON_BIN=".venv/bin/python"
+  else
+    PYTHON_BIN="python3"
+  fi
+fi
+
+exec "$PYTHON_BIN" Screen.py
