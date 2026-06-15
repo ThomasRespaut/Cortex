@@ -21,6 +21,7 @@ from app.screen_config import (
     env_int,
     env_screen_size,
     circle_fits_round_viewport,
+    fit_text,
     pointer_down_position,
     pointer_move_position,
     pointer_up_position,
@@ -328,7 +329,8 @@ class CortexHome:
         focused = min(visible, default=None, key=lambda entry: entry[0])
         if focused and focused[0] < radius * 0.25:
             _, app, position, size, _, _ = focused
-            label = self.label_font.render(app.name, True, TEXT)
+            label_text = fit_text(self.label_font, app.name, radius * 1.2)
+            label = self.label_font.render(label_text, True, TEXT)
             label_rect = label.get_rect(center=(center.x, center.y + radius * 0.56))
             label_bg = label_rect.inflate(30, 14)
             pygame.draw.rect(

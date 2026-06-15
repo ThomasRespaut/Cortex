@@ -45,6 +45,21 @@ def env_screen_size(name, default):
     return width, height
 
 
+def fit_text(font, text, max_width, ellipsis="..."):
+    if max_width <= 0:
+        return ""
+    if font.size(text)[0] <= max_width:
+        return text
+    trimmed = text
+    while trimmed and font.size(trimmed + ellipsis)[0] > max_width:
+        trimmed = trimmed[:-1]
+    if trimmed:
+        return trimmed + ellipsis
+    while ellipsis and font.size(ellipsis)[0] > max_width:
+        ellipsis = ellipsis[:-1]
+    return ellipsis
+
+
 def display_flags(fullscreen):
     import pygame
 

@@ -309,12 +309,29 @@ class InterfaceAssetTests(unittest.TestCase):
             circle_fits_round_viewport((240, 34), 480, 480, item_radius=44, margin=6)
         )
 
+    def test_fit_text_keeps_long_labels_inside_width(self):
+        import pygame
+        from app.screen_config import fit_text
+
+        pygame.font.init()
+        font = pygame.font.SysFont("Segoe UI", 22, bold=True)
+        fitted = fit_text(font, "Divertissement personnel familial", 180)
+
+        self.assertLessEqual(font.size(fitted)[0], 180)
+        self.assertTrue(fitted.endswith("..."))
+
     def test_home_menu_keeps_rendered_icons_inside_round_viewport(self):
         content = Path("Screen.py").read_text(encoding="utf-8")
 
         self.assertIn("circle_fits_round_viewport", content)
         self.assertIn("safe_margin", content)
         self.assertIn("size / 2", content)
+        self.assertIn("fit_text(self.label_font", content)
+
+    def test_screen_text_helpers_are_shared(self):
+        content = Path("app/screen_config.py").read_text(encoding="utf-8")
+
+        self.assertIn("def fit_text(", content)
 
     def test_modern_back_buttons_use_round_safe_position(self):
         for module in (Path("app/app_cortex.py"), Path("app/feature_shell.py")):
