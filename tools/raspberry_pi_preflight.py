@@ -64,6 +64,25 @@ REQUIRED_RASPBERRY_PI_REQUIREMENTS = [
     "vosk",
 ]
 
+REQUIRED_SERVICE_ENV_SNIPPETS = [
+    "Environment=SDL_VIDEODRIVER=kmsdrm",
+    "Environment=SDL_TOUCH_MOUSE_EVENTS=0",
+    "Environment=SDL_MOUSE_TOUCH_EVENTS=0",
+    "Environment=CORTEX_FULLSCREEN=true",
+    "Environment=CORTEX_HIDE_CURSOR=true",
+    "Environment=CORTEX_FPS=60",
+    "Environment=CORTEX_SCREEN_SIZE=480x480",
+    "Environment=CORTEX_TOUCH_ROTATION=0",
+    "Environment=CORTEX_TOUCH_ROUND_CLIP=true",
+    "Environment=CORTEX_TOUCH_EDGE_MARGIN=0",
+    "Environment=CORTEX_TOUCH_EDGE_CLAMP=true",
+    "Environment=CORTEX_ROUND_MASK=true",
+    "Environment=CORTEX_TOUCH_HIT_SLOP=10",
+    "Environment=CORTEX_TAP_MOVE_LIMIT=14",
+    "Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500",
+    "Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36",
+]
+
 REQUIRED_TEXT_SNIPPETS = {
     "scripts/launch_raspberry_pi.sh": [
         "SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"",
@@ -93,24 +112,8 @@ REQUIRED_TEXT_SNIPPETS = {
         "chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh",
         "tools/validate_raspberry_pi_ui.py",
     ],
-    "deploy/raspberry-pi/cortex.service.example": [
-        "Environment=SDL_VIDEODRIVER=kmsdrm",
-        "Environment=SDL_TOUCH_MOUSE_EVENTS=0",
-        "Environment=SDL_MOUSE_TOUCH_EVENTS=0",
-        "Environment=CORTEX_FULLSCREEN=true",
-        "Environment=CORTEX_HIDE_CURSOR=true",
-        "Environment=CORTEX_FPS=60",
-        "Environment=CORTEX_SCREEN_SIZE=480x480",
-        "Environment=CORTEX_TOUCH_ROTATION=0",
-        "Environment=CORTEX_TOUCH_ROUND_CLIP=true",
-        "Environment=CORTEX_TOUCH_EDGE_MARGIN=0",
-        "Environment=CORTEX_TOUCH_EDGE_CLAMP=true",
-        "Environment=CORTEX_ROUND_MASK=true",
-        "Environment=CORTEX_TOUCH_HIT_SLOP=10",
-        "Environment=CORTEX_TAP_MOVE_LIMIT=14",
-        "Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500",
-        "Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36",
-    ],
+    "deploy/raspberry-pi/cortex.service.example": REQUIRED_SERVICE_ENV_SNIPPETS,
+    "deploy/raspberry-pi/install_service.sh": REQUIRED_SERVICE_ENV_SNIPPETS,
 }
 
 

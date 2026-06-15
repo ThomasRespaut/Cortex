@@ -2063,6 +2063,13 @@ class ToolingDefaultsTests(unittest.TestCase):
             any("CORTEX_EMPTY_DOUBLE_TAP_DISTANCE" in error for error in errors)
         )
         self.assertTrue(
+            any(
+                "deploy/raspberry-pi/install_service.sh" in error
+                and "Environment=CORTEX_SCREEN_SIZE=480x480" in error
+                for error in errors
+            )
+        )
+        self.assertTrue(
             any("chmod +x scripts/launch_raspberry_pi.sh" in error for error in errors)
         )
 
