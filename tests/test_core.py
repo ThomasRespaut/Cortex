@@ -1100,6 +1100,9 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertTrue(any("SDL_TOUCH_MOUSE_EVENTS" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_ROUND_CLIP" in error for error in errors))
+        self.assertTrue(
+            any("chmod +x scripts/launch_raspberry_pi.sh" in error for error in errors)
+        )
 
 
 class RepositoryHygieneTests(unittest.TestCase):

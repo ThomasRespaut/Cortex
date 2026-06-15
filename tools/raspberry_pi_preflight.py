@@ -57,6 +57,10 @@ REQUIRED_TEXT_SNIPPETS = {
         "CORTEX_TOUCH_ROUND_CLIP=\"${CORTEX_TOUCH_ROUND_CLIP:-true}\"",
         "CORTEX_TOUCH_EDGE_MARGIN=\"${CORTEX_TOUCH_EDGE_MARGIN:-0}\"",
     ],
+    "scripts/setup_raspberry_pi.sh": [
+        "chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh",
+        "tools/validate_raspberry_pi_ui.py",
+    ],
     "deploy/raspberry-pi/cortex.service.example": [
         "Environment=SDL_VIDEODRIVER=kmsdrm",
         "Environment=SDL_TOUCH_MOUSE_EVENTS=0",
