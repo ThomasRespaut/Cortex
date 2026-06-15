@@ -3,6 +3,7 @@ import math
 
 from app.screen_config import (
     circular_menu_layout,
+    draw_round_mask,
     env_bool,
     pointer_down_position,
     pointer_move_position,
@@ -296,6 +297,7 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
 
                                             waiting_for_action = False
                                             break
+        draw_round_mask(screen)
         pygame.display.flip()
         if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
             running = False

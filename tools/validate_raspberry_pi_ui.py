@@ -121,6 +121,7 @@ def build_validation_steps(
                 screen_size,
                 "--output-dir",
                 relative_or_absolute(legacy_output_dir),
+                "--require-round-mask",
             ],
         ),
         ValidationStep(

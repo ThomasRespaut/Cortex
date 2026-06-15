@@ -1,7 +1,12 @@
 import pygame
 
 from app.screen_assets import asset_path, load_icon_or_fallback
-from app.screen_config import circular_menu_layout, env_bool, pointer_down_position
+from app.screen_config import (
+    circular_menu_layout,
+    draw_round_mask,
+    env_bool,
+    pointer_down_position,
+)
 
 
 def launch_reglage(screen, cortex, screen_width, screen_height):
@@ -96,7 +101,7 @@ def launch_reglage(screen, cortex, screen_width, screen_height):
                     else :
                         cortex.local_mode = True
                     print(f"Changement de mode : {'Online' if is_online else 'Local'}")
-
+        draw_round_mask(screen, center, radius)
         pygame.display.flip()
         if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
             running = False

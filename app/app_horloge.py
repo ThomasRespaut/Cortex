@@ -1,7 +1,12 @@
 import pygame
 
 from app.screen_assets import asset_path, load_background_or_fallback
-from app.screen_config import circular_menu_layout, env_bool, pointer_down_position
+from app.screen_config import (
+    circular_menu_layout,
+    draw_round_mask,
+    env_bool,
+    pointer_down_position,
+)
 
 def launch_clock(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Horloge."""
@@ -37,7 +42,7 @@ def launch_clock(screen, cortex, screen_width, screen_height):
                 if pointer and boutton_quitter.collidepoint(pointer):
                     running = False
 
-
+        draw_round_mask(screen)
         pygame.display.flip()
         if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
             running = False

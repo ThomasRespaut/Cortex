@@ -248,6 +248,7 @@ class InterfaceAssetTests(unittest.TestCase):
             content = module.read_text(encoding="utf-8")
             self.assertIn("pointer_down_position", content, module)
             self.assertIn("circular_menu_layout", content, module)
+            self.assertIn("draw_round_mask", content, module)
             self.assertIn("screen.get_size()", content, module)
             self.assertNotIn("event.pos", content, module)
             self.assertNotIn("pygame.display.Info", content, module)
@@ -291,6 +292,7 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("pointer_down_position", content)
         self.assertIn("pointer_move_position", content)
         self.assertIn("pointer_up_position", content)
+        self.assertIn("draw_round_mask", content)
         self.assertIn("screen.get_size()", content)
         self.assertIn("CORTEX_EXIT_AFTER_FRAME", content)
         self.assertIn("selection_pointer", content)
@@ -1230,7 +1232,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             step_commands,
         )
         self.assertIn(
-            "python tools/smoke_legacy_pygame_screens.py --size 480x480 --output-dir artifacts/legacy-screen-smoke",
+            "python tools/smoke_legacy_pygame_screens.py --size 480x480 --output-dir artifacts/legacy-screen-smoke --require-round-mask",
             step_commands,
         )
         self.assertIn(
