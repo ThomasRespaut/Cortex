@@ -1832,6 +1832,14 @@ class ToolingDefaultsTests(unittest.TestCase):
             "\"${CORTEX_EMPTY_DOUBLE_TAP_DISTANCE:-36}\"",
             content,
         )
+        self.assertIn(
+            "CORTEX_EXIT_AFTER_SCREENSHOT=\"${CORTEX_EXIT_AFTER_SCREENSHOT:-false}\"",
+            content,
+        )
+        self.assertIn(
+            "CORTEX_EXIT_AFTER_FRAME=\"${CORTEX_EXIT_AFTER_FRAME:-false}\"",
+            content,
+        )
         self.assertIn("SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"", content)
         self.assertIn("SDL_TOUCH_MOUSE_EVENTS=\"${SDL_TOUCH_MOUSE_EVENTS:-0}\"", content)
         self.assertIn("SDL_MOUSE_TOUCH_EVENTS=\"${SDL_MOUSE_TOUCH_EVENTS:-0}\"", content)

@@ -163,6 +163,8 @@ REQUIRED_TEXT_SNIPPETS = {
             "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE="
             "\"${CORTEX_EMPTY_DOUBLE_TAP_DISTANCE:-36}\""
         ),
+        "CORTEX_EXIT_AFTER_SCREENSHOT=\"${CORTEX_EXIT_AFTER_SCREENSHOT:-false}\"",
+        "CORTEX_EXIT_AFTER_FRAME=\"${CORTEX_EXIT_AFTER_FRAME:-false}\"",
     ],
     "scripts/setup_raspberry_pi.sh": [
         "bash -n scripts/launch_raspberry_pi.sh",
