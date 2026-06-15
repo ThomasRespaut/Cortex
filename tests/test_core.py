@@ -610,6 +610,74 @@ class RepositoryHygieneTests(unittest.TestCase):
             get.call_args.kwargs["timeout"],
         )
 
+    def test_media_request_handles_network_and_json_errors(self):
+        if (
+            importlib.util.find_spec("requests") is None
+            or importlib.util.find_spec("dotenv") is None
+        ):
+            self.skipTest("Dépendances média absentes.")
+
+        from assistant.films_and_series import films_and_series
+
+        class InvalidJsonResponse:
+            status_code = 200
+
+            def json(self):
+                raise ValueError("invalid json")
+
+        with mock.patch.object(films_and_series, "api_key", "movie-key"):
+            with mock.patch.object(
+                films_and_series.requests,
+                "get",
+                side_effect=films_and_series.requests.RequestException(
+                    "offline"
+                ),
+            ):
+                self.assertEqual(
+                    {},
+                    films_and_series.make_request("search/movie", {}),
+                )
+
+            with mock.patch.object(
+                films_and_series.requests,
+                "get",
+                return_value=InvalidJsonResponse(),
+            ):
+                self.assertEqual(
+                    {},
+                    films_and_series.make_request("search/movie", {}),
+                )
+
+    def test_media_request_does_not_mutate_params(self):
+        if (
+            importlib.util.find_spec("requests") is None
+            or importlib.util.find_spec("dotenv") is None
+        ):
+            self.skipTest("Dépendances média absentes.")
+
+        from assistant.films_and_series import films_and_series
+
+        class FakeResponse:
+            status_code = 200
+
+            def json(self):
+                return {"results": []}
+
+        params = {"query": "Dune"}
+        with mock.patch.object(films_and_series, "api_key", "movie-key"):
+            with mock.patch.object(
+                films_and_series.requests,
+                "get",
+                return_value=FakeResponse(),
+            ):
+                response = films_and_series.make_request(
+                    "search/movie",
+                    params,
+                )
+
+        self.assertEqual({"results": []}, response)
+        self.assertEqual({"query": "Dune"}, params)
+
     def test_spotify_assistant_reports_missing_credentials(self):
         if importlib.util.find_spec("spotipy") is None:
             self.skipTest("Dépendance spotipy absente.")

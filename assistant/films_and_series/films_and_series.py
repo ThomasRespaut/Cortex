@@ -28,14 +28,18 @@ def make_request(endpoint, params):
     if not api_key:
         return {"error": "API_KEY_MOVIE n'est pas configurée."}
 
+    params = dict(params)
     params['api_key'] = api_key
     params['language'] = 'fr-FR'
-    response = requests.get(
-        f"{base_url}/{endpoint}",
-        params=params,
-        timeout=DEFAULT_REQUEST_TIMEOUT,
-    )
-    return response.json() if response.status_code == 200 else {}
+    try:
+        response = requests.get(
+            f"{base_url}/{endpoint}",
+            params=params,
+            timeout=DEFAULT_REQUEST_TIMEOUT,
+        )
+        return response.json() if response.status_code == 200 else {}
+    except (requests.RequestException, ValueError):
+        return {}
 
 def get_genre_list(media_type='movie'):
     data = make_request(f'genre/{media_type}/list', {})
