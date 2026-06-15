@@ -83,6 +83,12 @@ CORTEX_FULLSCREEN=false
 CORTEX_PREVIEW_SIZE=900
 ```
 
+Pour tester le rendu sans modèle, sans micro et sans fenêtre réelle :
+
+```bash
+SDL_VIDEODRIVER=dummy CORTEX_FULLSCREEN=false CORTEX_SKIP_CORTEX_LOAD=true CORTEX_SCREENSHOT_PATH=artifacts/screen.png CORTEX_EXIT_AFTER_SCREENSHOT=true python Screen.py
+```
+
 ### Tests rapides
 
 Les tests du cœur local ne nécessitent ni modèle IA, ni microphone, ni compte

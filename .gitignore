@@ -24,6 +24,7 @@ output.wav
 *.log
 logs/
 dist/
+artifacts/
 
 # Local models and archives
 tinyllama_cortex_finetuned/

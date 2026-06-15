@@ -146,6 +146,15 @@ class InterfaceAssetTests(unittest.TestCase):
                 screen_config.rotated_touch_position(0.25, 0.75, 400, 400),
             )
 
+    def test_prepare_screenshot_path_creates_parent_directory(self):
+        from app.screen_config import prepare_screenshot_path
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            target = Path(temp_dir) / "nested" / "screen.png"
+
+            self.assertEqual(str(target), prepare_screenshot_path(target))
+            self.assertTrue(target.parent.is_dir())
+
 
 class ToolingDefaultsTests(unittest.TestCase):
     def test_finetune_tooling_defaults_to_v3_dataset(self):

@@ -24,8 +24,21 @@ jobs:
       - name: Compile local Python files
         run: python -m compileall -q Screen.py app function_calling.py model_loader.py tools tests
 
+      - name: Install Pygame smoke dependency
+        run: python -m pip install pygame==2.6.1
+
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
+
+      - name: Render Screen.py smoke screenshot
+        env:
+          SDL_VIDEODRIVER: dummy
+          CORTEX_FULLSCREEN: "false"
+          CORTEX_PREVIEW_SIZE: "480"
+          CORTEX_SKIP_CORTEX_LOAD: "true"
+          CORTEX_SCREENSHOT_PATH: artifacts/screen-smoke.png
+          CORTEX_EXIT_AFTER_SCREENSHOT: "true"
+        run: python Screen.py
 
       - name: Validate fine-tuning dataset
         run: python tools/validate_finetune_dataset.py --dataset-dir training/finetune_cortex_v3

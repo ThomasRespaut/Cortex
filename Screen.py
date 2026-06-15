@@ -13,9 +13,9 @@ from app.screen_config import (
     display_flags,
     env_bool,
     env_int,
+    prepare_screenshot_path,
     rotated_touch_position,
 )
-from cortex import Cortex
 
 
 FPS = 60
@@ -120,12 +120,15 @@ class CortexHome:
         self.clock = pygame.time.Clock()
         self.cortex = None
         self.loading_error = None
-        self.loading_thread = threading.Thread(
-            target=self.load_cortex,
-            name="cortex-loader",
-            daemon=True,
-        )
-        self.loading_thread.start()
+        self.skip_cortex_load = env_bool("CORTEX_SKIP_CORTEX_LOAD", False)
+        self.loading_thread = None
+        if not self.skip_cortex_load:
+            self.loading_thread = threading.Thread(
+                target=self.load_cortex,
+                name="cortex-loader",
+                daemon=True,
+            )
+            self.loading_thread.start()
         self.apps = build_honeycomb(APP_DEFINITIONS)
         self.icons = {
             app.name: pygame.image.load(app.icon_path).convert_alpha()
@@ -148,6 +151,8 @@ class CortexHome:
 
     def load_cortex(self):
         try:
+            from cortex import Cortex
+
             self.cortex = Cortex(
                 input_mode=os.getenv("CORTEX_INPUT_MODE", "voice"),
                 output_mode=os.getenv("CORTEX_OUTPUT_MODE", "voice"),
@@ -237,7 +242,10 @@ class CortexHome:
         )
 
     def draw_status(self, center, radius):
-        if self.loading_error:
+        if self.skip_cortex_load:
+            mode = "APERÇU"
+            mode_color = ACCENT
+        elif self.loading_error:
             mode = "ERREUR"
             mode_color = (255, 105, 125)
         elif self.cortex is None:
@@ -413,8 +421,10 @@ class CortexHome:
             pygame.display.flip()
             screenshot_path = os.getenv("CORTEX_SCREENSHOT_PATH")
             if screenshot_path and not self.screenshot_saved:
-                pygame.image.save(self.screen, screenshot_path)
+                pygame.image.save(self.screen, prepare_screenshot_path(screenshot_path))
                 self.screenshot_saved = True
+                if env_bool("CORTEX_EXIT_AFTER_SCREENSHOT", False):
+                    running = False
             self.clock.tick(FPS)
 
         pygame.quit()

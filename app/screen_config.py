@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 
@@ -48,3 +49,12 @@ def rotated_touch_position(x, y, width, height, rotation=None):
     if rotation == 270:
         return py, height - px
     return px, py
+
+
+def prepare_screenshot_path(path):
+    if not path:
+        return None
+    target = Path(path)
+    if target.parent != Path("."):
+        target.parent.mkdir(parents=True, exist_ok=True)
+    return str(target)
