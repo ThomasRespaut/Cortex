@@ -23,7 +23,7 @@ from app.app_musique import launch_music
 from app.app_reglage import launch_reglage
 from app.app_sante import launch_health
 from app.app_transport import launch_transport
-from tools.verify_screen_smoke import validate_screen_image
+from tools.verify_screen_smoke import format_screen_stats, validate_screen_image
 
 
 @dataclass(frozen=True)
@@ -164,7 +164,7 @@ def main():
                 )
                 print(
                     f"{spec.name}: {output_path} "
-                    f"({stats['width']}x{stats['height']}, {stats['unique_colors']} couleurs)"
+                    f"({format_screen_stats(stats)})"
                 )
             except Exception as error:
                 failures.append(f"{spec.name}: {error}")

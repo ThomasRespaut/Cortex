@@ -2134,6 +2134,25 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertGreater(stats["outside_round_samples"], 0)
         self.assertEqual(0, stats["outside_round_pixels"])
 
+    def test_screen_smoke_formatter_reports_round_mask_stats(self):
+        from tools.verify_screen_smoke import format_screen_stats
+
+        summary = format_screen_stats(
+            {
+                "width": 480,
+                "height": 480,
+                "unique_colors": 42,
+                "bright_pixels": 24,
+                "masked_corners": 4,
+                "outside_round_pixels": 0,
+                "outside_round_samples": 158,
+            }
+        )
+
+        self.assertIn("480x480", summary)
+        self.assertIn("42 couleurs", summary)
+        self.assertIn("0/158 pixels hors cercle visibles", summary)
+
     def test_screen_smoke_validator_rejects_missing_round_mask(self):
         import pygame
         from tools.verify_screen_smoke import validate_screen_image

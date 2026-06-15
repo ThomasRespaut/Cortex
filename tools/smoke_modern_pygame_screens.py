@@ -19,7 +19,7 @@ from Screen import APP_DEFINITIONS
 from app.app_cortex import launch_cortex
 from app.feature_shell import launch_feature
 from tools.smoke_legacy_pygame_screens import parse_size
-from tools.verify_screen_smoke import validate_screen_image
+from tools.verify_screen_smoke import format_screen_stats, validate_screen_image
 
 
 @dataclass(frozen=True)
@@ -141,7 +141,7 @@ def main():
             )
             print(
                 f"cortex: {output_path} "
-                f"({stats['width']}x{stats['height']}, {stats['unique_colors']} couleurs)"
+                f"({format_screen_stats(stats)})"
             )
         except Exception as error:
             failures.append(f"cortex: {error}")
@@ -156,7 +156,7 @@ def main():
                 )
                 print(
                     f"{spec.name}: {output_path} "
-                    f"({stats['width']}x{stats['height']}, {stats['unique_colors']} couleurs)"
+                    f"({format_screen_stats(stats)})"
                 )
             except Exception as error:
                 failures.append(f"{spec.name}: {error}")

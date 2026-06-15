@@ -96,6 +96,17 @@ def validate_screen_image(
     return stats
 
 
+def format_screen_stats(stats):
+    return (
+        f"{stats['width']}x{stats['height']}, "
+        f"{stats['unique_colors']} couleurs, "
+        f"{stats['bright_pixels']} pixels clairs, "
+        f"{stats['masked_corners']}/4 coins noirs, "
+        f"{stats['outside_round_pixels']}/"
+        f"{stats['outside_round_samples']} pixels hors cercle visibles"
+    )
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Vérifie qu'une capture smoke test de Screen.py est lisible."
@@ -128,15 +139,7 @@ def main():
         print(f"Validation capture écran échouée: {error}")
         return 1
 
-    print(
-        "Capture écran OK: "
-        f"{stats['width']}x{stats['height']}, "
-        f"{stats['unique_colors']} couleurs, "
-        f"{stats['bright_pixels']} pixels clairs échantillonnés, "
-        f"{stats['masked_corners']}/4 coins noirs, "
-        f"{stats['outside_round_pixels']}/"
-        f"{stats['outside_round_samples']} pixels hors cercle visibles"
-    )
+    print(f"Capture écran OK: {format_screen_stats(stats)}")
     return 0
 
 
