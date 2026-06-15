@@ -101,6 +101,15 @@ def build_validation_steps(
             ],
         ),
         ValidationStep(
+            "Screen.py un frame headless",
+            [python_bin, "Screen.py"],
+            env=pygame_headless_env(
+                screen_size,
+                **touch_env,
+                CORTEX_EXIT_AFTER_FRAME="true",
+            ),
+        ),
+        ValidationStep(
             "Capture Screen.py headless",
             [python_bin, "Screen.py"],
             env=pygame_headless_env(

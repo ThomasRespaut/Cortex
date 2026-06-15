@@ -1960,6 +1960,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual(
             [
                 "Préflight Raspberry Pi",
+                "Screen.py un frame headless",
                 "Capture Screen.py headless",
                 "Validation capture Screen.py",
                 "Préflight avec capture",
@@ -1973,6 +1974,8 @@ class ToolingDefaultsTests(unittest.TestCase):
             [step.name for step in steps],
         )
         self.assertIn("python Screen.py", step_commands)
+        self.assertEqual("true", steps[1].env["CORTEX_EXIT_AFTER_FRAME"])
+        self.assertNotIn("CORTEX_SCREENSHOT_PATH", steps[1].env)
         self.assertIn(
             "python tools/verify_screen_smoke.py artifacts/screen-smoke.png --min-width 400 --min-height 400 --require-round-mask",
             step_commands,
@@ -2005,20 +2008,20 @@ class ToolingDefaultsTests(unittest.TestCase):
             "python tools/smoke_modern_pygame_screens.py --size 480x480 --output-dir artifacts/modern-screen-smoke --require-round-mask",
             step_commands,
         )
-        self.assertEqual("dummy", steps[1].env["SDL_VIDEODRIVER"])
-        self.assertEqual("0", steps[1].env["SDL_TOUCH_MOUSE_EVENTS"])
-        self.assertEqual("0", steps[1].env["SDL_MOUSE_TOUCH_EVENTS"])
-        self.assertEqual("false", steps[1].env["CORTEX_FULLSCREEN"])
-        self.assertEqual("480x480", steps[1].env["CORTEX_SCREEN_SIZE"])
-        self.assertEqual("90", steps[1].env["CORTEX_TOUCH_ROTATION"])
-        self.assertEqual("true", steps[1].env["CORTEX_TOUCH_FLIP_X"])
-        self.assertEqual("true", steps[1].env["CORTEX_TOUCH_FLIP_Y"])
-        for index in (4, 5, 6, 7, 8, 9):
+        self.assertEqual("dummy", steps[2].env["SDL_VIDEODRIVER"])
+        self.assertEqual("0", steps[2].env["SDL_TOUCH_MOUSE_EVENTS"])
+        self.assertEqual("0", steps[2].env["SDL_MOUSE_TOUCH_EVENTS"])
+        self.assertEqual("false", steps[2].env["CORTEX_FULLSCREEN"])
+        self.assertEqual("480x480", steps[2].env["CORTEX_SCREEN_SIZE"])
+        self.assertEqual("90", steps[2].env["CORTEX_TOUCH_ROTATION"])
+        self.assertEqual("true", steps[2].env["CORTEX_TOUCH_FLIP_X"])
+        self.assertEqual("true", steps[2].env["CORTEX_TOUCH_FLIP_Y"])
+        for index in (5, 6, 7, 8, 9, 10):
             self.assertEqual("dummy", steps[index].env["SDL_VIDEODRIVER"])
             self.assertEqual("0", steps[index].env["SDL_TOUCH_MOUSE_EVENTS"])
             self.assertEqual("0", steps[index].env["SDL_MOUSE_TOUCH_EVENTS"])
             self.assertEqual("480x480", steps[index].env["CORTEX_SCREEN_SIZE"])
-        for index in (4, 5, 6, 8, 9):
+        for index in (5, 6, 7, 9, 10):
             self.assertEqual("90", steps[index].env["CORTEX_TOUCH_ROTATION"])
             self.assertEqual("true", steps[index].env["CORTEX_TOUCH_FLIP_X"])
             self.assertEqual("true", steps[index].env["CORTEX_TOUCH_FLIP_Y"])
