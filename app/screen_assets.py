@@ -4,6 +4,10 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
 
+def asset_path(*parts):
+    return os.path.join("app", "Images", *parts)
+
+
 def make_icon_fallback(label, size=128, accent=(88, 214, 255)):
     surface = pygame.Surface((size, size), pygame.SRCALPHA)
     pygame.draw.circle(surface, (10, 17, 35), (size // 2, size // 2), size // 2)

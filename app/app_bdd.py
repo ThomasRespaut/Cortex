@@ -6,7 +6,7 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
     clock = pygame.time.Clock()
     running = True
 
-    #background_path = os.path.join("app","images", "backgrounds", "jeu.png")
+    # Utiliser asset_path("backgrounds", "...") si une illustration est ajoutée.
     try:
         #background = pygame.image.load(background_path)
         #background = pygame.transform.scale(background, (screen_width, screen_height))

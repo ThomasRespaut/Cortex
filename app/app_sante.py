@@ -1,12 +1,13 @@
 import pygame
-import os
+
+from app.screen_assets import asset_path
 
 def launch_health(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Santé."""
     clock = pygame.time.Clock()
     running = True
 
-    background_path = os.path.join("app","images", "backgrounds", "sante.png")
+    background_path = asset_path("backgrounds", "sante.png")
     try:
         background = pygame.image.load(background_path)
         background = pygame.transform.scale(background, (screen_width, screen_height))

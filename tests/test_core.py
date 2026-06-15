@@ -127,6 +127,32 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertEqual((48, 48), icon.get_size())
         self.assertGreater(icon.get_bounding_rect().height, 0)
 
+    def test_pygame_asset_path_uses_linux_case(self):
+        from app.screen_assets import asset_path
+
+        path = Path(asset_path("backgrounds", "horloge.png"))
+
+        self.assertEqual(Path("app/Images/backgrounds/horloge.png"), path)
+        self.assertTrue(path.is_file())
+
+    def test_legacy_pygame_modules_do_not_use_lowercase_image_dir(self):
+        modules = [
+            Path("app/app_calendrier.py"),
+            Path("app/app_horloge.py"),
+            Path("app/app_jeu.py"),
+            Path("app/app_message.py"),
+            Path("app/app_musique.py"),
+            Path("app/app_reglage.py"),
+            Path("app/app_sante.py"),
+            Path("app/app_transport.py"),
+        ]
+
+        for module in modules:
+            content = module.read_text(encoding="utf-8")
+            self.assertNotIn('"images"', content, module)
+            self.assertNotIn("'images'", content, module)
+            self.assertNotIn("app/images", content.lower(), module)
+
     def test_touch_rotation_maps_circular_screen_coordinates(self):
         from app.screen_config import rotated_touch_position
 

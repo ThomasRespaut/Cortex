@@ -1,5 +1,5 @@
 import pygame
-import os
+from app.screen_assets import asset_path
 #from Screen import main
 
 def launch_calendar(screen, cortex, screen_width, screen_height):
@@ -10,7 +10,7 @@ def launch_calendar(screen, cortex, screen_width, screen_height):
     screen_width = infoObject.current_w
     screen_height = infoObject.current_h
     # Charger l'image de fond
-    background_path = os.path.join("app", "images", "backgrounds", "calendrier.png")
+    background_path = asset_path("backgrounds", "calendrier.png")
     try:
         background = pygame.image.load(background_path)
         background = pygame.transform.scale(background, (screen_width, screen_height))

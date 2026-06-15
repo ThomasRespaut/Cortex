@@ -1,5 +1,6 @@
 import pygame
-import os
+
+from app.screen_assets import asset_path
 
 
 def launch_reglage(screen, cortex, screen_width, screen_height):
@@ -22,7 +23,7 @@ def launch_reglage(screen, cortex, screen_width, screen_height):
     TEXT_COLOR = (0, 0, 0)  # Noir pour le texte
 
     # Charger l'image de fond
-    background_path = os.path.join("app", "images", "app_icons", "icone_reglage.png")
+    background_path = asset_path("app_icons", "icone_reglage.png")
     try:
         background = pygame.image.load(background_path)
         background = pygame.transform.scale(background, (screen_width, screen_height))
