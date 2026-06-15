@@ -2257,12 +2257,52 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
 
     def test_touch_rotation_smoke_tool_covers_all_quadrants(self):
+        from tools import smoke_touch_rotations
         from tools.smoke_touch_rotations import TOUCH_FLIP_CASES, TOUCH_ROTATIONS
 
         self.assertEqual((0, 90, 180, 270), TOUCH_ROTATIONS)
         self.assertEqual(
             ((False, False), (True, False), (False, True), (True, True)),
             TOUCH_FLIP_CASES,
+        )
+        with (
+            mock.patch.object(
+                smoke_touch_rotations,
+                "smoke_home_touch_interactions",
+            ) as home_smoke,
+            mock.patch.object(
+                smoke_touch_rotations,
+                "smoke_modern_touch_interactions",
+            ) as modern_smoke,
+            mock.patch.object(
+                smoke_touch_rotations,
+                "smoke_legacy_touch_interactions",
+            ) as legacy_smoke,
+        ):
+            checked = smoke_touch_rotations.smoke_touch_rotations(
+                (240, 240),
+                rotations=(90,),
+                flip_cases=((True, False),),
+            )
+
+        self.assertEqual([(90, True, False)], checked)
+        home_smoke.assert_called_once_with(
+            (240, 240),
+            touch_rotation=90,
+            touch_flip_x=True,
+            touch_flip_y=False,
+        )
+        modern_smoke.assert_called_once_with(
+            (240, 240),
+            touch_rotation=90,
+            touch_flip_x=True,
+            touch_flip_y=False,
+        )
+        legacy_smoke.assert_called_once_with(
+            (240, 240),
+            touch_rotation=90,
+            touch_flip_x=True,
+            touch_flip_y=False,
         )
 
     def test_legacy_screen_smoke_tool_covers_bdd_view(self):

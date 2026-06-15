@@ -16,6 +16,7 @@ os.environ.setdefault("CORTEX_EXIT_AFTER_FRAME", "true")
 
 from tools.smoke_home_touch_interactions import smoke_home_touch_interactions
 from tools.smoke_legacy_pygame_screens import parse_size
+from tools.smoke_legacy_touch_interactions import smoke_legacy_touch_interactions
 from tools.smoke_modern_touch_interactions import smoke_modern_touch_interactions
 
 
@@ -39,6 +40,12 @@ def smoke_touch_rotations(size, rotations=TOUCH_ROTATIONS, flip_cases=TOUCH_FLIP
                 touch_flip_y=flip_y,
             )
             smoke_modern_touch_interactions(
+                size,
+                touch_rotation=rotation,
+                touch_flip_x=flip_x,
+                touch_flip_y=flip_y,
+            )
+            smoke_legacy_touch_interactions(
                 size,
                 touch_rotation=rotation,
                 touch_flip_x=flip_x,
