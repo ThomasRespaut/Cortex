@@ -27,6 +27,7 @@ jobs:
       - name: Check Raspberry Pi launcher shell syntax
         run: |
           bash -n scripts/launch_raspberry_pi.sh
+          bash -n scripts/setup_raspberry_pi.sh
           bash -n deploy/raspberry-pi/install_service.sh
 
       - name: Install Pygame smoke dependency

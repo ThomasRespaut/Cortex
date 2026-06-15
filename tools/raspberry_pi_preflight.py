@@ -13,7 +13,9 @@ from tools.verify_screen_smoke import validate_screen_image
 
 REQUIRED_FILES = [
     "Screen.py",
+    "requirements-raspberry-pi.txt",
     "scripts/launch_raspberry_pi.sh",
+    "scripts/setup_raspberry_pi.sh",
     "deploy/raspberry-pi/install_service.sh",
     "deploy/raspberry-pi/cortex.service.example",
 ]
@@ -62,7 +64,11 @@ def collect_preflight_errors(
         if not path.is_file():
             errors.append(f"Fichier manquant: {relative_path}")
 
-    for relative_path in ("scripts/launch_raspberry_pi.sh", "deploy/raspberry-pi/install_service.sh"):
+    for relative_path in (
+        "scripts/launch_raspberry_pi.sh",
+        "scripts/setup_raspberry_pi.sh",
+        "deploy/raspberry-pi/install_service.sh",
+    ):
         path = root / relative_path
         if path.is_file() and not has_lf_line_endings(path):
             errors.append(f"Script avec fins de ligne CRLF: {relative_path}")

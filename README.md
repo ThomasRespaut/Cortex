@@ -94,9 +94,14 @@ adaptées à l'écran tactile, puis lance `Screen.py`, qui charge `.env` via
 `python-dotenv` :
 
 ```bash
+scripts/setup_raspberry_pi.sh
 chmod +x scripts/launch_raspberry_pi.sh
 scripts/launch_raspberry_pi.sh
 ```
+
+`requirements-raspberry-pi.txt` installe le socle interface/audio/API. Les
+paquets de modèle local lourd (`torch`, `transformers`, `peft`) restent à
+installer séparément si la Raspberry Pi cible a assez de mémoire et de stockage.
 
 Un exemple de service de démarrage est disponible dans
 `deploy/raspberry-pi/cortex.service.example`. Copiez-le vers

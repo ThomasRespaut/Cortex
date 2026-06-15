@@ -288,6 +288,26 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertNotIn(b"\r\n", content)
 
+    def test_raspberry_pi_setup_script_uses_base_requirements(self):
+        script = Path("scripts/setup_raspberry_pi.sh")
+        content = script.read_text(encoding="utf-8")
+
+        self.assertTrue(script.is_file())
+        self.assertTrue(content.startswith("#!/usr/bin/env bash"))
+        self.assertIn("set -euo pipefail", content)
+        self.assertIn("requirements-raspberry-pi.txt", content)
+        self.assertIn("tools/raspberry_pi_preflight.py", content)
+        self.assertNotIn("Screen.py", content.split("echo", 1)[0])
+
+    def test_raspberry_pi_requirements_exclude_heavy_local_model_stack(self):
+        requirements = Path("requirements-raspberry-pi.txt").read_text(encoding="utf-8")
+
+        self.assertIn("pygame==2.6.1", requirements)
+        self.assertIn("python-dotenv==1.0.1", requirements)
+        self.assertNotIn("torch==", requirements)
+        self.assertNotIn("transformers==", requirements)
+        self.assertNotIn("peft==", requirements)
+
     def test_raspberry_pi_systemd_service_uses_launcher(self):
         service = Path("deploy/raspberry-pi/cortex.service.example")
         content = service.read_text(encoding="utf-8")
@@ -421,7 +441,9 @@ class ToolingDefaultsTests(unittest.TestCase):
             root = Path(temp_dir)
             for relative_path in (
                 "Screen.py",
+                "requirements-raspberry-pi.txt",
                 "scripts/launch_raspberry_pi.sh",
+                "scripts/setup_raspberry_pi.sh",
                 "deploy/raspberry-pi/install_service.sh",
                 "deploy/raspberry-pi/cortex.service.example",
             ):
