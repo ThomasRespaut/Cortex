@@ -735,6 +735,31 @@ class InterfaceAssetTests(unittest.TestCase):
 
         self.assertFalse(pygame.get_init())
 
+    def test_home_menu_can_save_screenshot_and_exit_after_capture(self):
+        import pygame
+        from Screen import CortexHome
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            screenshot_path = Path(temp_dir) / "captures" / "screen.png"
+            with mock.patch.dict(
+                os.environ,
+                {
+                    "SDL_VIDEODRIVER": "dummy",
+                    "CORTEX_FULLSCREEN": "false",
+                    "CORTEX_SCREEN_SIZE": "120x120",
+                    "CORTEX_SKIP_CORTEX_LOAD": "true",
+                    "CORTEX_SCREENSHOT_PATH": f"  {screenshot_path}  ",
+                    "CORTEX_EXIT_AFTER_SCREENSHOT": "true",
+                },
+            ):
+                home = CortexHome()
+                home.run()
+                self.assertTrue(home.screenshot_saved)
+                self.assertTrue(screenshot_path.is_file())
+                self.assertGreater(screenshot_path.stat().st_size, 0)
+
+        self.assertFalse(pygame.get_init())
+
     def test_modern_pygame_views_apply_round_mask_before_flip(self):
         cortex_content = Path("app/app_cortex.py").read_text(encoding="utf-8")
         feature_content = Path("app/feature_shell.py").read_text(encoding="utf-8")
@@ -1760,6 +1785,9 @@ class InterfaceAssetTests(unittest.TestCase):
 
             self.assertEqual(str(target), prepare_screenshot_path(target))
             self.assertTrue(target.parent.is_dir())
+            self.assertEqual(str(target), prepare_screenshot_path(f"  {target}  "))
+            self.assertIsNone(prepare_screenshot_path(""))
+            self.assertIsNone(prepare_screenshot_path("   "))
 
         with tempfile.TemporaryDirectory() as temp_dir:
             with mock.patch.dict(

@@ -405,7 +405,10 @@ def pointer_up_position(event, width, height):
 def prepare_screenshot_path(path):
     if not path:
         return None
-    target = Path(path).expanduser()
+    normalized = str(path).strip()
+    if not normalized:
+        return None
+    target = Path(normalized).expanduser()
     if target.parent != Path("."):
         target.parent.mkdir(parents=True, exist_ok=True)
     return str(target)
