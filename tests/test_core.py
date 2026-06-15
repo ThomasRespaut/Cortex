@@ -139,6 +139,19 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertEqual((1, 1), make_icon_fallback("Cortex", size=0).get_size())
         self.assertEqual((1, 1), make_icon_fallback("Cortex", size=-24).get_size())
 
+    def test_circular_icon_rejects_zero_or_negative_sizes(self):
+        import pygame
+        from Screen import circular_icon
+
+        pygame.init()
+        try:
+            icon = pygame.Surface((4, 4), pygame.SRCALPHA)
+
+            self.assertEqual((1, 1), circular_icon(icon, 0).get_size())
+            self.assertEqual((1, 1), circular_icon(icon, -8).get_size())
+        finally:
+            pygame.quit()
+
     def test_icon_fallback_tolerates_invalid_or_text_sizes(self):
         import pygame
         from app.screen_assets import make_icon_fallback

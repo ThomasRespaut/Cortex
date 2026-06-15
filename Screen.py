@@ -119,6 +119,7 @@ def build_honeycomb(items):
 
 
 def circular_icon(source, size):
+    size = max(1, int(size))
     scaled = pygame.transform.smoothscale(source, (size, size))
     result = pygame.Surface((size, size), pygame.SRCALPHA)
     mask = pygame.Surface((size, size), pygame.SRCALPHA)
