@@ -118,6 +118,14 @@ NON_NEGATIVE_INT_KEYS = (
     "CORTEX_TAP_MOVE_LIMIT",
     "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE",
 )
+BOOLEAN_KEYS = (
+    "CORTEX_FULLSCREEN",
+    "CORTEX_HIDE_CURSOR",
+    "CORTEX_FRAMELESS",
+    "CORTEX_TOUCH_ROUND_CLIP",
+    "CORTEX_TOUCH_EDGE_CLAMP",
+    "CORTEX_ROUND_MASK",
+)
 
 REQUIRED_TEXT_SNIPPETS = {
     "scripts/launch_raspberry_pi.sh": [
@@ -285,6 +293,15 @@ def invalid_numeric_config_values(relative_path, content):
     return errors
 
 
+def invalid_boolean_config_values(relative_path, content):
+    errors = []
+    for key, value in extract_config_values(content, BOOLEAN_KEYS):
+        parsed = parse_touch_bool(value, default=None)
+        if parsed is None:
+            errors.append(f"Valeur booléenne invalide dans {relative_path}: {key}={value}")
+    return errors
+
+
 def has_lf_line_endings(path):
     content = Path(path).read_bytes()
     return b"\r\n" not in content
@@ -357,11 +374,13 @@ def collect_preflight_errors(
         errors.extend(invalid_touch_config_values(relative_path, content))
         errors.extend(invalid_screen_size_values(relative_path, content))
         errors.extend(invalid_numeric_config_values(relative_path, content))
+        errors.extend(invalid_boolean_config_values(relative_path, content))
 
     if env_example.is_file():
         errors.extend(invalid_touch_config_values(".env.example", env_content))
         errors.extend(invalid_screen_size_values(".env.example", env_content))
         errors.extend(invalid_numeric_config_values(".env.example", env_content))
+        errors.extend(invalid_boolean_config_values(".env.example", env_content))
 
     for relative_path in (
         "scripts/launch_raspberry_pi.sh",

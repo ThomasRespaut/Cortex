@@ -2518,6 +2518,31 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertTrue(any("CORTEX_TOUCH_HIT_SLOP=-1" in error for error in errors))
         self.assertTrue(any("CORTEX_TAP_MOVE_LIMIT=wide" in error for error in errors))
 
+    def test_raspberry_pi_preflight_validates_boolean_kiosk_values(self):
+        from tools.raspberry_pi_preflight import invalid_boolean_config_values
+
+        valid_content = "\n".join(
+            [
+                'export CORTEX_FULLSCREEN="${CORTEX_FULLSCREEN:-true}"',
+                "Environment=CORTEX_HIDE_CURSOR=true",
+                "Environment=CORTEX_FRAMELESS=false",
+                "Environment=CORTEX_TOUCH_ROUND_CLIP=oui",
+                "Environment=CORTEX_TOUCH_EDGE_CLAMP=non",
+                "Environment=CORTEX_ROUND_MASK=1",
+            ]
+        )
+        invalid_content = "\n".join(
+            [
+                "Environment=CORTEX_FULLSCREEN=fullscreen",
+                'export CORTEX_ROUND_MASK="${CORTEX_ROUND_MASK:-maybe}"',
+            ]
+        )
+
+        self.assertEqual([], invalid_boolean_config_values("service", valid_content))
+        errors = invalid_boolean_config_values("service", invalid_content)
+        self.assertTrue(any("CORTEX_FULLSCREEN=fullscreen" in error for error in errors))
+        self.assertTrue(any("CORTEX_ROUND_MASK=maybe" in error for error in errors))
+
     def test_env_example_documents_raspberry_pi_screen_settings(self):
         content = Path(".env.example").read_text(encoding="utf-8")
 
