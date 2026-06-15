@@ -1,5 +1,6 @@
 import os
 
+os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
 from app.screen_config import rotated_touch_position
@@ -60,6 +61,15 @@ def fit_text(font, text, max_width):
     while text and font.size(text + "…")[0] > max_width:
         text = text[:-1]
     return text + "…"
+
+
+def activate_feature_at(cortex, app_name, position, back_center, back_radius, card_rects, cards):
+    if pygame.Vector2(position).distance_to(back_center) <= back_radius:
+        return False
+    if app_name == "Réglages" and card_rects and card_rects[0].collidepoint(position):
+        cortex.local_mode = not cortex.local_mode
+        cards[0] = "Mode local" if cortex.local_mode else "Mode en ligne"
+    return True
 
 
 def launch_feature(screen, cortex, app_name, icon_path):
@@ -163,15 +173,26 @@ def launch_feature(screen, cortex, app_name, icon_path):
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.Vector2(event.pos).distance_to(back_center) <= back_radius:
-                    running = False
-                elif app_name == "Réglages" and card_rects[0].collidepoint(event.pos):
-                    cortex.local_mode = not cortex.local_mode
-                    cards[0] = "Mode local" if cortex.local_mode else "Mode en ligne"
+                running = activate_feature_at(
+                    cortex,
+                    app_name,
+                    event.pos,
+                    back_center,
+                    back_radius,
+                    card_rects,
+                    cards,
+                )
             elif event.type == pygame.FINGERDOWN:
                 position = rotated_touch_position(event.x, event.y, width, height)
-                if pygame.Vector2(position).distance_to(back_center) <= back_radius:
-                    running = False
+                running = activate_feature_at(
+                    cortex,
+                    app_name,
+                    position,
+                    back_center,
+                    back_radius,
+                    card_rects,
+                    cards,
+                )
 
         mode = "LOCAL" if cortex.local_mode else "EN LIGNE"
         mode_surface = small_font.render(mode, True, accent)

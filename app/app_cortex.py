@@ -1,7 +1,9 @@
 import math
+import os
 import threading
 import time
 
+os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
 from app.screen_config import rotated_touch_position
@@ -251,6 +253,27 @@ class CortexView:
         self.worker = threading.Thread(target=worker, name="cortex-query", daemon=True)
         self.worker.start()
 
+    def activate_at(
+        self,
+        position,
+        back_center,
+        back_radius,
+        orb_center,
+        orb_radius,
+        suggestion_rects,
+    ):
+        pos = pygame.Vector2(position)
+        if pos.distance_to(back_center) <= back_radius:
+            self.running = False
+            return
+        if pos.distance_to(orb_center) <= orb_radius:
+            self.run_query()
+            return
+        for rect, suggestion in suggestion_rects:
+            if rect.collidepoint(position):
+                self.run_query(suggestion)
+                return
+
     def run(self):
         while self.running:
             center, radius = self.viewport()
@@ -267,25 +290,24 @@ class CortexView:
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = pygame.Vector2(event.pos)
-                    if pos.distance_to(back_center) <= back_radius:
-                        self.running = False
-                    elif pos.distance_to(orb_center) <= orb_radius:
-                        self.run_query()
-                    else:
-                        for rect, suggestion in suggestion_rects:
-                            if rect.collidepoint(event.pos):
-                                self.run_query(suggestion)
-                                break
+                    self.activate_at(
+                        event.pos,
+                        back_center,
+                        back_radius,
+                        orb_center,
+                        orb_radius,
+                        suggestion_rects,
+                    )
                 elif event.type == pygame.FINGERDOWN:
                     width, height = self.screen.get_size()
-                    pos = pygame.Vector2(
-                        rotated_touch_position(event.x, event.y, width, height)
+                    self.activate_at(
+                        rotated_touch_position(event.x, event.y, width, height),
+                        back_center,
+                        back_radius,
+                        orb_center,
+                        orb_radius,
+                        suggestion_rects,
                     )
-                    if pos.distance_to(back_center) <= back_radius:
-                        self.running = False
-                    elif pos.distance_to(orb_center) <= orb_radius:
-                        self.run_query()
 
             pygame.display.flip()
             self.clock.tick(60)

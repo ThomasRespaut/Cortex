@@ -155,6 +155,68 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertEqual(str(target), prepare_screenshot_path(target))
             self.assertTrue(target.parent.is_dir())
 
+    def test_cortex_view_activation_supports_touch_suggestions(self):
+        import pygame
+        from app.app_cortex import CortexView
+
+        view = CortexView.__new__(CortexView)
+        view.running = True
+        prompts = []
+        view.run_query = lambda prompt=None: prompts.append(prompt)
+        suggestions = [(pygame.Rect(20, 20, 80, 40), "Résumé du jour")]
+
+        view.activate_at(
+            (40, 40),
+            back_center=(200, 200),
+            back_radius=20,
+            orb_center=(300, 300),
+            orb_radius=20,
+            suggestion_rects=suggestions,
+        )
+
+        self.assertEqual(["Résumé du jour"], prompts)
+        self.assertTrue(view.running)
+
+    def test_cortex_view_activation_supports_touch_back_button(self):
+        from app.app_cortex import CortexView
+
+        view = CortexView.__new__(CortexView)
+        view.running = True
+        view.run_query = lambda prompt=None: self.fail("query should not run")
+
+        view.activate_at(
+            (10, 10),
+            back_center=(10, 10),
+            back_radius=20,
+            orb_center=(300, 300),
+            orb_radius=20,
+            suggestion_rects=[],
+        )
+
+        self.assertFalse(view.running)
+
+    def test_feature_activation_supports_touch_settings_toggle(self):
+        import pygame
+        from app.feature_shell import activate_feature_at
+
+        class CortexState:
+            local_mode = True
+
+        cards = ["Mode de calcul"]
+        running = activate_feature_at(
+            CortexState,
+            "Réglages",
+            position=(25, 25),
+            back_center=(200, 200),
+            back_radius=20,
+            card_rects=[pygame.Rect(0, 0, 80, 50)],
+            cards=cards,
+        )
+
+        self.assertTrue(running)
+        self.assertFalse(CortexState.local_mode)
+        self.assertEqual("Mode en ligne", cards[0])
+
 
 class ToolingDefaultsTests(unittest.TestCase):
     def test_raspberry_pi_launcher_defaults_to_screen_kiosk(self):
