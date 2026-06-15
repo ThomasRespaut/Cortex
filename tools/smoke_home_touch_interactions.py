@@ -24,6 +24,7 @@ from tools.screen_size import parse_square_screen_size as parse_size
 from tools.screen_size import require_square_screen_size
 from tools.touch_config import (
     env_touch_bool,
+    normalize_touch_calibration,
     parse_required_touch_bool,
     parse_touch_rotation,
 )
@@ -54,9 +55,11 @@ def configure_touch_environment(
     touch_flip_y=False,
     size=None,
 ):
-    touch_rotation = parse_touch_rotation(touch_rotation)
-    touch_flip_x = parse_required_touch_bool(touch_flip_x)
-    touch_flip_y = parse_required_touch_bool(touch_flip_y)
+    touch_rotation, touch_flip_x, touch_flip_y = normalize_touch_calibration(
+        touch_rotation,
+        touch_flip_x,
+        touch_flip_y,
+    )
     if size is not None:
         os.environ["CORTEX_SCREEN_SIZE"] = f"{size[0]}x{size[1]}"
     os.environ["CORTEX_TOUCH_ROTATION"] = str(touch_rotation)

@@ -37,5 +37,17 @@ def parse_required_touch_bool(value):
     return parsed
 
 
+def normalize_touch_calibration(
+    touch_rotation=0,
+    touch_flip_x=False,
+    touch_flip_y=False,
+):
+    return (
+        parse_touch_rotation(touch_rotation),
+        parse_required_touch_bool(touch_flip_x),
+        parse_required_touch_bool(touch_flip_y),
+    )
+
+
 def env_touch_bool(name, default=False):
     return parse_touch_bool(os.getenv(name), default=default)

@@ -2057,12 +2057,21 @@ class ToolingDefaultsTests(unittest.TestCase):
             configure_touch_environment,
             touch_fraction_for_screen_position,
         )
-        from tools.touch_config import parse_required_touch_bool
+        from tools.touch_config import (
+            normalize_touch_calibration,
+            parse_required_touch_bool,
+        )
 
         self.assertTrue(parse_required_touch_bool("oui"))
         self.assertFalse(parse_required_touch_bool("0"))
+        self.assertEqual(
+            (90, True, False),
+            normalize_touch_calibration("90", "oui", "0"),
+        )
         with self.assertRaises(argparse.ArgumentTypeError):
             parse_required_touch_bool("maybe")
+        with self.assertRaises(argparse.ArgumentTypeError):
+            normalize_touch_calibration("45", "oui", "0")
         with self.assertRaises(argparse.ArgumentTypeError):
             configure_touch_environment(touch_flip_x="maybe")
         with self.assertRaises(argparse.ArgumentTypeError):
