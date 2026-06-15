@@ -1,11 +1,16 @@
 import pygame
-import os
-from app.screen_config import rotated_touch_position
+import math
+
+from app.screen_config import circular_menu_layout, env_bool, rotated_touch_position
+from database.database import Neo4jDatabase
 
 def launch_bdd(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Jeux."""
     clock = pygame.time.Clock()
     running = True
+    screen_width, screen_height = screen.get_size()
+    graph_center_x = screen_width / 2
+    graph_center_y = screen_height / 2
 
     # Utiliser asset_path("backgrounds", "...") si une illustration est ajoutée.
     try:
@@ -30,15 +35,17 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
     last_distance = None
 
 
-    #Bouton Quitter
-    boutton_quitter = pygame.Rect(screen_width/2-75, 0, 150, 50)
+    boutton_quitter, action_buttons = circular_menu_layout(
+        screen_width,
+        screen_height,
+        item_count=3,
+    )
     border_color = (0, 200, 0)
     border_width = 3
     pygame.draw.rect(screen, border_color, boutton_quitter, width=border_width)
     screen.fill((255, 255, 255))
     while running:
         screen.fill((255, 255, 255))
-        boutton_quitter = pygame.Rect(screen_width / 2 - 75, 0, 150, 50)
         border_color = (0, 200, 0)
         border_width = 3
         pygame.draw.rect(screen, border_color, boutton_quitter, width=border_width)
@@ -47,10 +54,14 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
         # Dessiner les arêtes (relations)
         for edge in graph.edges:
             if edge[0] in positions and edge[1] in positions:
-                start_pos = (int(positions[edge[0]][0] * zoom + 400 + offset_x),
-                             int(positions[edge[0]][1] * zoom + 300 + offset_y))
-                end_pos = (int(positions[edge[1]][0] * zoom + 400 + offset_x),
-                           int(positions[edge[1]][1] * zoom + 300 + offset_y))
+                start_pos = (
+                    int(positions[edge[0]][0] * zoom + graph_center_x + offset_x),
+                    int(positions[edge[0]][1] * zoom + graph_center_y + offset_y),
+                )
+                end_pos = (
+                    int(positions[edge[1]][0] * zoom + graph_center_x + offset_x),
+                    int(positions[edge[1]][1] * zoom + graph_center_y + offset_y),
+                )
                 pygame.draw.line(screen, (0, 0, 0), start_pos, end_pos, 2)
 
                 # Ajouter un texte pour représenter la relation
@@ -64,7 +75,8 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
         # Dessiner les nœuds
         for node_id, pos in positions.items():
             if node_id in graph.nodes:
-                x, y = int(pos[0] * zoom + 400 + offset_x), int(pos[1] * zoom + 300 + offset_y)
+                x = int(pos[0] * zoom + graph_center_x + offset_x)
+                y = int(pos[1] * zoom + graph_center_y + offset_y)
                 # Déterminer la couleur du nœud
                 if node_id == noeud_principal_id:
                     color = (0, 255, 0)  # Vert pour "Thomas RESPAUT"
@@ -128,13 +140,14 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
                 for node_id, pos in positions.items():
-                    x, y = int(pos[0] * zoom + 400 + offset_x), int(pos[1] * zoom + 300 + offset_y)
+                    x = int(pos[0] * zoom + graph_center_x + offset_x)
+                    y = int(pos[1] * zoom + graph_center_y + offset_y)
                     if (mouse_pos[0] - x) ** 2 + (mouse_pos[1] - y) ** 2 <= int(20 * zoom) ** 2:
                         # Ajouter les boutons et gérer les actions
                         buttons = {
-                            "Ajouter": pygame.Rect(50, 500, 150, 50),
-                            "Modifier": pygame.Rect(250, 500, 150, 50),
-                            "Supprimer": pygame.Rect(450, 500, 150, 50),
+                            "Ajouter": action_buttons[0],
+                            "Modifier": action_buttons[1],
+                            "Supprimer": action_buttons[2],
                         }
 
                         for button_name, button_rect in buttons.items():
@@ -245,3 +258,5 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
                                             waiting_for_action = False
                                             break
         pygame.display.flip()
+        if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
+            running = False

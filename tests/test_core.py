@@ -192,6 +192,18 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertIn("env_bool", content, module)
             self.assertIn("CORTEX_EXIT_AFTER_FRAME", content, module)
 
+    def test_bdd_screen_uses_responsive_touch_layout(self):
+        content = Path("app/app_bdd.py").read_text(encoding="utf-8")
+
+        self.assertIn("import math", content)
+        self.assertIn("from database.database import Neo4jDatabase", content)
+        self.assertIn("circular_menu_layout", content)
+        self.assertIn("screen.get_size()", content)
+        self.assertIn("CORTEX_EXIT_AFTER_FRAME", content)
+        self.assertNotIn("+ 400 + offset_x", content)
+        self.assertNotIn("+ 300 + offset_y", content)
+        self.assertNotIn("pygame.Rect(50, 500", content)
+
     def test_circular_menu_layout_keeps_controls_inside_round_viewport(self):
         import pygame
         from app.screen_config import circular_menu_layout
