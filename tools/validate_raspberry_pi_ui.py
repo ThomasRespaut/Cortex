@@ -21,7 +21,21 @@ class ValidationStep:
     env: dict[str, str] = field(default_factory=dict)
 
 
-parse_size = parse_screen_size
+def require_square_size(size):
+    width, height = size
+    if width != height:
+        raise ValueError(
+            "La validation Raspberry Pi cible un écran circulaire: "
+            "la taille doit être carrée."
+        )
+    return width, height
+
+
+def parse_size(value):
+    try:
+        return require_square_size(parse_screen_size(value))
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(str(error)) from error
 
 
 def positive_int(value):
@@ -65,7 +79,7 @@ def build_validation_steps(
     touch_flip_x=False,
     touch_flip_y=False,
 ):
-    width, height = size
+    width, height = require_square_size(size)
     screen_size = f"{width}x{height}"
     min_width = str(min(width, 400))
     min_height = str(min(height, 400))

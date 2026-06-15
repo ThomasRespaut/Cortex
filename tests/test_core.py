@@ -2203,6 +2203,22 @@ class ToolingDefaultsTests(unittest.TestCase):
         ):
             self.assertEqual(124, run_step(step, ".", 1))
 
+    def test_raspberry_pi_ui_validator_requires_square_size(self):
+        from tools.validate_raspberry_pi_ui import build_validation_steps, parse_size
+
+        self.assertEqual((480, 480), parse_size("480x480"))
+        with self.assertRaises(argparse.ArgumentTypeError):
+            parse_size("800x480")
+        with self.assertRaises(ValueError):
+            build_validation_steps(
+                "python",
+                ".",
+                (800, 480),
+                "artifacts/screen-smoke.png",
+                "artifacts/legacy-screen-smoke",
+                "artifacts/modern-screen-smoke",
+            )
+
     def test_raspberry_pi_ui_validator_rejects_invalid_step_timeout(self):
         from tools.validate_raspberry_pi_ui import positive_int, touch_rotation
 
