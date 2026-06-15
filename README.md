@@ -139,6 +139,12 @@ pas vide :
 python tools/raspberry_pi_preflight.py --project-root . --screenshot artifacts/screen-smoke.png
 ```
 
+Pour vérifier aussi les anciens sous-écrans Pygame sans interaction :
+
+```bash
+python tools/smoke_legacy_pygame_screens.py --size 480x480
+```
+
 ### Tests rapides
 
 Les tests du cœur local ne nécessitent ni modèle IA, ni microphone, ni compte

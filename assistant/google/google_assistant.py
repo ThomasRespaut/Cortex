@@ -3,6 +3,7 @@ import json
 import base64
 import binascii
 import sys
+from pathlib import Path
 from html import unescape
 from datetime import datetime, timedelta
 from email.mime.text import MIMEText
@@ -34,8 +35,14 @@ def create_chat_completion(**kwargs):
 
 
 # Chemin vers les fichiers credentials et token
-CREDENTIALS_FILE = "assistant/google/google_secret.json"
-TOKEN_FILE = "assistant/google/token_google.json"
+CREDENTIALS_FILE = os.getenv(
+    "GOOGLE_CREDENTIALS_FILE",
+    "assistant/google/google_secret.json",
+)
+TOKEN_FILE = os.getenv(
+    "GOOGLE_TOKEN_FILE",
+    "assistant/google/token_google.json",
+)
 
 class GoogleAssistant:
     def __init__(self):
@@ -59,7 +66,7 @@ class GoogleAssistant:
     def load_token(self):
         if os.path.exists(TOKEN_FILE):
             try:
-                with open(TOKEN_FILE, 'r') as token_file:
+                with Path(TOKEN_FILE).open('r', encoding='utf-8') as token_file:
                     token_data = json.load(token_file)
                     return self.from_token_info(token_data)
             except (OSError, json.JSONDecodeError, KeyError, ValueError) as error:
@@ -81,9 +88,16 @@ class GoogleAssistant:
         return creds
 
     def save_token(self, credentials):
-        with open(TOKEN_FILE, 'w') as token_file:
-            token_json = credentials.to_json()
-            token_file.write(token_json)
+        token_path = Path(TOKEN_FILE)
+        try:
+            token_path.parent.mkdir(parents=True, exist_ok=True)
+            token_path.write_text(credentials.to_json(), encoding='utf-8')
+            return True
+        except OSError as error:
+            self.append_error_message(
+                f"Impossible d'enregistrer le token Google: {error}"
+            )
+            return False
 
     def get_google_token(self):
         """Obtenir un token Google valide."""
@@ -94,7 +108,9 @@ class GoogleAssistant:
                 creds.refresh(Request())
                 self.save_token(creds)
             except Exception as error:
-                print(f"Erreur lors du rafraîchissement du token: {error}")
+                self.append_error_message(
+                    f"Erreur lors du rafraîchissement du token Google: {error}"
+                )
                 creds = None
 
         if not creds or not creds.valid:

@@ -572,6 +572,13 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_SCREEN_SIZE=", content)
         self.assertIn("CORTEX_TOUCH_ROTATION=0", content)
 
+    def test_env_example_documents_oauth_token_overrides(self):
+        content = Path(".env.example").read_text(encoding="utf-8")
+
+        self.assertIn("SPOTIFY_TOKEN_FILE=", content)
+        self.assertIn("GOOGLE_CREDENTIALS_FILE=", content)
+        self.assertIn("GOOGLE_TOKEN_FILE=", content)
+
     def test_raspberry_pi_preflight_reports_missing_assets(self):
         from tools.raspberry_pi_preflight import collect_preflight_errors
 
@@ -799,6 +806,99 @@ class RepositoryHygieneTests(unittest.TestCase):
         self.assertIsNone(assistant.gmail_service)
         self.assertIn("google_secret", assistant.error_message)
         from_client_secrets_file.assert_not_called()
+
+    def test_google_assistant_save_token_creates_parent_directory(self):
+        required_modules = [
+            "google_auth_oauthlib",
+            "googleapiclient",
+            "mistralai",
+            "openai",
+        ]
+        missing_modules = [
+            name for name in required_modules
+            if importlib.util.find_spec(name) is None
+        ]
+        if missing_modules:
+            self.skipTest(
+                "Dépendances Google/OpenAI absentes: "
+                + ", ".join(missing_modules)
+            )
+
+        import assistant.google.google_assistant as google_assistant
+
+        class FakeCredentials:
+            def to_json(self):
+                return '{"token": "google-token"}'
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            token_file = Path(temp_dir) / "nested" / "token_google.json"
+            assistant = google_assistant.GoogleAssistant.__new__(
+                google_assistant.GoogleAssistant
+            )
+            assistant.error_message = ""
+            with mock.patch.object(
+                google_assistant,
+                "TOKEN_FILE",
+                str(token_file),
+            ):
+                self.assertTrue(assistant.save_token(FakeCredentials()))
+                self.assertTrue(token_file.is_file())
+                self.assertEqual(
+                    '{"token": "google-token"}',
+                    token_file.read_text(encoding="utf-8"),
+                )
+        self.assertEqual("", assistant.error_message)
+
+    def test_google_assistant_refresh_keeps_credentials_if_save_fails(self):
+        required_modules = [
+            "google_auth_oauthlib",
+            "googleapiclient",
+            "mistralai",
+            "openai",
+        ]
+        missing_modules = [
+            name for name in required_modules
+            if importlib.util.find_spec(name) is None
+        ]
+        if missing_modules:
+            self.skipTest(
+                "Dépendances Google/OpenAI absentes: "
+                + ", ".join(missing_modules)
+            )
+
+        import assistant.google.google_assistant as google_assistant
+
+        class FakeCredentials:
+            expired = True
+            valid = False
+            refresh_token = "refresh-placeholder"
+
+            def refresh(self, request):
+                self.expired = False
+                self.valid = True
+
+            def to_json(self):
+                return '{"token": "google-token"}'
+
+        assistant = google_assistant.GoogleAssistant.__new__(
+            google_assistant.GoogleAssistant
+        )
+        assistant.error_message = ""
+        assistant.load_token = lambda: FakeCredentials()
+
+        with mock.patch.object(
+            google_assistant.Path,
+            "write_text",
+            side_effect=OSError("disk full"),
+        ):
+            creds = assistant.get_google_token()
+
+        self.assertIsNotNone(creds)
+        self.assertTrue(creds.valid)
+        self.assertIn(
+            "Impossible d'enregistrer le token Google",
+            assistant.error_message,
+        )
 
     def test_google_decode_message_body_ignores_invalid_base64(self):
         required_modules = [
@@ -1336,6 +1436,91 @@ class RepositoryHygieneTests(unittest.TestCase):
 
         self.assertIsNone(assistant.sp)
         self.assertIn("rafraîchissement Spotify", assistant.error_message)
+
+    def test_spotify_assistant_save_token_creates_parent_directory(self):
+        if importlib.util.find_spec("spotipy") is None:
+            self.skipTest("Dépendance spotipy absente.")
+
+        import assistant.spotify.spotify_assistant as spotify_assistant
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            token_file = Path(temp_dir) / "nested" / "token_info.json"
+            assistant = spotify_assistant.SpotifyAssistant.__new__(
+                spotify_assistant.SpotifyAssistant
+            )
+            assistant.error_message = ""
+            with mock.patch.object(
+                spotify_assistant,
+                "TOKEN_FILE",
+                str(token_file),
+            ):
+                self.assertTrue(
+                    assistant.save_token({"access_token": "spotify-token"})
+                )
+                self.assertTrue(token_file.is_file())
+                self.assertEqual(
+                    '{"access_token": "spotify-token"}',
+                    token_file.read_text(encoding="utf-8"),
+                )
+        self.assertEqual("", assistant.error_message)
+
+    def test_spotify_assistant_refresh_keeps_token_if_save_fails(self):
+        if importlib.util.find_spec("spotipy") is None:
+            self.skipTest("Dépendance spotipy absente.")
+
+        import assistant.spotify.spotify_assistant as spotify_assistant
+
+        class FakeOAuth:
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+
+            def is_token_expired(self, token_info):
+                return True
+
+            def refresh_access_token(self, refresh_token):
+                return {"access_token": "refreshed"}
+
+        original_path_open = Path.open
+
+        def selective_open(path, *args, **kwargs):
+            mode = args[0] if args else kwargs.get("mode", "r")
+            if "w" in mode:
+                raise OSError("disk full")
+            return original_path_open(path, *args, **kwargs)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            token_file = Path(temp_dir) / "token_info.json"
+            token_file.write_text(
+                '{"refresh_token": "refresh-placeholder"}',
+                encoding="utf-8",
+            )
+            with (
+                mock.patch.object(spotify_assistant, "SPOTIPY_CLIENT_ID", "client"),
+                mock.patch.object(
+                    spotify_assistant,
+                    "SPOTIPY_CLIENT_SECRET",
+                    "secret",
+                ),
+                mock.patch.object(
+                    spotify_assistant,
+                    "TOKEN_FILE",
+                    str(token_file),
+                ),
+                mock.patch.object(spotify_assistant, "SpotifyOAuth", FakeOAuth),
+                mock.patch.object(
+                    spotify_assistant.spotipy,
+                    "Spotify",
+                    side_effect=lambda auth: {"auth": auth},
+                ),
+                mock.patch.object(spotify_assistant.Path, "open", new=selective_open),
+            ):
+                assistant = spotify_assistant.SpotifyAssistant()
+
+        self.assertEqual({"auth": "refreshed"}, assistant.sp)
+        self.assertIn(
+            "Impossible d'enregistrer le token Spotify",
+            assistant.error_message,
+        )
 
     def test_spotify_assistant_reports_token_without_access_token(self):
         if importlib.util.find_spec("spotipy") is None:

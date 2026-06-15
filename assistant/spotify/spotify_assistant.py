@@ -1,6 +1,8 @@
 import json
 import os
 import sys
+from pathlib import Path
+
 import spotipy
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
@@ -40,6 +42,14 @@ class SpotifyAssistant:
         self.token_info = self.get_token()
         self.sp = self._build_spotify_client()
 
+    def append_error_message(self, message):
+        if not message:
+            return
+        if not self.error_message:
+            self.error_message = message
+        elif message not in self.error_message:
+            self.error_message = f"{self.error_message} | {message}"
+
     def _build_spotify_client(self):
         if not self.token_info:
             return None
@@ -58,10 +68,10 @@ class SpotifyAssistant:
         token_info = None
         if os.path.exists(TOKEN_FILE):
             try:
-                with open(TOKEN_FILE, "r") as f:
+                with Path(TOKEN_FILE).open("r", encoding="utf-8") as f:
                     token_info = json.load(f)
             except (OSError, json.JSONDecodeError) as error:
-                self.error_message = f"Token Spotify invalide: {error}"
+                self.append_error_message(f"Token Spotify invalide: {error}")
                 token_info = None
 
         if not token_info or self.sp_oauth.is_token_expired(token_info):
@@ -87,10 +97,22 @@ class SpotifyAssistant:
                 code = self.sp_oauth.parse_response_code(redirect_response)
                 token_info = self.sp_oauth.get_access_token(code)
 
-            with open(TOKEN_FILE, "w") as f:
-                json.dump(token_info, f)
+            self.save_token(token_info)
 
         return token_info
+
+    def save_token(self, token_info):
+        token_path = Path(TOKEN_FILE)
+        try:
+            token_path.parent.mkdir(parents=True, exist_ok=True)
+            with token_path.open("w", encoding="utf-8") as f:
+                json.dump(token_info, f)
+            return True
+        except OSError as error:
+            self.append_error_message(
+                f"Impossible d'enregistrer le token Spotify: {error}"
+            )
+            return False
 
     def get_spotify_instance(self):
         if not self.sp_oauth:
