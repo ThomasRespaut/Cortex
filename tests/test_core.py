@@ -221,6 +221,23 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertNotIn("+ 300 + offset_y", content)
         self.assertNotIn("pygame.Rect(50, 500", content)
 
+    def test_database_graph_view_delegates_to_bdd_screen(self):
+        content = Path("database/database.py").read_text(encoding="utf-8")
+        method = content.split("def visualiser_graph_interactif(self):", 1)[1].split(
+            "    def close(self):",
+            1,
+        )[0]
+
+        self.assertIn("from app.app_bdd import launch_bdd", method)
+        self.assertIn("env_screen_size", method)
+        self.assertIn("CortexProxy", method)
+        self.assertNotIn("event.x * 800", method)
+        self.assertNotIn("event.y * 600", method)
+        self.assertNotIn("+ 400 + offset_x", method)
+        self.assertNotIn("+ 300 + offset_y", method)
+        self.assertNotIn("pygame.Rect(50, 500", method)
+        self.assertNotIn("exit()", method)
+
     def test_circular_menu_layout_keeps_controls_inside_round_viewport(self):
         import pygame
         from app.screen_config import circular_menu_layout
