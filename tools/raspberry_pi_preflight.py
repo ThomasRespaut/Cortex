@@ -120,6 +120,10 @@ TOUCH_BOOL_KEYS = (
     "CORTEX_TOUCH_FLIP_X",
     "CORTEX_TOUCH_FLIP_Y",
 )
+RUNTIME_MODE_CHOICES = {
+    "CORTEX_INPUT_MODE": {"voice", "text"},
+    "CORTEX_OUTPUT_MODE": {"voice", "text", "screen"},
+}
 SCREEN_SIZE_KEY = "CORTEX_SCREEN_SIZE"
 POSITIVE_INT_KEYS = (
     "CORTEX_PREVIEW_SIZE",
@@ -327,6 +331,19 @@ def invalid_boolean_config_values(relative_path, content):
     return errors
 
 
+def invalid_runtime_mode_values(relative_path, content):
+    errors = []
+    for key, value in extract_config_values(content, RUNTIME_MODE_CHOICES.keys()):
+        normalized = value.strip().lower()
+        if normalized not in RUNTIME_MODE_CHOICES[key]:
+            expected = ", ".join(sorted(RUNTIME_MODE_CHOICES[key]))
+            errors.append(
+                f"Mode runtime invalide dans {relative_path}: "
+                f"{key}={value} (attendu: {expected})"
+            )
+    return errors
+
+
 def has_lf_line_endings(path):
     content = Path(path).read_bytes()
     return b"\r\n" not in content
@@ -400,12 +417,14 @@ def collect_preflight_errors(
         errors.extend(invalid_screen_size_values(relative_path, content))
         errors.extend(invalid_numeric_config_values(relative_path, content))
         errors.extend(invalid_boolean_config_values(relative_path, content))
+        errors.extend(invalid_runtime_mode_values(relative_path, content))
 
     if env_example.is_file():
         errors.extend(invalid_touch_config_values(".env.example", env_content))
         errors.extend(invalid_screen_size_values(".env.example", env_content))
         errors.extend(invalid_numeric_config_values(".env.example", env_content))
         errors.extend(invalid_boolean_config_values(".env.example", env_content))
+        errors.extend(invalid_runtime_mode_values(".env.example", env_content))
 
     for relative_path in (
         "scripts/launch_raspberry_pi.sh",

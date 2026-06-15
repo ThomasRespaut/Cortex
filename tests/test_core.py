@@ -2812,6 +2812,30 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertTrue(any("CORTEX_LOCAL_MODE=offline" in error for error in errors))
         self.assertTrue(any("CORTEX_ROUND_MASK=maybe" in error for error in errors))
 
+    def test_raspberry_pi_preflight_validates_runtime_mode_values(self):
+        from tools.raspberry_pi_preflight import invalid_runtime_mode_values
+
+        valid_content = "\n".join(
+            [
+                "CORTEX_INPUT_MODE=voice",
+                'export CORTEX_INPUT_MODE="${CORTEX_INPUT_MODE:-text}"',
+                "Environment=CORTEX_OUTPUT_MODE=voice",
+                "Environment=CORTEX_OUTPUT_MODE=text",
+                "Environment=CORTEX_OUTPUT_MODE=screen",
+            ]
+        )
+        invalid_content = "\n".join(
+            [
+                "Environment=CORTEX_INPUT_MODE=microphone",
+                'export CORTEX_OUTPUT_MODE="${CORTEX_OUTPUT_MODE:-display}"',
+            ]
+        )
+
+        self.assertEqual([], invalid_runtime_mode_values("service", valid_content))
+        errors = invalid_runtime_mode_values("service", invalid_content)
+        self.assertTrue(any("CORTEX_INPUT_MODE=microphone" in error for error in errors))
+        self.assertTrue(any("CORTEX_OUTPUT_MODE=display" in error for error in errors))
+
     def test_env_example_documents_raspberry_pi_screen_settings(self):
         content = Path(".env.example").read_text(encoding="utf-8")
 
