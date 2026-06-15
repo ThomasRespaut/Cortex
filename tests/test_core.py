@@ -683,6 +683,42 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_honors_custom_fps(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_FPS": "30",
+            },
+        ):
+            home = CortexHome()
+            try:
+                self.assertEqual(30, home.fps)
+            finally:
+                pygame.quit()
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_FPS": "0",
+            },
+        ):
+            home = CortexHome()
+            try:
+                self.assertEqual(1, home.fps)
+            finally:
+                pygame.quit()
+
     def test_home_menu_empty_double_tap_resets_view(self):
         import pygame
         from Screen import CortexHome
@@ -1367,6 +1403,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("exec \"$PYTHON_BIN\" Screen.py", content)
         self.assertIn("CORTEX_FULLSCREEN=\"${CORTEX_FULLSCREEN:-true}\"", content)
         self.assertIn("CORTEX_HIDE_CURSOR=\"${CORTEX_HIDE_CURSOR:-true}\"", content)
+        self.assertIn("CORTEX_FPS=\"${CORTEX_FPS:-60}\"", content)
         self.assertIn("CORTEX_TOUCH_ROTATION=\"${CORTEX_TOUCH_ROTATION:-0}\"", content)
         self.assertIn(
             "CORTEX_TOUCH_ROUND_CLIP=\"${CORTEX_TOUCH_ROUND_CLIP:-true}\"",
@@ -1573,6 +1610,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=SDL_MOUSE_TOUCH_EVENTS=0", content)
         self.assertIn("Environment=CORTEX_FULLSCREEN=true", content)
         self.assertIn("Environment=CORTEX_HIDE_CURSOR=true", content)
+        self.assertIn("Environment=CORTEX_FPS=60", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
@@ -1597,6 +1635,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=SDL_MOUSE_TOUCH_EVENTS=0", content)
         self.assertIn("Environment=CORTEX_FULLSCREEN=true", content)
         self.assertIn("Environment=CORTEX_HIDE_CURSOR=true", content)
+        self.assertIn("Environment=CORTEX_FPS=60", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
@@ -1797,6 +1836,7 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertIn("CORTEX_FULLSCREEN=true", content)
         self.assertIn("CORTEX_HIDE_CURSOR=true", content)
+        self.assertIn("CORTEX_FPS=60", content)
         self.assertIn("CORTEX_SCREEN_SIZE=", content)
         self.assertIn("CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("CORTEX_TOUCH_ROUND_CLIP=true", content)
@@ -1891,6 +1931,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             )
 
         self.assertTrue(any("SDL_TOUCH_MOUSE_EVENTS" in error for error in errors))
+        self.assertTrue(any("CORTEX_FPS" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_ROUND_CLIP" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_EDGE_CLAMP" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_HIT_SLOP" in error for error in errors))

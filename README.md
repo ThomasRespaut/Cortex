@@ -71,6 +71,7 @@ d'environnement nécessaires dans `.env` :
 ```bash
 CORTEX_FULLSCREEN=true
 CORTEX_HIDE_CURSOR=true
+CORTEX_FPS=60
 CORTEX_TOUCH_ROTATION=0
 CORTEX_TOUCH_ROUND_CLIP=true
 CORTEX_TOUCH_EDGE_MARGIN=0
@@ -89,6 +90,8 @@ l'écran circulaire, et `CORTEX_TOUCH_EDGE_MARGIN` retire quelques pixels au
 rayon tactile si la bordure physique déclenche des appuis parasites.
 `CORTEX_TOUCH_EDGE_CLAMP=true` maintient les drags sur le bord du disque au
 lieu de les couper dès que le doigt dépasse légèrement la zone visible.
+`CORTEX_FPS` règle la cadence de rendu du kiosque Pygame; gardez `60` pour
+une interface fluide, ou baissez vers `30` si le Raspberry Pi chauffe.
 `CORTEX_ROUND_MASK=true` masque les coins du framebuffer carré, et
 `CORTEX_TOUCH_HIT_SLOP` ajoute une marge invisible autour des boutons et
 icônes pour compenser l'imprécision du tactile.

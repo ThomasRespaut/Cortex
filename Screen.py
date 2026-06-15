@@ -146,6 +146,7 @@ class CortexHome:
         self.cortex = None
         self.loading_error = None
         self.skip_cortex_load = env_bool("CORTEX_SKIP_CORTEX_LOAD", False)
+        self.fps = max(1, env_int("CORTEX_FPS", FPS))
         self.loading_thread = None
         if not self.skip_cortex_load:
             self.loading_thread = threading.Thread(
@@ -671,7 +672,7 @@ class CortexHome:
                 self.screenshot_saved = True
                 if env_bool("CORTEX_EXIT_AFTER_SCREENSHOT", False):
                     running = False
-            self.clock.tick(FPS)
+            self.clock.tick(self.fps)
 
         pygame.quit()
 
