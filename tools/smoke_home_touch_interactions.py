@@ -20,6 +20,38 @@ import pygame
 from Screen import CortexHome
 from tools.smoke_legacy_pygame_screens import parse_size
 
+TOUCH_ENV_KEYS = (
+    "CORTEX_SCREEN_SIZE",
+    "CORTEX_TOUCH_ROTATION",
+    "CORTEX_TOUCH_FLIP_X",
+    "CORTEX_TOUCH_FLIP_Y",
+)
+
+
+def snapshot_touch_environment():
+    return {key: os.environ.get(key) for key in TOUCH_ENV_KEYS}
+
+
+def restore_touch_environment(snapshot):
+    for key, value in snapshot.items():
+        if value is None:
+            os.environ.pop(key, None)
+        else:
+            os.environ[key] = value
+
+
+def configure_touch_environment(
+    touch_rotation=0,
+    touch_flip_x=False,
+    touch_flip_y=False,
+    size=None,
+):
+    if size is not None:
+        os.environ["CORTEX_SCREEN_SIZE"] = f"{size[0]}x{size[1]}"
+    os.environ["CORTEX_TOUCH_ROTATION"] = str(touch_rotation)
+    os.environ["CORTEX_TOUCH_FLIP_X"] = "true" if touch_flip_x else "false"
+    os.environ["CORTEX_TOUCH_FLIP_Y"] = "true" if touch_flip_y else "false"
+
 
 def render_home_once(home):
     center, radius = home.viewport()
@@ -126,10 +158,13 @@ def smoke_home_touch_interactions(
     touch_flip_x=False,
     touch_flip_y=False,
 ):
-    os.environ["CORTEX_SCREEN_SIZE"] = f"{size[0]}x{size[1]}"
-    os.environ["CORTEX_TOUCH_ROTATION"] = str(touch_rotation)
-    os.environ["CORTEX_TOUCH_FLIP_X"] = "true" if touch_flip_x else "false"
-    os.environ["CORTEX_TOUCH_FLIP_Y"] = "true" if touch_flip_y else "false"
+    previous_env = snapshot_touch_environment()
+    configure_touch_environment(
+        touch_rotation,
+        touch_flip_x=touch_flip_x,
+        touch_flip_y=touch_flip_y,
+        size=size,
+    )
     home = CortexHome()
     try:
         render_home_once(home)
@@ -316,6 +351,7 @@ def smoke_home_touch_interactions(
             raise RuntimeError("Le double-tap vide ne recentre pas le menu principal.")
     finally:
         pygame.quit()
+        restore_touch_environment(previous_env)
     return app.name
 
 

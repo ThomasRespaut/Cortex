@@ -18,7 +18,12 @@ import pygame
 
 from app.app_reglage import launch_reglage
 from app.screen_config import circular_menu_layout
-from tools.smoke_home_touch_interactions import touch_fraction_for_screen_position
+from tools.smoke_home_touch_interactions import (
+    configure_touch_environment,
+    restore_touch_environment,
+    snapshot_touch_environment,
+    touch_fraction_for_screen_position,
+)
 from tools.smoke_legacy_pygame_screens import parse_size
 
 
@@ -60,9 +65,12 @@ def smoke_legacy_touch_interactions(
     touch_flip_x=False,
     touch_flip_y=False,
 ):
-    os.environ["CORTEX_TOUCH_ROTATION"] = str(touch_rotation)
-    os.environ["CORTEX_TOUCH_FLIP_X"] = "true" if touch_flip_x else "false"
-    os.environ["CORTEX_TOUCH_FLIP_Y"] = "true" if touch_flip_y else "false"
+    previous_env = snapshot_touch_environment()
+    configure_touch_environment(
+        touch_rotation,
+        touch_flip_x=touch_flip_x,
+        touch_flip_y=touch_flip_y,
+    )
 
     _, menu_buttons = circular_menu_layout(size[0], size[1], item_count=1)
     toggle_position = menu_buttons[0].center
@@ -104,6 +112,7 @@ def smoke_legacy_touch_interactions(
             )
     finally:
         pygame.quit()
+        restore_touch_environment(previous_env)
 
 
 def parse_args():

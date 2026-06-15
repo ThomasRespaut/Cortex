@@ -1827,6 +1827,27 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         smoke_legacy_touch_interactions((240, 240), touch_rotation=90)
 
+    def test_touch_smokes_restore_calibration_environment(self):
+        from tools.smoke_legacy_touch_interactions import (
+            smoke_legacy_touch_interactions,
+        )
+
+        calibration = {
+            "CORTEX_TOUCH_ROTATION": "270",
+            "CORTEX_TOUCH_FLIP_X": "true",
+            "CORTEX_TOUCH_FLIP_Y": "false",
+        }
+        with mock.patch.dict(os.environ, calibration, clear=False):
+            smoke_legacy_touch_interactions(
+                (240, 240),
+                touch_rotation=90,
+                touch_flip_x=False,
+                touch_flip_y=True,
+            )
+
+            for key, value in calibration.items():
+                self.assertEqual(value, os.environ.get(key))
+
     def test_raspberry_pi_ui_validator_times_out_stuck_steps(self):
         from tools.validate_raspberry_pi_ui import ValidationStep, run_step
 
