@@ -8,6 +8,7 @@ from app.screen_config import (
     circle_hit_test,
     draw_round_mask,
     env_bool,
+    env_fps,
     fit_text,
     pointer_down_position,
     rect_hit_test,
@@ -203,4 +204,4 @@ def launch_feature(screen, cortex, app_name, icon_path):
         pygame.display.flip()
         if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
             running = False
-        clock.tick(60)
+        clock.tick(env_fps())

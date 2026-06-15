@@ -276,13 +276,19 @@ class InterfaceAssetTests(unittest.TestCase):
         for module in modules:
             content = module.read_text(encoding="utf-8")
             self.assertIn("env_bool", content, module)
+            self.assertIn("env_fps", content, module)
             self.assertIn("CORTEX_EXIT_AFTER_FRAME", content, module)
+            self.assertIn("clock.tick(env_fps())", content, module)
+            self.assertNotIn("clock.tick(60)", content, module)
 
     def test_modern_pygame_modules_can_exit_after_one_frame(self):
         for module in (Path("app/app_cortex.py"), Path("app/feature_shell.py")):
             content = module.read_text(encoding="utf-8")
             self.assertIn("env_bool", content, module)
+            self.assertIn("env_fps", content, module)
             self.assertIn("CORTEX_EXIT_AFTER_FRAME", content, module)
+            self.assertIn("clock.tick(env_fps())", content, module)
+            self.assertNotIn("clock.tick(60)", content, module)
 
     def test_bdd_screen_uses_responsive_touch_layout(self):
         content = Path("app/app_bdd.py").read_text(encoding="utf-8")
@@ -1122,12 +1128,14 @@ class InterfaceAssetTests(unittest.TestCase):
                 "CORTEX_TOUCH_ROUND_CLIP": "true",
                 "CORTEX_TOUCH_EDGE_MARGIN": "12",
                 "CORTEX_TOUCH_EDGE_CLAMP": "false",
+                "CORTEX_FPS": "24",
                 "CORTEX_SCREEN_SIZE": "480x480",
             },
         ):
             self.assertTrue(screen_config.env_bool("CORTEX_TEST_TRUE"))
             self.assertFalse(screen_config.env_bool("CORTEX_TEST_FALSE", True))
             self.assertEqual(7, screen_config.env_int("CORTEX_TEST_INT", 7))
+            self.assertEqual(24, screen_config.env_fps())
             self.assertEqual(
                 (480, 480),
                 screen_config.env_screen_size("CORTEX_SCREEN_SIZE", (900, 900)),
@@ -1140,6 +1148,10 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertFalse(
                 screen_config.is_inside_round_viewport((200, 20), 400, 400, 24)
             )
+
+        for value in ("0", "-5", "abc"):
+            with mock.patch.dict(os.environ, {"CORTEX_FPS": value}):
+                self.assertEqual(1 if value != "abc" else 60, screen_config.env_fps())
 
     def test_screen_config_rejects_invalid_screen_size(self):
         from app import screen_config

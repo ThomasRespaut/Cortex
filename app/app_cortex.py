@@ -10,6 +10,7 @@ from app.screen_config import (
     circle_hit_test,
     draw_round_mask,
     env_bool,
+    env_fps,
     fit_text,
     pointer_down_position,
     rect_hit_test,
@@ -293,7 +294,7 @@ class CortexView:
             pygame.display.flip()
             if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
                 self.running = False
-            self.clock.tick(60)
+            self.clock.tick(env_fps())
 
 
 def launch_cortex(screen, cortex, screen_width, screen_height):

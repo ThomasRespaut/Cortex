@@ -5,6 +5,7 @@ from app.screen_config import (
     circular_menu_layout,
     draw_round_mask,
     env_bool,
+    env_fps,
     pointer_down_position,
     rect_hit_test,
 )
@@ -47,4 +48,4 @@ def launch_game(screen, cortex, screen_width, screen_height):
         pygame.display.flip()
         if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
             running = False
-        clock.tick(60)
+        clock.tick(env_fps())

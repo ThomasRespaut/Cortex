@@ -20,6 +20,7 @@ from app.screen_config import (
     draw_round_mask as apply_round_mask,
     display_flags,
     env_bool,
+    env_fps,
     env_int,
     env_screen_size,
     circle_fits_round_viewport,
@@ -146,7 +147,7 @@ class CortexHome:
         self.cortex = None
         self.loading_error = None
         self.skip_cortex_load = env_bool("CORTEX_SKIP_CORTEX_LOAD", False)
-        self.fps = max(1, env_int("CORTEX_FPS", FPS))
+        self.fps = env_fps(FPS)
         self.loading_thread = None
         if not self.skip_cortex_load:
             self.loading_thread = threading.Thread(
