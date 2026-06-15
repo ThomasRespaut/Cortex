@@ -6,13 +6,14 @@ from app.screen_config import (
     draw_round_mask,
     env_bool,
     env_fps,
+    fit_text,
     pointer_down_position,
     rect_hit_test,
 )
 
 
 def launch_reglage(screen, cortex, screen_width, screen_height):
-    """Fonction principale pour l'application Calendrier."""
+    """Fonction principale pour l'application Réglages."""
     clock = pygame.time.Clock()
     running = True
     screen_width, screen_height = screen.get_size()
@@ -68,11 +69,19 @@ def launch_reglage(screen, cortex, screen_width, screen_height):
         icon_rect = icon.get_rect(center=(center[0], center[1] - radius * 0.45))
         pygame.draw.circle(screen, (24, 33, 58), icon_rect.center, int(icon_size * 0.68))
         screen.blit(icon, icon_rect)
-        title = title_font.render("Réglages", True, TEXT_COLOR)
+        title = title_font.render(
+            fit_text(title_font, "Réglages", radius * 1.15),
+            True,
+            TEXT_COLOR,
+        )
         screen.blit(title, title.get_rect(center=(center[0], center[1] - radius * 0.24)))
 
         pygame.draw.rect(screen, border_color, boutton_quitter, width=border_width)
-        quit_text = font.render("Quitter", True, border_color)
+        quit_text = font.render(
+            fit_text(font, "Quitter", boutton_quitter.width - 12),
+            True,
+            border_color,
+        )
         quit_text_rect = quit_text.get_rect(center=boutton_quitter.center)
         screen.blit(quit_text, quit_text_rect)
 
@@ -81,10 +90,31 @@ def launch_reglage(screen, cortex, screen_width, screen_height):
         pygame.draw.rect(screen, current_color, toggle_button, 3, border_radius=toggle_button.height // 3)
 
         mode_text = "Mode Online" if is_online else "Mode Local"
-        text_surface = font.render(mode_text, True, current_color)
+        text_surface = font.render(
+            fit_text(font, mode_text, toggle_button.width - 38),
+            True,
+            current_color,
+        )
         text_rect = text_surface.get_rect(center=toggle_button.center)
         screen.blit(text_surface, text_rect)
-        hint = small_font.render("Touchez pour basculer", True, (174, 185, 205))
+        indicator_radius = max(5, toggle_button.height // 8)
+        pygame.draw.circle(
+            screen,
+            current_color,
+            (toggle_button.left + toggle_button.height // 2, toggle_button.centery),
+            indicator_radius,
+        )
+        pygame.draw.circle(
+            screen,
+            (245, 247, 255),
+            (toggle_button.left + toggle_button.height // 2, toggle_button.centery),
+            max(2, indicator_radius // 2),
+        )
+        hint = small_font.render(
+            fit_text(small_font, "Touchez pour basculer", radius * 1.35),
+            True,
+            (205, 213, 229),
+        )
         screen.blit(hint, hint.get_rect(center=(center[0], toggle_button.bottom + radius * 0.09)))
 
         for event in pygame.event.get():

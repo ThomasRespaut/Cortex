@@ -282,6 +282,14 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertIn("clock.tick(env_fps())", content, module)
             self.assertNotIn("clock.tick(60)", content, module)
 
+    def test_legacy_settings_screen_fits_round_display_labels(self):
+        content = Path("app/app_reglage.py").read_text(encoding="utf-8")
+
+        self.assertIn("fit_text", content)
+        self.assertIn('fit_text(font, "Quitter"', content)
+        self.assertIn("fit_text(font, mode_text", content)
+        self.assertIn('fit_text(small_font, "Touchez pour basculer"', content)
+
     def test_modern_pygame_modules_can_exit_after_one_frame(self):
         for module in (Path("app/app_cortex.py"), Path("app/feature_shell.py")):
             content = module.read_text(encoding="utf-8")
