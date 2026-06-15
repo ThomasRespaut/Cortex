@@ -1503,6 +1503,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_FULLSCREEN=\"${CORTEX_FULLSCREEN:-true}\"", content)
         self.assertIn("CORTEX_HIDE_CURSOR=\"${CORTEX_HIDE_CURSOR:-true}\"", content)
         self.assertIn("CORTEX_FPS=\"${CORTEX_FPS:-60}\"", content)
+        self.assertIn("CORTEX_SCREEN_SIZE=\"${CORTEX_SCREEN_SIZE:-480x480}\"", content)
         self.assertIn("CORTEX_TOUCH_ROTATION=\"${CORTEX_TOUCH_ROTATION:-0}\"", content)
         self.assertIn(
             "CORTEX_TOUCH_ROUND_CLIP=\"${CORTEX_TOUCH_ROUND_CLIP:-true}\"",
@@ -1713,6 +1714,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_FULLSCREEN=true", content)
         self.assertIn("Environment=CORTEX_HIDE_CURSOR=true", content)
         self.assertIn("Environment=CORTEX_FPS=60", content)
+        self.assertIn("Environment=CORTEX_SCREEN_SIZE=480x480", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
@@ -1738,6 +1740,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_FULLSCREEN=true", content)
         self.assertIn("Environment=CORTEX_HIDE_CURSOR=true", content)
         self.assertIn("Environment=CORTEX_FPS=60", content)
+        self.assertIn("Environment=CORTEX_SCREEN_SIZE=480x480", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
