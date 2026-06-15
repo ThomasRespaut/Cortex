@@ -2491,6 +2491,33 @@ class ToolingDefaultsTests(unittest.TestCase):
         errors = invalid_screen_size_values("scripts/launch_raspberry_pi.sh", invalid_content)
         self.assertTrue(any("CORTEX_SCREEN_SIZE=480" in error for error in errors))
 
+    def test_raspberry_pi_preflight_validates_numeric_kiosk_values(self):
+        from tools.raspberry_pi_preflight import invalid_numeric_config_values
+
+        valid_content = "\n".join(
+            [
+                'export CORTEX_FPS="${CORTEX_FPS:-60}"',
+                "Environment=CORTEX_TOUCH_EDGE_MARGIN=0",
+                "Environment=CORTEX_TOUCH_HIT_SLOP=10",
+                "Environment=CORTEX_TAP_MOVE_LIMIT=14",
+                "Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500",
+                "Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36",
+            ]
+        )
+        invalid_content = "\n".join(
+            [
+                "Environment=CORTEX_FPS=0",
+                "Environment=CORTEX_TOUCH_HIT_SLOP=-1",
+                'export CORTEX_TAP_MOVE_LIMIT="${CORTEX_TAP_MOVE_LIMIT:-wide}"',
+            ]
+        )
+
+        self.assertEqual([], invalid_numeric_config_values("service", valid_content))
+        errors = invalid_numeric_config_values("service", invalid_content)
+        self.assertTrue(any("CORTEX_FPS=0" in error for error in errors))
+        self.assertTrue(any("CORTEX_TOUCH_HIT_SLOP=-1" in error for error in errors))
+        self.assertTrue(any("CORTEX_TAP_MOVE_LIMIT=wide" in error for error in errors))
+
     def test_env_example_documents_raspberry_pi_screen_settings(self):
         content = Path(".env.example").read_text(encoding="utf-8")
 

@@ -108,6 +108,16 @@ TOUCH_BOOL_KEYS = (
     "CORTEX_TOUCH_FLIP_Y",
 )
 SCREEN_SIZE_KEY = "CORTEX_SCREEN_SIZE"
+POSITIVE_INT_KEYS = (
+    "CORTEX_FPS",
+    "CORTEX_EMPTY_DOUBLE_TAP_MS",
+)
+NON_NEGATIVE_INT_KEYS = (
+    "CORTEX_TOUCH_EDGE_MARGIN",
+    "CORTEX_TOUCH_HIT_SLOP",
+    "CORTEX_TAP_MOVE_LIMIT",
+    "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE",
+)
 
 REQUIRED_TEXT_SNIPPETS = {
     "scripts/launch_raspberry_pi.sh": [
@@ -257,6 +267,24 @@ def invalid_screen_size_values(relative_path, content):
     return errors
 
 
+def invalid_numeric_config_values(relative_path, content):
+    errors = []
+    for key, value in extract_config_values(
+        content,
+        (*POSITIVE_INT_KEYS, *NON_NEGATIVE_INT_KEYS),
+    ):
+        try:
+            parsed = int(value.strip())
+        except ValueError:
+            errors.append(f"Valeur numérique invalide dans {relative_path}: {key}={value}")
+            continue
+        if key in POSITIVE_INT_KEYS and parsed <= 0:
+            errors.append(f"Valeur numérique invalide dans {relative_path}: {key}={value}")
+        if key in NON_NEGATIVE_INT_KEYS and parsed < 0:
+            errors.append(f"Valeur numérique invalide dans {relative_path}: {key}={value}")
+    return errors
+
+
 def has_lf_line_endings(path):
     content = Path(path).read_bytes()
     return b"\r\n" not in content
@@ -328,10 +356,12 @@ def collect_preflight_errors(
                 errors.append(f"Configuration absente de {relative_path}: {snippet}")
         errors.extend(invalid_touch_config_values(relative_path, content))
         errors.extend(invalid_screen_size_values(relative_path, content))
+        errors.extend(invalid_numeric_config_values(relative_path, content))
 
     if env_example.is_file():
         errors.extend(invalid_touch_config_values(".env.example", env_content))
         errors.extend(invalid_screen_size_values(".env.example", env_content))
+        errors.extend(invalid_numeric_config_values(".env.example", env_content))
 
     for relative_path in (
         "scripts/launch_raspberry_pi.sh",
