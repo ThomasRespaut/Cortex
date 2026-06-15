@@ -94,11 +94,22 @@ def run_secret_scan(project_root):
     return 1
 
 
+def positive_int(value):
+    try:
+        parsed = int(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("La valeur doit être un entier") from error
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("La valeur doit être positive")
+    return parsed
+
+
 def build_check_steps(
     python_bin,
     dataset_dir,
     screen_size,
     project_root=".",
+    step_timeout=300,
 ):
     return [
         CheckStep(
@@ -156,17 +167,32 @@ def build_check_steps(
                 project_root,
                 "--size",
                 screen_size,
+                "--step-timeout",
+                str(step_timeout),
             ],
         ),
     ]
 
 
-def run_step(step, project_root):
+def run_step(step, project_root, timeout_seconds):
     print(f"\n==> {step.name}", flush=True)
     print(" ".join(step.command), flush=True)
     env = os.environ.copy()
     env.update(step.env)
-    result = subprocess.run(step.command, cwd=project_root, env=env, check=False)
+    try:
+        result = subprocess.run(
+            step.command,
+            cwd=project_root,
+            env=env,
+            check=False,
+            timeout=timeout_seconds,
+        )
+    except subprocess.TimeoutExpired:
+        print(
+            f"Étape expirée après {timeout_seconds}s: {step.name}",
+            flush=True,
+        )
+        return 124
     if result.returncode != 0:
         print(f"Étape échouée: {step.name} ({result.returncode})")
     return result.returncode
@@ -192,6 +218,12 @@ def parse_args():
         action="store_true",
         help="Ne lance que le scan de secrets des fichiers modifiés.",
     )
+    parser.add_argument(
+        "--step-timeout",
+        default=300,
+        type=positive_int,
+        help="Durée maximale en secondes pour chaque étape de validation.",
+    )
     return parser.parse_args()
 
 
@@ -210,9 +242,10 @@ def main():
         args.dataset_dir,
         args.screen_size,
         project_root=".",
+        step_timeout=args.step_timeout,
     )
     for step in steps:
-        returncode = run_step(step, project_root)
+        returncode = run_step(step, project_root, args.step_timeout)
         if returncode != 0:
             return returncode
 

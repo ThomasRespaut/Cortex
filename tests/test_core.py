@@ -1700,8 +1700,9 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
         self.assertIn(
             "python tools/validate_raspberry_pi_ui.py --project-root . --size 480x480",
-            step_commands,
+            step_commands[-1],
         )
+        self.assertIn("--step-timeout 300", step_commands[-1])
 
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
@@ -1722,6 +1723,23 @@ class ToolingDefaultsTests(unittest.TestCase):
             )
 
         self.assertEqual([("secrets.env", 1, "OpenAI-style API key")], findings)
+
+    def test_local_check_runner_times_out_stuck_steps(self):
+        from tools.run_local_checks import CheckStep, run_step
+
+        step = CheckStep(
+            "Commande lente",
+            [sys.executable, "-c", "import time; time.sleep(2)"],
+        )
+
+        self.assertEqual(124, run_step(step, ".", 1))
+
+    def test_local_check_runner_rejects_invalid_step_timeout(self):
+        from tools.run_local_checks import positive_int
+
+        self.assertEqual(5, positive_int("5"))
+        with self.assertRaises(argparse.ArgumentTypeError):
+            positive_int("0")
 
     def test_raspberry_pi_requirements_exclude_heavy_local_model_stack(self):
         requirements = Path("requirements-raspberry-pi.txt").read_text(encoding="utf-8")
