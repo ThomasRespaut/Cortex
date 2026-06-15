@@ -516,6 +516,11 @@ class ToolingDefaultsTests(unittest.TestCase):
             "ExecStart=/home/pi/Cortex/scripts/launch_raspberry_pi.sh",
             content,
         )
+        self.assertIn("Environment=CORTEX_FULLSCREEN=true", content)
+        self.assertIn("Environment=CORTEX_HIDE_CURSOR=true", content)
+        self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
+        self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
+        self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("Restart=on-failure", content)
 
     def test_raspberry_pi_service_installer_generates_systemd_unit(self):
@@ -527,6 +532,11 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_PROJECT_DIR", content)
         self.assertIn("CORTEX_SERVICE_USER", content)
         self.assertIn("scripts/launch_raspberry_pi.sh", content)
+        self.assertIn("Environment=CORTEX_FULLSCREEN=true", content)
+        self.assertIn("Environment=CORTEX_HIDE_CURSOR=true", content)
+        self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
+        self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
+        self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("systemctl daemon-reload", content)
         self.assertIn("CORTEX_START_SERVICE:-false", content)
         self.assertNotIn("OPENAI_API_KEY=", content)

@@ -32,6 +32,11 @@ User=${SERVICE_USER}
 WorkingDirectory=${PROJECT_DIR}
 Environment=PYTHONUNBUFFERED=1
 Environment=SDL_VIDEODRIVER=kmsdrm
+Environment=CORTEX_FULLSCREEN=true
+Environment=CORTEX_HIDE_CURSOR=true
+Environment=CORTEX_TOUCH_ROTATION=0
+Environment=CORTEX_TOUCH_ROUND_CLIP=true
+Environment=CORTEX_TOUCH_EDGE_MARGIN=0
 ExecStart=${LAUNCHER}
 Restart=on-failure
 RestartSec=5
