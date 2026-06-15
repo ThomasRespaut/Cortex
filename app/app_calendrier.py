@@ -1,5 +1,5 @@
 import pygame
-from app.screen_assets import asset_path
+from app.screen_assets import asset_path, load_background_or_fallback
 from app.screen_config import circular_menu_layout, env_bool, pointer_down_position
 #from Screen import main
 
@@ -10,12 +10,12 @@ def launch_calendar(screen, cortex, screen_width, screen_height):
     screen_width, screen_height = screen.get_size()
     # Charger l'image de fond
     background_path = asset_path("backgrounds", "calendrier.png")
-    try:
-        background = pygame.image.load(background_path)
-        background = pygame.transform.scale(background, (screen_width, screen_height))
-    except pygame.error as e:
-        print(f"Erreur lors du chargement de l'image de fond : {e}")
-        running = False
+    background = load_background_or_fallback(
+        background_path,
+        "Calendrier",
+        (screen_width, screen_height),
+        accent=(249, 115, 22),
+    )
 
     screen.blit(background, (0, 0))
 

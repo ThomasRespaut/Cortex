@@ -24,6 +24,44 @@ def make_icon_fallback(label, size=128, accent=(88, 214, 255)):
     return surface.convert_alpha() if pygame.display.get_init() else surface
 
 
+def make_background_fallback(label, size, accent=(88, 214, 255)):
+    width, height = size
+    surface = pygame.Surface((width, height))
+    top = (16, 28, 58)
+    bottom = (4, 7, 20)
+    for y in range(height):
+        ratio = y / max(1, height - 1)
+        color = tuple(
+            int(top[channel] * (1 - ratio) + bottom[channel] * ratio)
+            for channel in range(3)
+        )
+        pygame.draw.line(surface, color, (0, y), (width, y))
+
+    radius = min(width, height) // 2
+    center = (width // 2, height // 2)
+    pygame.draw.circle(surface, accent, center, max(18, int(radius * 0.36)), 3)
+    pygame.draw.circle(surface, (240, 245, 255), center, max(8, int(radius * 0.08)))
+
+    try:
+        font = pygame.font.SysFont("Segoe UI", max(22, int(radius * 0.12)), bold=True)
+        text = (label.strip() or "Cortex")[:18]
+        glyph = font.render(text, True, (240, 245, 255))
+        surface.blit(glyph, glyph.get_rect(center=(center[0], center[1] + radius * 0.28)))
+    except pygame.error:
+        pass
+
+    return surface.convert() if pygame.display.get_init() else surface
+
+
+def load_background_or_fallback(path, label, size, accent=(88, 214, 255)):
+    try:
+        background = pygame.image.load(path)
+        return pygame.transform.scale(background, size)
+    except (FileNotFoundError, pygame.error, OSError, TypeError) as error:
+        print(f"Impossible de charger le fond {path}: {error}")
+        return make_background_fallback(label, size, accent=accent)
+
+
 def load_icon_or_fallback(path, label, size=128, accent=(88, 214, 255)):
     if not path:
         print(f"Icône absente pour {label}: fallback généré.")

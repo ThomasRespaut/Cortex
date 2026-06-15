@@ -139,6 +139,21 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertEqual((48, 48), icon.get_size())
         self.assertGreater(icon.get_bounding_rect().height, 0)
 
+    def test_missing_background_uses_pygame_fallback_surface(self):
+        import pygame
+        from app.screen_assets import load_background_or_fallback
+
+        pygame.font.init()
+        with mock.patch("builtins.print"):
+            background = load_background_or_fallback(
+                "tests/missing-background.png",
+                "Horloge",
+                (160, 160),
+            )
+
+        self.assertEqual((160, 160), background.get_size())
+        self.assertGreater(background.get_bounding_rect().height, 0)
+
     def test_pygame_asset_path_uses_linux_case(self):
         from app.screen_assets import asset_path
 
@@ -186,6 +201,11 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertNotIn("pygame.display.Info", content, module)
             self.assertNotIn("screen_width/2-200", content, module)
             self.assertNotIn("500, 400", content, module)
+            if module.name == "app_reglage.py":
+                self.assertIn("load_icon_or_fallback", content, module)
+            else:
+                self.assertIn("load_background_or_fallback", content, module)
+                self.assertNotIn("pygame.image.load", content, module)
 
     def test_legacy_pygame_modules_can_exit_after_one_frame(self):
         modules = [

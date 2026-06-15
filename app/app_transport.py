@@ -1,6 +1,6 @@
 import pygame
 
-from app.screen_assets import asset_path
+from app.screen_assets import asset_path, load_background_or_fallback
 from app.screen_config import circular_menu_layout, env_bool, pointer_down_position
 
 def launch_transport(screen, cortex, screen_width, screen_height):
@@ -10,12 +10,12 @@ def launch_transport(screen, cortex, screen_width, screen_height):
     screen_width, screen_height = screen.get_size()
 
     background_path = asset_path("backgrounds", "transport.png")
-    try:
-        background = pygame.image.load(background_path)
-        background = pygame.transform.scale(background, (screen_width, screen_height))
-    except pygame.error as e:
-        print(f"Erreur lors du chargement de l'image de fond : {e}")
-        running = False
+    background = load_background_or_fallback(
+        background_path,
+        "Transport",
+        (screen_width, screen_height),
+        accent=(56, 189, 248),
+    )
 
     screen.blit(background, (0, 0))
 

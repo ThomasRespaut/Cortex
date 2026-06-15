@@ -1,6 +1,6 @@
 import pygame
 
-from app.screen_assets import asset_path
+from app.screen_assets import asset_path, load_icon_or_fallback
 from app.screen_config import circular_menu_layout, env_bool, pointer_down_position
 
 
@@ -22,12 +22,13 @@ def launch_reglage(screen, cortex, screen_width, screen_height):
 
     # Charger l'image de fond
     background_path = asset_path("app_icons", "icone_reglage.png")
-    try:
-        background = pygame.image.load(background_path).convert_alpha()
-        background = pygame.transform.scale(background, (screen_width, screen_height))
-    except pygame.error as e:
-        print(f"Erreur lors du chargement de l'image de fond : {e}")
-        running = False
+    background = load_icon_or_fallback(
+        background_path,
+        "Réglages",
+        size=max(screen_width, screen_height),
+        accent=(148, 163, 184),
+    )
+    background = pygame.transform.scale(background, (screen_width, screen_height))
 
     font = pygame.font.Font(None, 36)
     title_font = pygame.font.Font(None, 42)
