@@ -1914,6 +1914,9 @@ class ToolingDefaultsTests(unittest.TestCase):
             "CORTEX_EXIT_AFTER_FRAME=\"${CORTEX_EXIT_AFTER_FRAME:-false}\"",
             content,
         )
+        self.assertIn("CORTEX_INPUT_MODE=\"${CORTEX_INPUT_MODE:-voice}\"", content)
+        self.assertIn("CORTEX_OUTPUT_MODE=\"${CORTEX_OUTPUT_MODE:-voice}\"", content)
+        self.assertIn("CORTEX_LOCAL_MODE=\"${CORTEX_LOCAL_MODE:-true}\"", content)
         self.assertIn("SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"", content)
         self.assertIn("SDL_TOUCH_MOUSE_EVENTS=\"${SDL_TOUCH_MOUSE_EVENTS:-0}\"", content)
         self.assertIn("SDL_MOUSE_TOUCH_EVENTS=\"${SDL_MOUSE_TOUCH_EVENTS:-0}\"", content)
@@ -2777,6 +2780,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "Environment=CORTEX_EXIT_AFTER_SCREENSHOT=off",
                 "Environment=CORTEX_EXIT_AFTER_FRAME=false",
                 "Environment=CORTEX_SKIP_CORTEX_LOAD=oui",
+                "Environment=CORTEX_LOCAL_MODE=true",
                 "Environment=CORTEX_TOUCH_ROUND_CLIP=oui",
                 "Environment=CORTEX_TOUCH_EDGE_CLAMP=non",
                 "Environment=CORTEX_ROUND_MASK=1",
@@ -2787,6 +2791,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "Environment=CORTEX_FULLSCREEN=fullscreen",
                 "Environment=CORTEX_EXIT_AFTER_SCREENSHOT=close",
                 "Environment=CORTEX_EXIT_AFTER_FRAME=stop",
+                "Environment=CORTEX_LOCAL_MODE=offline",
                 'export CORTEX_ROUND_MASK="${CORTEX_ROUND_MASK:-maybe}"',
             ]
         )
@@ -2798,6 +2803,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             any("CORTEX_EXIT_AFTER_SCREENSHOT=close" in error for error in errors)
         )
         self.assertTrue(any("CORTEX_EXIT_AFTER_FRAME=stop" in error for error in errors))
+        self.assertTrue(any("CORTEX_LOCAL_MODE=offline" in error for error in errors))
         self.assertTrue(any("CORTEX_ROUND_MASK=maybe" in error for error in errors))
 
     def test_env_example_documents_raspberry_pi_screen_settings(self):
@@ -2825,6 +2831,9 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_EXIT_AFTER_SCREENSHOT=false", content)
         self.assertIn("CORTEX_EXIT_AFTER_FRAME=false", content)
         self.assertIn("CORTEX_SKIP_CORTEX_LOAD=false", content)
+        self.assertIn("CORTEX_INPUT_MODE=voice", content)
+        self.assertIn("CORTEX_OUTPUT_MODE=voice", content)
+        self.assertIn("CORTEX_LOCAL_MODE=true", content)
 
     def test_env_example_documents_oauth_token_overrides(self):
         content = Path(".env.example").read_text(encoding="utf-8")
@@ -2925,6 +2934,9 @@ class ToolingDefaultsTests(unittest.TestCase):
             any("CORTEX_EMPTY_DOUBLE_TAP_DISTANCE" in error for error in errors)
         )
         self.assertTrue(any("CORTEX_EXIT_AFTER_FRAME" in error for error in errors))
+        self.assertTrue(any("CORTEX_INPUT_MODE" in error for error in errors))
+        self.assertTrue(any("CORTEX_OUTPUT_MODE" in error for error in errors))
+        self.assertTrue(any("CORTEX_LOCAL_MODE" in error for error in errors))
         self.assertTrue(
             any(
                 "deploy/raspberry-pi/install_service.sh" in error
