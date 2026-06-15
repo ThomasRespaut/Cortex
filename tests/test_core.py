@@ -1351,6 +1351,38 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_ignores_touch_events_without_finger_id(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                for event_type in (
+                    pygame.FINGERDOWN,
+                    pygame.FINGERMOTION,
+                    pygame.FINGERUP,
+                ):
+                    self.assertTrue(
+                        home.handle_event(
+                            pygame.event.Event(event_type, {"x": 0.5, "y": 0.5})
+                        )
+                    )
+
+                self.assertFalse(home.dragging)
+                self.assertFalse(home.active_fingers)
+                self.assertIsNone(home.pinch_last_distance)
+            finally:
+                pygame.quit()
+
     def test_home_menu_mouse_wheel_uses_zoom_bounds(self):
         import pygame
         from Screen import CortexHome

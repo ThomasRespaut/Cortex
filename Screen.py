@@ -588,11 +588,15 @@ class CortexHome:
         self.last_empty_tap_position = position
 
     def handle_touch_event(self, event, width, height):
+        finger_id = getattr(event, "finger_id", None)
+        if finger_id is None:
+            return True
+
         if event.type == pygame.FINGERDOWN:
             pointer = pointer_down_position(event, width, height)
             if pointer is None:
                 return True
-            self.active_fingers[event.finger_id] = pygame.Vector2(pointer)
+            self.active_fingers[finger_id] = pygame.Vector2(pointer)
             if len(self.active_fingers) == 1:
                 self.handle_pointer_down(pointer)
             elif len(self.active_fingers) == 2:
@@ -604,12 +608,12 @@ class CortexHome:
             return True
 
         if event.type == pygame.FINGERMOTION:
-            if event.finger_id not in self.active_fingers:
+            if finger_id not in self.active_fingers:
                 return True
             pointer = pointer_move_position(event, width, height)
             if pointer is None:
                 return True
-            self.active_fingers[event.finger_id] = pygame.Vector2(pointer)
+            self.active_fingers[finger_id] = pygame.Vector2(pointer)
             if len(self.active_fingers) >= 2:
                 distance = self.active_touch_distance()
                 if distance is not None and self.pinch_last_distance is not None:
@@ -630,7 +634,7 @@ class CortexHome:
                 self.pinch_last_distance is not None
                 or len(self.active_fingers) > 1
             )
-            self.active_fingers.pop(event.finger_id, None)
+            self.active_fingers.pop(finger_id, None)
             if was_pinching:
                 self.pinch_last_distance = self.active_touch_distance()
                 self.dragging = False
