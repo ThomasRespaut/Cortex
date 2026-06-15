@@ -50,6 +50,7 @@ def configure_touch_environment(
     touch_flip_y=False,
     size=None,
 ):
+    touch_rotation = parse_touch_rotation(touch_rotation)
     if size is not None:
         os.environ["CORTEX_SCREEN_SIZE"] = f"{size[0]}x{size[1]}"
     os.environ["CORTEX_TOUCH_ROTATION"] = str(touch_rotation)
@@ -74,7 +75,7 @@ def touch_fraction_for_screen_position(
     touch_flip_x=None,
     touch_flip_y=None,
 ):
-    rotation %= 360
+    rotation = parse_touch_rotation(rotation)
     screen_x, screen_y = position
     width, height = size
     if rotation == 90:

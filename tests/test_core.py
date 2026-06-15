@@ -2043,6 +2043,15 @@ class ToolingDefaultsTests(unittest.TestCase):
             self.assertIn("type=parse_touch_rotation", content)
             self.assertNotIn("choices=(0, 90, 180, 270)", content)
 
+    def test_touch_smokes_reject_invalid_programmatic_rotation(self):
+        from tools.smoke_home_touch_interactions import configure_touch_environment
+        from tools.smoke_touch_rotations import smoke_touch_rotations
+
+        with self.assertRaises(argparse.ArgumentTypeError):
+            configure_touch_environment(touch_rotation=45)
+        with self.assertRaises(argparse.ArgumentTypeError):
+            smoke_touch_rotations((480, 480), rotations=(45,), flip_cases=())
+
     def test_touch_smokes_use_shared_touch_flip_parser(self):
         content = Path("tools/smoke_home_touch_interactions.py").read_text(
             encoding="utf-8"
