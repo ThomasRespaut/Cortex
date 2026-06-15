@@ -4,27 +4,17 @@ import os
 from pathlib import Path
 
 from tools.screen_size import parse_screen_size
+from tools.touch_config import TOUCH_ROTATIONS, parse_touch_bool, parse_touch_rotation
 
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 
 
-TRUTHY = {"1", "true", "yes", "on", "oui"}
-FALSY = {"0", "false", "no", "off", "non"}
-TOUCH_ROTATIONS = {0, 90, 180, 270}
 _ROUND_MASK_CACHE_KEY = None
 _ROUND_MASK_CACHE_SURFACE = None
 
 
 def env_bool(name, default=False):
-    value = os.getenv(name)
-    if value is None:
-        return default
-    normalized = value.strip().lower()
-    if normalized in TRUTHY:
-        return True
-    if normalized in FALSY:
-        return False
-    return default
+    return parse_touch_bool(os.getenv(name), default=default)
 
 
 def env_int(name, default):
@@ -55,9 +45,11 @@ def env_fps(default=60):
 
 
 def env_touch_rotation(default=0):
-    rotation = env_int("CORTEX_TOUCH_ROTATION", default)
     fallback = default if default in TOUCH_ROTATIONS else 0
-    return rotation if rotation in TOUCH_ROTATIONS else fallback
+    try:
+        return parse_touch_rotation(os.getenv("CORTEX_TOUCH_ROTATION", str(default)))
+    except argparse.ArgumentTypeError:
+        return fallback
 
 
 def env_screen_size(name, default):

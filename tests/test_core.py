@@ -1516,6 +1516,13 @@ class InterfaceAssetTests(unittest.TestCase):
     def test_screen_config_parses_environment_defaults(self):
         from app import screen_config
 
+        content = Path("app/screen_config.py").read_text(encoding="utf-8")
+        self.assertIn("from tools.touch_config import", content)
+        self.assertIn("parse_touch_bool", content)
+        self.assertIn("parse_touch_rotation", content)
+        self.assertNotIn("TRUTHY =", content)
+        self.assertNotIn("FALSY =", content)
+
         with mock.patch.dict(
             os.environ,
             {
