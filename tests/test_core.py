@@ -2845,6 +2845,70 @@ class ToolingDefaultsTests(unittest.TestCase):
         ):
             self.assertEqual(124, run_step(step, ".", 1))
 
+    def test_local_check_runner_clears_inherited_capture_env(self):
+        from tools.run_local_checks import CheckStep, run_step
+
+        step = CheckStep(
+            "Tests unitaires",
+            [sys.executable, "-c", "pass"],
+        )
+
+        with (
+            mock.patch.dict(
+                os.environ,
+                {
+                    "CORTEX_SCREENSHOT_PATH": "artifacts/leftover.png",
+                    "CORTEX_EXIT_AFTER_SCREENSHOT": "true",
+                    "CORTEX_EXIT_AFTER_FRAME": "true",
+                },
+                clear=False,
+            ),
+            mock.patch(
+                "tools.run_local_checks.subprocess.run",
+                return_value=subprocess.CompletedProcess(step.command, 0),
+            ) as mocked_run,
+        ):
+            self.assertEqual(0, run_step(step, ".", 5))
+
+        env = mocked_run.call_args.kwargs["env"]
+        self.assertNotIn("CORTEX_SCREENSHOT_PATH", env)
+        self.assertNotIn("CORTEX_EXIT_AFTER_SCREENSHOT", env)
+        self.assertNotIn("CORTEX_EXIT_AFTER_FRAME", env)
+
+    def test_local_check_runner_keeps_explicit_capture_env(self):
+        from tools.run_local_checks import CheckStep, run_step
+
+        step = CheckStep(
+            "Smoke capture",
+            [sys.executable, "-c", "pass"],
+            env={
+                "CORTEX_SCREENSHOT_PATH": "artifacts/current.png",
+                "CORTEX_EXIT_AFTER_SCREENSHOT": "true",
+            },
+        )
+
+        with (
+            mock.patch.dict(
+                os.environ,
+                {
+                    "CORTEX_SCREENSHOT_PATH": "artifacts/leftover.png",
+                    "CORTEX_EXIT_AFTER_SCREENSHOT": "false",
+                    "CORTEX_EXIT_AFTER_FRAME": "true",
+                },
+                clear=False,
+            ),
+            mock.patch(
+                "tools.run_local_checks.subprocess.run",
+                return_value=subprocess.CompletedProcess(step.command, 0),
+            ) as mocked_run,
+        ):
+            self.assertEqual(0, run_step(step, ".", 5))
+
+        env = mocked_run.call_args.kwargs["env"]
+        self.assertEqual("artifacts/current.png", env["CORTEX_SCREENSHOT_PATH"])
+        self.assertEqual("true", env["CORTEX_EXIT_AFTER_SCREENSHOT"])
+        self.assertNotIn("CORTEX_EXIT_AFTER_FRAME", env)
+
     def test_local_check_runner_rejects_invalid_step_timeout(self):
         from tools.run_local_checks import positive_int, touch_rotation
         from tools.screen_size import (

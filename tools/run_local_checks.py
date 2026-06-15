@@ -105,6 +105,11 @@ def run_secret_scan(project_root):
 
 positive_int = parse_positive_int
 touch_rotation = parse_touch_rotation
+STEP_SCOPED_ENV_KEYS = (
+    "CORTEX_SCREENSHOT_PATH",
+    "CORTEX_EXIT_AFTER_SCREENSHOT",
+    "CORTEX_EXIT_AFTER_FRAME",
+)
 
 
 def build_check_steps(
@@ -197,6 +202,9 @@ def run_step(step, project_root, timeout_seconds):
     print(f"\n==> {step.name}", flush=True)
     print(" ".join(step.command), flush=True)
     env = os.environ.copy()
+    for key in STEP_SCOPED_ENV_KEYS:
+        if key not in step.env:
+            env.pop(key, None)
     env.update(step.env)
     try:
         result = subprocess.run(
