@@ -451,6 +451,15 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("exec \"$PYTHON_BIN\" Screen.py", content)
         self.assertIn("CORTEX_FULLSCREEN=\"${CORTEX_FULLSCREEN:-true}\"", content)
         self.assertIn("CORTEX_HIDE_CURSOR=\"${CORTEX_HIDE_CURSOR:-true}\"", content)
+        self.assertIn("CORTEX_TOUCH_ROTATION=\"${CORTEX_TOUCH_ROTATION:-0}\"", content)
+        self.assertIn(
+            "CORTEX_TOUCH_ROUND_CLIP=\"${CORTEX_TOUCH_ROUND_CLIP:-true}\"",
+            content,
+        )
+        self.assertIn(
+            "CORTEX_TOUCH_EDGE_MARGIN=\"${CORTEX_TOUCH_EDGE_MARGIN:-0}\"",
+            content,
+        )
         self.assertIn("SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"", content)
         self.assertNotIn(". \".env\"", content)
         self.assertNotIn("source .env", content)
@@ -646,6 +655,8 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_HIDE_CURSOR=true", content)
         self.assertIn("CORTEX_SCREEN_SIZE=", content)
         self.assertIn("CORTEX_TOUCH_ROTATION=0", content)
+        self.assertIn("CORTEX_TOUCH_ROUND_CLIP=true", content)
+        self.assertIn("CORTEX_TOUCH_EDGE_MARGIN=0", content)
 
     def test_env_example_documents_oauth_token_overrides(self):
         content = Path(".env.example").read_text(encoding="utf-8")
