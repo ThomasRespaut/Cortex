@@ -5,7 +5,8 @@ from app.screen_config import (
     circular_menu_layout,
     env_bool,
     pointer_down_position,
-    rotated_touch_position,
+    pointer_move_position,
+    pointer_up_position,
 )
 from database.database import Neo4jDatabase
 
@@ -108,7 +109,10 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
                 running = False
             elif event.type == pygame.FINGERDOWN:
                 width, height = screen.get_size()
-                finger_positions[event.finger_id] = rotated_touch_position(event.x, event.y, width, height)
+                pointer = pointer_down_position(event, width, height)
+                if not pointer:
+                    continue
+                finger_positions[event.finger_id] = pointer
                 touch_start_positions[event.finger_id] = finger_positions[event.finger_id]
                 moved_fingers.discard(event.finger_id)
                 if len(finger_positions) == 1:
@@ -124,15 +128,22 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
                     last_distance = None
                 dragging = False
 
-                touch_x, touch_y = rotated_touch_position(event.x, event.y, width, height)
-                if boutton_quitter.collidepoint((touch_x, touch_y)):
+                pointer = pointer_up_position(event, width, height)
+                if not pointer:
+                    continue
+                if boutton_quitter.collidepoint(pointer):
                     running = False
                 elif was_tap:
-                    selection_pointer = (touch_x, touch_y)
+                    selection_pointer = pointer
             elif event.type == pygame.FINGERMOTION:
                 width, height = screen.get_size()
+                if event.finger_id not in finger_positions:
+                    continue
                 previous_position = finger_positions.get(event.finger_id)
-                finger_positions[event.finger_id] = rotated_touch_position(event.x, event.y, width, height)
+                pointer = pointer_move_position(event, width, height)
+                if not pointer:
+                    continue
+                finger_positions[event.finger_id] = pointer
                 if previous_position:
                     moved_distance = math.dist(previous_position, finger_positions[event.finger_id])
                     if moved_distance > 8:
