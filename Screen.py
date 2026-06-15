@@ -405,11 +405,30 @@ class CortexHome:
     def clamp_zoom(self, value):
         return max(ZOOM_MIN, min(ZOOM_MAX, value))
 
+    def set_zoom(self, value, focus=None):
+        previous_zoom = self.zoom
+        next_zoom = self.clamp_zoom(value)
+        if focus is not None and previous_zoom > 0 and next_zoom != previous_zoom:
+            center, _ = self.viewport()
+            focus = pygame.Vector2(focus)
+            relative_focus = focus - center - self.offset
+            self.offset = focus - center - relative_focus * (next_zoom / previous_zoom)
+        self.zoom = next_zoom
+
     def active_touch_distance(self):
         fingers = list(self.active_fingers.values())
         if len(fingers) < 2:
             return None
         return fingers[0].distance_to(fingers[1])
+
+    def active_touch_center(self):
+        fingers = list(self.active_fingers.values())
+        if not fingers:
+            return None
+        center = pygame.Vector2()
+        for finger in fingers:
+            center += finger
+        return center / len(fingers)
 
     def launch_app(self, name):
         if self.cortex is None:
@@ -492,7 +511,7 @@ class CortexHome:
                 distance = self.active_touch_distance()
                 if distance is not None and self.pinch_last_distance is not None:
                     delta = (distance - self.pinch_last_distance) * PINCH_ZOOM_FACTOR
-                    self.zoom = self.clamp_zoom(self.zoom + delta)
+                    self.set_zoom(self.zoom + delta, focus=self.active_touch_center())
                 self.pinch_last_distance = distance
                 self.dragging = False
                 self.panning = False
@@ -539,7 +558,7 @@ class CortexHome:
         if event.type in (pygame.FINGERDOWN, pygame.FINGERMOTION, pygame.FINGERUP):
             return self.handle_touch_event(event, width, height)
         if event.type == pygame.MOUSEWHEEL:
-            self.zoom = self.clamp_zoom(self.zoom + event.y * 0.07)
+            self.set_zoom(self.zoom + event.y * 0.07)
         pointer_down = pointer_down_position(event, width, height)
         if pointer_down is not None:
             self.handle_pointer_down(pointer_down)

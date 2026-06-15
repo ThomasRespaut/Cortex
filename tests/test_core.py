@@ -556,6 +556,34 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_zoom_keeps_focus_point_stable(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                center, _ = home.viewport()
+                focus = pygame.Vector2(170, 120)
+                home.offset.update(24, -8)
+                before = (focus - center - home.offset) / home.zoom
+
+                home.set_zoom(1.2, focus=focus)
+
+                after = (focus - center - home.offset) / home.zoom
+                self.assertAlmostEqual(before.x, after.x, places=5)
+                self.assertAlmostEqual(before.y, after.y, places=5)
+            finally:
+                pygame.quit()
+
     def test_home_menu_supports_two_finger_pinch_zoom(self):
         import pygame
         from Screen import CortexHome
@@ -600,6 +628,31 @@ class InterfaceAssetTests(unittest.TestCase):
                 launch_app.assert_not_called()
                 self.assertFalse(home.active_fingers)
                 self.assertFalse(home.dragging)
+            finally:
+                pygame.quit()
+
+    def test_home_menu_mouse_wheel_uses_zoom_bounds(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                for _ in range(20):
+                    home.handle_event(pygame.event.Event(pygame.MOUSEWHEEL, {"y": 1}))
+                self.assertEqual(1.28, home.zoom)
+
+                for _ in range(40):
+                    home.handle_event(pygame.event.Event(pygame.MOUSEWHEEL, {"y": -1}))
+                self.assertEqual(0.72, home.zoom)
             finally:
                 pygame.quit()
 
