@@ -69,6 +69,42 @@ def rotated_touch_position(x, y, width, height, rotation=None):
     return px, py
 
 
+def circular_menu_layout(width, height, item_count=4):
+    import pygame
+
+    diameter = min(width, height)
+    radius = diameter / 2
+    center_x = width / 2
+    center_y = height / 2
+
+    quit_width = max(96, min(180, int(diameter * 0.32)))
+    quit_height = max(34, min(54, int(diameter * 0.085)))
+    quit_rect = pygame.Rect(
+        int(center_x - quit_width / 2),
+        max(0, int(center_y - radius + radius * 0.1)),
+        quit_width,
+        quit_height,
+    )
+
+    item_width = max(220, int(diameter * 0.7))
+    item_width = min(item_width, int(width * 0.86))
+    item_height = max(42, int(diameter * 0.095))
+    item_gap = max(12, int(diameter * 0.035))
+    total_height = item_count * item_height + max(0, item_count - 1) * item_gap
+    start_y = int(center_y - total_height / 2 + radius * 0.08)
+
+    item_rects = [
+        pygame.Rect(
+            int(center_x - item_width / 2),
+            start_y + index * (item_height + item_gap),
+            item_width,
+            item_height,
+        )
+        for index in range(item_count)
+    ]
+    return quit_rect, item_rects
+
+
 def pointer_down_position(event, width, height):
     import pygame
 

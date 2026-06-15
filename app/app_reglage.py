@@ -1,16 +1,14 @@
 import pygame
 
 from app.screen_assets import asset_path
-from app.screen_config import pointer_down_position
+from app.screen_config import circular_menu_layout, pointer_down_position
 
 
 def launch_reglage(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Calendrier."""
     clock = pygame.time.Clock()
     running = True
-    infoObject = pygame.display.Info()
-    screen_width = infoObject.current_w
-    screen_height = infoObject.current_h
+    screen_width, screen_height = screen.get_size()
 
     # État du mode Cortex
     if cortex.local_mode == True :
@@ -35,15 +33,8 @@ def launch_reglage(screen, cortex, screen_width, screen_height):
     # Configuration de la police
     font = pygame.font.Font(None, 36)
 
-    # Dimensions et position du bouton toggle
-    toggle_width = 200
-    toggle_height = 50
-    toggle_x = screen_width / 2 - toggle_width / 2
-    toggle_y = screen_height / 2 - toggle_height / 2
-    toggle_button = pygame.Rect(toggle_x, toggle_y, toggle_width, toggle_height)
-
-    # Bouton Quitter
-    boutton_quitter = pygame.Rect(screen_width / 2 - 75, 0, 150, 50)
+    boutton_quitter, menu_buttons = circular_menu_layout(screen_width, screen_height, item_count=1)
+    toggle_button = menu_buttons[0]
     border_color = (0, 200, 0)
     border_width = 3
 

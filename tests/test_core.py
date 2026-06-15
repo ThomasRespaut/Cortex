@@ -168,7 +168,33 @@ class InterfaceAssetTests(unittest.TestCase):
         for module in modules:
             content = module.read_text(encoding="utf-8")
             self.assertIn("pointer_down_position", content, module)
+            self.assertIn("circular_menu_layout", content, module)
+            self.assertIn("screen.get_size()", content, module)
             self.assertNotIn("event.pos", content, module)
+            self.assertNotIn("pygame.display.Info", content, module)
+            self.assertNotIn("screen_width/2-200", content, module)
+            self.assertNotIn("500, 400", content, module)
+
+    def test_circular_menu_layout_keeps_controls_inside_round_viewport(self):
+        import pygame
+        from app.screen_config import circular_menu_layout
+
+        quit_rect, item_rects = circular_menu_layout(480, 480)
+        center = pygame.Vector2(240, 240)
+        radius = 240
+
+        self.assertEqual(4, len(item_rects))
+        for rect in [quit_rect, *item_rects]:
+            self.assertGreaterEqual(rect.left, 0)
+            self.assertGreaterEqual(rect.top, 0)
+            self.assertLessEqual(rect.right, 480)
+            self.assertLessEqual(rect.bottom, 480)
+            for point in (rect.topleft, rect.topright, rect.bottomleft, rect.bottomright):
+                self.assertLessEqual(
+                    pygame.Vector2(point).distance_to(center),
+                    radius,
+                    rect,
+                )
 
     def test_touch_rotation_maps_circular_screen_coordinates(self):
         from app.screen_config import rotated_touch_position
