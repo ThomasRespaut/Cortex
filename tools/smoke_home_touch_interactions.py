@@ -20,7 +20,7 @@ os.environ.setdefault("CORTEX_SKIP_CORTEX_LOAD", "true")
 import pygame
 
 from Screen import CortexHome
-from tools.screen_size import parse_screen_size as parse_size
+from tools.screen_size import parse_square_screen_size as parse_size
 from tools.touch_config import env_touch_bool, parse_touch_rotation
 
 TOUCH_ENV_KEYS = (

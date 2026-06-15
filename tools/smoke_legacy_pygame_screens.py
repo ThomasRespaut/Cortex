@@ -25,7 +25,7 @@ from app.app_musique import launch_music
 from app.app_reglage import launch_reglage
 from app.app_sante import launch_health
 from app.app_transport import launch_transport
-from tools.screen_size import parse_screen_size
+from tools.screen_size import parse_square_screen_size
 from tools.verify_screen_smoke import format_screen_stats, validate_screen_image
 
 
@@ -93,7 +93,7 @@ class DummyCortex:
     db = SmokeDatabase()
 
 
-parse_size = parse_screen_size
+parse_size = parse_square_screen_size
 
 
 def smoke_screen(spec, output_dir, size, require_round_mask=False):

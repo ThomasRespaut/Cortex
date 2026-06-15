@@ -19,7 +19,7 @@ os.environ.setdefault("CORTEX_EXIT_AFTER_FRAME", "true")
 from tools.smoke_home_touch_interactions import smoke_home_touch_interactions
 from tools.smoke_legacy_touch_interactions import smoke_legacy_touch_interactions
 from tools.smoke_modern_touch_interactions import smoke_modern_touch_interactions
-from tools.screen_size import parse_screen_size as parse_size
+from tools.screen_size import parse_square_screen_size as parse_size
 
 
 TOUCH_ROTATIONS = (0, 90, 180, 270)

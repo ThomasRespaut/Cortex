@@ -2000,8 +2000,24 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         for tool in smoke_tools:
             content = tool.read_text(encoding="utf-8")
-            self.assertIn("from tools.screen_size import parse_screen_size", content)
+            self.assertIn("parse_square_screen_size", content)
             self.assertNotIn("from tools.smoke_legacy_pygame_screens import parse_size", content)
+
+    def test_pygame_smokes_reject_rectangular_pi_sizes(self):
+        smoke_modules = [
+            "tools.smoke_home_touch_interactions",
+            "tools.smoke_modern_pygame_screens",
+            "tools.smoke_modern_touch_interactions",
+            "tools.smoke_legacy_touch_interactions",
+            "tools.smoke_touch_rotations",
+            "tools.smoke_legacy_pygame_screens",
+        ]
+
+        for module_name in smoke_modules:
+            module = __import__(module_name, fromlist=["parse_size"])
+            self.assertEqual((480, 480), module.parse_size("480x480"))
+            with self.assertRaises(argparse.ArgumentTypeError, msg=module_name):
+                module.parse_size("800x480")
 
     def test_touch_smokes_use_shared_touch_rotation_parser(self):
         smoke_tools = [

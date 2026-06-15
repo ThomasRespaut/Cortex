@@ -26,7 +26,7 @@ from tools.smoke_home_touch_interactions import (
     snapshot_touch_environment,
     touch_fraction_for_screen_position,
 )
-from tools.screen_size import parse_screen_size as parse_size
+from tools.screen_size import parse_square_screen_size as parse_size
 from tools.touch_config import parse_touch_rotation
 
 
