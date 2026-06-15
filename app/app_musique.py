@@ -1,5 +1,6 @@
 import pygame
 
+from app.legacy_widgets import draw_legacy_status_panel
 from app.screen_assets import asset_path, load_background_or_fallback
 from app.screen_config import (
     circular_menu_layout,
@@ -33,24 +34,13 @@ def launch_music(screen, cortex, screen_width, screen_height):
     pygame.draw.rect(screen, border_color, boutton_quitter, width=border_width)
     for button in menu_buttons:
         pygame.draw.rect(screen, border_color, button, width=border_width)
-
-    center_x = screen_width // 2
-    center_y = screen_height // 2
-    radius = min(screen_width, screen_height) // 2
-    title_font = pygame.font.SysFont("Segoe UI", max(24, radius // 8), bold=True)
-    small_font = pygame.font.SysFont("Segoe UI", max(16, radius // 14), bold=True)
-    orb_center = (center_x, center_y - radius // 5)
-    pygame.draw.circle(screen, (244, 114, 182), orb_center, radius // 5)
-    pygame.draw.circle(screen, (255, 230, 245), orb_center, radius // 11)
-    title = title_font.render("Musique", True, (255, 245, 252))
-    screen.blit(title, title.get_rect(center=(center_x, center_y + radius // 12)))
-    for index, color in enumerate(
-        ((244, 114, 182), (88, 214, 255), (52, 211, 153))
-    ):
-        x = center_x - radius // 3 + index * radius // 3
-        pygame.draw.circle(screen, color, (x, center_y + radius // 4), radius // 16)
-    hint = small_font.render("Lecture locale", True, (240, 245, 255))
-    screen.blit(hint, hint.get_rect(center=(center_x, center_y + radius // 2)))
+    draw_legacy_status_panel(
+        screen,
+        "Musique",
+        "Lecture locale",
+        (244, 114, 182),
+        ("Radio", "Mix", "Favoris"),
+    )
 
     while running:
         for event in pygame.event.get():
