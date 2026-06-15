@@ -112,6 +112,10 @@ chmod +x scripts/launch_raspberry_pi.sh
 scripts/launch_raspberry_pi.sh
 ```
 
+Le lanceur force aussi `SDL_TOUCH_MOUSE_EVENTS=0` et
+`SDL_MOUSE_TOUCH_EVENTS=0` afin qu'un appui tactile ne soit pas traité deux fois
+par SDL/Pygame.
+
 `requirements-raspberry-pi.txt` installe le socle interface/audio/API. Les
 paquets de modèle local lourd (`torch`, `transformers`, `peft`) restent à
 installer séparément si la Raspberry Pi cible a assez de mémoire et de stockage.

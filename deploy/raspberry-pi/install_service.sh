@@ -32,6 +32,8 @@ User=${SERVICE_USER}
 WorkingDirectory=${PROJECT_DIR}
 Environment=PYTHONUNBUFFERED=1
 Environment=SDL_VIDEODRIVER=kmsdrm
+Environment=SDL_TOUCH_MOUSE_EVENTS=0
+Environment=SDL_MOUSE_TOUCH_EVENTS=0
 Environment=CORTEX_FULLSCREEN=true
 Environment=CORTEX_HIDE_CURSOR=true
 Environment=CORTEX_TOUCH_ROTATION=0

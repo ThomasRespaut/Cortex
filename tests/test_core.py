@@ -461,6 +461,8 @@ class ToolingDefaultsTests(unittest.TestCase):
             content,
         )
         self.assertIn("SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"", content)
+        self.assertIn("SDL_TOUCH_MOUSE_EVENTS=\"${SDL_TOUCH_MOUSE_EVENTS:-0}\"", content)
+        self.assertIn("SDL_MOUSE_TOUCH_EVENTS=\"${SDL_MOUSE_TOUCH_EVENTS:-0}\"", content)
         self.assertNotIn(". \".env\"", content)
         self.assertNotIn("source .env", content)
         self.assertNotIn("OPENAI_API_KEY=", content)
@@ -516,6 +518,8 @@ class ToolingDefaultsTests(unittest.TestCase):
             "ExecStart=/home/pi/Cortex/scripts/launch_raspberry_pi.sh",
             content,
         )
+        self.assertIn("Environment=SDL_TOUCH_MOUSE_EVENTS=0", content)
+        self.assertIn("Environment=SDL_MOUSE_TOUCH_EVENTS=0", content)
         self.assertIn("Environment=CORTEX_FULLSCREEN=true", content)
         self.assertIn("Environment=CORTEX_HIDE_CURSOR=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
@@ -532,6 +536,8 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_PROJECT_DIR", content)
         self.assertIn("CORTEX_SERVICE_USER", content)
         self.assertIn("scripts/launch_raspberry_pi.sh", content)
+        self.assertIn("Environment=SDL_TOUCH_MOUSE_EVENTS=0", content)
+        self.assertIn("Environment=SDL_MOUSE_TOUCH_EVENTS=0", content)
         self.assertIn("Environment=CORTEX_FULLSCREEN=true", content)
         self.assertIn("Environment=CORTEX_HIDE_CURSOR=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
