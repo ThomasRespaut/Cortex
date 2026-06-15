@@ -20,6 +20,7 @@ from app.screen_config import (
     env_bool,
     env_int,
     env_screen_size,
+    circle_fits_round_viewport,
     pointer_down_position,
     pointer_move_position,
     pointer_up_position,
@@ -277,8 +278,10 @@ class CortexHome:
         self.screen.blit(mode_surface, mode_rect)
 
     def draw_apps(self, center, radius):
+        width, height = self.screen.get_size()
         spacing = radius * 0.245 * self.zoom
         base_size = radius * 0.285 * self.zoom
+        safe_margin = max(6, int(radius * 0.025))
         self.rendered_apps = []
 
         visible = []
@@ -292,6 +295,14 @@ class CortexHome:
             edge_fade = max(0.15, min(1.0, (radius - distance) / (radius * 0.24)))
             size = int(base_size * (0.72 + 0.56 * focus))
             size = max(62, min(size, int(radius * 0.37)))
+            if not circle_fits_round_viewport(
+                position,
+                width,
+                height,
+                size / 2,
+                margin=safe_margin,
+            ):
+                continue
             visible.append((distance, app, position, size, edge_fade, focus))
 
         for distance, app, position, size, edge_fade, focus in sorted(

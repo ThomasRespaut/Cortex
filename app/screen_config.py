@@ -78,6 +78,15 @@ def is_inside_round_viewport(position, width, height, edge_margin=0):
     return (px - center_x) ** 2 + (py - center_y) ** 2 <= radius**2
 
 
+def circle_fits_round_viewport(position, width, height, item_radius, margin=0):
+    import pygame
+
+    diameter = min(width, height)
+    radius = max(0, diameter / 2 - margin)
+    center = pygame.Vector2(width / 2, height / 2)
+    return pygame.Vector2(position).distance_to(center) + item_radius <= radius
+
+
 def round_safe_point(center, radius, dx_ratio, dy_ratio, item_radius=0, margin=0):
     import pygame
 
