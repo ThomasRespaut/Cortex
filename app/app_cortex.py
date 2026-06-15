@@ -6,7 +6,7 @@ import time
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
-from app.screen_config import env_bool, pointer_down_position, round_safe_point
+from app.screen_config import env_bool, fit_text, pointer_down_position, round_safe_point
 
 
 BACKGROUND_TOP = (18, 38, 86)
@@ -22,14 +22,6 @@ SUGGESTIONS = [
     "Mes prochains RDV",
     "Trajet maison",
 ]
-
-
-def fit_text(font, text, max_width):
-    if font.size(text)[0] <= max_width:
-        return text
-    while text and font.size(text + "...")[0] > max_width:
-        text = text[:-1]
-    return text + "..."
 
 
 def wrap_text(font, text, max_width, max_lines=3):

@@ -329,9 +329,14 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("fit_text(self.label_font", content)
 
     def test_screen_text_helpers_are_shared(self):
-        content = Path("app/screen_config.py").read_text(encoding="utf-8")
+        helper_content = Path("app/screen_config.py").read_text(encoding="utf-8")
 
-        self.assertIn("def fit_text(", content)
+        self.assertIn("def fit_text(", helper_content)
+        for module in (Path("app/app_cortex.py"), Path("app/feature_shell.py")):
+            content = module.read_text(encoding="utf-8")
+
+            self.assertIn("fit_text", content, module)
+            self.assertNotIn("def fit_text(", content, module)
 
     def test_modern_back_buttons_use_round_safe_position(self):
         for module in (Path("app/app_cortex.py"), Path("app/feature_shell.py")):

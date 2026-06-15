@@ -4,7 +4,7 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
 from app.screen_assets import load_icon_or_fallback
-from app.screen_config import env_bool, pointer_down_position, round_safe_point
+from app.screen_config import env_bool, fit_text, pointer_down_position, round_safe_point
 
 
 FEATURE_CONTENT = {
@@ -54,14 +54,6 @@ FEATURE_ACCENTS = {
     "Courses": (74, 222, 128),
     "Traduction": (240, 171, 252),
 }
-
-
-def fit_text(font, text, max_width):
-    if font.size(text)[0] <= max_width:
-        return text
-    while text and font.size(text + "…")[0] > max_width:
-        text = text[:-1]
-    return text + "…"
 
 
 def activate_feature_at(cortex, app_name, position, back_center, back_radius, card_rects, cards):
@@ -132,7 +124,7 @@ def launch_feature(screen, cortex, app_name, icon_path):
         screen.blit(icon_scaled, icon_rect)
 
         heading = title_font.render(
-            fit_text(title_font, title, radius * 1.15),
+            fit_text(title_font, title, radius * 1.15, ellipsis="…"),
             True,
             (245, 247, 255),
         )
@@ -166,7 +158,7 @@ def launch_feature(screen, cortex, app_name, icon_path):
             number = small_font.render(f"0{index + 1}", True, number_color)
             screen.blit(number, (rect.x + 20, rect.centery - number.get_height() / 2))
             card_label = card_font.render(
-                fit_text(card_font, label, card_width - 100),
+                fit_text(card_font, label, card_width - 100, ellipsis="…"),
                 True,
                 text_color,
             )
