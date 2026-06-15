@@ -21,7 +21,7 @@ from tools.smoke_legacy_touch_interactions import smoke_legacy_touch_interaction
 from tools.smoke_modern_touch_interactions import smoke_modern_touch_interactions
 from tools.screen_size import parse_square_screen_size as parse_size
 from tools.screen_size import require_square_screen_size
-from tools.touch_config import parse_touch_rotation
+from tools.touch_config import parse_required_touch_bool, parse_touch_rotation
 
 
 TOUCH_ROTATIONS = (0, 90, 180, 270)
@@ -36,6 +36,13 @@ TOUCH_FLIP_CASES = (
 def smoke_touch_rotations(size, rotations=TOUCH_ROTATIONS, flip_cases=TOUCH_FLIP_CASES):
     size = require_square_screen_size(size)
     rotations = tuple(parse_touch_rotation(rotation) for rotation in rotations)
+    flip_cases = tuple(
+        (
+            parse_required_touch_bool(flip_x),
+            parse_required_touch_bool(flip_y),
+        )
+        for flip_x, flip_y in flip_cases
+    )
     checked = []
     for rotation in rotations:
         for flip_x, flip_y in flip_cases:

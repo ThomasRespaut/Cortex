@@ -2752,7 +2752,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             checked = smoke_touch_rotations.smoke_touch_rotations(
                 (240, 240),
                 rotations=(90,),
-                flip_cases=((True, False),),
+                flip_cases=(("true", "0"),),
             )
 
         self.assertEqual([(90, True, False)], checked)
@@ -2774,6 +2774,12 @@ class ToolingDefaultsTests(unittest.TestCase):
             touch_flip_x=True,
             touch_flip_y=False,
         )
+        with self.assertRaises(argparse.ArgumentTypeError):
+            smoke_touch_rotations.smoke_touch_rotations(
+                (240, 240),
+                rotations=(),
+                flip_cases=(("maybe", False),),
+            )
 
     def test_legacy_screen_smoke_tool_covers_bdd_view(self):
         from tools.smoke_legacy_pygame_screens import SCREEN_SPECS
