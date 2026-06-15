@@ -2470,18 +2470,29 @@ class ToolingDefaultsTests(unittest.TestCase):
             parse_square_screen_size,
             require_square_screen_size,
         )
-        from tools.touch_config import parse_touch_bool, parse_touch_rotation
+        from tools.touch_config import (
+            parse_non_negative_int,
+            parse_positive_int,
+            parse_touch_bool,
+            parse_touch_rotation,
+        )
 
         self.assertEqual(5, positive_int("5"))
         with self.assertRaises(argparse.ArgumentTypeError):
             positive_int("0")
         self.assertEqual(90, touch_rotation("90"))
         self.assertEqual(270, parse_touch_rotation(" 270 "))
+        self.assertEqual(5, parse_positive_int("5"))
+        self.assertEqual(0, parse_non_negative_int("0"))
         self.assertTrue(parse_touch_bool(" oui "))
         self.assertFalse(parse_touch_bool(" non "))
         self.assertTrue(parse_touch_bool("maybe", default=True))
         with self.assertRaises(argparse.ArgumentTypeError):
             touch_rotation("45")
+        with self.assertRaises(argparse.ArgumentTypeError):
+            parse_positive_int("0")
+        with self.assertRaises(argparse.ArgumentTypeError):
+            parse_non_negative_int("-1")
         self.assertEqual((480, 480), parse_screen_size(" 480 * 480 "))
         self.assertEqual((480, 480), parse_screen_size("480×480"))
         self.assertEqual((480, 480), require_square_screen_size((480, 480)))

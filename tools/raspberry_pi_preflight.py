@@ -10,7 +10,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.screen_size import parse_screen_size, require_square_screen_size
-from tools.touch_config import parse_touch_bool, parse_touch_rotation
+from tools.touch_config import (
+    parse_non_negative_int,
+    parse_positive_int,
+    parse_touch_bool,
+    parse_touch_rotation,
+)
 
 
 REQUIRED_FILES = [
@@ -311,13 +316,11 @@ def invalid_numeric_config_values(relative_path, content):
         (*POSITIVE_INT_KEYS, *NON_NEGATIVE_INT_KEYS),
     ):
         try:
-            parsed = int(value.strip())
-        except ValueError:
-            errors.append(f"Valeur numérique invalide dans {relative_path}: {key}={value}")
-            continue
-        if key in POSITIVE_INT_KEYS and parsed <= 0:
-            errors.append(f"Valeur numérique invalide dans {relative_path}: {key}={value}")
-        if key in NON_NEGATIVE_INT_KEYS and parsed < 0:
+            if key in POSITIVE_INT_KEYS:
+                parse_positive_int(value)
+            else:
+                parse_non_negative_int(value)
+        except argparse.ArgumentTypeError:
             errors.append(f"Valeur numérique invalide dans {relative_path}: {key}={value}")
     return errors
 

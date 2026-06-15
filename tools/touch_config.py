@@ -17,6 +17,27 @@ def parse_touch_rotation(value):
     return parsed
 
 
+def parse_required_int(value):
+    try:
+        return int(str(value).strip())
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("La valeur doit être un entier") from error
+
+
+def parse_positive_int(value):
+    parsed = parse_required_int(value)
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("La valeur doit être positive")
+    return parsed
+
+
+def parse_non_negative_int(value):
+    parsed = parse_required_int(value)
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("La valeur doit être positive ou nulle")
+    return parsed
+
+
 def parse_touch_bool(value, default=False):
     if value is None:
         return default
