@@ -1,7 +1,10 @@
 import argparse
+import os
 
 
 TOUCH_ROTATIONS = (0, 90, 180, 270)
+TRUTHY = {"1", "true", "yes", "on", "oui"}
+FALSY = {"0", "false", "no", "off", "non"}
 
 
 def parse_touch_rotation(value):
@@ -12,3 +15,18 @@ def parse_touch_rotation(value):
     if parsed not in TOUCH_ROTATIONS:
         raise argparse.ArgumentTypeError("La rotation tactile doit être 0, 90, 180 ou 270")
     return parsed
+
+
+def parse_touch_bool(value, default=False):
+    if value is None:
+        return default
+    normalized = str(value).strip().lower()
+    if normalized in TRUTHY:
+        return True
+    if normalized in FALSY:
+        return False
+    return default
+
+
+def env_touch_bool(name, default=False):
+    return parse_touch_bool(os.getenv(name), default=default)
