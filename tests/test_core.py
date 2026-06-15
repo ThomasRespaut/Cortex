@@ -2169,6 +2169,45 @@ class ToolingDefaultsTests(unittest.TestCase):
             self.assertEqual("true", steps[index].env["CORTEX_TOUCH_FLIP_X"])
             self.assertEqual("true", steps[index].env["CORTEX_TOUCH_FLIP_Y"])
 
+        text_steps = build_validation_steps(
+            "python",
+            ".",
+            parse_size("480x480"),
+            "artifacts/screen-smoke.png",
+            "artifacts/legacy-screen-smoke",
+            "artifacts/modern-screen-smoke",
+            touch_rotation="270",
+            touch_flip_x="oui",
+            touch_flip_y="0",
+        )
+        text_command = " ".join(text_steps[5].command)
+        self.assertIn("--touch-rotation 270", text_command)
+        self.assertIn("--touch-flip-x", text_command)
+        self.assertNotIn("--touch-flip-y", text_command)
+        self.assertEqual("270", text_steps[2].env["CORTEX_TOUCH_ROTATION"])
+        self.assertEqual("true", text_steps[2].env["CORTEX_TOUCH_FLIP_X"])
+        self.assertEqual("false", text_steps[2].env["CORTEX_TOUCH_FLIP_Y"])
+        with self.assertRaises(argparse.ArgumentTypeError):
+            build_validation_steps(
+                "python",
+                ".",
+                parse_size("480x480"),
+                "artifacts/screen-smoke.png",
+                "artifacts/legacy-screen-smoke",
+                "artifacts/modern-screen-smoke",
+                touch_rotation="45",
+            )
+        with self.assertRaises(argparse.ArgumentTypeError):
+            build_validation_steps(
+                "python",
+                ".",
+                parse_size("480x480"),
+                "artifacts/screen-smoke.png",
+                "artifacts/legacy-screen-smoke",
+                "artifacts/modern-screen-smoke",
+                touch_flip_x="maybe",
+            )
+
     def test_legacy_touch_smoke_toggles_settings_both_ways(self):
         from tools.smoke_legacy_touch_interactions import (
             smoke_legacy_touch_interactions,
@@ -2342,6 +2381,32 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("--touch-rotation 270", flipped_command)
         self.assertIn("--touch-flip-x", flipped_command)
         self.assertIn("--touch-flip-y", flipped_command)
+        text_flipped_steps = build_check_steps(
+            "python",
+            "training/finetune_cortex_v3",
+            "480x480",
+            touch_rotation="90",
+            touch_flip_x="non",
+            touch_flip_y="1",
+        )
+        text_flipped_command = " ".join(text_flipped_steps[-1].command)
+        self.assertIn("--touch-rotation 90", text_flipped_command)
+        self.assertNotIn("--touch-flip-x", text_flipped_command)
+        self.assertIn("--touch-flip-y", text_flipped_command)
+        with self.assertRaises(argparse.ArgumentTypeError):
+            build_check_steps(
+                "python",
+                "training/finetune_cortex_v3",
+                "480x480",
+                touch_rotation="45",
+            )
+        with self.assertRaises(argparse.ArgumentTypeError):
+            build_check_steps(
+                "python",
+                "training/finetune_cortex_v3",
+                "480x480",
+                touch_flip_y="maybe",
+            )
 
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)

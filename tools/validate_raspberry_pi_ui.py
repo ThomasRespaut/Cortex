@@ -11,7 +11,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.screen_size import parse_square_screen_size, require_square_screen_size
-from tools.touch_config import parse_touch_rotation
+from tools.touch_config import parse_required_touch_bool, parse_touch_rotation
 
 
 @dataclass(frozen=True)
@@ -67,6 +67,9 @@ def build_validation_steps(
     touch_flip_y=False,
 ):
     width, height = require_square_screen_size(size)
+    touch_rotation = parse_touch_rotation(touch_rotation)
+    touch_flip_x = parse_required_touch_bool(touch_flip_x)
+    touch_flip_y = parse_required_touch_bool(touch_flip_y)
     screen_size = f"{width}x{height}"
     min_width = str(min(width, 400))
     min_height = str(min(height, 400))

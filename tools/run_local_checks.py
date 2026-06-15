@@ -12,7 +12,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.screen_size import format_square_screen_size
-from tools.touch_config import parse_touch_rotation
+from tools.touch_config import parse_required_touch_bool, parse_touch_rotation
 
 
 @dataclass(frozen=True)
@@ -122,6 +122,9 @@ def build_check_steps(
     touch_flip_x=False,
     touch_flip_y=False,
 ):
+    touch_rotation = parse_touch_rotation(touch_rotation)
+    touch_flip_x = parse_required_touch_bool(touch_flip_x)
+    touch_flip_y = parse_required_touch_bool(touch_flip_y)
     raspberry_pi_command = [
         python_bin,
         "tools/validate_raspberry_pi_ui.py",
