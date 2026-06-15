@@ -559,6 +559,70 @@ class RepositoryHygieneTests(unittest.TestCase):
             get.call_args.kwargs["timeout"],
         )
 
+    def test_idfm_places_handles_network_and_json_errors(self):
+        if importlib.util.find_spec("requests") is None:
+            self.skipTest("Dépendance requests absente.")
+
+        from assistant.ratp import ratp_assistant
+
+        class InvalidJsonResponse:
+            status_code = 200
+
+            def json(self):
+                raise ValueError("invalid json")
+
+        assistant = ratp_assistant.IDFMAssistant()
+        assistant.idfm_api_key = "idfm-key"
+        with mock.patch.object(
+            ratp_assistant.requests,
+            "get",
+            side_effect=ratp_assistant.requests.RequestException("offline"),
+        ):
+            self.assertIsNone(assistant.get_coords("Paris"))
+
+        with mock.patch.object(
+            ratp_assistant.requests,
+            "get",
+            return_value=InvalidJsonResponse(),
+        ):
+            self.assertIsNone(assistant.get_coords("Paris"))
+
+    def test_idfm_route_handles_network_and_json_errors(self):
+        if importlib.util.find_spec("requests") is None:
+            self.skipTest("Dépendance requests absente.")
+
+        from assistant.ratp import ratp_assistant
+
+        class InvalidJsonResponse:
+            status_code = 200
+
+            def json(self):
+                raise ValueError("invalid json")
+
+        assistant = ratp_assistant.IDFMAssistant()
+        assistant.idfm_api_key = "idfm-key"
+        assistant.get_coords = lambda city: {"lat": "48.8566", "lon": "2.3522"}
+
+        with mock.patch.object(
+            ratp_assistant.requests,
+            "get",
+            side_effect=ratp_assistant.requests.RequestException("offline"),
+        ):
+            self.assertIn(
+                "Erreur réseau IDFM",
+                assistant.calculate_route("Paris", "Lyon"),
+            )
+
+        with mock.patch.object(
+            ratp_assistant.requests,
+            "get",
+            return_value=InvalidJsonResponse(),
+        ):
+            self.assertEqual(
+                "Réponse IDFM invalide.",
+                assistant.calculate_route("Paris", "Lyon"),
+            )
+
     def test_media_recommendations_report_missing_api_key(self):
         if importlib.util.find_spec("requests") is None:
             self.skipTest("Dépendance requests absente.")

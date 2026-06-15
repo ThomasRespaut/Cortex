@@ -34,20 +34,25 @@ class IDFMAssistant:
             'apikey': self.idfm_api_key
         }
 
-        # Envoyer la requête
-        response_places = requests.get(
-            url_places,
-            params=params_places,
-            headers=headers,
-            timeout=DEFAULT_REQUEST_TIMEOUT,
-        )
+        try:
+            response_places = requests.get(
+                url_places,
+                params=params_places,
+                headers=headers,
+                timeout=DEFAULT_REQUEST_TIMEOUT,
+            )
+        except requests.RequestException:
+            return None
 
         # Vérifier si la requête a réussi
         if response_places.status_code == 200:
-            data_places = response_places.json()
+            try:
+                data_places = response_places.json()
+            except ValueError:
+                return None
 
             # Parcourir les résultats
-            for place in data_places['places']:
+            for place in data_places.get('places', []):
                 name = place.get('name', 'Nom non disponible')
                 embedded_type = place.get('embedded_type', 'Type non disponible')
 
@@ -101,21 +106,26 @@ class IDFMAssistant:
                 'apikey': self.idfm_api_key
             }
 
-            # Envoi de la requête pour calculer l'itinéraire
-            response_journey = requests.get(
-                url_journey,
-                params=params_journey,
-                headers=headers,
-                timeout=DEFAULT_REQUEST_TIMEOUT,
-            )
+            try:
+                response_journey = requests.get(
+                    url_journey,
+                    params=params_journey,
+                    headers=headers,
+                    timeout=DEFAULT_REQUEST_TIMEOUT,
+                )
+            except requests.RequestException as error:
+                return f"Erreur réseau IDFM : {error}"
 
             # Vérification du statut de la requête
             if response_journey.status_code == 200:
-                data_journey = response_journey.json()
+                try:
+                    data_journey = response_journey.json()
+                except ValueError:
+                    return "Réponse IDFM invalide."
                 itineraries = []
 
                 # Pour chaque itinéraire trouvé
-                for journey in data_journey['journeys']:
+                for journey in data_journey.get('journeys', []):
                     itinerary = {
                         'departure_time': journey['departure_date_time'],
                         'arrival_time': journey['arrival_date_time'],
