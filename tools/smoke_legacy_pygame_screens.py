@@ -25,6 +25,7 @@ from app.app_musique import launch_music
 from app.app_reglage import launch_reglage
 from app.app_sante import launch_health
 from app.app_transport import launch_transport
+from tools.screen_size import parse_screen_size
 from tools.verify_screen_smoke import format_screen_stats, validate_screen_image
 
 
@@ -92,19 +93,7 @@ class DummyCortex:
     db = SmokeDatabase()
 
 
-def parse_size(value):
-    normalized = value.lower().replace("*", "x")
-    if "x" not in normalized:
-        raise argparse.ArgumentTypeError("Format attendu: largeurxhauteur")
-    width_text, height_text = normalized.split("x", 1)
-    try:
-        width = int(width_text)
-        height = int(height_text)
-    except ValueError as error:
-        raise argparse.ArgumentTypeError("La taille doit contenir deux entiers") from error
-    if width <= 0 or height <= 0:
-        raise argparse.ArgumentTypeError("La taille doit être positive")
-    return width, height
+parse_size = parse_screen_size
 
 
 def smoke_screen(spec, output_dir, size, require_round_mask=False):

@@ -2031,7 +2031,8 @@ class ToolingDefaultsTests(unittest.TestCase):
             self.assertEqual(124, run_step(step, ".", 1))
 
     def test_local_check_runner_rejects_invalid_step_timeout(self):
-        from tools.run_local_checks import positive_int, screen_size, touch_rotation
+        from tools.run_local_checks import positive_int, touch_rotation
+        from tools.screen_size import format_screen_size
 
         self.assertEqual(5, positive_int("5"))
         with self.assertRaises(argparse.ArgumentTypeError):
@@ -2039,11 +2040,11 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual(90, touch_rotation("90"))
         with self.assertRaises(argparse.ArgumentTypeError):
             touch_rotation("45")
-        self.assertEqual("480x480", screen_size("480*480"))
+        self.assertEqual("480x480", format_screen_size("480*480"))
         with self.assertRaises(argparse.ArgumentTypeError):
-            screen_size("480")
+            format_screen_size("480")
         with self.assertRaises(argparse.ArgumentTypeError):
-            screen_size("480x0")
+            format_screen_size("480x0")
 
     def test_raspberry_pi_requirements_exclude_heavy_local_model_stack(self):
         requirements = Path("requirements-raspberry-pi.txt").read_text(encoding="utf-8")
