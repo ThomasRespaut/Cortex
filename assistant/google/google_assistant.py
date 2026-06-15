@@ -45,6 +45,17 @@ class GoogleAssistant:
         self.calendar_service = self.get_service('calendar', 'v3')
         self.tasks_service = self.get_service('tasks', 'v1')
 
+    def append_error_message(self, message):
+        if not message:
+            return
+        if not self.error_message:
+            self.error_message = message
+        elif message not in self.error_message:
+            self.error_message = f"{self.error_message} | {message}"
+
+    def get_service_error_message(self, service_name):
+        return self.error_message or f"Service Google {service_name} indisponible."
+
     def load_token(self):
         if os.path.exists(TOKEN_FILE):
             try:
@@ -121,7 +132,10 @@ class GoogleAssistant:
             service = build(api_name, api_version, credentials=self.creds)
             return service
         except HttpError as error:
-            return [f"Une erreur s'est produite lors de la création du service {api_name} : {error}"]
+            self.append_error_message(
+                f"Une erreur s'est produite lors de la création du service {api_name} : {error}"
+            )
+            return None
 
     def decode_message_body(self, encoded_body, mime_type):
         """Décode le corps du message en fonction du type MIME."""
@@ -146,6 +160,9 @@ class GoogleAssistant:
         """Collecte des emails avec des filtres avancés, incluant une plage de dates."""
         result = []
         query = query_extra
+        if self.gmail_service is None:
+            self.append_error_message(self.get_service_error_message("Gmail"))
+            return {}
 
         # Filtrer par type (existant)
         if filter_type == 'unread':
@@ -207,6 +224,9 @@ class GoogleAssistant:
     def mark_as_read(self, message_id, user_id='me'):
         """Marquer un message comme lu."""
         result = []
+        if self.gmail_service is None:
+            result.append(self.get_service_error_message("Gmail"))
+            return result
         try:
             self.gmail_service.users().messages().modify(userId=user_id, id=message_id, body={'removeLabelIds': ['UNREAD']}).execute()
             result.append(f"Message ID {message_id} marqué comme lu.")
@@ -217,6 +237,9 @@ class GoogleAssistant:
     def trash_message(self, message_id, user_id='me'):
         """Mettre un message à la corbeille."""
         result = []
+        if self.gmail_service is None:
+            result.append(self.get_service_error_message("Gmail"))
+            return result
         try:
             self.gmail_service.users().messages().modify(userId=user_id, id=message_id, body={'addLabelIds': ['TRASH']}).execute()
             result.append(f"Message ID {message_id} mis à la corbeille.")
@@ -227,6 +250,9 @@ class GoogleAssistant:
     def archive_message(self, message_id, user_id='me'):
         """Archiver un message."""
         result = []
+        if self.gmail_service is None:
+            result.append(self.get_service_error_message("Gmail"))
+            return result
         try:
             self.gmail_service.users().messages().modify(userId=user_id, id=message_id, body={'removeLabelIds': ['INBOX']}).execute()
             result.append(f"Message ID {message_id} archivé.")
@@ -237,6 +263,9 @@ class GoogleAssistant:
     def reply_to_message(self, message_id, user_id='me'):
         """Répondre à un message."""
         result = []
+        if self.gmail_service is None:
+            result.append(self.get_service_error_message("Gmail"))
+            return result
         try:
             # Lire le message original
             message = self.gmail_service.users().messages().get(userId=user_id, id=message_id, format='metadata').execute()
@@ -262,6 +291,9 @@ class GoogleAssistant:
     def forward_message(self, message_id, user_id='me'):
         """Transférer un message."""
         result = []
+        if self.gmail_service is None:
+            result.append(self.get_service_error_message("Gmail"))
+            return result
         try:
             # Lire le message original
             message = self.gmail_service.users().messages().get(userId=user_id, id=message_id, format='full').execute()
@@ -297,6 +329,9 @@ class GoogleAssistant:
     def read_message(self, message_id, user_id='me', preview_length=500, display=True):
         """Lire un message Gmail avec un aperçu limité et nettoyer les sauts de ligne."""
         result = []
+        if self.gmail_service is None:
+            result.append(self.get_service_error_message("Gmail"))
+            return result
         try:
             message = self.gmail_service.users().messages().get(userId=user_id, id=message_id, format='full').execute()
 
@@ -535,6 +570,8 @@ class GoogleAssistant:
         return analysis
 
     def create_calendar_event(self, name, duration, participants, date_preference, time_range, location):
+        if self.calendar_service is None:
+            return self.get_service_error_message("Calendar")
         try:
             # Gestion de la date et de l'heure
             if date_preference:
@@ -587,6 +624,8 @@ class GoogleAssistant:
 
     def create_google_task(self, task_title, task_notes):
         """Créer une tâche dans Google Tasks."""
+        if self.tasks_service is None:
+            return self.get_service_error_message("Tasks")
         try:
             task = {
                 'title': task_title,
@@ -789,6 +828,9 @@ class GoogleAssistant:
     def create_email(self, to, subject, additional_info=None, user_id='me'):
         """Créer un brouillon d'email en utilisant GPT pour générer le corps de l'email."""
         result = []
+        if self.gmail_service is None:
+            result.append(self.get_service_error_message("Gmail"))
+            return result
         try:
             # Créer le prompt pour GPT
             prompt = (
@@ -848,6 +890,9 @@ class GoogleAssistant:
     def display_draft(self, draft_id, user_id='me'):
         """Afficher le contenu d'un brouillon basé sur son ID."""
         result = []
+        if self.gmail_service is None:
+            result.append(self.get_service_error_message("Gmail"))
+            return result
 
         try:
             # Récupérer le brouillon existant
@@ -889,6 +934,9 @@ class GoogleAssistant:
     def create_draft_reply(self, message_id, user_id='me', additional_info=None):
         """Créer un brouillon de réponse à un message donné en utilisant GPT pour générer le corps de la réponse."""
         result = []
+        if self.gmail_service is None:
+            result.append(self.get_service_error_message("Gmail"))
+            return result
         try:
             # Lire le message original
             message = self.gmail_service.users().messages().get(userId=user_id, id=message_id, format='full').execute()
@@ -975,6 +1023,9 @@ class GoogleAssistant:
     def send_draft(self, draft_id, content=None, user_id='me'):
         """Modifier le contenu d'un brouillon et l'envoyer."""
         result = []
+        if self.gmail_service is None:
+            result.append(self.get_service_error_message("Gmail"))
+            return result
         try:
             # Récupérer le brouillon existant
             draft = self.gmail_service.users().drafts().get(userId=user_id, id=draft_id).execute()
