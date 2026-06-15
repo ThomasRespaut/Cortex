@@ -567,6 +567,8 @@ class InterfaceAssetTests(unittest.TestCase):
                 "CORTEX_FULLSCREEN": "false",
                 "CORTEX_SCREEN_SIZE": "240x240",
                 "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_EMPTY_DOUBLE_TAP_MS": "900",
+                "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE": "60",
             },
         ):
             home = CortexHome()
@@ -578,15 +580,15 @@ class InterfaceAssetTests(unittest.TestCase):
 
                 with mock.patch(
                     "pygame.time.get_ticks",
-                    side_effect=[1000, 1300, 1300],
+                    side_effect=[1000, 1700, 1700],
                 ):
                     home.handle_pointer_down((40, 120))
                     home.handle_pointer_up((40, 120))
                     self.assertEqual((42, -24), tuple(home.offset))
                     self.assertEqual(1.2, home.zoom)
 
-                    home.handle_pointer_down((48, 122))
-                    home.handle_pointer_up((48, 122))
+                    home.handle_pointer_down((90, 120))
+                    home.handle_pointer_up((90, 120))
 
                 self.assertEqual((0, 0), tuple(home.offset))
                 self.assertEqual((0, 0), tuple(home.velocity))
@@ -1017,6 +1019,15 @@ class ToolingDefaultsTests(unittest.TestCase):
             content,
         )
         self.assertIn("CORTEX_TAP_MOVE_LIMIT=\"${CORTEX_TAP_MOVE_LIMIT:-14}\"", content)
+        self.assertIn(
+            "CORTEX_EMPTY_DOUBLE_TAP_MS=\"${CORTEX_EMPTY_DOUBLE_TAP_MS:-500}\"",
+            content,
+        )
+        self.assertIn(
+            "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE="
+            "\"${CORTEX_EMPTY_DOUBLE_TAP_DISTANCE:-36}\"",
+            content,
+        )
         self.assertIn("SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"", content)
         self.assertIn("SDL_TOUCH_MOUSE_EVENTS=\"${SDL_TOUCH_MOUSE_EVENTS:-0}\"", content)
         self.assertIn("SDL_MOUSE_TOUCH_EVENTS=\"${SDL_MOUSE_TOUCH_EVENTS:-0}\"", content)
@@ -1202,6 +1213,8 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
+        self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
+        self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
         self.assertIn("Restart=on-failure", content)
 
     def test_raspberry_pi_service_installer_generates_systemd_unit(self):
@@ -1221,6 +1234,8 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
+        self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
+        self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
         self.assertIn("systemctl daemon-reload", content)
         self.assertIn("CORTEX_START_SERVICE:-false", content)
         self.assertNotIn("OPENAI_API_KEY=", content)
@@ -1357,6 +1372,8 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("CORTEX_TAP_MOVE_LIMIT=14", content)
+        self.assertIn("CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
+        self.assertIn("CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
 
     def test_env_example_documents_oauth_token_overrides(self):
         content = Path(".env.example").read_text(encoding="utf-8")
@@ -1442,6 +1459,10 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertTrue(any("SDL_TOUCH_MOUSE_EVENTS" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_ROUND_CLIP" in error for error in errors))
         self.assertTrue(any("CORTEX_TAP_MOVE_LIMIT" in error for error in errors))
+        self.assertTrue(any("CORTEX_EMPTY_DOUBLE_TAP_MS" in error for error in errors))
+        self.assertTrue(
+            any("CORTEX_EMPTY_DOUBLE_TAP_DISTANCE" in error for error in errors)
+        )
         self.assertTrue(
             any("chmod +x scripts/launch_raspberry_pi.sh" in error for error in errors)
         )

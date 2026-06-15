@@ -75,6 +75,8 @@ CORTEX_TOUCH_ROTATION=0
 CORTEX_TOUCH_ROUND_CLIP=true
 CORTEX_TOUCH_EDGE_MARGIN=0
 CORTEX_TAP_MOVE_LIMIT=14
+CORTEX_EMPTY_DOUBLE_TAP_MS=500
+CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36
 ```
 
 `CORTEX_TOUCH_ROTATION` accepte `0`, `90`, `180` ou `270` pour aligner les
@@ -83,7 +85,10 @@ coordonnées tactiles avec l'orientation réelle de l'écran.
 l'écran circulaire, et `CORTEX_TOUCH_EDGE_MARGIN` retire quelques pixels au
 rayon tactile si la bordure physique déclenche des appuis parasites.
 `CORTEX_TAP_MOVE_LIMIT` règle la tolérance entre un tap et un drag si le
-tactile génère du jitter. Sur un poste de développement, utilisez plutôt :
+tactile génère du jitter. Un double-tap sur une zone vide recentre le menu;
+`CORTEX_EMPTY_DOUBLE_TAP_MS` et `CORTEX_EMPTY_DOUBLE_TAP_DISTANCE` ajustent ce
+geste si le panneau tactile est plus lent ou moins précis. Sur un poste de
+développement, utilisez plutôt :
 
 ```bash
 CORTEX_FULLSCREEN=false

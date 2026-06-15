@@ -45,6 +45,8 @@ REQUIRED_ENV_EXAMPLE_KEYS = [
     "CORTEX_TOUCH_ROUND_CLIP",
     "CORTEX_TOUCH_EDGE_MARGIN",
     "CORTEX_TAP_MOVE_LIMIT",
+    "CORTEX_EMPTY_DOUBLE_TAP_MS",
+    "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE",
 ]
 
 REQUIRED_TEXT_SNIPPETS = {
@@ -58,6 +60,11 @@ REQUIRED_TEXT_SNIPPETS = {
         "CORTEX_TOUCH_ROUND_CLIP=\"${CORTEX_TOUCH_ROUND_CLIP:-true}\"",
         "CORTEX_TOUCH_EDGE_MARGIN=\"${CORTEX_TOUCH_EDGE_MARGIN:-0}\"",
         "CORTEX_TAP_MOVE_LIMIT=\"${CORTEX_TAP_MOVE_LIMIT:-14}\"",
+        "CORTEX_EMPTY_DOUBLE_TAP_MS=\"${CORTEX_EMPTY_DOUBLE_TAP_MS:-500}\"",
+        (
+            "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE="
+            "\"${CORTEX_EMPTY_DOUBLE_TAP_DISTANCE:-36}\""
+        ),
     ],
     "scripts/setup_raspberry_pi.sh": [
         "chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh",
@@ -73,6 +80,8 @@ REQUIRED_TEXT_SNIPPETS = {
         "Environment=CORTEX_TOUCH_ROUND_CLIP=true",
         "Environment=CORTEX_TOUCH_EDGE_MARGIN=0",
         "Environment=CORTEX_TAP_MOVE_LIMIT=14",
+        "Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500",
+        "Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36",
     ],
 }
 

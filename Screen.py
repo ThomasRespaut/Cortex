@@ -500,12 +500,20 @@ class CortexHome:
     def handle_empty_tap(self, position):
         now = pygame.time.get_ticks()
         position = pygame.Vector2(position)
+        double_tap_ms = max(
+            1,
+            env_int("CORTEX_EMPTY_DOUBLE_TAP_MS", EMPTY_DOUBLE_TAP_MS),
+        )
+        double_tap_distance = max(
+            1,
+            env_int("CORTEX_EMPTY_DOUBLE_TAP_DISTANCE", EMPTY_DOUBLE_TAP_DISTANCE),
+        )
         if (
             self.last_empty_tap_at is not None
-            and now - self.last_empty_tap_at <= EMPTY_DOUBLE_TAP_MS
+            and now - self.last_empty_tap_at <= double_tap_ms
             and self.last_empty_tap_position is not None
             and position.distance_to(self.last_empty_tap_position)
-            <= EMPTY_DOUBLE_TAP_DISTANCE
+            <= double_tap_distance
         ):
             self.reset_view()
             self.last_empty_tap_at = None
