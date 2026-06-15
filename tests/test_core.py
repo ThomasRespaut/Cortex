@@ -767,6 +767,10 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertTrue(content.startswith("#!/usr/bin/env bash"))
         self.assertIn("set -euo pipefail", content)
         self.assertIn("requirements-raspberry-pi.txt", content)
+        self.assertIn(
+            "chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh",
+            content,
+        )
         self.assertIn("tools/validate_raspberry_pi_ui.py", content)
         self.assertIn("--screenshot artifacts/screen-smoke.png", content)
         self.assertIn("--legacy-output-dir artifacts/legacy-screen-smoke", content)

@@ -23,6 +23,7 @@ fi
 "$PYTHON_BIN" -m venv "$VENV_DIR"
 "$VENV_DIR/bin/python" -m pip install --upgrade pip setuptools wheel
 "$VENV_DIR/bin/python" -m pip install -r requirements-raspberry-pi.txt
+chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh
 "$VENV_DIR/bin/python" tools/validate_raspberry_pi_ui.py \
   --project-root . \
   --size "${CORTEX_SCREEN_SIZE:-480x480}" \
