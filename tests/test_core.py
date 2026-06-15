@@ -270,6 +270,8 @@ class InterfaceAssetTests(unittest.TestCase):
                 "CORTEX_TEST_FALSE": "off",
                 "CORTEX_TEST_INT": "abc",
                 "CORTEX_TOUCH_ROTATION": "180",
+                "CORTEX_TOUCH_ROUND_CLIP": "true",
+                "CORTEX_TOUCH_EDGE_MARGIN": "12",
                 "CORTEX_SCREEN_SIZE": "480x480",
             },
         ):
@@ -283,6 +285,10 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertEqual(
                 (300.0, 100.0),
                 screen_config.rotated_touch_position(0.25, 0.75, 400, 400),
+            )
+            self.assertFalse(screen_config.is_inside_round_viewport((10, 10), 400, 400))
+            self.assertFalse(
+                screen_config.is_inside_round_viewport((200, 20), 400, 400, 24)
             )
 
     def test_screen_config_rejects_invalid_screen_size(self):
@@ -305,7 +311,7 @@ class InterfaceAssetTests(unittest.TestCase):
 
         mouse_event = pygame.event.Event(
             pygame.MOUSEBUTTONDOWN,
-            {"button": 1, "pos": (12, 34)},
+            {"button": 1, "pos": (200, 200)},
         )
         mouse_motion_event = pygame.event.Event(
             pygame.MOUSEMOTION,
@@ -331,12 +337,22 @@ class InterfaceAssetTests(unittest.TestCase):
             pygame.MOUSEBUTTONDOWN,
             {"button": 2, "pos": (12, 34)},
         )
+        clipped_corner_event = pygame.event.Event(
+            pygame.MOUSEBUTTONDOWN,
+            {"button": 1, "pos": (12, 34)},
+        )
+        clipped_touch_event = pygame.event.Event(
+            pygame.FINGERDOWN,
+            {"x": 0.0, "y": 0.0},
+        )
 
         with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROTATION": "180"}):
-            self.assertEqual((12, 34), pointer_down_position(mouse_event, 400, 400))
-            self.assertIsNone(pointer_down_position(ignored_mouse_event, 400, 400))
+            self.assertEqual((200, 200), pointer_down_position(mouse_event, 400, 400))
+            self.assertIsNone(pointer_down_position(clipped_corner_event, 400, 400))
+            self.assertIsNone(pointer_down_position(clipped_touch_event, 400, 400))
             self.assertEqual((56, 78), pointer_move_position(mouse_motion_event, 400, 400))
             self.assertEqual((90, 123), pointer_up_position(mouse_up_event, 400, 400))
+            self.assertIsNone(pointer_down_position(ignored_mouse_event, 400, 400))
             self.assertEqual(
                 (300.0, 100.0),
                 pointer_down_position(touch_event, 400, 400),
@@ -349,6 +365,9 @@ class InterfaceAssetTests(unittest.TestCase):
                 (100.0, 200.0),
                 pointer_up_position(touch_up_event, 400, 400),
             )
+
+        with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROUND_CLIP": "false"}):
+            self.assertEqual((12, 34), pointer_down_position(clipped_corner_event, 400, 400))
 
     def test_prepare_screenshot_path_creates_parent_directory(self):
         from app.screen_config import prepare_screenshot_path

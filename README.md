@@ -72,11 +72,16 @@ d'environnement nécessaires dans `.env` :
 CORTEX_FULLSCREEN=true
 CORTEX_HIDE_CURSOR=true
 CORTEX_TOUCH_ROTATION=0
+CORTEX_TOUCH_ROUND_CLIP=true
+CORTEX_TOUCH_EDGE_MARGIN=0
 ```
 
 `CORTEX_TOUCH_ROTATION` accepte `0`, `90`, `180` ou `270` pour aligner les
-coordonnées tactiles avec l'orientation réelle de l'écran. Sur un poste de
-développement, utilisez plutôt :
+coordonnées tactiles avec l'orientation réelle de l'écran.
+`CORTEX_TOUCH_ROUND_CLIP=true` ignore les appuis hors du disque utile de
+l'écran circulaire, et `CORTEX_TOUCH_EDGE_MARGIN` retire quelques pixels au
+rayon tactile si la bordure physique déclenche des appuis parasites. Sur un
+poste de développement, utilisez plutôt :
 
 ```bash
 CORTEX_FULLSCREEN=false

@@ -69,6 +69,15 @@ def rotated_touch_position(x, y, width, height, rotation=None):
     return px, py
 
 
+def is_inside_round_viewport(position, width, height, edge_margin=0):
+    diameter = min(width, height)
+    radius = max(0, diameter / 2 - edge_margin)
+    center_x = width / 2
+    center_y = height / 2
+    px, py = position
+    return (px - center_x) ** 2 + (py - center_y) ** 2 <= radius**2
+
+
 def circular_menu_layout(width, height, item_count=4):
     import pygame
 
@@ -108,11 +117,22 @@ def circular_menu_layout(width, height, item_count=4):
 def pointer_down_position(event, width, height):
     import pygame
 
+    position = None
     if event.type == pygame.MOUSEBUTTONDOWN and getattr(event, "button", 1) == 1:
-        return event.pos
-    if event.type == pygame.FINGERDOWN:
-        return rotated_touch_position(event.x, event.y, width, height)
-    return None
+        position = event.pos
+    elif event.type == pygame.FINGERDOWN:
+        position = rotated_touch_position(event.x, event.y, width, height)
+
+    if position is None:
+        return None
+    if env_bool("CORTEX_TOUCH_ROUND_CLIP", True) and not is_inside_round_viewport(
+        position,
+        width,
+        height,
+        env_int("CORTEX_TOUCH_EDGE_MARGIN", 0),
+    ):
+        return None
+    return position
 
 
 def pointer_move_position(event, width, height):
