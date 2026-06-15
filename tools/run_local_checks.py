@@ -12,7 +12,11 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.screen_size import format_square_screen_size
-from tools.touch_config import normalize_touch_calibration, parse_touch_rotation
+from tools.touch_config import (
+    normalize_touch_calibration,
+    parse_positive_int,
+    parse_touch_rotation,
+)
 
 
 @dataclass(frozen=True)
@@ -99,16 +103,7 @@ def run_secret_scan(project_root):
     return 1
 
 
-def positive_int(value):
-    try:
-        parsed = int(value)
-    except ValueError as error:
-        raise argparse.ArgumentTypeError("La valeur doit être un entier") from error
-    if parsed <= 0:
-        raise argparse.ArgumentTypeError("La valeur doit être positive")
-    return parsed
-
-
+positive_int = parse_positive_int
 touch_rotation = parse_touch_rotation
 
 

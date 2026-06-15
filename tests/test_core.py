@@ -2365,6 +2365,11 @@ class ToolingDefaultsTests(unittest.TestCase):
     def test_raspberry_pi_ui_validator_rejects_invalid_step_timeout(self):
         from tools.validate_raspberry_pi_ui import positive_int, touch_rotation
 
+        validator_content = Path("tools/validate_raspberry_pi_ui.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("positive_int = parse_positive_int", validator_content)
+        self.assertNotIn("def positive_int", validator_content)
         self.assertEqual(5, positive_int("5"))
         with self.assertRaises(argparse.ArgumentTypeError):
             positive_int("0")
@@ -2507,6 +2512,9 @@ class ToolingDefaultsTests(unittest.TestCase):
             parse_touch_rotation,
         )
 
+        runner_content = Path("tools/run_local_checks.py").read_text(encoding="utf-8")
+        self.assertIn("positive_int = parse_positive_int", runner_content)
+        self.assertNotIn("def positive_int", runner_content)
         self.assertEqual(5, positive_int("5"))
         with self.assertRaises(argparse.ArgumentTypeError):
             positive_int("0")
