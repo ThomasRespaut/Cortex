@@ -148,6 +148,16 @@ def is_synthetic_touch_mouse_event(event):
     return bool(getattr(event, "touch", False))
 
 
+def _mouse_event_position(event):
+    return getattr(event, "pos", None)
+
+
+def _touch_event_position(event, width, height):
+    if not hasattr(event, "x") or not hasattr(event, "y"):
+        return None
+    return rotated_touch_position(event.x, event.y, width, height)
+
+
 def _clamp_touch_axis(value):
     try:
         normalized = float(value)
@@ -365,9 +375,9 @@ def pointer_down_position(event, width, height):
     if is_synthetic_touch_mouse_event(event):
         return None
     if event.type == pygame.MOUSEBUTTONDOWN and getattr(event, "button", 1) == 1:
-        position = event.pos
+        position = _mouse_event_position(event)
     elif event.type == pygame.FINGERDOWN:
-        position = rotated_touch_position(event.x, event.y, width, height)
+        position = _touch_event_position(event, width, height)
 
     if position is None:
         return None
@@ -388,9 +398,9 @@ def pointer_move_position(event, width, height):
     if is_synthetic_touch_mouse_event(event):
         return None
     if event.type == pygame.MOUSEMOTION:
-        position = event.pos
+        position = _mouse_event_position(event)
     elif event.type == pygame.FINGERMOTION:
-        position = rotated_touch_position(event.x, event.y, width, height)
+        position = _touch_event_position(event, width, height)
 
     if position is None:
         return None
@@ -414,9 +424,9 @@ def pointer_up_position(event, width, height):
     if is_synthetic_touch_mouse_event(event):
         return None
     if event.type == pygame.MOUSEBUTTONUP and getattr(event, "button", 1) == 1:
-        position = event.pos
+        position = _mouse_event_position(event)
     elif event.type == pygame.FINGERUP:
-        position = rotated_touch_position(event.x, event.y, width, height)
+        position = _touch_event_position(event, width, height)
 
     if position is None:
         return None

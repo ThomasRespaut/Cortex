@@ -1875,6 +1875,34 @@ class InterfaceAssetTests(unittest.TestCase):
                 pointer_move_position(clipped_mouse_motion_event, 400, 400),
             )
 
+    def test_pointer_helpers_ignore_malformed_events(self):
+        import pygame
+        from app.screen_config import (
+            pointer_down_position,
+            pointer_move_position,
+            pointer_up_position,
+        )
+
+        malformed_mouse_down = pygame.event.Event(
+            pygame.MOUSEBUTTONDOWN,
+            {"button": 1},
+        )
+        malformed_mouse_motion = pygame.event.Event(pygame.MOUSEMOTION, {})
+        malformed_mouse_up = pygame.event.Event(
+            pygame.MOUSEBUTTONUP,
+            {"button": 1},
+        )
+        malformed_touch_down = pygame.event.Event(pygame.FINGERDOWN, {"x": 0.5})
+        malformed_touch_motion = pygame.event.Event(pygame.FINGERMOTION, {"y": 0.5})
+        malformed_touch_up = pygame.event.Event(pygame.FINGERUP, {})
+
+        self.assertIsNone(pointer_down_position(malformed_mouse_down, 400, 400))
+        self.assertIsNone(pointer_move_position(malformed_mouse_motion, 400, 400))
+        self.assertIsNone(pointer_up_position(malformed_mouse_up, 400, 400))
+        self.assertIsNone(pointer_down_position(malformed_touch_down, 400, 400))
+        self.assertIsNone(pointer_move_position(malformed_touch_motion, 400, 400))
+        self.assertIsNone(pointer_up_position(malformed_touch_up, 400, 400))
+
     def test_prepare_screenshot_path_creates_parent_directory(self):
         from app.screen_config import prepare_screenshot_path
 
