@@ -2,7 +2,7 @@ import argparse
 
 
 def parse_screen_size(value):
-    normalized = value.lower().replace("*", "x")
+    normalized = str(value).strip().lower().replace("*", "x").replace("×", "x")
     if "x" not in normalized:
         raise argparse.ArgumentTypeError("Format attendu: largeurxhauteur")
     width_text, height_text = normalized.split("x", 1)

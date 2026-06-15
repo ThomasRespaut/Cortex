@@ -2197,7 +2197,9 @@ class ToolingDefaultsTests(unittest.TestCase):
         with self.assertRaises(argparse.ArgumentTypeError):
             touch_rotation("45")
         self.assertEqual((480, 480), parse_screen_size(" 480 * 480 "))
+        self.assertEqual((480, 480), parse_screen_size("480×480"))
         self.assertEqual("480x480", format_screen_size("480*480"))
+        self.assertEqual("480x480", format_screen_size("480×480"))
         with self.assertRaises(argparse.ArgumentTypeError):
             format_screen_size("480")
         with self.assertRaises(argparse.ArgumentTypeError):
