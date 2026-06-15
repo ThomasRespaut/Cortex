@@ -6,6 +6,7 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 
 TRUTHY = {"1", "true", "yes", "on", "oui"}
 FALSY = {"0", "false", "no", "off", "non"}
+TOUCH_ROTATIONS = {0, 90, 180, 270}
 _ROUND_MASK_CACHE_KEY = None
 _ROUND_MASK_CACHE_SURFACE = None
 
@@ -39,6 +40,12 @@ def env_touch_hit_slop(default=10):
 
 def env_fps(default=60):
     return env_positive_int("CORTEX_FPS", default)
+
+
+def env_touch_rotation(default=0):
+    rotation = env_int("CORTEX_TOUCH_ROTATION", default)
+    fallback = default if default in TOUCH_ROTATIONS else 0
+    return rotation if rotation in TOUCH_ROTATIONS else fallback
 
 
 def env_screen_size(name, default):
@@ -117,8 +124,7 @@ def is_synthetic_touch_mouse_event(event):
 
 
 def rotated_touch_position(x, y, width, height, rotation=None):
-    rotation = env_int("CORTEX_TOUCH_ROTATION", 0) if rotation is None else rotation
-    rotation %= 360
+    rotation = env_touch_rotation() if rotation is None else rotation
     if env_bool("CORTEX_TOUCH_FLIP_X", False):
         x = 1 - x
     if env_bool("CORTEX_TOUCH_FLIP_Y", False):

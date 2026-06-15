@@ -1379,6 +1379,7 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertEqual(7, screen_config.env_int("CORTEX_TEST_INT", 7))
             self.assertEqual(9, screen_config.env_positive_int("CORTEX_TEST_INT", 9))
             self.assertEqual(24, screen_config.env_fps())
+            self.assertEqual(180, screen_config.env_touch_rotation())
             self.assertEqual(
                 (480, 480),
                 screen_config.env_screen_size("CORTEX_SCREEN_SIZE", (900, 900)),
@@ -1402,6 +1403,10 @@ class InterfaceAssetTests(unittest.TestCase):
                     1 if value != "abc" else 11,
                     screen_config.env_positive_int("CORTEX_TEST_POSITIVE_INT", 11),
                 )
+
+        for value in ("45", "-90", "abc"):
+            with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROTATION": value}):
+                self.assertEqual(0, screen_config.env_touch_rotation())
 
     def test_screen_config_rejects_invalid_screen_size(self):
         from app import screen_config
