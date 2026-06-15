@@ -103,6 +103,16 @@ Un exemple de service de démarrage est disponible dans
 `/etc/systemd/system/cortex.service`, adaptez `User`, `WorkingDirectory` et
 `ExecStart`, puis activez-le avec `sudo systemctl enable --now cortex.service`.
 
+Pour générer ce service automatiquement depuis le répertoire courant du clone :
+
+```bash
+sudo CORTEX_PROJECT_DIR="$(pwd)" CORTEX_SERVICE_USER="$USER" deploy/raspberry-pi/install_service.sh
+sudo systemctl start cortex.service
+```
+
+Le script active le service au démarrage. Il ne le démarre immédiatement que si
+`CORTEX_START_SERVICE=true` est fourni.
+
 ### Tests rapides
 
 Les tests du cœur local ne nécessitent ni modèle IA, ni microphone, ni compte

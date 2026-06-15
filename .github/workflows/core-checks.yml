@@ -25,7 +25,9 @@ jobs:
         run: python -m compileall -q Screen.py app function_calling.py model_loader.py tools tests
 
       - name: Check Raspberry Pi launcher shell syntax
-        run: bash -n scripts/launch_raspberry_pi.sh
+        run: |
+          bash -n scripts/launch_raspberry_pi.sh
+          bash -n deploy/raspberry-pi/install_service.sh
 
       - name: Install Pygame smoke dependency
         run: python -m pip install pygame==2.6.1

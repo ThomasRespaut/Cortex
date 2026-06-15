@@ -299,6 +299,25 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
         self.assertIn("Restart=on-failure", content)
 
+    def test_raspberry_pi_service_installer_generates_systemd_unit(self):
+        installer = Path("deploy/raspberry-pi/install_service.sh")
+        content = installer.read_text(encoding="utf-8")
+
+        self.assertTrue(content.startswith("#!/usr/bin/env bash"))
+        self.assertIn("set -euo pipefail", content)
+        self.assertIn("CORTEX_PROJECT_DIR", content)
+        self.assertIn("CORTEX_SERVICE_USER", content)
+        self.assertIn("scripts/launch_raspberry_pi.sh", content)
+        self.assertIn("systemctl daemon-reload", content)
+        self.assertIn("CORTEX_START_SERVICE:-false", content)
+        self.assertNotIn("OPENAI_API_KEY=", content)
+        self.assertNotIn("MISTRAL_API_KEY=", content)
+
+    def test_raspberry_pi_service_installer_uses_lf_line_endings(self):
+        content = Path("deploy/raspberry-pi/install_service.sh").read_bytes()
+
+        self.assertNotIn(b"\r\n", content)
+
     def test_finetune_tooling_defaults_to_v3_dataset(self):
         expected = Path("training/finetune_cortex_v3")
         self.assertEqual(
