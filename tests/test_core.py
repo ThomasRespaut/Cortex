@@ -2052,12 +2052,35 @@ class ToolingDefaultsTests(unittest.TestCase):
         with self.assertRaises(argparse.ArgumentTypeError):
             smoke_touch_rotations((480, 480), rotations=(45,), flip_cases=())
 
+    def test_touch_smokes_reject_invalid_programmatic_flip_flags(self):
+        from tools.smoke_home_touch_interactions import (
+            configure_touch_environment,
+            touch_fraction_for_screen_position,
+        )
+        from tools.touch_config import parse_required_touch_bool
+
+        self.assertTrue(parse_required_touch_bool("oui"))
+        self.assertFalse(parse_required_touch_bool("0"))
+        with self.assertRaises(argparse.ArgumentTypeError):
+            parse_required_touch_bool("maybe")
+        with self.assertRaises(argparse.ArgumentTypeError):
+            configure_touch_environment(touch_flip_x="maybe")
+        with self.assertRaises(argparse.ArgumentTypeError):
+            touch_fraction_for_screen_position(
+                (120, 120),
+                (480, 480),
+                0,
+                touch_flip_y="maybe",
+            )
+
     def test_touch_smokes_use_shared_touch_flip_parser(self):
         content = Path("tools/smoke_home_touch_interactions.py").read_text(
             encoding="utf-8"
         )
 
-        self.assertIn("from tools.touch_config import env_touch_bool", content)
+        self.assertIn("from tools.touch_config import", content)
+        self.assertIn("env_touch_bool", content)
+        self.assertIn("parse_required_touch_bool", content)
         self.assertIn('env_touch_bool("CORTEX_TOUCH_FLIP_X")', content)
         self.assertIn('env_touch_bool("CORTEX_TOUCH_FLIP_Y")', content)
 

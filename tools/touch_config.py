@@ -28,5 +28,14 @@ def parse_touch_bool(value, default=False):
     return default
 
 
+def parse_required_touch_bool(value):
+    parsed = parse_touch_bool(value, default=None)
+    if parsed is None:
+        raise argparse.ArgumentTypeError(
+            "La valeur tactile booléenne doit être true/false, 1/0, oui/non"
+        )
+    return parsed
+
+
 def env_touch_bool(name, default=False):
     return parse_touch_bool(os.getenv(name), default=default)

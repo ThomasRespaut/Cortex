@@ -22,7 +22,11 @@ import pygame
 from Screen import CortexHome
 from tools.screen_size import parse_square_screen_size as parse_size
 from tools.screen_size import require_square_screen_size
-from tools.touch_config import env_touch_bool, parse_touch_rotation
+from tools.touch_config import (
+    env_touch_bool,
+    parse_required_touch_bool,
+    parse_touch_rotation,
+)
 
 TOUCH_ENV_KEYS = (
     "CORTEX_SCREEN_SIZE",
@@ -51,6 +55,8 @@ def configure_touch_environment(
     size=None,
 ):
     touch_rotation = parse_touch_rotation(touch_rotation)
+    touch_flip_x = parse_required_touch_bool(touch_flip_x)
+    touch_flip_y = parse_required_touch_bool(touch_flip_y)
     if size is not None:
         os.environ["CORTEX_SCREEN_SIZE"] = f"{size[0]}x{size[1]}"
     os.environ["CORTEX_TOUCH_ROTATION"] = str(touch_rotation)
@@ -92,8 +98,12 @@ def touch_fraction_for_screen_position(
         y = screen_y / height
     if touch_flip_x is None:
         touch_flip_x = env_touch_bool("CORTEX_TOUCH_FLIP_X")
+    else:
+        touch_flip_x = parse_required_touch_bool(touch_flip_x)
     if touch_flip_y is None:
         touch_flip_y = env_touch_bool("CORTEX_TOUCH_FLIP_Y")
+    else:
+        touch_flip_y = parse_required_touch_bool(touch_flip_y)
     if touch_flip_x:
         x = 1 - x
     if touch_flip_y:
