@@ -15,6 +15,7 @@ from app.screen_config import (
     pointer_down_position,
     rect_hit_test,
     round_safe_point,
+    round_safe_rect_center,
     wrap_text,
 )
 
@@ -169,7 +170,16 @@ class CortexView:
 
     def draw_header(self, center, radius):
         title = self.title_font.render("Cortex", True, TEXT)
-        self.screen.blit(title, title.get_rect(center=(center.x, center.y - radius * 0.82)))
+        title_rect = title.get_rect()
+        title_rect.center = round_safe_rect_center(
+            center,
+            radius,
+            0,
+            -0.82,
+            title_rect.size,
+            margin=max(6, int(radius * 0.025)),
+        )
+        self.screen.blit(title, title_rect)
 
         if self.status == "listening":
             label = "Écoute en cours"
@@ -180,7 +190,16 @@ class CortexView:
         else:
             label = "Assistant local"
         subtitle = self.small_font.render(label.upper(), True, ACCENT)
-        self.screen.blit(subtitle, subtitle.get_rect(center=(center.x, center.y - radius * 0.72)))
+        subtitle_rect = subtitle.get_rect()
+        subtitle_rect.center = round_safe_rect_center(
+            center,
+            radius,
+            0,
+            -0.72,
+            subtitle_rect.size,
+            margin=max(6, int(radius * 0.025)),
+        )
+        self.screen.blit(subtitle, subtitle_rect)
 
     def draw_conversation_card(self, center, radius):
         card_width = radius * 1.32

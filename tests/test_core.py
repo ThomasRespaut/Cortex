@@ -614,6 +614,8 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("circle_hit_test", cortex_content)
         self.assertIn("rect_hit_test", feature_content)
         self.assertIn("circle_hit_test", feature_content)
+        self.assertIn("round_safe_rect_center", cortex_content)
+        self.assertIn("round_safe_rect_center", feature_content)
 
     def test_cortex_view_reuses_static_background_cache(self):
         import pygame

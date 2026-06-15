@@ -13,6 +13,7 @@ from app.screen_config import (
     pointer_down_position,
     rect_hit_test,
     round_safe_point,
+    round_safe_rect_center,
 )
 
 
@@ -242,9 +243,18 @@ def launch_feature(screen, cortex, app_name, icon_path):
 
         mode = "LOCAL" if cortex.local_mode else "EN LIGNE"
         mode_surface = small_font.render(mode, True, accent)
+        mode_rect = mode_surface.get_rect()
+        mode_rect.center = round_safe_rect_center(
+            center,
+            radius,
+            0,
+            0.82,
+            mode_rect.size,
+            margin=max(6, int(radius * 0.025)),
+        )
         screen.blit(
             mode_surface,
-            mode_surface.get_rect(center=(center.x, center.y + radius * 0.82)),
+            mode_rect,
         )
         draw_round_mask(screen, center, radius)
         pygame.display.flip()
