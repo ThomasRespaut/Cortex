@@ -20,6 +20,7 @@ REQUIRED_FILES = [
     "tools/validate_raspberry_pi_ui.py",
     "tools/smoke_home_touch_interactions.py",
     "tools/smoke_modern_touch_interactions.py",
+    "tools/smoke_legacy_touch_interactions.py",
     "tools/smoke_touch_rotations.py",
     "tools/smoke_legacy_pygame_screens.py",
     "tools/smoke_modern_pygame_screens.py",
