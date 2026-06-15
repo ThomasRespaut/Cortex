@@ -25,5 +25,19 @@ fi
 "$VENV_DIR/bin/python" -m pip install -r requirements-raspberry-pi.txt
 "$VENV_DIR/bin/python" tools/raspberry_pi_preflight.py --project-root .
 
+SDL_VIDEODRIVER=dummy \
+CORTEX_FULLSCREEN=false \
+CORTEX_SCREEN_SIZE="${CORTEX_SCREEN_SIZE:-480x480}" \
+CORTEX_SKIP_CORTEX_LOAD=true \
+CORTEX_SCREENSHOT_PATH=artifacts/screen-smoke.png \
+CORTEX_EXIT_AFTER_SCREENSHOT=true \
+  "$VENV_DIR/bin/python" Screen.py
+"$VENV_DIR/bin/python" tools/raspberry_pi_preflight.py \
+  --project-root . \
+  --screenshot artifacts/screen-smoke.png
+"$VENV_DIR/bin/python" tools/smoke_legacy_pygame_screens.py \
+  --size "${CORTEX_SCREEN_SIZE:-480x480}" \
+  --output-dir artifacts/legacy-screen-smoke
+
 echo "Environnement Raspberry Pi prêt dans ${VENV_DIR}."
-echo "Smoke test headless: SDL_VIDEODRIVER=dummy CORTEX_FULLSCREEN=false CORTEX_SKIP_CORTEX_LOAD=true CORTEX_SCREENSHOT_PATH=artifacts/screen-smoke.png CORTEX_EXIT_AFTER_SCREENSHOT=true ${VENV_DIR}/bin/python Screen.py"
+echo "Smokes Pygame headless validés dans artifacts/."

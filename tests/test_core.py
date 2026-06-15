@@ -448,7 +448,17 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("set -euo pipefail", content)
         self.assertIn("requirements-raspberry-pi.txt", content)
         self.assertIn("tools/raspberry_pi_preflight.py", content)
-        self.assertNotIn("Screen.py", content.split("echo", 1)[0])
+        self.assertIn("CORTEX_SCREENSHOT_PATH=artifacts/screen-smoke.png", content)
+        self.assertIn("tools/smoke_legacy_pygame_screens.py", content)
+
+    def test_github_actions_runs_pygame_smokes(self):
+        workflow = Path(".github/workflows/core-checks.yml")
+        content = workflow.read_text(encoding="utf-8")
+
+        self.assertIn("python Screen.py", content)
+        self.assertIn("tools/verify_screen_smoke.py", content)
+        self.assertIn("tools/raspberry_pi_preflight.py", content)
+        self.assertIn("tools/smoke_legacy_pygame_screens.py", content)
 
     def test_raspberry_pi_requirements_exclude_heavy_local_model_stack(self):
         requirements = Path("requirements-raspberry-pi.txt").read_text(encoding="utf-8")
