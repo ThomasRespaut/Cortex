@@ -1561,6 +1561,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
         self.assertIn("--skip-pygame-import", content)
         self.assertIn("--skip-executable-check", content)
+        self.assertIn("\"$PYTHON_BIN\" -m compileall -q Screen.py app tools", content)
         self.assertIn("requirements-raspberry-pi.txt", content)
         self.assertIn("\"$VENV_DIR/bin/python\" -m pip check", content)
         self.assertIn(

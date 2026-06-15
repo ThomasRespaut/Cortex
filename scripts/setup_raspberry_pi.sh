@@ -15,6 +15,7 @@ APT_INSTALL="${CORTEX_APT_INSTALL:-true}"
   --project-root . \
   --skip-pygame-import \
   --skip-executable-check
+"$PYTHON_BIN" -m compileall -q Screen.py app tools
 
 if command -v apt-get >/dev/null 2>&1 && [ "$APT_INSTALL" = "true" ]; then
   sudo apt-get update

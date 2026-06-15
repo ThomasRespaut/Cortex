@@ -120,6 +120,7 @@ REQUIRED_TEXT_SNIPPETS = {
         "--project-root .",
         "--skip-pygame-import",
         "--skip-executable-check",
+        "\"$PYTHON_BIN\" -m compileall -q Screen.py app tools",
         "\"$VENV_DIR/bin/python\" -m pip check",
         "chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh",
         "tools/validate_raspberry_pi_ui.py",
