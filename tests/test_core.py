@@ -153,6 +153,23 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertNotIn("'images'", content, module)
             self.assertNotIn("app/images", content.lower(), module)
 
+    def test_legacy_pygame_modules_use_shared_pointer_helper(self):
+        modules = [
+            Path("app/app_calendrier.py"),
+            Path("app/app_horloge.py"),
+            Path("app/app_jeu.py"),
+            Path("app/app_message.py"),
+            Path("app/app_musique.py"),
+            Path("app/app_reglage.py"),
+            Path("app/app_sante.py"),
+            Path("app/app_transport.py"),
+        ]
+
+        for module in modules:
+            content = module.read_text(encoding="utf-8")
+            self.assertIn("pointer_down_position", content, module)
+            self.assertNotIn("event.pos", content, module)
+
     def test_touch_rotation_maps_circular_screen_coordinates(self):
         from app.screen_config import rotated_touch_position
 
@@ -193,6 +210,31 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertEqual(
                 (300.0, 100.0),
                 screen_config.rotated_touch_position(0.25, 0.75, 400, 400),
+            )
+
+    def test_pointer_down_position_supports_mouse_and_rotated_touch(self):
+        import pygame
+        from app.screen_config import pointer_down_position
+
+        mouse_event = pygame.event.Event(
+            pygame.MOUSEBUTTONDOWN,
+            {"button": 1, "pos": (12, 34)},
+        )
+        touch_event = pygame.event.Event(
+            pygame.FINGERDOWN,
+            {"x": 0.25, "y": 0.75},
+        )
+        ignored_mouse_event = pygame.event.Event(
+            pygame.MOUSEBUTTONDOWN,
+            {"button": 2, "pos": (12, 34)},
+        )
+
+        with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROTATION": "180"}):
+            self.assertEqual((12, 34), pointer_down_position(mouse_event, 400, 400))
+            self.assertIsNone(pointer_down_position(ignored_mouse_event, 400, 400))
+            self.assertEqual(
+                (300.0, 100.0),
+                pointer_down_position(touch_event, 400, 400),
             )
 
     def test_prepare_screenshot_path_creates_parent_directory(self):

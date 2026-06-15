@@ -1,5 +1,6 @@
 import pygame
 import os
+from app.screen_config import rotated_touch_position
 
 def launch_bdd(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Jeux."""
@@ -86,21 +87,25 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.FINGERDOWN:
-                finger_positions[event.finger_id] = (event.x * screen.get_width(), event.y * screen.get_height())
+                width, height = screen.get_size()
+                finger_positions[event.finger_id] = rotated_touch_position(event.x, event.y, width, height)
                 if len(finger_positions) == 1:
                     dragging = True
             elif event.type == pygame.FINGERUP:
+                width, height = screen.get_size()
                 if event.finger_id in finger_positions:
                     del finger_positions[event.finger_id]
                 if len(finger_positions) < 2:
                     last_distance = None
                 dragging = False
 
-                touch_x, touch_y = int(event.x * screen.get_width()), int(event.y * screen.get_height())
+                touch_x, touch_y = rotated_touch_position(event.x, event.y, width, height)
                 if boutton_quitter.collidepoint((touch_x, touch_y)):
                     running = False
             elif event.type == pygame.FINGERMOTION:
-                finger_positions[event.finger_id] = (event.x * 800, event.y * 600)
+                width, height = screen.get_size()
+                previous_position = finger_positions.get(event.finger_id)
+                finger_positions[event.finger_id] = rotated_touch_position(event.x, event.y, width, height)
                 if len(finger_positions) == 2:
                     fingers = list(finger_positions.values())
                     dist_current = math.sqrt((fingers[0][0] - fingers[1][0]) ** 2 +
@@ -112,9 +117,10 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
 
                     last_distance = dist_current
 
-                elif dragging and len(finger_positions) == 1:
-                    dx = event.dx * 800
-                    dy = event.dy * 600
+                elif dragging and len(finger_positions) == 1 and previous_position:
+                    current_position = finger_positions[event.finger_id]
+                    dx = current_position[0] - previous_position[0]
+                    dy = current_position[1] - previous_position[1]
                     offset_x += dx
                     offset_y += dy
 

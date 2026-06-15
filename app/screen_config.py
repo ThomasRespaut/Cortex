@@ -51,6 +51,16 @@ def rotated_touch_position(x, y, width, height, rotation=None):
     return px, py
 
 
+def pointer_down_position(event, width, height):
+    import pygame
+
+    if event.type == pygame.MOUSEBUTTONDOWN and getattr(event, "button", 1) == 1:
+        return event.pos
+    if event.type == pygame.FINGERDOWN:
+        return rotated_touch_position(event.x, event.y, width, height)
+    return None
+
+
 def prepare_screenshot_path(path):
     if not path:
         return None

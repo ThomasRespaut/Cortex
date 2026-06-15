@@ -1,6 +1,7 @@
 import pygame
 
 from app.screen_assets import asset_path
+from app.screen_config import pointer_down_position
 
 def launch_health(screen, cortex, screen_width, screen_height):
     """Fonction principale pour l'application Santé."""
@@ -53,8 +54,9 @@ def launch_health(screen, cortex, screen_width, screen_height):
                 running = False
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if boutton_quitter.collidepoint(event.pos):
+            else:
+                pointer = pointer_down_position(event, screen_width, screen_height)
+                if pointer and boutton_quitter.collidepoint(pointer):
                     running = False
 
 
