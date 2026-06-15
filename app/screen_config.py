@@ -1,6 +1,9 @@
+import argparse
 import math
 import os
 from pathlib import Path
+
+from tools.screen_size import parse_screen_size
 
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 
@@ -61,18 +64,10 @@ def env_screen_size(name, default):
     value = os.getenv(name)
     if not value:
         return default
-    normalized = value.strip().lower().replace("*", "x").replace("×", "x")
-    if "x" not in normalized:
-        return default
-    width_text, height_text = normalized.split("x", 1)
     try:
-        width = int(width_text.strip())
-        height = int(height_text.strip())
-    except ValueError:
+        return parse_screen_size(value)
+    except argparse.ArgumentTypeError:
         return default
-    if width <= 0 or height <= 0:
-        return default
-    return width, height
 
 
 def fit_text(font, text, max_width, ellipsis="..."):
