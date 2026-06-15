@@ -446,6 +446,31 @@ class InterfaceAssetTests(unittest.TestCase):
         finally:
             pygame.quit()
 
+    def test_shared_round_mask_reuses_cached_surface(self):
+        import pygame
+        import app.screen_config as screen_config
+
+        pygame.init()
+        try:
+            surface = pygame.Surface((240, 240))
+            surface.fill((210, 30, 30))
+
+            screen_config._ROUND_MASK_CACHE_KEY = None
+            screen_config._ROUND_MASK_CACHE_SURFACE = None
+
+            self.assertTrue(screen_config.draw_round_mask(surface))
+            first_mask = screen_config._ROUND_MASK_CACHE_SURFACE
+
+            surface.fill((40, 210, 80))
+            self.assertTrue(screen_config.draw_round_mask(surface))
+            second_mask = screen_config._ROUND_MASK_CACHE_SURFACE
+
+            self.assertIs(first_mask, second_mask)
+            self.assertEqual((0, 0, 0), surface.get_at((0, 0))[:3])
+            self.assertEqual((40, 210, 80), surface.get_at((120, 120))[:3])
+        finally:
+            pygame.quit()
+
     def test_circle_fit_rejects_partially_clipped_controls(self):
         from app.screen_config import circle_fits_round_viewport
 

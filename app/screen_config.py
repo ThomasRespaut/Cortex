@@ -6,6 +6,8 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 
 TRUTHY = {"1", "true", "yes", "on", "oui"}
 FALSY = {"0", "false", "no", "off", "non"}
+_ROUND_MASK_CACHE_KEY = None
+_ROUND_MASK_CACHE_SURFACE = None
 
 
 def env_bool(name, default=False):
@@ -240,6 +242,7 @@ def round_safe_point(center, radius, dx_ratio, dy_ratio, item_radius=0, margin=0
 
 def draw_round_mask(surface, center=None, radius=None, enabled=None):
     import pygame
+    global _ROUND_MASK_CACHE_KEY, _ROUND_MASK_CACHE_SURFACE
 
     if enabled is None:
         enabled = env_bool("CORTEX_ROUND_MASK", True)
@@ -249,13 +252,26 @@ def draw_round_mask(surface, center=None, radius=None, enabled=None):
     width, height = surface.get_size()
     if center is None:
         center = pygame.Vector2(width / 2, height / 2)
+    else:
+        center = pygame.Vector2(center)
     if radius is None:
         radius = min(width, height) / 2
 
-    mask = pygame.Surface((width, height), pygame.SRCALPHA)
-    mask.fill((0, 0, 0, 255))
-    pygame.draw.circle(mask, (0, 0, 0, 0), center, radius)
-    surface.blit(mask, (0, 0))
+    cache_key = (
+        width,
+        height,
+        round(center.x, 2),
+        round(center.y, 2),
+        round(radius, 2),
+    )
+    if _ROUND_MASK_CACHE_KEY != cache_key or _ROUND_MASK_CACHE_SURFACE is None:
+        mask = pygame.Surface((width, height), pygame.SRCALPHA)
+        mask.fill((0, 0, 0, 255))
+        pygame.draw.circle(mask, (0, 0, 0, 0), center, radius)
+        _ROUND_MASK_CACHE_KEY = cache_key
+        _ROUND_MASK_CACHE_SURFACE = mask
+
+    surface.blit(_ROUND_MASK_CACHE_SURFACE, (0, 0))
     return True
 
 
