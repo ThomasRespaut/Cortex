@@ -685,6 +685,29 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertEqual("local-cortex", home.cortex)
         self.assertIsNone(home.loading_error)
 
+        cortex_constructor.reset_mock()
+        cortex_constructor.return_value = "fallback-cortex"
+        home.cortex = None
+        home.loading_error = None
+        with mock.patch.dict(
+            os.environ,
+            {
+                "CORTEX_INPUT_MODE": "microphone",
+                "CORTEX_OUTPUT_MODE": "display",
+            },
+            clear=True,
+        ):
+            with mock.patch.dict(sys.modules, {"cortex": cortex_module}):
+                home.load_cortex()
+
+        cortex_constructor.assert_called_once_with(
+            input_mode="voice",
+            output_mode="voice",
+            local_mode=True,
+        )
+        self.assertEqual("fallback-cortex", home.cortex)
+        self.assertIsNone(home.loading_error)
+
     def test_home_menu_reuses_static_background_cache(self):
         import pygame
         from Screen import CortexHome
@@ -1571,6 +1594,8 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertEqual(7, screen_config.env_int("CORTEX_TEST_INT", 7))
             self.assertEqual(9, screen_config.env_positive_int("CORTEX_TEST_INT", 9))
             self.assertEqual(9, screen_config.env_non_negative_int("CORTEX_TEST_INT", 9))
+            self.assertEqual("voice", screen_config.env_input_mode())
+            self.assertEqual("voice", screen_config.env_output_mode())
             self.assertEqual(24, screen_config.env_fps())
             self.assertEqual(180, screen_config.env_touch_rotation())
             self.assertEqual(12, screen_config.env_touch_edge_margin())
@@ -1613,6 +1638,30 @@ class InterfaceAssetTests(unittest.TestCase):
                 self.assertEqual(0, screen_config.env_touch_rotation())
                 self.assertEqual(90, screen_config.env_touch_rotation(default="90"))
                 self.assertEqual(0, screen_config.env_touch_rotation(default="45"))
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "CORTEX_INPUT_MODE": " Text ",
+                "CORTEX_OUTPUT_MODE": " SCREEN ",
+            },
+        ):
+            self.assertEqual("text", screen_config.env_input_mode())
+            self.assertEqual("screen", screen_config.env_output_mode())
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "CORTEX_INPUT_MODE": "microphone",
+                "CORTEX_OUTPUT_MODE": "display",
+            },
+        ):
+            self.assertEqual("voice", screen_config.env_input_mode())
+            self.assertEqual("voice", screen_config.env_output_mode())
+            self.assertEqual("text", screen_config.env_input_mode(default="text"))
+            self.assertEqual("screen", screen_config.env_output_mode(default="screen"))
+            self.assertEqual("voice", screen_config.env_input_mode(default="microphone"))
+            self.assertEqual("voice", screen_config.env_output_mode(default="display"))
 
         for value in ("-5", "abc"):
             with mock.patch.dict(os.environ, {"CORTEX_TOUCH_EDGE_MARGIN": value}):

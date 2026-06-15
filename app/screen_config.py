@@ -16,10 +16,31 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 
 _ROUND_MASK_CACHE_KEY = None
 _ROUND_MASK_CACHE_SURFACE = None
+INPUT_MODES = frozenset(("voice", "text"))
+OUTPUT_MODES = frozenset(("voice", "text", "screen"))
 
 
 def env_bool(name, default=False):
     return parse_touch_bool(os.getenv(name), default=default)
+
+
+def env_choice(name, choices, default):
+    fallback = str(default).strip().lower()
+    if fallback not in choices:
+        fallback = "voice" if "voice" in choices else sorted(choices)[0]
+    value = os.getenv(name)
+    if value is None:
+        return fallback
+    normalized = value.strip().lower()
+    return normalized if normalized in choices else fallback
+
+
+def env_input_mode(default="voice"):
+    return env_choice("CORTEX_INPUT_MODE", INPUT_MODES, default)
+
+
+def env_output_mode(default="voice"):
+    return env_choice("CORTEX_OUTPUT_MODE", OUTPUT_MODES, default)
 
 
 def env_int(name, default):

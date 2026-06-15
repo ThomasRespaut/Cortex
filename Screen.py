@@ -23,6 +23,8 @@ from app.screen_config import (
     display_flags,
     env_bool,
     env_fps,
+    env_input_mode,
+    env_output_mode,
     env_positive_int,
     env_screen_size,
     circle_fits_round_viewport,
@@ -194,8 +196,8 @@ class CortexHome:
             from cortex import Cortex
 
             self.cortex = Cortex(
-                input_mode=os.getenv("CORTEX_INPUT_MODE", "voice"),
-                output_mode=os.getenv("CORTEX_OUTPUT_MODE", "voice"),
+                input_mode=env_input_mode(),
+                output_mode=env_output_mode(),
                 local_mode=env_bool("CORTEX_LOCAL_MODE", True),
             )
         except Exception as error:
