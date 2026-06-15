@@ -562,6 +562,31 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("rect_hit_test", feature_content)
         self.assertIn("circle_hit_test", feature_content)
 
+    def test_cortex_view_reuses_static_background_cache(self):
+        import pygame
+        from app.app_cortex import CortexView
+
+        with mock.patch.dict(os.environ, {"SDL_VIDEODRIVER": "dummy"}):
+            pygame.init()
+            screen = pygame.display.set_mode((240, 240))
+            view = CortexView(screen, cortex=None)
+            try:
+                center, radius = view.viewport()
+
+                view.draw_background(center, radius)
+                first_surface = view.background_cache_surface
+                first_key = view.background_cache_key
+
+                view.draw_background(center, radius)
+                self.assertIs(first_surface, view.background_cache_surface)
+                self.assertEqual(first_key, view.background_cache_key)
+
+                view.draw_background(center, radius - 1)
+                self.assertIsNot(first_surface, view.background_cache_surface)
+                self.assertNotEqual(first_key, view.background_cache_key)
+            finally:
+                pygame.quit()
+
     def test_home_menu_shows_notice_when_app_is_not_ready(self):
         import pygame
         from Screen import CortexHome

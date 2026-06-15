@@ -50,6 +50,8 @@ class CortexView:
         self.body_font = pygame.font.SysFont("Segoe UI", 23)
         self.small_font = pygame.font.SysFont("Segoe UI", 16, bold=True)
         self.button_font = pygame.font.SysFont("Segoe UI", 18, bold=True)
+        self.background_cache_key = None
+        self.background_cache_surface = None
 
     def viewport(self):
         width, height = self.screen.get_size()
@@ -57,15 +59,16 @@ class CortexView:
         center = pygame.Vector2(width / 2, height / 2)
         return center, radius
 
-    def draw_background(self, center, radius):
+    def make_background_surface(self, center, radius):
         width, height = self.screen.get_size()
+        background = pygame.Surface((width, height))
         for y in range(height):
             ratio = y / max(1, height - 1)
             color = tuple(
                 int(BACKGROUND_TOP[i] * (1 - ratio) + BACKGROUND_BOTTOM[i] * ratio)
                 for i in range(3)
             )
-            pygame.draw.line(self.screen, color, (0, y), (width, y))
+            pygame.draw.line(background, color, (0, y), (width, y))
 
         glow = pygame.Surface((width, height), pygame.SRCALPHA)
         for step in range(28, 0, -1):
@@ -89,9 +92,27 @@ class CortexView:
                 (center.x, center.y + radius * 0.58),
                 int(radius * 0.65 * ratio),
             )
-        self.screen.blit(glow, (0, 0))
-        pygame.draw.circle(self.screen, (142, 169, 231), center, radius, max(2, int(radius * 0.008)))
-        pygame.draw.circle(self.screen, (235, 242, 255), center, radius - 8, 1)
+        background.blit(glow, (0, 0))
+        pygame.draw.circle(background, (142, 169, 231), center, radius, max(2, int(radius * 0.008)))
+        pygame.draw.circle(background, (235, 242, 255), center, radius - 8, 1)
+        return background
+
+    def draw_background(self, center, radius):
+        width, height = self.screen.get_size()
+        cache_key = (
+            width,
+            height,
+            round(center.x, 2),
+            round(center.y, 2),
+            round(radius, 2),
+        )
+        if (
+            self.background_cache_key != cache_key
+            or self.background_cache_surface is None
+        ):
+            self.background_cache_surface = self.make_background_surface(center, radius)
+            self.background_cache_key = cache_key
+        self.screen.blit(self.background_cache_surface, (0, 0))
 
     def draw_back_button(self, center, radius):
         button_radius = max(26, int(radius * 0.07))
