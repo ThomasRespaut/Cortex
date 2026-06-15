@@ -21,9 +21,6 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Compile local Python files
-        run: python -m compileall -q Screen.py app function_calling.py model_loader.py tools tests
-
       - name: Check Raspberry Pi launcher shell syntax
         run: |
           bash -n scripts/launch_raspberry_pi.sh
@@ -33,11 +30,5 @@ jobs:
       - name: Install Pygame smoke dependency
         run: python -m pip install pygame==2.6.1
 
-      - name: Run unit tests
-        run: python -m unittest discover -s tests -v
-
-      - name: Run Raspberry Pi UI validation
-        run: python tools/validate_raspberry_pi_ui.py --project-root . --size 480x480
-
-      - name: Validate fine-tuning dataset
-        run: python tools/validate_finetune_dataset.py --dataset-dir training/finetune_cortex_v3
+      - name: Run local validation chain
+        run: python tools/run_local_checks.py --project-root . --screen-size 480x480

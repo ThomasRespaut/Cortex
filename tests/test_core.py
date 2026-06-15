@@ -780,8 +780,9 @@ class ToolingDefaultsTests(unittest.TestCase):
         workflow = Path(".github/workflows/core-checks.yml")
         content = workflow.read_text(encoding="utf-8")
 
-        self.assertIn("tools/validate_raspberry_pi_ui.py", content)
-        self.assertIn("--size 480x480", content)
+        self.assertIn("bash -n scripts/launch_raspberry_pi.sh", content)
+        self.assertIn("python tools/run_local_checks.py", content)
+        self.assertIn("--screen-size 480x480", content)
 
     def test_raspberry_pi_ui_validator_runs_full_headless_chain(self):
         from tools.validate_raspberry_pi_ui import build_validation_steps, parse_size
