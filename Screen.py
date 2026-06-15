@@ -21,7 +21,6 @@ from app.screen_config import (
     display_flags,
     env_bool,
     env_fps,
-    env_int,
     env_positive_int,
     env_screen_size,
     circle_fits_round_viewport,
@@ -518,7 +517,7 @@ class CortexHome:
         if not self.dragging:
             return
         pointer = pygame.Vector2(position)
-        tap_move_limit = max(1, env_int("CORTEX_TAP_MOVE_LIMIT", TAP_MOVE_LIMIT))
+        tap_move_limit = env_positive_int("CORTEX_TAP_MOVE_LIMIT", TAP_MOVE_LIMIT)
         if pointer.distance_to(self.press_position) < tap_move_limit:
             return
         delta = pointer - self.last_pointer
@@ -533,7 +532,7 @@ class CortexHome:
             return
         release = pygame.Vector2(position)
         moved = release.distance_to(self.press_position)
-        tap_move_limit = max(1, env_int("CORTEX_TAP_MOVE_LIMIT", TAP_MOVE_LIMIT))
+        tap_move_limit = env_positive_int("CORTEX_TAP_MOVE_LIMIT", TAP_MOVE_LIMIT)
         tapped = self.app_at(position)
         selected = self.selected
         suppress_empty_tap = self.suppress_next_empty_tap
@@ -554,13 +553,13 @@ class CortexHome:
     def handle_empty_tap(self, position):
         now = pygame.time.get_ticks()
         position = pygame.Vector2(position)
-        double_tap_ms = max(
-            1,
-            env_int("CORTEX_EMPTY_DOUBLE_TAP_MS", EMPTY_DOUBLE_TAP_MS),
+        double_tap_ms = env_positive_int(
+            "CORTEX_EMPTY_DOUBLE_TAP_MS",
+            EMPTY_DOUBLE_TAP_MS,
         )
-        double_tap_distance = max(
-            1,
-            env_int("CORTEX_EMPTY_DOUBLE_TAP_DISTANCE", EMPTY_DOUBLE_TAP_DISTANCE),
+        double_tap_distance = env_positive_int(
+            "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE",
+            EMPTY_DOUBLE_TAP_DISTANCE,
         )
         if (
             self.last_empty_tap_at is not None

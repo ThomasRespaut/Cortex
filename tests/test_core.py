@@ -998,6 +998,43 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_clamps_invalid_empty_double_tap_config(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_EMPTY_DOUBLE_TAP_MS": "0",
+                "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE": "0",
+            },
+        ):
+            home = CortexHome()
+            try:
+                home.rendered_apps = []
+                home.offset.update(18, -12)
+                home.velocity.update(3, 1)
+                home.zoom = 1.15
+
+                with mock.patch(
+                    "pygame.time.get_ticks",
+                    side_effect=[1000, 1001, 1001],
+                ):
+                    home.handle_pointer_down((90, 120))
+                    home.handle_pointer_up((90, 120))
+                    home.handle_pointer_down((90, 120))
+                    home.handle_pointer_up((90, 120))
+
+                self.assertEqual((0, 0), tuple(home.offset))
+                self.assertEqual((0, 0), tuple(home.velocity))
+                self.assertEqual(1.0, home.zoom)
+            finally:
+                pygame.quit()
+
     def test_home_menu_zoom_keeps_focus_point_stable(self):
         import pygame
         from Screen import CortexHome
