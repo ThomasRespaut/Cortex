@@ -113,6 +113,19 @@ sudo systemctl start cortex.service
 Le script active le service au démarrage. Il ne le démarre immédiatement que si
 `CORTEX_START_SERVICE=true` est fourni.
 
+Avant de l'activer sur la Raspberry Pi, lancez le préflight local :
+
+```bash
+python tools/raspberry_pi_preflight.py --project-root .
+```
+
+Après une capture headless, le même outil peut vérifier que l'écran rendu n'est
+pas vide :
+
+```bash
+python tools/raspberry_pi_preflight.py --project-root . --screenshot artifacts/screen-smoke.png
+```
+
 ### Tests rapides
 
 Les tests du cœur local ne nécessitent ni modèle IA, ni microphone, ni compte

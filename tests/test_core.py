@@ -403,6 +403,40 @@ class ToolingDefaultsTests(unittest.TestCase):
         finally:
             pygame.quit()
 
+    def test_raspberry_pi_preflight_accepts_repo_layout(self):
+        from tools.raspberry_pi_preflight import collect_preflight_errors
+
+        errors = collect_preflight_errors(
+            ".",
+            check_pygame=False,
+            require_executable=False,
+        )
+
+        self.assertEqual([], errors)
+
+    def test_raspberry_pi_preflight_reports_missing_assets(self):
+        from tools.raspberry_pi_preflight import collect_preflight_errors
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            for relative_path in (
+                "Screen.py",
+                "scripts/launch_raspberry_pi.sh",
+                "deploy/raspberry-pi/install_service.sh",
+                "deploy/raspberry-pi/cortex.service.example",
+            ):
+                path = root / relative_path
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("# placeholder\n", encoding="utf-8")
+
+            errors = collect_preflight_errors(
+                root,
+                check_pygame=False,
+                require_executable=False,
+            )
+
+        self.assertTrue(any("Asset manquant" in error for error in errors))
+
 
 class RepositoryHygieneTests(unittest.TestCase):
     def test_generated_and_sensitive_files_are_not_tracked(self):
