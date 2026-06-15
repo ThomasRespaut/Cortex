@@ -162,6 +162,8 @@ class CortexHome:
         self.selected = None
         self.rendered_apps = []
         self.screenshot_saved = False
+        self.notice_text = ""
+        self.notice_until = 0
         self.title_font = pygame.font.SysFont("Segoe UI", 30, bold=True)
         self.label_font = pygame.font.SysFont("Segoe UI", 22, bold=True)
         self.small_font = pygame.font.SysFont("Segoe UI", 16)
@@ -278,6 +280,32 @@ class CortexHome:
         pygame.draw.rect(self.screen, (28, 103, 128), pill, 1, border_radius=pill.height // 2)
         self.screen.blit(mode_surface, mode_rect)
 
+    def show_notice(self, text, duration_ms=1800):
+        self.notice_text = text
+        self.notice_until = pygame.time.get_ticks() + duration_ms
+
+    def draw_notice(self, center, radius):
+        if not self.notice_text or pygame.time.get_ticks() > self.notice_until:
+            return
+        text = fit_text(self.small_font, self.notice_text, radius * 1.25)
+        notice_surface = self.small_font.render(text, True, TEXT)
+        notice_rect = notice_surface.get_rect(center=(center.x, center.y + radius * 0.78))
+        notice_bg = notice_rect.inflate(26, 12)
+        pygame.draw.rect(
+            self.screen,
+            (10, 20, 38),
+            notice_bg,
+            border_radius=notice_bg.height // 2,
+        )
+        pygame.draw.rect(
+            self.screen,
+            (55, 75, 116),
+            notice_bg,
+            1,
+            border_radius=notice_bg.height // 2,
+        )
+        self.screen.blit(notice_surface, notice_rect)
+
     def draw_apps(self, center, radius):
         width, height = self.screen.get_size()
         spacing = radius * 0.245 * self.zoom
@@ -361,7 +389,14 @@ class CortexHome:
 
     def launch_app(self, name):
         if self.cortex is None:
-            print("Cortex est encore en cours d'initialisation.")
+            if self.loading_error:
+                message = "Cortex indisponible"
+            elif self.skip_cortex_load:
+                message = "Aperçu: Cortex non chargé"
+            else:
+                message = "Initialisation de Cortex..."
+            self.show_notice(message)
+            print(message)
             return
         width, height = self.screen.get_size()
         if name == "Cortex":
@@ -441,6 +476,7 @@ class CortexHome:
             self.draw_background(center, radius)
             self.draw_apps(center, radius)
             self.draw_status(center, radius)
+            self.draw_notice(center, radius)
             pygame.display.flip()
             screenshot_path = os.getenv("CORTEX_SCREENSHOT_PATH")
             if screenshot_path and not self.screenshot_saved:

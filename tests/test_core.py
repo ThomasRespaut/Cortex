@@ -340,6 +340,30 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("size / 2", content)
         self.assertIn("fit_text(self.label_font", content)
 
+    def test_home_menu_shows_notice_when_app_is_not_ready(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                with mock.patch("builtins.print") as printed:
+                    home.launch_app("Horloge")
+
+                self.assertEqual("Aperçu: Cortex non chargé", home.notice_text)
+                self.assertGreater(home.notice_until, pygame.time.get_ticks())
+                printed.assert_called_with("Aperçu: Cortex non chargé")
+            finally:
+                pygame.quit()
+
     def test_screen_text_helpers_are_shared(self):
         helper_content = Path("app/screen_config.py").read_text(encoding="utf-8")
 
