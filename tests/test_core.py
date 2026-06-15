@@ -238,6 +238,20 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertNotIn("pygame.Rect(50, 500", method)
         self.assertNotIn("exit()", method)
 
+    def test_database_form_uses_responsive_pointer_input(self):
+        content = Path("database/database.py").read_text(encoding="utf-8")
+        method = content.split("def afficher_formulaire(screen, titre, question):", 1)[
+            1
+        ].split("    def _initialiser_graphe(self):", 1)[0]
+
+        self.assertIn("pointer_down_position", method)
+        self.assertIn("screen.get_size()", method)
+        self.assertIn("CORTEX_EXIT_AFTER_FRAME", method)
+        self.assertNotIn("event.pos", method)
+        self.assertNotIn("exit()", method)
+        self.assertNotIn("pygame.quit()", method)
+        self.assertNotIn("pygame.Rect(200, 300", method)
+
     def test_circular_menu_layout_keeps_controls_inside_round_viewport(self):
         import pygame
         from app.screen_config import circular_menu_layout

@@ -288,8 +288,22 @@ class Neo4jDatabase:
         :param question: Question posée à l'utilisateur
         :return: Réponse de l'utilisateur
         """
-        font = pygame.font.Font(None, 32)
-        input_box = pygame.Rect(200, 300, 400, 50)
+        from app.screen_config import env_bool, pointer_down_position
+
+        screen_width, screen_height = screen.get_size()
+        diameter = min(screen_width, screen_height)
+        center_x = screen_width / 2
+        center_y = screen_height / 2
+
+        font = pygame.font.Font(None, max(22, min(32, int(diameter * 0.07))))
+        input_width = max(80, min(int(diameter * 0.72), max(80, screen_width - 32)))
+        input_height = max(42, min(56, int(diameter * 0.11)))
+        input_box = pygame.Rect(
+            int(center_x - input_width / 2),
+            int(center_y + diameter * 0.08),
+            input_width,
+            input_height,
+        )
         color_inactive = pygame.Color('lightskyblue3')
         color_active = pygame.Color('dodgerblue2')
         color = color_inactive
@@ -302,11 +316,11 @@ class Neo4jDatabase:
         while not done:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
+                    return None
+                pointer = pointer_down_position(event, screen_width, screen_height)
+                if pointer:
                     # Si l'utilisateur clique sur la boîte, activez-la.
-                    if input_box.collidepoint(event.pos):
+                    if input_box.collidepoint(pointer):
                         active = not active
                     else:
                         active = False
@@ -325,20 +339,26 @@ class Neo4jDatabase:
 
             # Dessiner le titre
             titre_surface = font.render(titre, True, (0, 0, 0))
-            screen.blit(titre_surface, (200, 150))
+            screen.blit(
+                titre_surface,
+                titre_surface.get_rect(center=(center_x, center_y - diameter * 0.26)),
+            )
 
             # Dessiner la question
             question_surface = font.render(question, True, (0, 0, 0))
-            screen.blit(question_surface, (200, 250))
+            screen.blit(
+                question_surface,
+                question_surface.get_rect(center=(center_x, center_y - diameter * 0.08)),
+            )
 
             # Dessiner la boîte d'entrée.
             txt_surface = font.render(text, True, (0, 0, 0))
-            width = max(400, txt_surface.get_width() + 10)
-            input_box.w = width
             screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
             pygame.draw.rect(screen, color, input_box, 2)
 
             pygame.display.flip()
+            if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
+                return text or None
             clock.tick(30)
 
         return text
