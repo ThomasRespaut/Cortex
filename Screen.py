@@ -14,6 +14,7 @@ except ImportError:
 
 from app.app_cortex import launch_cortex
 from app.feature_shell import launch_feature
+from app.screen_assets import load_icon_or_fallback
 from app.screen_config import (
     display_flags,
     env_bool,
@@ -138,7 +139,7 @@ class CortexHome:
             self.loading_thread.start()
         self.apps = build_honeycomb(APP_DEFINITIONS)
         self.icons = {
-            app.name: pygame.image.load(app.icon_path).convert_alpha()
+            app.name: load_icon_or_fallback(app.icon_path, app.name)
             for app in self.apps
         }
         self.icon_cache = {}

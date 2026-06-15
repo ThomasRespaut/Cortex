@@ -3,6 +3,7 @@ import os
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
+from app.screen_assets import load_icon_or_fallback
 from app.screen_config import rotated_touch_position
 
 
@@ -78,12 +79,12 @@ def launch_feature(screen, cortex, app_name, icon_path):
         app_name,
         (app_name, ["Fonctionnalité en préparation", "Personnaliser", "En savoir plus"]),
     )
-    icon = pygame.image.load(icon_path).convert_alpha()
+    accent = FEATURE_ACCENTS.get(app_name, (88, 214, 255))
+    icon = load_icon_or_fallback(icon_path, app_name, accent=accent)
     title_font = pygame.font.SysFont("Segoe UI", 34, bold=True)
     card_font = pygame.font.SysFont("Segoe UI", 22, bold=True)
     small_font = pygame.font.SysFont("Segoe UI", 16)
     running = True
-    accent = FEATURE_ACCENTS.get(app_name, (88, 214, 255))
 
     while running:
         width, height = screen.get_size()

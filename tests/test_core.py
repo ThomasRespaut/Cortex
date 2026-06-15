@@ -7,6 +7,8 @@ import unittest
 from unittest import mock
 from pathlib import Path
 
+os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
+
 from assistant.functions import generate_random_number
 from function_calling import execute_tool, parse_tool_call
 from tools import build_finetune_dataset, validate_finetune_dataset
@@ -103,6 +105,27 @@ class InterfaceAssetTests(unittest.TestCase):
         icons = list(icon_dir.glob("*.png"))
         self.assertEqual(len(icons), 22)
         self.assertTrue(all(icon.stat().st_size > 0 for icon in icons))
+
+    def test_missing_icon_uses_pygame_fallback_surface(self):
+        import pygame
+        from app.screen_assets import load_icon_or_fallback
+
+        pygame.font.init()
+        with mock.patch("builtins.print"):
+            icon = load_icon_or_fallback("tests/missing-icon.png", "Cortex", size=64)
+
+        self.assertEqual((64, 64), icon.get_size())
+        self.assertGreater(icon.get_bounding_rect().width, 0)
+
+    def test_icon_fallback_works_without_display(self):
+        import pygame
+        from app.screen_assets import make_icon_fallback
+
+        pygame.font.init()
+        icon = make_icon_fallback("Réglages", size=48)
+
+        self.assertEqual((48, 48), icon.get_size())
+        self.assertGreater(icon.get_bounding_rect().height, 0)
 
     def test_touch_rotation_maps_circular_screen_coordinates(self):
         from app.screen_config import rotated_touch_position
