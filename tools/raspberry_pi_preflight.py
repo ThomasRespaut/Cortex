@@ -1,5 +1,6 @@
 import argparse
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -7,6 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+from tools.touch_config import parse_touch_bool, parse_touch_rotation
 
 
 REQUIRED_FILES = [
@@ -98,6 +101,12 @@ REQUIRED_SERVICE_ENV_SNIPPETS = [
     "Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36",
 ]
 
+TOUCH_ROTATION_KEY = "CORTEX_TOUCH_ROTATION"
+TOUCH_BOOL_KEYS = (
+    "CORTEX_TOUCH_FLIP_X",
+    "CORTEX_TOUCH_FLIP_Y",
+)
+
 REQUIRED_TEXT_SNIPPETS = {
     "scripts/launch_raspberry_pi.sh": [
         "SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"",
@@ -187,6 +196,48 @@ def missing_raspberry_pi_apt_packages(setup_script_text):
     ]
 
 
+def extract_touch_config_values(content):
+    values = []
+    keys = (TOUCH_ROTATION_KEY, *TOUCH_BOOL_KEYS)
+    for line in content.splitlines():
+        cleaned = line.strip()
+        if not cleaned or cleaned.startswith("#"):
+            continue
+        if cleaned.startswith("export "):
+            cleaned = cleaned.removeprefix("export ").strip()
+        if cleaned.startswith("Environment="):
+            cleaned = cleaned.removeprefix("Environment=").strip()
+        for key in keys:
+            assignment_prefix = f"{key}="
+            if cleaned.startswith(assignment_prefix):
+                value = cleaned[len(assignment_prefix) :].strip().strip('"').strip("'")
+                shell_default = re.fullmatch(r"\$\{" + re.escape(key) + r":-([^}]+)\}", value)
+                if shell_default:
+                    value = shell_default.group(1).strip()
+                values.append((key, value))
+                continue
+            default_pattern = re.compile(r"\$\{" + re.escape(key) + r":-([^}]+)\}")
+            values.extend((key, match.strip()) for match in default_pattern.findall(cleaned))
+    return values
+
+
+def invalid_touch_config_values(relative_path, content):
+    errors = []
+    for key, value in extract_touch_config_values(content):
+        try:
+            if key == TOUCH_ROTATION_KEY:
+                parse_touch_rotation(value)
+            else:
+                parsed = parse_touch_bool(value, default=None)
+                if parsed is None:
+                    raise ValueError("valeur booléenne invalide")
+        except (argparse.ArgumentTypeError, ValueError):
+            errors.append(
+                f"Valeur tactile invalide dans {relative_path}: {key}={value}"
+            )
+    return errors
+
+
 def has_lf_line_endings(path):
     content = Path(path).read_bytes()
     return b"\r\n" not in content
@@ -256,6 +307,10 @@ def collect_preflight_errors(
         for snippet in snippets:
             if snippet not in content:
                 errors.append(f"Configuration absente de {relative_path}: {snippet}")
+        errors.extend(invalid_touch_config_values(relative_path, content))
+
+    if env_example.is_file():
+        errors.extend(invalid_touch_config_values(".env.example", env_content))
 
     for relative_path in (
         "scripts/launch_raspberry_pi.sh",

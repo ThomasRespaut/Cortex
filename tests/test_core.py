@@ -2453,6 +2453,28 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertEqual([], errors)
 
+    def test_raspberry_pi_preflight_validates_touch_config_values(self):
+        from tools.raspberry_pi_preflight import invalid_touch_config_values
+
+        valid_content = "\n".join(
+            [
+                "CORTEX_TOUCH_ROTATION=90",
+                'export CORTEX_TOUCH_FLIP_X="${CORTEX_TOUCH_FLIP_X:-oui}"',
+                "Environment=CORTEX_TOUCH_FLIP_Y=false",
+            ]
+        )
+        invalid_content = "\n".join(
+            [
+                "CORTEX_TOUCH_ROTATION=45",
+                'export CORTEX_TOUCH_FLIP_X="${CORTEX_TOUCH_FLIP_X:-maybe}"',
+            ]
+        )
+
+        self.assertEqual([], invalid_touch_config_values(".env.example", valid_content))
+        errors = invalid_touch_config_values("scripts/launch_raspberry_pi.sh", invalid_content)
+        self.assertTrue(any("CORTEX_TOUCH_ROTATION=45" in error for error in errors))
+        self.assertTrue(any("CORTEX_TOUCH_FLIP_X=maybe" in error for error in errors))
+
     def test_env_example_documents_raspberry_pi_screen_settings(self):
         content = Path(".env.example").read_text(encoding="utf-8")
 
