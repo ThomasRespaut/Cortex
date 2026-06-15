@@ -117,6 +117,18 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertEqual((64, 64), icon.get_size())
         self.assertGreater(icon.get_bounding_rect().width, 0)
 
+    def test_empty_icon_path_uses_pygame_fallback_surface(self):
+        import pygame
+        from app.screen_assets import load_icon_or_fallback
+
+        pygame.font.init()
+        for missing_path in (None, ""):
+            with mock.patch("builtins.print"):
+                icon = load_icon_or_fallback(missing_path, "Réglages", size=64)
+
+            self.assertEqual((64, 64), icon.get_size())
+            self.assertGreater(icon.get_bounding_rect().width, 0)
+
     def test_icon_fallback_works_without_display(self):
         import pygame
         from app.screen_assets import make_icon_fallback

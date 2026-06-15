@@ -25,8 +25,12 @@ def make_icon_fallback(label, size=128, accent=(88, 214, 255)):
 
 
 def load_icon_or_fallback(path, label, size=128, accent=(88, 214, 255)):
+    if not path:
+        print(f"Icône absente pour {label}: fallback généré.")
+        return make_icon_fallback(label, size=size, accent=accent)
+
     try:
         return pygame.image.load(path).convert_alpha()
-    except (FileNotFoundError, pygame.error, OSError) as error:
+    except (FileNotFoundError, pygame.error, OSError, TypeError) as error:
         print(f"Impossible de charger l'icône {path}: {error}")
         return make_icon_fallback(label, size=size, accent=accent)
