@@ -20,7 +20,7 @@ os.environ.setdefault("CORTEX_SKIP_CORTEX_LOAD", "true")
 import pygame
 
 from Screen import CortexHome
-from tools.smoke_legacy_pygame_screens import parse_size
+from tools.screen_size import parse_screen_size as parse_size
 
 TOUCH_ENV_KEYS = (
     "CORTEX_SCREEN_SIZE",

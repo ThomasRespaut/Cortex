@@ -26,7 +26,7 @@ from tools.smoke_home_touch_interactions import (
     snapshot_touch_environment,
     touch_fraction_for_screen_position,
 )
-from tools.smoke_legacy_pygame_screens import parse_size
+from tools.screen_size import parse_screen_size as parse_size
 
 
 class DummyCortex:

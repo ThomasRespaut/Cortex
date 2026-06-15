@@ -20,7 +20,7 @@ import pygame
 from Screen import APP_DEFINITIONS
 from app.app_cortex import launch_cortex
 from app.feature_shell import launch_feature
-from tools.smoke_legacy_pygame_screens import parse_size
+from tools.screen_size import parse_screen_size as parse_size
 from tools.verify_screen_smoke import format_screen_stats, validate_screen_image
 
 
