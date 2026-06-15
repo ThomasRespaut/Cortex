@@ -6,7 +6,7 @@ import time
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
-from app.screen_config import rotated_touch_position
+from app.screen_config import pointer_down_position
 
 
 BACKGROUND_TOP = (18, 38, 86)
@@ -289,25 +289,18 @@ class CortexView:
                     self.running = False
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self.activate_at(
-                        event.pos,
-                        back_center,
-                        back_radius,
-                        orb_center,
-                        orb_radius,
-                        suggestion_rects,
-                    )
-                elif event.type == pygame.FINGERDOWN:
+                else:
                     width, height = self.screen.get_size()
-                    self.activate_at(
-                        rotated_touch_position(event.x, event.y, width, height),
-                        back_center,
-                        back_radius,
-                        orb_center,
-                        orb_radius,
-                        suggestion_rects,
-                    )
+                    pointer = pointer_down_position(event, width, height)
+                    if pointer:
+                        self.activate_at(
+                            pointer,
+                            back_center,
+                            back_radius,
+                            orb_center,
+                            orb_radius,
+                            suggestion_rects,
+                        )
 
             pygame.display.flip()
             self.clock.tick(60)

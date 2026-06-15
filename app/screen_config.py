@@ -61,6 +61,26 @@ def pointer_down_position(event, width, height):
     return None
 
 
+def pointer_move_position(event, width, height):
+    import pygame
+
+    if event.type == pygame.MOUSEMOTION:
+        return event.pos
+    if event.type == pygame.FINGERMOTION:
+        return rotated_touch_position(event.x, event.y, width, height)
+    return None
+
+
+def pointer_up_position(event, width, height):
+    import pygame
+
+    if event.type == pygame.MOUSEBUTTONUP and getattr(event, "button", 1) == 1:
+        return event.pos
+    if event.type == pygame.FINGERUP:
+        return rotated_touch_position(event.x, event.y, width, height)
+    return None
+
+
 def prepare_screenshot_path(path):
     if not path:
         return None

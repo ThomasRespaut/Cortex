@@ -212,17 +212,37 @@ class InterfaceAssetTests(unittest.TestCase):
                 screen_config.rotated_touch_position(0.25, 0.75, 400, 400),
             )
 
-    def test_pointer_down_position_supports_mouse_and_rotated_touch(self):
+    def test_pointer_helpers_support_mouse_and_rotated_touch(self):
         import pygame
-        from app.screen_config import pointer_down_position
+        from app.screen_config import (
+            pointer_down_position,
+            pointer_move_position,
+            pointer_up_position,
+        )
 
         mouse_event = pygame.event.Event(
             pygame.MOUSEBUTTONDOWN,
             {"button": 1, "pos": (12, 34)},
         )
+        mouse_motion_event = pygame.event.Event(
+            pygame.MOUSEMOTION,
+            {"pos": (56, 78)},
+        )
+        mouse_up_event = pygame.event.Event(
+            pygame.MOUSEBUTTONUP,
+            {"button": 1, "pos": (90, 123)},
+        )
         touch_event = pygame.event.Event(
             pygame.FINGERDOWN,
             {"x": 0.25, "y": 0.75},
+        )
+        touch_motion_event = pygame.event.Event(
+            pygame.FINGERMOTION,
+            {"x": 0.5, "y": 0.25},
+        )
+        touch_up_event = pygame.event.Event(
+            pygame.FINGERUP,
+            {"x": 0.75, "y": 0.5},
         )
         ignored_mouse_event = pygame.event.Event(
             pygame.MOUSEBUTTONDOWN,
@@ -232,9 +252,19 @@ class InterfaceAssetTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROTATION": "180"}):
             self.assertEqual((12, 34), pointer_down_position(mouse_event, 400, 400))
             self.assertIsNone(pointer_down_position(ignored_mouse_event, 400, 400))
+            self.assertEqual((56, 78), pointer_move_position(mouse_motion_event, 400, 400))
+            self.assertEqual((90, 123), pointer_up_position(mouse_up_event, 400, 400))
             self.assertEqual(
                 (300.0, 100.0),
                 pointer_down_position(touch_event, 400, 400),
+            )
+            self.assertEqual(
+                (200.0, 300.0),
+                pointer_move_position(touch_motion_event, 400, 400),
+            )
+            self.assertEqual(
+                (100.0, 200.0),
+                pointer_up_position(touch_up_event, 400, 400),
             )
 
     def test_prepare_screenshot_path_creates_parent_directory(self):

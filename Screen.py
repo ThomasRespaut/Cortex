@@ -19,8 +19,10 @@ from app.screen_config import (
     display_flags,
     env_bool,
     env_int,
+    pointer_down_position,
+    pointer_move_position,
+    pointer_up_position,
     prepare_screenshot_path,
-    rotated_touch_position,
 )
 
 load_dotenv()
@@ -390,21 +392,16 @@ class CortexHome:
                 self.velocity.update(0, 0)
         if event.type == pygame.MOUSEWHEEL:
             self.zoom = max(0.72, min(1.28, self.zoom + event.y * 0.07))
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            self.handle_pointer_down(event.pos)
-        if event.type == pygame.MOUSEMOTION:
-            self.handle_pointer_move(event.pos)
-        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            self.handle_pointer_up(event.pos)
-        if event.type == pygame.FINGERDOWN:
-            width, height = self.screen.get_size()
-            self.handle_pointer_down(rotated_touch_position(event.x, event.y, width, height))
-        if event.type == pygame.FINGERMOTION:
-            width, height = self.screen.get_size()
-            self.handle_pointer_move(rotated_touch_position(event.x, event.y, width, height))
-        if event.type == pygame.FINGERUP:
-            width, height = self.screen.get_size()
-            self.handle_pointer_up(rotated_touch_position(event.x, event.y, width, height))
+        width, height = self.screen.get_size()
+        pointer_down = pointer_down_position(event, width, height)
+        if pointer_down:
+            self.handle_pointer_down(pointer_down)
+        pointer_move = pointer_move_position(event, width, height)
+        if pointer_move:
+            self.handle_pointer_move(pointer_move)
+        pointer_up = pointer_up_position(event, width, height)
+        if pointer_up:
+            self.handle_pointer_up(pointer_up)
         return True
 
     def run(self):

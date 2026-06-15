@@ -4,7 +4,7 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
 from app.screen_assets import load_icon_or_fallback
-from app.screen_config import rotated_touch_position
+from app.screen_config import pointer_down_position
 
 
 FEATURE_CONTENT = {
@@ -173,27 +173,18 @@ def launch_feature(screen, cortex, app_name, icon_path):
                 running = False
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                running = activate_feature_at(
-                    cortex,
-                    app_name,
-                    event.pos,
-                    back_center,
-                    back_radius,
-                    card_rects,
-                    cards,
-                )
-            elif event.type == pygame.FINGERDOWN:
-                position = rotated_touch_position(event.x, event.y, width, height)
-                running = activate_feature_at(
-                    cortex,
-                    app_name,
-                    position,
-                    back_center,
-                    back_radius,
-                    card_rects,
-                    cards,
-                )
+            else:
+                position = pointer_down_position(event, width, height)
+                if position:
+                    running = activate_feature_at(
+                        cortex,
+                        app_name,
+                        position,
+                        back_center,
+                        back_radius,
+                        card_rects,
+                        cards,
+                    )
 
         mode = "LOCAL" if cortex.local_mode else "EN LIGNE"
         mode_surface = small_font.render(mode, True, accent)
