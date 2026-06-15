@@ -2324,7 +2324,11 @@ class ToolingDefaultsTests(unittest.TestCase):
 
     def test_local_check_runner_rejects_invalid_step_timeout(self):
         from tools.run_local_checks import positive_int, touch_rotation
-        from tools.screen_size import format_screen_size, parse_screen_size
+        from tools.screen_size import (
+            format_screen_size,
+            parse_screen_size,
+            require_square_screen_size,
+        )
         from tools.touch_config import parse_touch_bool, parse_touch_rotation
 
         self.assertEqual(5, positive_int("5"))
@@ -2339,6 +2343,9 @@ class ToolingDefaultsTests(unittest.TestCase):
             touch_rotation("45")
         self.assertEqual((480, 480), parse_screen_size(" 480 * 480 "))
         self.assertEqual((480, 480), parse_screen_size("480×480"))
+        self.assertEqual((480, 480), require_square_screen_size((480, 480)))
+        with self.assertRaises(ValueError):
+            require_square_screen_size((800, 480))
         self.assertEqual("480x480", format_screen_size("480*480"))
         self.assertEqual("480x480", format_screen_size("480×480"))
         with self.assertRaises(argparse.ArgumentTypeError):
@@ -2751,10 +2758,18 @@ class ToolingDefaultsTests(unittest.TestCase):
             ]
         )
         invalid_content = 'export CORTEX_SCREEN_SIZE="${CORTEX_SCREEN_SIZE:-480}"'
+        rectangular_content = "Environment=CORTEX_SCREEN_SIZE=800x480"
 
         self.assertEqual([], invalid_screen_size_values(".env.example", valid_content))
         errors = invalid_screen_size_values("scripts/launch_raspberry_pi.sh", invalid_content)
+        rectangular_errors = invalid_screen_size_values(
+            "deploy/raspberry-pi/cortex.service.example",
+            rectangular_content,
+        )
         self.assertTrue(any("CORTEX_SCREEN_SIZE=480" in error for error in errors))
+        self.assertTrue(
+            any("CORTEX_SCREEN_SIZE=800x480" in error for error in rectangular_errors)
+        )
 
     def test_raspberry_pi_preflight_validates_numeric_kiosk_values(self):
         from tools.raspberry_pi_preflight import invalid_numeric_config_values

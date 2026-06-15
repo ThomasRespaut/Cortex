@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.screen_size import parse_screen_size
+from tools.screen_size import parse_screen_size, require_square_screen_size
 from tools.touch_config import parse_touch_rotation
 
 
@@ -21,19 +21,9 @@ class ValidationStep:
     env: dict[str, str] = field(default_factory=dict)
 
 
-def require_square_size(size):
-    width, height = size
-    if width != height:
-        raise ValueError(
-            "La validation Raspberry Pi cible un écran circulaire: "
-            "la taille doit être carrée."
-        )
-    return width, height
-
-
 def parse_size(value):
     try:
-        return require_square_size(parse_screen_size(value))
+        return require_square_screen_size(parse_screen_size(value))
     except ValueError as error:
         raise argparse.ArgumentTypeError(str(error)) from error
 
@@ -79,7 +69,7 @@ def build_validation_steps(
     touch_flip_x=False,
     touch_flip_y=False,
 ):
-    width, height = require_square_size(size)
+    width, height = require_square_screen_size(size)
     screen_size = f"{width}x{height}"
     min_width = str(min(width, 400))
     min_height = str(min(height, 400))

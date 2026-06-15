@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.screen_size import parse_screen_size
+from tools.screen_size import parse_screen_size, require_square_screen_size
 from tools.touch_config import parse_touch_bool, parse_touch_rotation
 
 
@@ -296,8 +296,8 @@ def invalid_screen_size_values(relative_path, content):
         if not value:
             continue
         try:
-            parse_screen_size(value)
-        except argparse.ArgumentTypeError:
+            require_square_screen_size(parse_screen_size(value))
+        except (argparse.ArgumentTypeError, ValueError):
             errors.append(
                 f"Valeur écran invalide dans {relative_path}: {key}={value}"
             )

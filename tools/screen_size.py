@@ -16,6 +16,16 @@ def parse_screen_size(value):
     return width, height
 
 
+def require_square_screen_size(size):
+    width, height = size
+    if width != height:
+        raise ValueError(
+            "La validation Raspberry Pi cible un écran circulaire: "
+            "la taille doit être carrée."
+        )
+    return width, height
+
+
 def format_screen_size(value):
     width, height = parse_screen_size(value)
     return f"{width}x{height}"
