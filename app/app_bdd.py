@@ -5,6 +5,7 @@ from app.screen_config import (
     circular_menu_layout,
     draw_round_mask,
     env_bool,
+    env_fps,
     circle_hit_test,
     pointer_down_position,
     pointer_move_position,
@@ -303,3 +304,4 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
         pygame.display.flip()
         if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
             running = False
+        clock.tick(env_fps())
