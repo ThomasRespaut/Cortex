@@ -16,6 +16,7 @@ from app.app_cortex import launch_cortex
 from app.feature_shell import launch_feature
 from app.screen_assets import load_icon_or_fallback
 from app.screen_config import (
+    draw_round_mask as apply_round_mask,
     display_flags,
     env_bool,
     env_int,
@@ -319,13 +320,7 @@ class CortexHome:
         self.screen.blit(notice_surface, notice_rect)
 
     def draw_round_mask(self, center, radius):
-        if not env_bool("CORTEX_ROUND_MASK", True):
-            return
-
-        mask = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
-        mask.fill((0, 0, 0, 255))
-        pygame.draw.circle(mask, (0, 0, 0, 0), center, radius)
-        self.screen.blit(mask, (0, 0))
+        apply_round_mask(self.screen, center, radius)
 
     def draw_apps(self, center, radius):
         width, height = self.screen.get_size()

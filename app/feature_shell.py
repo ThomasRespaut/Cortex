@@ -4,7 +4,13 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
 from app.screen_assets import load_icon_or_fallback
-from app.screen_config import env_bool, fit_text, pointer_down_position, round_safe_point
+from app.screen_config import (
+    draw_round_mask,
+    env_bool,
+    fit_text,
+    pointer_down_position,
+    round_safe_point,
+)
 
 
 FEATURE_CONTENT = {
@@ -191,6 +197,7 @@ def launch_feature(screen, cortex, app_name, icon_path):
             mode_surface,
             mode_surface.get_rect(center=(center.x, center.y + radius * 0.82)),
         )
+        draw_round_mask(screen, center, radius)
         pygame.display.flip()
         if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
             running = False

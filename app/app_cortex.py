@@ -7,6 +7,7 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
 from app.screen_config import (
+    draw_round_mask,
     env_bool,
     fit_text,
     pointer_down_position,
@@ -267,6 +268,7 @@ class CortexView:
             orb_center, orb_radius = self.draw_orb(center, radius)
             self.draw_conversation_card(center, radius)
             suggestion_rects = self.draw_suggestions(center, radius)
+            draw_round_mask(self.screen, center, radius)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

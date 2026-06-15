@@ -380,6 +380,22 @@ class InterfaceAssetTests(unittest.TestCase):
             radius,
         )
 
+    def test_shared_round_mask_blacks_out_square_corners(self):
+        import pygame
+        from app.screen_config import draw_round_mask
+
+        pygame.init()
+        try:
+            surface = pygame.Surface((240, 240))
+            surface.fill((210, 30, 30))
+
+            self.assertTrue(draw_round_mask(surface))
+
+            self.assertEqual((0, 0, 0), surface.get_at((0, 0))[:3])
+            self.assertEqual((210, 30, 30), surface.get_at((120, 120))[:3])
+        finally:
+            pygame.quit()
+
     def test_circle_fit_rejects_partially_clipped_controls(self):
         from app.screen_config import circle_fits_round_viewport
 
@@ -425,6 +441,7 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("fit_text(self.label_font", content)
         self.assertIn("TAP_MOVE_LIMIT", content)
         self.assertIn("app == self.selected", content)
+        self.assertIn("apply_round_mask(self.screen", content)
 
     def test_home_menu_round_mask_blacks_out_square_corners(self):
         import pygame
@@ -473,6 +490,13 @@ class InterfaceAssetTests(unittest.TestCase):
                 self.assertEqual((210, 30, 30), home.screen.get_at((0, 0))[:3])
             finally:
                 pygame.quit()
+
+    def test_modern_pygame_views_apply_round_mask_before_flip(self):
+        cortex_content = Path("app/app_cortex.py").read_text(encoding="utf-8")
+        feature_content = Path("app/feature_shell.py").read_text(encoding="utf-8")
+
+        self.assertIn("draw_round_mask(self.screen, center, radius)", cortex_content)
+        self.assertIn("draw_round_mask(screen, center, radius)", feature_content)
 
     def test_home_menu_shows_notice_when_app_is_not_ready(self):
         import pygame

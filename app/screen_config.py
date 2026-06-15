@@ -144,6 +144,27 @@ def round_safe_point(center, radius, dx_ratio, dy_ratio, item_radius=0, margin=0
     return origin + vector
 
 
+def draw_round_mask(surface, center=None, radius=None, enabled=None):
+    import pygame
+
+    if enabled is None:
+        enabled = env_bool("CORTEX_ROUND_MASK", True)
+    if not enabled:
+        return False
+
+    width, height = surface.get_size()
+    if center is None:
+        center = pygame.Vector2(width / 2, height / 2)
+    if radius is None:
+        radius = min(width, height) / 2
+
+    mask = pygame.Surface((width, height), pygame.SRCALPHA)
+    mask.fill((0, 0, 0, 255))
+    pygame.draw.circle(mask, (0, 0, 0, 0), center, radius)
+    surface.blit(mask, (0, 0))
+    return True
+
+
 def circular_menu_layout(width, height, item_count=4):
     import pygame
 
