@@ -556,6 +556,53 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_supports_two_finger_pinch_zoom(self):
+        import pygame
+        from Screen import CortexHome
+
+        def finger_event(event_type, finger_id, x, y):
+            return pygame.event.Event(
+                event_type,
+                {"finger_id": finger_id, "x": x, "y": y},
+            )
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                home.handle_event(finger_event(pygame.FINGERDOWN, 1, 0.35, 0.50))
+                self.assertTrue(home.dragging)
+
+                home.handle_event(finger_event(pygame.FINGERDOWN, 2, 0.65, 0.50))
+                self.assertFalse(home.dragging)
+                self.assertIsNone(home.selected)
+                self.assertIsNotNone(home.pinch_last_distance)
+
+                home.handle_event(finger_event(pygame.FINGERMOTION, 2, 0.85, 0.50))
+                self.assertGreater(home.zoom, 1.0)
+                self.assertFalse(home.dragging)
+
+                home.zoom = 1.27
+                home.handle_event(finger_event(pygame.FINGERMOTION, 2, 0.99, 0.50))
+                self.assertLessEqual(home.zoom, 1.28)
+
+                with mock.patch.object(home, "launch_app") as launch_app:
+                    home.handle_event(finger_event(pygame.FINGERUP, 2, 0.99, 0.50))
+                    home.handle_event(finger_event(pygame.FINGERUP, 1, 0.35, 0.50))
+
+                launch_app.assert_not_called()
+                self.assertFalse(home.active_fingers)
+                self.assertFalse(home.dragging)
+            finally:
+                pygame.quit()
+
     def test_home_menu_launches_matching_tap(self):
         import pygame
         from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb

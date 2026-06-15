@@ -31,13 +31,13 @@ def render_home_once(home):
     pygame.display.flip()
 
 
-def finger_event(event_type, position, size):
+def finger_event(event_type, position, size, finger_id=1):
     return pygame.event.Event(
         event_type,
         {
             "x": position[0] / size[0],
             "y": position[1] / size[1],
-            "finger_id": 1,
+            "finger_id": finger_id,
         },
     )
 
@@ -86,6 +86,31 @@ def smoke_home_touch_interactions(size):
             home,
             finger_event(pygame.FINGERUP, (start[0] + 48, start[1]), size),
         )
+
+        home.offset.update(0, 0)
+        home.zoom = 1.0
+        center = (size[0] // 2, size[1] // 2)
+        left = (center[0] - 45, center[1])
+        right = (center[0] + 45, center[1])
+        wider = (center[0] + 95, center[1])
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERDOWN, left, size, finger_id=1),
+        )
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERDOWN, right, size, finger_id=2),
+        )
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERMOTION, wider, size, finger_id=2),
+        )
+        if home.zoom <= 1.0:
+            raise RuntimeError("Le pinch tactile du menu principal ne zoome pas.")
+        if home.dragging:
+            raise RuntimeError("Le pinch tactile laisse un drag actif.")
+        dispatch_quietly(home, finger_event(pygame.FINGERUP, wider, size, finger_id=2))
+        dispatch_quietly(home, finger_event(pygame.FINGERUP, left, size, finger_id=1))
     finally:
         pygame.quit()
     return app.name

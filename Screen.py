@@ -38,6 +38,9 @@ TEXT = (242, 245, 255)
 MUTED = (148, 157, 184)
 ACCENT = (88, 214, 255)
 TAP_MOVE_LIMIT = 14
+ZOOM_MIN = 0.72
+ZOOM_MAX = 1.28
+PINCH_ZOOM_FACTOR = 0.003
 
 
 @dataclass
@@ -162,6 +165,8 @@ class CortexHome:
         self.last_pointer = pygame.Vector2()
         self.press_position = pygame.Vector2()
         self.selected = None
+        self.active_fingers = {}
+        self.pinch_last_distance = None
         self.rendered_apps = []
         self.screenshot_saved = False
         self.notice_text = ""
@@ -397,6 +402,15 @@ class CortexHome:
         self.offset = -target
         self.velocity.update(0, 0)
 
+    def clamp_zoom(self, value):
+        return max(ZOOM_MIN, min(ZOOM_MAX, value))
+
+    def active_touch_distance(self):
+        fingers = list(self.active_fingers.values())
+        if len(fingers) < 2:
+            return None
+        return fingers[0].distance_to(fingers[1])
+
     def launch_app(self, name):
         if self.cortex is None:
             if self.loading_error:
@@ -451,6 +465,67 @@ class CortexHome:
         if moved < tap_move_limit and tapped and tapped == selected:
             self.launch_app(tapped.name)
 
+    def handle_touch_event(self, event, width, height):
+        if event.type == pygame.FINGERDOWN:
+            pointer = pointer_down_position(event, width, height)
+            if pointer is None:
+                return True
+            self.active_fingers[event.finger_id] = pygame.Vector2(pointer)
+            if len(self.active_fingers) == 1:
+                self.handle_pointer_down(pointer)
+            elif len(self.active_fingers) == 2:
+                self.dragging = False
+                self.panning = False
+                self.selected = None
+                self.velocity.update(0, 0)
+                self.pinch_last_distance = self.active_touch_distance()
+            return True
+
+        if event.type == pygame.FINGERMOTION:
+            if event.finger_id not in self.active_fingers:
+                return True
+            pointer = pointer_move_position(event, width, height)
+            if pointer is None:
+                return True
+            self.active_fingers[event.finger_id] = pygame.Vector2(pointer)
+            if len(self.active_fingers) >= 2:
+                distance = self.active_touch_distance()
+                if distance is not None and self.pinch_last_distance is not None:
+                    delta = (distance - self.pinch_last_distance) * PINCH_ZOOM_FACTOR
+                    self.zoom = self.clamp_zoom(self.zoom + delta)
+                self.pinch_last_distance = distance
+                self.dragging = False
+                self.panning = False
+                self.selected = None
+                self.velocity.update(0, 0)
+            else:
+                self.handle_pointer_move(pointer)
+            return True
+
+        if event.type == pygame.FINGERUP:
+            pointer = pointer_up_position(event, width, height)
+            was_pinching = (
+                self.pinch_last_distance is not None
+                or len(self.active_fingers) > 1
+            )
+            self.active_fingers.pop(event.finger_id, None)
+            if was_pinching:
+                self.pinch_last_distance = self.active_touch_distance()
+                self.dragging = False
+                self.panning = False
+                self.selected = None
+                self.velocity.update(0, 0)
+                if len(self.active_fingers) == 1:
+                    remaining = next(iter(self.active_fingers.values()))
+                    self.press_position = remaining.copy()
+                    self.last_pointer = remaining.copy()
+                return True
+            if pointer is not None:
+                self.handle_pointer_up(pointer)
+            return True
+
+        return False
+
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             return False
@@ -460,9 +535,11 @@ class CortexHome:
             if event.key == pygame.K_HOME:
                 self.offset.update(0, 0)
                 self.velocity.update(0, 0)
-        if event.type == pygame.MOUSEWHEEL:
-            self.zoom = max(0.72, min(1.28, self.zoom + event.y * 0.07))
         width, height = self.screen.get_size()
+        if event.type in (pygame.FINGERDOWN, pygame.FINGERMOTION, pygame.FINGERUP):
+            return self.handle_touch_event(event, width, height)
+        if event.type == pygame.MOUSEWHEEL:
+            self.zoom = self.clamp_zoom(self.zoom + event.y * 0.07)
         pointer_down = pointer_down_position(event, width, height)
         if pointer_down is not None:
             self.handle_pointer_down(pointer_down)
