@@ -1,13 +1,22 @@
 import importlib
 import inspect
 import json
-import shlex
+import ast
 from functools import lru_cache
 
 from assistant import functions
 
 
 def _coerce_value(value):
+    if not isinstance(value, str):
+        return value
+
+    if value and value[0] in "\"'([{":
+        try:
+            return ast.literal_eval(value)
+        except (SyntaxError, ValueError) as error:
+            raise ValueError(f"Valeur d'argument invalide: {value}") from error
+
     lowered = value.lower()
     if lowered == "true":
         return True
@@ -24,15 +33,115 @@ def _coerce_value(value):
             return value
 
 
+def _find_tool_body(response):
+    start = response.find("[")
+    if start == -1:
+        return None
+
+    bracket_pairs = {"[": "]", "(": ")", "{": "}"}
+    closing_pairs = {closing: opening for opening, closing in bracket_pairs.items()}
+    stack = []
+    quote = None
+    escape = False
+
+    for index in range(start, len(response)):
+        character = response[index]
+
+        if quote is not None:
+            if escape:
+                escape = False
+                continue
+            if character == "\\":
+                escape = True
+                continue
+            if character == quote:
+                quote = None
+            continue
+
+        if character in {"'", '"'}:
+            quote = character
+            continue
+        if character in bracket_pairs:
+            stack.append(character)
+            continue
+        if character in closing_pairs:
+            if not stack or stack[-1] != closing_pairs[character]:
+                raise ValueError("Délimiteurs d'outil invalides")
+            stack.pop()
+            if not stack:
+                return response[start + 1:index]
+
+    if quote is not None:
+        raise ValueError("Guillemets non fermés dans la commande d'outil")
+    if stack:
+        raise ValueError("Délimiteurs d'outil non fermés")
+    return None
+
+
+def _split_tool_parts(command):
+    parts = []
+    current = []
+    bracket_pairs = {"[": "]", "(": ")", "{": "}"}
+    closing_pairs = {closing: opening for opening, closing in bracket_pairs.items()}
+    stack = []
+    quote = None
+    escape = False
+
+    for character in command:
+        if quote is not None:
+            current.append(character)
+            if escape:
+                escape = False
+                continue
+            if character == "\\":
+                escape = True
+                continue
+            if character == quote:
+                quote = None
+            continue
+
+        if character in {"'", '"'}:
+            quote = character
+            current.append(character)
+            continue
+
+        if character in bracket_pairs:
+            stack.append(character)
+            current.append(character)
+            continue
+
+        if character in closing_pairs:
+            if not stack or stack[-1] != closing_pairs[character]:
+                raise ValueError("Délimiteurs d'argument invalides")
+            stack.pop()
+            current.append(character)
+            continue
+
+        if character.isspace() and not stack:
+            if current:
+                parts.append("".join(current))
+                current = []
+            continue
+
+        current.append(character)
+
+    if quote is not None:
+        raise ValueError("Guillemets non fermés dans la commande d'outil")
+    if stack:
+        raise ValueError("Délimiteurs d'argument non fermés")
+    if current:
+        parts.append("".join(current))
+    return parts
+
+
 def parse_tool_call(response):
     """Parse a model tool call formatted as ``[tool_name key='value']``."""
-    start = response.find("[")
-    end = response.find("]", start + 1)
-    if start == -1 or end == -1:
+    body = _find_tool_body(response)
+    if body is None:
         return None
 
     try:
-        parts = shlex.split(response[start + 1:end])
+        parts = _split_tool_parts(body)
     except ValueError as error:
         raise ValueError(f"Commande d'outil invalide: {error}") from error
 
