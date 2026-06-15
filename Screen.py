@@ -171,6 +171,7 @@ class CortexHome:
         self.pinch_last_distance = None
         self.last_empty_tap_at = None
         self.last_empty_tap_position = None
+        self.suppress_next_empty_tap = False
         self.rendered_apps = []
         self.screenshot_saved = False
         self.notice_text = ""
@@ -489,12 +490,19 @@ class CortexHome:
         tap_move_limit = max(1, env_int("CORTEX_TAP_MOVE_LIMIT", TAP_MOVE_LIMIT))
         tapped = self.app_at(position)
         selected = self.selected
+        suppress_empty_tap = self.suppress_next_empty_tap
+        self.suppress_next_empty_tap = False
         self.dragging = False
         self.panning = False
         self.selected = None
         if moved < tap_move_limit and tapped and tapped == selected:
             self.launch_app(tapped.name)
-        elif moved < tap_move_limit and tapped is None and selected is None:
+        elif (
+            moved < tap_move_limit
+            and tapped is None
+            and selected is None
+            and not suppress_empty_tap
+        ):
             self.handle_empty_tap(release)
 
     def handle_empty_tap(self, position):
@@ -575,8 +583,10 @@ class CortexHome:
                 self.velocity.update(0, 0)
                 if len(self.active_fingers) == 1:
                     remaining = next(iter(self.active_fingers.values()))
+                    self.dragging = True
                     self.press_position = remaining.copy()
                     self.last_pointer = remaining.copy()
+                    self.suppress_next_empty_tap = True
                 return True
             if pointer is not None:
                 self.handle_pointer_up(pointer)

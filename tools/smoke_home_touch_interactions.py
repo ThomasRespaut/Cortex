@@ -123,6 +123,17 @@ def smoke_home_touch_interactions(size):
         if home.dragging:
             raise RuntimeError("Le pinch tactile laisse un drag actif.")
         dispatch_quietly(home, finger_event(pygame.FINGERUP, wider, size, finger_id=2))
+        dispatch_quietly(
+            home,
+            finger_event(
+                pygame.FINGERMOTION,
+                (left[0] - 40, left[1]),
+                size,
+                finger_id=1,
+            ),
+        )
+        if not home.panning or home.offset.length() <= 0:
+            raise RuntimeError("Le pan ne reprend pas après un pinch tactile.")
         dispatch_quietly(home, finger_event(pygame.FINGERUP, left, size, finger_id=1))
 
         render_home_once(home)

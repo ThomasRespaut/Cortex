@@ -672,6 +672,49 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_can_pan_after_pinch_lifts_one_finger(self):
+        import pygame
+        from Screen import CortexHome
+
+        def finger_event(event_type, finger_id, x, y):
+            return pygame.event.Event(
+                event_type,
+                {"finger_id": finger_id, "x": x, "y": y},
+            )
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                home.handle_event(finger_event(pygame.FINGERDOWN, 1, 0.35, 0.50))
+                home.handle_event(finger_event(pygame.FINGERDOWN, 2, 0.65, 0.50))
+                home.handle_event(finger_event(pygame.FINGERMOTION, 2, 0.80, 0.50))
+
+                home.handle_event(finger_event(pygame.FINGERUP, 2, 0.80, 0.50))
+                self.assertTrue(home.dragging)
+                self.assertTrue(home.suppress_next_empty_tap)
+
+                home.handle_event(finger_event(pygame.FINGERMOTION, 1, 0.28, 0.50))
+                self.assertTrue(home.panning)
+                self.assertGreater(home.offset.length(), 0)
+
+                with mock.patch.object(home, "reset_view") as reset_view:
+                    home.handle_event(finger_event(pygame.FINGERUP, 1, 0.28, 0.50))
+
+                reset_view.assert_not_called()
+                self.assertFalse(home.active_fingers)
+                self.assertFalse(home.dragging)
+                self.assertFalse(home.suppress_next_empty_tap)
+            finally:
+                pygame.quit()
+
     def test_home_menu_mouse_wheel_uses_zoom_bounds(self):
         import pygame
         from Screen import CortexHome
