@@ -1555,6 +1555,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("bash -n scripts/launch_raspberry_pi.sh", content)
         self.assertIn("bash -n deploy/raspberry-pi/install_service.sh", content)
         self.assertIn("requirements-raspberry-pi.txt", content)
+        self.assertIn("\"$VENV_DIR/bin/python\" -m pip check", content)
         self.assertIn(
             "chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh",
             content,

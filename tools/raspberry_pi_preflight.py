@@ -77,6 +77,7 @@ REQUIRED_TEXT_SNIPPETS = {
     "scripts/setup_raspberry_pi.sh": [
         "bash -n scripts/launch_raspberry_pi.sh",
         "bash -n deploy/raspberry-pi/install_service.sh",
+        "\"$VENV_DIR/bin/python\" -m pip check",
         "chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh",
         "tools/validate_raspberry_pi_ui.py",
     ],
