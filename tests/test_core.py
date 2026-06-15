@@ -364,6 +364,56 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_only_launches_app_pressed_at_pointer_down(self):
+        import pygame
+        from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                app = build_honeycomb(APP_DEFINITIONS)[0]
+                home.rendered_apps = [(app, pygame.Vector2(120, 120), 60)]
+                with mock.patch.object(home, "launch_app") as launch_app:
+                    home.handle_pointer_down((20, 20))
+                    home.handle_pointer_up((120, 120))
+
+                launch_app.assert_not_called()
+            finally:
+                pygame.quit()
+
+    def test_home_menu_launches_matching_tap(self):
+        import pygame
+        from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                app = build_honeycomb(APP_DEFINITIONS)[0]
+                home.rendered_apps = [(app, pygame.Vector2(120, 120), 60)]
+                with mock.patch.object(home, "launch_app") as launch_app:
+                    home.handle_pointer_down((120, 120))
+                    home.handle_pointer_up((120, 120))
+
+                launch_app.assert_called_once_with(app.name)
+            finally:
+                pygame.quit()
+
     def test_screen_text_helpers_are_shared(self):
         helper_content = Path("app/screen_config.py").read_text(encoding="utf-8")
 

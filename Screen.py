@@ -427,11 +427,10 @@ class CortexHome:
         release = pygame.Vector2(position)
         moved = release.distance_to(self.press_position)
         tapped = self.app_at(position)
+        selected = self.selected
         self.dragging = False
-        if moved < 14 and tapped:
-            center, radius = self.viewport()
-            spacing = radius * 0.245 * self.zoom
-            app_center = self.app_position(tapped, center, spacing)
+        self.selected = None
+        if moved < 14 and tapped and tapped == selected:
             self.launch_app(tapped.name)
 
     def handle_event(self, event):
