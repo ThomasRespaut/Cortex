@@ -521,12 +521,21 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertEqual([], errors)
 
+    def test_env_example_documents_raspberry_pi_screen_settings(self):
+        content = Path(".env.example").read_text(encoding="utf-8")
+
+        self.assertIn("CORTEX_FULLSCREEN=true", content)
+        self.assertIn("CORTEX_HIDE_CURSOR=true", content)
+        self.assertIn("CORTEX_SCREEN_SIZE=", content)
+        self.assertIn("CORTEX_TOUCH_ROTATION=0", content)
+
     def test_raspberry_pi_preflight_reports_missing_assets(self):
         from tools.raspberry_pi_preflight import collect_preflight_errors
 
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             for relative_path in (
+                ".env.example",
                 "Screen.py",
                 "requirements-raspberry-pi.txt",
                 "scripts/launch_raspberry_pi.sh",

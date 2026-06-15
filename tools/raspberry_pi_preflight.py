@@ -12,6 +12,7 @@ from tools.verify_screen_smoke import validate_screen_image
 
 
 REQUIRED_FILES = [
+    ".env.example",
     "Screen.py",
     "requirements-raspberry-pi.txt",
     "scripts/launch_raspberry_pi.sh",
@@ -29,6 +30,13 @@ REQUIRED_ASSETS = [
     "app/Images/backgrounds/sante.png",
     "app/Images/backgrounds/transport.png",
     "app/Images/app_icons/icone_reglage.png",
+]
+
+REQUIRED_ENV_EXAMPLE_KEYS = [
+    "CORTEX_FULLSCREEN",
+    "CORTEX_HIDE_CURSOR",
+    "CORTEX_SCREEN_SIZE",
+    "CORTEX_TOUCH_ROTATION",
 ]
 
 
@@ -63,6 +71,13 @@ def collect_preflight_errors(
         path = root / relative_path
         if not path.is_file():
             errors.append(f"Fichier manquant: {relative_path}")
+
+    env_example = root / ".env.example"
+    if env_example.is_file():
+        env_content = env_example.read_text(encoding="utf-8")
+        for key in REQUIRED_ENV_EXAMPLE_KEYS:
+            if f"{key}=" not in env_content:
+                errors.append(f"Variable absente de .env.example: {key}")
 
     for relative_path in (
         "scripts/launch_raspberry_pi.sh",
