@@ -43,6 +43,29 @@ REQUIRED_ENV_EXAMPLE_KEYS = [
     "CORTEX_TOUCH_EDGE_MARGIN",
 ]
 
+REQUIRED_TEXT_SNIPPETS = {
+    "scripts/launch_raspberry_pi.sh": [
+        "SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"",
+        "SDL_TOUCH_MOUSE_EVENTS=\"${SDL_TOUCH_MOUSE_EVENTS:-0}\"",
+        "SDL_MOUSE_TOUCH_EVENTS=\"${SDL_MOUSE_TOUCH_EVENTS:-0}\"",
+        "CORTEX_FULLSCREEN=\"${CORTEX_FULLSCREEN:-true}\"",
+        "CORTEX_HIDE_CURSOR=\"${CORTEX_HIDE_CURSOR:-true}\"",
+        "CORTEX_TOUCH_ROTATION=\"${CORTEX_TOUCH_ROTATION:-0}\"",
+        "CORTEX_TOUCH_ROUND_CLIP=\"${CORTEX_TOUCH_ROUND_CLIP:-true}\"",
+        "CORTEX_TOUCH_EDGE_MARGIN=\"${CORTEX_TOUCH_EDGE_MARGIN:-0}\"",
+    ],
+    "deploy/raspberry-pi/cortex.service.example": [
+        "Environment=SDL_VIDEODRIVER=kmsdrm",
+        "Environment=SDL_TOUCH_MOUSE_EVENTS=0",
+        "Environment=SDL_MOUSE_TOUCH_EVENTS=0",
+        "Environment=CORTEX_FULLSCREEN=true",
+        "Environment=CORTEX_HIDE_CURSOR=true",
+        "Environment=CORTEX_TOUCH_ROTATION=0",
+        "Environment=CORTEX_TOUCH_ROUND_CLIP=true",
+        "Environment=CORTEX_TOUCH_EDGE_MARGIN=0",
+    ],
+}
+
 
 def has_lf_line_endings(path):
     content = Path(path).read_bytes()
@@ -82,6 +105,15 @@ def collect_preflight_errors(
         for key in REQUIRED_ENV_EXAMPLE_KEYS:
             if f"{key}=" not in env_content:
                 errors.append(f"Variable absente de .env.example: {key}")
+
+    for relative_path, snippets in REQUIRED_TEXT_SNIPPETS.items():
+        path = root / relative_path
+        if not path.is_file():
+            continue
+        content = path.read_text(encoding="utf-8")
+        for snippet in snippets:
+            if snippet not in content:
+                errors.append(f"Configuration absente de {relative_path}: {snippet}")
 
     for relative_path in (
         "scripts/launch_raspberry_pi.sh",

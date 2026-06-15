@@ -749,6 +749,49 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertTrue(any("Asset manquant" in error for error in errors))
 
+    def test_raspberry_pi_preflight_reports_missing_touch_settings(self):
+        from tools.raspberry_pi_preflight import collect_preflight_errors
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            for relative_path in (
+                ".env.example",
+                "Screen.py",
+                "requirements-raspberry-pi.txt",
+                "scripts/launch_raspberry_pi.sh",
+                "scripts/setup_raspberry_pi.sh",
+                "deploy/raspberry-pi/install_service.sh",
+                "deploy/raspberry-pi/cortex.service.example",
+                "tools/smoke_legacy_pygame_screens.py",
+                "tools/smoke_modern_pygame_screens.py",
+            ):
+                path = root / relative_path
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("# placeholder\n", encoding="utf-8")
+
+            (root / ".env.example").write_text(
+                "\n".join(
+                    [
+                        "CORTEX_FULLSCREEN=true",
+                        "CORTEX_HIDE_CURSOR=true",
+                        "CORTEX_SCREEN_SIZE=",
+                        "CORTEX_TOUCH_ROTATION=0",
+                        "CORTEX_TOUCH_ROUND_CLIP=true",
+                        "CORTEX_TOUCH_EDGE_MARGIN=0",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            errors = collect_preflight_errors(
+                root,
+                check_pygame=False,
+                require_executable=False,
+            )
+
+        self.assertTrue(any("SDL_TOUCH_MOUSE_EVENTS" in error for error in errors))
+        self.assertTrue(any("CORTEX_TOUCH_ROUND_CLIP" in error for error in errors))
+
 
 class RepositoryHygieneTests(unittest.TestCase):
     def test_generated_and_sensitive_files_are_not_tracked(self):
