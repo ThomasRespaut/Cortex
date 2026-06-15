@@ -1362,6 +1362,18 @@ class InterfaceAssetTests(unittest.TestCase):
                 (100.0, 100.0),
                 rotated_touch_position(0.25, 0.75, width, height, 0),
             )
+        self.assertEqual(
+            (400.0, 0.0),
+            rotated_touch_position(1.02, -0.01, width, height, 0),
+        )
+        with mock.patch.dict(
+            os.environ,
+            {"CORTEX_TOUCH_FLIP_X": "true", "CORTEX_TOUCH_FLIP_Y": "true"},
+        ):
+            self.assertEqual(
+                (0.0, 400.0),
+                rotated_touch_position(1.02, -0.01, width, height, 0),
+            )
 
     def test_touch_drag_motion_can_clamp_to_round_edge(self):
         import pygame

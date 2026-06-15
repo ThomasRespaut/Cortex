@@ -1,3 +1,4 @@
+import math
 import os
 from pathlib import Path
 
@@ -131,8 +132,20 @@ def is_synthetic_touch_mouse_event(event):
     return bool(getattr(event, "touch", False))
 
 
+def _clamp_touch_axis(value):
+    try:
+        normalized = float(value)
+    except (TypeError, ValueError):
+        return 0.0
+    if not math.isfinite(normalized):
+        return 0.0
+    return max(0.0, min(1.0, normalized))
+
+
 def rotated_touch_position(x, y, width, height, rotation=None):
     rotation = env_touch_rotation() if rotation is None else rotation
+    x = _clamp_touch_axis(x)
+    y = _clamp_touch_axis(y)
     if env_bool("CORTEX_TOUCH_FLIP_X", False):
         x = 1 - x
     if env_bool("CORTEX_TOUCH_FLIP_Y", False):
