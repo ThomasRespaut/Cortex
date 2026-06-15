@@ -21,6 +21,7 @@ import pygame
 
 from Screen import CortexHome
 from tools.screen_size import parse_square_screen_size as parse_size
+from tools.screen_size import require_square_screen_size
 from tools.touch_config import env_touch_bool, parse_touch_rotation
 
 TOUCH_ENV_KEYS = (
@@ -160,6 +161,7 @@ def smoke_home_touch_interactions(
     touch_flip_x=False,
     touch_flip_y=False,
 ):
+    size = require_square_screen_size(size)
     previous_env = snapshot_touch_environment()
     configure_touch_environment(
         touch_rotation,

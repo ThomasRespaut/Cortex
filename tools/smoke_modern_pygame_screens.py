@@ -21,6 +21,7 @@ from Screen import APP_DEFINITIONS
 from app.app_cortex import launch_cortex
 from app.feature_shell import launch_feature
 from tools.screen_size import parse_square_screen_size as parse_size
+from tools.screen_size import require_square_screen_size
 from tools.verify_screen_smoke import format_screen_stats, validate_screen_image
 
 
@@ -71,6 +72,7 @@ class DummyCortex:
 
 
 def smoke_cortex(output_dir, size, require_round_mask=False):
+    size = require_square_screen_size(size)
     width, height = size
     screen = pygame.display.set_mode(size)
     screen.fill((0, 0, 0))
@@ -87,6 +89,7 @@ def smoke_cortex(output_dir, size, require_round_mask=False):
 
 
 def smoke_feature(spec, output_dir, size, require_round_mask=False):
+    size = require_square_screen_size(size)
     width, height = size
     screen = pygame.display.set_mode(size)
     screen.fill((0, 0, 0))

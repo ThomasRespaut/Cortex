@@ -27,6 +27,7 @@ from tools.smoke_home_touch_interactions import (
     touch_fraction_for_screen_position,
 )
 from tools.screen_size import parse_square_screen_size as parse_size
+from tools.screen_size import require_square_screen_size
 from tools.touch_config import parse_touch_rotation
 
 
@@ -68,6 +69,7 @@ def smoke_legacy_touch_interactions(
     touch_flip_x=False,
     touch_flip_y=False,
 ):
+    size = require_square_screen_size(size)
     previous_env = snapshot_touch_environment()
     configure_touch_environment(
         touch_rotation,

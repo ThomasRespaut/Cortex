@@ -2024,6 +2024,11 @@ class ToolingDefaultsTests(unittest.TestCase):
             with self.assertRaises(argparse.ArgumentTypeError, msg=module_name):
                 module.parse_size("800x480")
 
+        from tools.smoke_touch_rotations import smoke_touch_rotations
+
+        with self.assertRaises(ValueError):
+            smoke_touch_rotations((800, 480), rotations=(), flip_cases=())
+
     def test_touch_smokes_use_shared_touch_rotation_parser(self):
         smoke_tools = [
             Path("tools/smoke_home_touch_interactions.py"),
