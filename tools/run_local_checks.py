@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.screen_size import format_screen_size
+from tools.screen_size import format_square_screen_size
 from tools.touch_config import parse_touch_rotation
 
 
@@ -230,7 +230,7 @@ def parse_args():
     parser.add_argument(
         "--screen-size",
         default="480x480",
-        type=format_screen_size,
+        type=format_square_screen_size,
         help="Taille utilisée par les smokes Raspberry Pi/Pygame.",
     )
     parser.add_argument(

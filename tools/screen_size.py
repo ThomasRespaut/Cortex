@@ -26,6 +26,18 @@ def require_square_screen_size(size):
     return width, height
 
 
+def parse_square_screen_size(value):
+    try:
+        return require_square_screen_size(parse_screen_size(value))
+    except ValueError as error:
+        raise argparse.ArgumentTypeError(str(error)) from error
+
+
 def format_screen_size(value):
     width, height = parse_screen_size(value)
+    return f"{width}x{height}"
+
+
+def format_square_screen_size(value):
+    width, height = parse_square_screen_size(value)
     return f"{width}x{height}"

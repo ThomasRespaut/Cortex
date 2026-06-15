@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.screen_size import parse_screen_size, require_square_screen_size
+from tools.screen_size import parse_square_screen_size, require_square_screen_size
 from tools.touch_config import parse_touch_rotation
 
 
@@ -22,10 +22,7 @@ class ValidationStep:
 
 
 def parse_size(value):
-    try:
-        return require_square_screen_size(parse_screen_size(value))
-    except ValueError as error:
-        raise argparse.ArgumentTypeError(str(error)) from error
+    return parse_square_screen_size(value)
 
 
 def positive_int(value):

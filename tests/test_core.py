@@ -2326,7 +2326,9 @@ class ToolingDefaultsTests(unittest.TestCase):
         from tools.run_local_checks import positive_int, touch_rotation
         from tools.screen_size import (
             format_screen_size,
+            format_square_screen_size,
             parse_screen_size,
+            parse_square_screen_size,
             require_square_screen_size,
         )
         from tools.touch_config import parse_touch_bool, parse_touch_rotation
@@ -2344,10 +2346,16 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual((480, 480), parse_screen_size(" 480 * 480 "))
         self.assertEqual((480, 480), parse_screen_size("480×480"))
         self.assertEqual((480, 480), require_square_screen_size((480, 480)))
+        self.assertEqual((480, 480), parse_square_screen_size("480*480"))
         with self.assertRaises(ValueError):
             require_square_screen_size((800, 480))
+        with self.assertRaises(argparse.ArgumentTypeError):
+            parse_square_screen_size("800x480")
         self.assertEqual("480x480", format_screen_size("480*480"))
         self.assertEqual("480x480", format_screen_size("480×480"))
+        self.assertEqual("480x480", format_square_screen_size("480×480"))
+        with self.assertRaises(argparse.ArgumentTypeError):
+            format_square_screen_size("800x480")
         with self.assertRaises(argparse.ArgumentTypeError):
             format_screen_size("480")
         with self.assertRaises(argparse.ArgumentTypeError):
