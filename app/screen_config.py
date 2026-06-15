@@ -4,7 +4,12 @@ import os
 from pathlib import Path
 
 from tools.screen_size import parse_screen_size
-from tools.touch_config import TOUCH_ROTATIONS, parse_touch_bool, parse_touch_rotation
+from tools.touch_config import (
+    TOUCH_ROTATIONS,
+    parse_required_int,
+    parse_touch_bool,
+    parse_touch_rotation,
+)
 
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 
@@ -19,8 +24,8 @@ def env_bool(name, default=False):
 
 def env_int(name, default):
     try:
-        return int(os.getenv(name, str(default)))
-    except ValueError:
+        return parse_required_int(os.getenv(name, str(default)))
+    except argparse.ArgumentTypeError:
         return default
 
 

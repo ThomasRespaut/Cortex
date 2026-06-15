@@ -1543,8 +1543,10 @@ class InterfaceAssetTests(unittest.TestCase):
 
         content = Path("app/screen_config.py").read_text(encoding="utf-8")
         self.assertIn("from tools.touch_config import", content)
+        self.assertIn("parse_required_int", content)
         self.assertIn("parse_touch_bool", content)
         self.assertIn("parse_touch_rotation", content)
+        self.assertNotIn("return int(os.getenv", content)
         self.assertNotIn("TRUTHY =", content)
         self.assertNotIn("FALSY =", content)
 
