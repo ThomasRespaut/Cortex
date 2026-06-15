@@ -1773,7 +1773,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         steps = build_validation_steps(
             "python",
             ".",
-            parse_size("480x480"),
+            parse_size("480*480"),
             "artifacts/screen-smoke.png",
             "artifacts/legacy-screen-smoke",
             "artifacts/modern-screen-smoke",
@@ -2046,7 +2046,7 @@ class ToolingDefaultsTests(unittest.TestCase):
 
     def test_local_check_runner_rejects_invalid_step_timeout(self):
         from tools.run_local_checks import positive_int, touch_rotation
-        from tools.screen_size import format_screen_size
+        from tools.screen_size import format_screen_size, parse_screen_size
 
         self.assertEqual(5, positive_int("5"))
         with self.assertRaises(argparse.ArgumentTypeError):
@@ -2054,6 +2054,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual(90, touch_rotation("90"))
         with self.assertRaises(argparse.ArgumentTypeError):
             touch_rotation("45")
+        self.assertEqual((480, 480), parse_screen_size(" 480 * 480 "))
         self.assertEqual("480x480", format_screen_size("480*480"))
         with self.assertRaises(argparse.ArgumentTypeError):
             format_screen_size("480")
