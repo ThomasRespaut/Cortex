@@ -2470,6 +2470,70 @@ class ToolingDefaultsTests(unittest.TestCase):
         ):
             self.assertEqual(124, run_step(step, ".", 1))
 
+    def test_raspberry_pi_ui_validator_clears_inherited_capture_env(self):
+        from tools.validate_raspberry_pi_ui import ValidationStep, run_step
+
+        step = ValidationStep(
+            "Un frame",
+            [sys.executable, "-c", "pass"],
+            env={"CORTEX_EXIT_AFTER_FRAME": "true"},
+        )
+
+        with (
+            mock.patch.dict(
+                os.environ,
+                {
+                    "CORTEX_SCREENSHOT_PATH": "artifacts/leftover.png",
+                    "CORTEX_EXIT_AFTER_SCREENSHOT": "true",
+                },
+                clear=False,
+            ),
+            mock.patch(
+                "tools.validate_raspberry_pi_ui.subprocess.run",
+                return_value=mock.Mock(returncode=0),
+            ) as mocked_run,
+            mock.patch("builtins.print"),
+        ):
+            self.assertEqual(0, run_step(step, ".", 5))
+
+        env = mocked_run.call_args.kwargs["env"]
+        self.assertNotIn("CORTEX_SCREENSHOT_PATH", env)
+        self.assertNotIn("CORTEX_EXIT_AFTER_SCREENSHOT", env)
+        self.assertEqual("true", env["CORTEX_EXIT_AFTER_FRAME"])
+
+    def test_raspberry_pi_ui_validator_keeps_explicit_capture_env(self):
+        from tools.validate_raspberry_pi_ui import ValidationStep, run_step
+
+        step = ValidationStep(
+            "Capture",
+            [sys.executable, "-c", "pass"],
+            env={
+                "CORTEX_SCREENSHOT_PATH": "artifacts/screen-smoke.png",
+                "CORTEX_EXIT_AFTER_SCREENSHOT": "true",
+            },
+        )
+
+        with (
+            mock.patch.dict(
+                os.environ,
+                {
+                    "CORTEX_SCREENSHOT_PATH": "artifacts/leftover.png",
+                    "CORTEX_EXIT_AFTER_SCREENSHOT": "false",
+                },
+                clear=False,
+            ),
+            mock.patch(
+                "tools.validate_raspberry_pi_ui.subprocess.run",
+                return_value=mock.Mock(returncode=0),
+            ) as mocked_run,
+            mock.patch("builtins.print"),
+        ):
+            self.assertEqual(0, run_step(step, ".", 5))
+
+        env = mocked_run.call_args.kwargs["env"]
+        self.assertEqual("artifacts/screen-smoke.png", env["CORTEX_SCREENSHOT_PATH"])
+        self.assertEqual("true", env["CORTEX_EXIT_AFTER_SCREENSHOT"])
+
     def test_raspberry_pi_ui_validator_requires_square_size(self):
         from tools.validate_raspberry_pi_ui import build_validation_steps, parse_size
 
