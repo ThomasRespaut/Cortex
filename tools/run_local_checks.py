@@ -12,6 +12,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.screen_size import format_screen_size
+from tools.touch_config import parse_touch_rotation
 
 
 @dataclass(frozen=True)
@@ -108,14 +109,7 @@ def positive_int(value):
     return parsed
 
 
-def touch_rotation(value):
-    try:
-        parsed = int(value)
-    except ValueError as error:
-        raise argparse.ArgumentTypeError("La rotation doit être un entier") from error
-    if parsed not in (0, 90, 180, 270):
-        raise argparse.ArgumentTypeError("La rotation tactile doit être 0, 90, 180 ou 270")
-    return parsed
+touch_rotation = parse_touch_rotation
 
 
 def build_check_steps(

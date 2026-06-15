@@ -21,6 +21,7 @@ import pygame
 
 from Screen import CortexHome
 from tools.screen_size import parse_screen_size as parse_size
+from tools.touch_config import parse_touch_rotation
 
 TOUCH_ENV_KEYS = (
     "CORTEX_SCREEN_SIZE",
@@ -370,8 +371,7 @@ def parse_args():
     parser.add_argument(
         "--touch-rotation",
         default=0,
-        type=int,
-        choices=(0, 90, 180, 270),
+        type=parse_touch_rotation,
         help="Rotation tactile Cortex à valider.",
     )
     parser.add_argument(

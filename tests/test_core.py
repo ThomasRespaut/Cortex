@@ -1767,6 +1767,19 @@ class ToolingDefaultsTests(unittest.TestCase):
             self.assertIn("from tools.screen_size import parse_screen_size", content)
             self.assertNotIn("from tools.smoke_legacy_pygame_screens import parse_size", content)
 
+    def test_touch_smokes_use_shared_touch_rotation_parser(self):
+        smoke_tools = [
+            Path("tools/smoke_home_touch_interactions.py"),
+            Path("tools/smoke_modern_touch_interactions.py"),
+            Path("tools/smoke_legacy_touch_interactions.py"),
+        ]
+
+        for tool in smoke_tools:
+            content = tool.read_text(encoding="utf-8")
+            self.assertIn("from tools.touch_config import parse_touch_rotation", content)
+            self.assertIn("type=parse_touch_rotation", content)
+            self.assertNotIn("choices=(0, 90, 180, 270)", content)
+
     def test_raspberry_pi_ui_validator_runs_full_headless_chain(self):
         from tools.validate_raspberry_pi_ui import build_validation_steps, parse_size
 
@@ -2047,11 +2060,13 @@ class ToolingDefaultsTests(unittest.TestCase):
     def test_local_check_runner_rejects_invalid_step_timeout(self):
         from tools.run_local_checks import positive_int, touch_rotation
         from tools.screen_size import format_screen_size, parse_screen_size
+        from tools.touch_config import parse_touch_rotation
 
         self.assertEqual(5, positive_int("5"))
         with self.assertRaises(argparse.ArgumentTypeError):
             positive_int("0")
         self.assertEqual(90, touch_rotation("90"))
+        self.assertEqual(270, parse_touch_rotation(" 270 "))
         with self.assertRaises(argparse.ArgumentTypeError):
             touch_rotation("45")
         self.assertEqual((480, 480), parse_screen_size(" 480 * 480 "))
