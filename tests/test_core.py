@@ -1820,7 +1820,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             self.assertEqual("true", steps[index].env["CORTEX_TOUCH_FLIP_X"])
             self.assertEqual("true", steps[index].env["CORTEX_TOUCH_FLIP_Y"])
 
-    def test_legacy_touch_smoke_toggles_settings(self):
+    def test_legacy_touch_smoke_toggles_settings_both_ways(self):
         from tools.smoke_legacy_touch_interactions import (
             smoke_legacy_touch_interactions,
         )

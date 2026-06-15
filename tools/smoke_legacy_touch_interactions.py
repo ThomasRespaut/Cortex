@@ -96,6 +96,21 @@ def smoke_legacy_touch_interactions(
         local_mode, is_online = run_settings_with_event(
             screen,
             size,
+            finger_down(
+                toggle_position,
+                size,
+                touch_rotation=touch_rotation,
+                touch_flip_x=touch_flip_x,
+                touch_flip_y=touch_flip_y,
+            ),
+            local_mode=False,
+        )
+        if not local_mode or is_online:
+            raise RuntimeError("Le tap tactile Réglages ne rebascule pas en mode local.")
+
+        local_mode, is_online = run_settings_with_event(
+            screen,
+            size,
             pygame.event.Event(
                 pygame.MOUSEBUTTONDOWN,
                 {
