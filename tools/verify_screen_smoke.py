@@ -18,9 +18,14 @@ def corner_pixels(surface):
 
 def analyze_surface(surface, grid_size=24):
     width, height = surface.get_size()
+    center_x = width / 2
+    center_y = height / 2
+    radius = min(width, height) / 2
     colors = set()
     bright_pixels = 0
     masked_corners = 0
+    outside_round_samples = 0
+    outside_round_pixels = 0
 
     for x_index in range(grid_size):
         x = min(width - 1, round(x_index * (width - 1) / max(1, grid_size - 1)))
@@ -30,6 +35,10 @@ def analyze_surface(surface, grid_size=24):
             colors.add((color.r, color.g, color.b, color.a))
             if max(color.r, color.g, color.b) >= 80 and color.a >= 128:
                 bright_pixels += 1
+            if (x - center_x) ** 2 + (y - center_y) ** 2 > radius**2:
+                outside_round_samples += 1
+                if max(color.r, color.g, color.b) > 8 or color.a < 128:
+                    outside_round_pixels += 1
 
     for color in corner_pixels(surface):
         if max(color.r, color.g, color.b) <= 8 and color.a >= 128:
@@ -41,6 +50,8 @@ def analyze_surface(surface, grid_size=24):
         "unique_colors": len(colors),
         "bright_pixels": bright_pixels,
         "masked_corners": masked_corners,
+        "outside_round_samples": outside_round_samples,
+        "outside_round_pixels": outside_round_pixels,
     }
 
 
@@ -75,6 +86,12 @@ def validate_screen_image(
         raise ValueError(
             "Masque rond absent ou incomplet: "
             f"{stats['masked_corners']}/4 coins noirs"
+        )
+    if require_round_mask and stats["outside_round_pixels"] > 0:
+        raise ValueError(
+            "Masque rond absent ou incomplet: "
+            f"{stats['outside_round_pixels']}/"
+            f"{stats['outside_round_samples']} pixels hors cercle visibles"
         )
     return stats
 
@@ -116,7 +133,9 @@ def main():
         f"{stats['width']}x{stats['height']}, "
         f"{stats['unique_colors']} couleurs, "
         f"{stats['bright_pixels']} pixels clairs échantillonnés, "
-        f"{stats['masked_corners']}/4 coins noirs"
+        f"{stats['masked_corners']}/4 coins noirs, "
+        f"{stats['outside_round_pixels']}/"
+        f"{stats['outside_round_samples']} pixels hors cercle visibles"
     )
     return 0
 

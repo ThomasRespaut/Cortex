@@ -267,7 +267,7 @@ def draw_round_mask(surface, center=None, radius=None, enabled=None):
     if _ROUND_MASK_CACHE_KEY != cache_key or _ROUND_MASK_CACHE_SURFACE is None:
         mask = pygame.Surface((width, height), pygame.SRCALPHA)
         mask.fill((0, 0, 0, 255))
-        pygame.draw.circle(mask, (0, 0, 0, 0), center, radius)
+        pygame.draw.circle(mask, (0, 0, 0, 0), center, max(0, radius - 1))
         _ROUND_MASK_CACHE_KEY = cache_key
         _ROUND_MASK_CACHE_SURFACE = mask
 

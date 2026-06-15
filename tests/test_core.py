@@ -442,6 +442,7 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertTrue(draw_round_mask(surface))
 
             self.assertEqual((0, 0, 0), surface.get_at((0, 0))[:3])
+            self.assertEqual((0, 0, 0), surface.get_at((1, 103))[:3])
             self.assertEqual((210, 30, 30), surface.get_at((120, 120))[:3])
         finally:
             pygame.quit()
@@ -2099,6 +2100,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertGreaterEqual(stats["unique_colors"], 8)
         self.assertGreaterEqual(stats["bright_pixels"], 12)
         self.assertEqual(0, stats["masked_corners"])
+        self.assertGreater(stats["outside_round_pixels"], 0)
 
     def test_screen_smoke_validator_accepts_round_masked_capture(self):
         import pygame
@@ -2129,6 +2131,8 @@ class ToolingDefaultsTests(unittest.TestCase):
             pygame.quit()
 
         self.assertEqual(4, stats["masked_corners"])
+        self.assertGreater(stats["outside_round_samples"], 0)
+        self.assertEqual(0, stats["outside_round_pixels"])
 
     def test_screen_smoke_validator_rejects_missing_round_mask(self):
         import pygame
