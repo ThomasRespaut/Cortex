@@ -1649,10 +1649,17 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         step = ValidationStep(
             "Commande lente",
-            [sys.executable, "-c", "import time; time.sleep(2)"],
+            [sys.executable, "-c", "pass"],
         )
 
-        self.assertEqual(124, run_step(step, ".", 1))
+        with (
+            mock.patch(
+                "tools.validate_raspberry_pi_ui.subprocess.run",
+                side_effect=subprocess.TimeoutExpired(step.command, 1),
+            ),
+            mock.patch("builtins.print"),
+        ):
+            self.assertEqual(124, run_step(step, ".", 1))
 
     def test_raspberry_pi_ui_validator_rejects_invalid_step_timeout(self):
         from tools.validate_raspberry_pi_ui import positive_int
@@ -1729,10 +1736,17 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         step = CheckStep(
             "Commande lente",
-            [sys.executable, "-c", "import time; time.sleep(2)"],
+            [sys.executable, "-c", "pass"],
         )
 
-        self.assertEqual(124, run_step(step, ".", 1))
+        with (
+            mock.patch(
+                "tools.run_local_checks.subprocess.run",
+                side_effect=subprocess.TimeoutExpired(step.command, 1),
+            ),
+            mock.patch("builtins.print"),
+        ):
+            self.assertEqual(124, run_step(step, ".", 1))
 
     def test_local_check_runner_rejects_invalid_step_timeout(self):
         from tools.run_local_checks import positive_int
