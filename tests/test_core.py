@@ -2475,6 +2475,22 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertTrue(any("CORTEX_TOUCH_ROTATION=45" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_FLIP_X=maybe" in error for error in errors))
 
+    def test_raspberry_pi_preflight_validates_screen_size_values(self):
+        from tools.raspberry_pi_preflight import invalid_screen_size_values
+
+        valid_content = "\n".join(
+            [
+                "CORTEX_SCREEN_SIZE=",
+                'export CORTEX_SCREEN_SIZE="${CORTEX_SCREEN_SIZE:-480*480}"',
+                "Environment=CORTEX_SCREEN_SIZE=480x480",
+            ]
+        )
+        invalid_content = 'export CORTEX_SCREEN_SIZE="${CORTEX_SCREEN_SIZE:-480}"'
+
+        self.assertEqual([], invalid_screen_size_values(".env.example", valid_content))
+        errors = invalid_screen_size_values("scripts/launch_raspberry_pi.sh", invalid_content)
+        self.assertTrue(any("CORTEX_SCREEN_SIZE=480" in error for error in errors))
+
     def test_env_example_documents_raspberry_pi_screen_settings(self):
         content = Path(".env.example").read_text(encoding="utf-8")
 

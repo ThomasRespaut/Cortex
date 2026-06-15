@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from tools.screen_size import parse_screen_size
 from tools.touch_config import parse_touch_bool, parse_touch_rotation
 
 
@@ -106,6 +107,7 @@ TOUCH_BOOL_KEYS = (
     "CORTEX_TOUCH_FLIP_X",
     "CORTEX_TOUCH_FLIP_Y",
 )
+SCREEN_SIZE_KEY = "CORTEX_SCREEN_SIZE"
 
 REQUIRED_TEXT_SNIPPETS = {
     "scripts/launch_raspberry_pi.sh": [
@@ -197,8 +199,11 @@ def missing_raspberry_pi_apt_packages(setup_script_text):
 
 
 def extract_touch_config_values(content):
+    return extract_config_values(content, (TOUCH_ROTATION_KEY, *TOUCH_BOOL_KEYS))
+
+
+def extract_config_values(content, keys):
     values = []
-    keys = (TOUCH_ROTATION_KEY, *TOUCH_BOOL_KEYS)
     for line in content.splitlines():
         cleaned = line.strip()
         if not cleaned or cleaned.startswith("#"):
@@ -234,6 +239,20 @@ def invalid_touch_config_values(relative_path, content):
         except (argparse.ArgumentTypeError, ValueError):
             errors.append(
                 f"Valeur tactile invalide dans {relative_path}: {key}={value}"
+            )
+    return errors
+
+
+def invalid_screen_size_values(relative_path, content):
+    errors = []
+    for key, value in extract_config_values(content, (SCREEN_SIZE_KEY,)):
+        if not value:
+            continue
+        try:
+            parse_screen_size(value)
+        except argparse.ArgumentTypeError:
+            errors.append(
+                f"Valeur écran invalide dans {relative_path}: {key}={value}"
             )
     return errors
 
@@ -308,9 +327,11 @@ def collect_preflight_errors(
             if snippet not in content:
                 errors.append(f"Configuration absente de {relative_path}: {snippet}")
         errors.extend(invalid_touch_config_values(relative_path, content))
+        errors.extend(invalid_screen_size_values(relative_path, content))
 
     if env_example.is_file():
         errors.extend(invalid_touch_config_values(".env.example", env_content))
+        errors.extend(invalid_screen_size_values(".env.example", env_content))
 
     for relative_path in (
         "scripts/launch_raspberry_pi.sh",
