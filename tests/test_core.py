@@ -1767,6 +1767,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
+        self.assertIn("systemd-analyze verify \"${SERVICE_FILE}\"", content)
         self.assertIn("systemctl daemon-reload", content)
         self.assertIn("CORTEX_START_SERVICE:-false", content)
         self.assertNotIn("OPENAI_API_KEY=", content)

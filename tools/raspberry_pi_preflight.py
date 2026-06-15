@@ -113,7 +113,10 @@ REQUIRED_TEXT_SNIPPETS = {
         "tools/validate_raspberry_pi_ui.py",
     ],
     "deploy/raspberry-pi/cortex.service.example": REQUIRED_SERVICE_ENV_SNIPPETS,
-    "deploy/raspberry-pi/install_service.sh": REQUIRED_SERVICE_ENV_SNIPPETS,
+    "deploy/raspberry-pi/install_service.sh": [
+        *REQUIRED_SERVICE_ENV_SNIPPETS,
+        "systemd-analyze verify \"${SERVICE_FILE}\"",
+    ],
 }
 
 

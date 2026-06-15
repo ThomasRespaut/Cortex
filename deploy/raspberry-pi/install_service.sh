@@ -55,6 +55,10 @@ RestartSec=5
 WantedBy=multi-user.target
 SERVICE
 
+if command -v systemd-analyze >/dev/null 2>&1; then
+  systemd-analyze verify "${SERVICE_FILE}"
+fi
+
 systemctl daemon-reload
 
 if [ "${ENABLE_SERVICE}" = "true" ]; then
