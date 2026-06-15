@@ -1700,6 +1700,23 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertNotIn("transformers==", requirements)
         self.assertNotIn("peft==", requirements)
 
+    def test_raspberry_pi_preflight_reports_missing_runtime_requirement(self):
+        from tools.raspberry_pi_preflight import missing_raspberry_pi_requirements
+
+        requirements = "\n".join(
+            [
+                "pygame==2.6.1",
+                "python-dotenv==1.0.1",
+                "requests==2.32.3",
+                "PyAudio==0.2.14",
+                "sounddevice==0.5.1",
+                "soundfile==0.12.1",
+                "pvporcupine==3.0.3",
+            ]
+        )
+
+        self.assertEqual(["vosk"], missing_raspberry_pi_requirements(requirements))
+
     def test_raspberry_pi_systemd_service_uses_launcher(self):
         service = Path("deploy/raspberry-pi/cortex.service.example")
         content = service.read_text(encoding="utf-8")

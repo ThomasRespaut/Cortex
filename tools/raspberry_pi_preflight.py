@@ -53,6 +53,17 @@ REQUIRED_ENV_EXAMPLE_KEYS = [
     "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE",
 ]
 
+REQUIRED_RASPBERRY_PI_REQUIREMENTS = [
+    "pygame",
+    "python-dotenv",
+    "requests",
+    "PyAudio",
+    "sounddevice",
+    "soundfile",
+    "pvporcupine",
+    "vosk",
+]
+
 REQUIRED_TEXT_SNIPPETS = {
     "scripts/launch_raspberry_pi.sh": [
         "SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"",
@@ -103,6 +114,38 @@ REQUIRED_TEXT_SNIPPETS = {
 }
 
 
+def normalize_requirement_name(name):
+    return name.strip().lower().replace("_", "-")
+
+
+def requirement_names(requirements_text):
+    names = set()
+    for line in requirements_text.splitlines():
+        cleaned = line.split("#", 1)[0].strip()
+        if not cleaned or cleaned.startswith("-"):
+            continue
+        separator_indexes = [
+            index
+            for index in (
+                cleaned.find(separator)
+                for separator in ("<", ">", "=", "!", "~", "[", ";", " ")
+            )
+            if index >= 0
+        ]
+        name_end = min(separator_indexes) if separator_indexes else len(cleaned)
+        names.add(normalize_requirement_name(cleaned[:name_end]))
+    return names
+
+
+def missing_raspberry_pi_requirements(requirements_text):
+    names = requirement_names(requirements_text)
+    return [
+        requirement
+        for requirement in REQUIRED_RASPBERRY_PI_REQUIREMENTS
+        if normalize_requirement_name(requirement) not in names
+    ]
+
+
 def has_lf_line_endings(path):
     content = Path(path).read_bytes()
     return b"\r\n" not in content
@@ -141,6 +184,17 @@ def collect_preflight_errors(
         for key in REQUIRED_ENV_EXAMPLE_KEYS:
             if f"{key}=" not in env_content:
                 errors.append(f"Variable absente de .env.example: {key}")
+
+    requirements = root / "requirements-raspberry-pi.txt"
+    if requirements.is_file():
+        missing_requirements = missing_raspberry_pi_requirements(
+            requirements.read_text(encoding="utf-8")
+        )
+        for requirement in missing_requirements:
+            errors.append(
+                "Dépendance Raspberry Pi absente de requirements-raspberry-pi.txt: "
+                f"{requirement}"
+            )
 
     for relative_path, snippets in REQUIRED_TEXT_SNIPPETS.items():
         path = root / relative_path
