@@ -182,8 +182,8 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
                         while waiting_for_action:
                             for sub_event in pygame.event.get():
                                 if sub_event.type == pygame.QUIT:
-                                    pygame.quit()
-                                    exit()
+                                    waiting_for_action = False
+                                    running = False
                                 else:
                                     click_pos = pointer_down_position(
                                         sub_event,

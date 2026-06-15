@@ -205,6 +205,8 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("moved_fingers", content)
         self.assertNotIn("event.pos", content)
         self.assertNotIn("sub_event.pos", content)
+        self.assertNotIn("exit()", content)
+        self.assertNotIn("pygame.quit()", content)
         self.assertNotIn("+ 400 + offset_x", content)
         self.assertNotIn("+ 300 + offset_y", content)
         self.assertNotIn("pygame.Rect(50, 500", content)
