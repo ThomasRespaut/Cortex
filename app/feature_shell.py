@@ -93,6 +93,14 @@ def make_feature_background_surface(size, center, radius, accent):
     return background
 
 
+def cached_scaled_icon(icon, size, cache):
+    size = max(1, int(size))
+    if cache.get("size") != size or cache.get("surface") is None:
+        cache["size"] = size
+        cache["surface"] = pygame.transform.smoothscale(icon, (size, size))
+    return cache["surface"]
+
+
 def launch_feature(screen, cortex, app_name, icon_path):
     clock = pygame.time.Clock()
     title, cards = FEATURE_CONTENT.get(
@@ -107,6 +115,7 @@ def launch_feature(screen, cortex, app_name, icon_path):
     running = True
     background_cache_key = None
     background_cache_surface = None
+    icon_cache = {"size": None, "surface": None}
 
     while running:
         width, height = screen.get_size()
@@ -159,7 +168,7 @@ def launch_feature(screen, cortex, app_name, icon_path):
         )
 
         icon_size = int(radius * 0.22)
-        icon_scaled = pygame.transform.smoothscale(icon, (icon_size, icon_size))
+        icon_scaled = cached_scaled_icon(icon, icon_size, icon_cache)
         icon_rect = icon_scaled.get_rect(center=(center.x, center.y - radius * 0.56))
         pygame.draw.circle(
             screen,

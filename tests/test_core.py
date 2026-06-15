@@ -560,6 +560,8 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("feature_background_cache_key", feature_content)
         self.assertIn("make_feature_background_surface", feature_content)
         self.assertIn("screen.blit(background_cache_surface", feature_content)
+        self.assertIn("cached_scaled_icon", feature_content)
+        self.assertIn("icon_cache", feature_content)
         self.assertIn("rect_hit_test", cortex_content)
         self.assertIn("circle_hit_test", cortex_content)
         self.assertIn("rect_hit_test", feature_content)
@@ -617,6 +619,30 @@ class InterfaceAssetTests(unittest.TestCase):
                 key,
                 feature_background_cache_key(240, 240, center, radius, (1, 2, 3)),
             )
+        finally:
+            pygame.quit()
+
+    def test_feature_shell_reuses_scaled_icon_cache(self):
+        import pygame
+        from app.feature_shell import cached_scaled_icon
+
+        pygame.init()
+        try:
+            icon = pygame.Surface((32, 32), pygame.SRCALPHA)
+            icon.fill((88, 214, 255, 255))
+            cache = {"size": None, "surface": None}
+
+            first = cached_scaled_icon(icon, 48, cache)
+            second = cached_scaled_icon(icon, 48, cache)
+            self.assertIs(first, second)
+            self.assertEqual((48, 48), first.get_size())
+
+            third = cached_scaled_icon(icon, 64, cache)
+            self.assertIsNot(first, third)
+            self.assertEqual((64, 64), third.get_size())
+
+            tiny = cached_scaled_icon(icon, 0, cache)
+            self.assertEqual((1, 1), tiny.get_size())
         finally:
             pygame.quit()
 
