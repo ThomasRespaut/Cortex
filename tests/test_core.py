@@ -642,6 +642,25 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_can_exit_after_one_frame(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "120x120",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_EXIT_AFTER_FRAME": "true",
+            },
+        ):
+            home = CortexHome()
+            home.run()
+
+        self.assertFalse(pygame.get_init())
+
     def test_modern_pygame_views_apply_round_mask_before_flip(self):
         cortex_content = Path("app/app_cortex.py").read_text(encoding="utf-8")
         feature_content = Path("app/feature_shell.py").read_text(encoding="utf-8")

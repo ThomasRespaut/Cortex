@@ -694,6 +694,8 @@ class CortexHome:
                 self.screenshot_saved = True
                 if env_bool("CORTEX_EXIT_AFTER_SCREENSHOT", False):
                     running = False
+            if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
+                running = False
             self.clock.tick(self.fps)
 
         pygame.quit()
