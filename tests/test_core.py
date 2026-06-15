@@ -557,6 +557,9 @@ class InterfaceAssetTests(unittest.TestCase):
 
         self.assertIn("draw_round_mask(self.screen, center, radius)", cortex_content)
         self.assertIn("draw_round_mask(screen, center, radius)", feature_content)
+        self.assertIn("feature_background_cache_key", feature_content)
+        self.assertIn("make_feature_background_surface", feature_content)
+        self.assertIn("screen.blit(background_cache_surface", feature_content)
         self.assertIn("rect_hit_test", cortex_content)
         self.assertIn("circle_hit_test", cortex_content)
         self.assertIn("rect_hit_test", feature_content)
@@ -586,6 +589,36 @@ class InterfaceAssetTests(unittest.TestCase):
                 self.assertNotEqual(first_key, view.background_cache_key)
             finally:
                 pygame.quit()
+
+    def test_feature_shell_background_cache_helpers(self):
+        import pygame
+        from app.feature_shell import (
+            feature_background_cache_key,
+            make_feature_background_surface,
+        )
+
+        pygame.init()
+        try:
+            center = pygame.Vector2(120, 120)
+            radius = 120
+            accent = (88, 214, 255)
+
+            surface = make_feature_background_surface((240, 240), center, radius, accent)
+            self.assertEqual((240, 240), surface.get_size())
+            self.assertGreater(surface.get_bounding_rect().width, 0)
+
+            key = feature_background_cache_key(240, 240, center, radius, accent)
+            self.assertEqual(key, feature_background_cache_key(240, 240, center, radius, accent))
+            self.assertNotEqual(
+                key,
+                feature_background_cache_key(240, 240, center, radius - 1, accent),
+            )
+            self.assertNotEqual(
+                key,
+                feature_background_cache_key(240, 240, center, radius, (1, 2, 3)),
+            )
+        finally:
+            pygame.quit()
 
     def test_home_menu_shows_notice_when_app_is_not_ready(self):
         import pygame

@@ -74,6 +74,25 @@ def activate_feature_at(cortex, app_name, position, back_center, back_radius, ca
     return True
 
 
+def feature_background_cache_key(width, height, center, radius, accent):
+    return (
+        width,
+        height,
+        round(center.x, 2),
+        round(center.y, 2),
+        round(radius, 2),
+        tuple(accent),
+    )
+
+
+def make_feature_background_surface(size, center, radius, accent):
+    background = pygame.Surface(size)
+    background.fill((3, 5, 12))
+    pygame.draw.circle(background, (28, 34, 51), center, radius, max(2, int(radius * 0.008)))
+    pygame.draw.circle(background, accent, center, radius - 6, 2)
+    return background
+
+
 def launch_feature(screen, cortex, app_name, icon_path):
     clock = pygame.time.Clock()
     title, cards = FEATURE_CONTENT.get(
@@ -86,15 +105,33 @@ def launch_feature(screen, cortex, app_name, icon_path):
     card_font = pygame.font.SysFont("Segoe UI", 22, bold=True)
     small_font = pygame.font.SysFont("Segoe UI", 16)
     running = True
+    background_cache_key = None
+    background_cache_surface = None
 
     while running:
         width, height = screen.get_size()
         diameter = min(width, height)
         radius = diameter / 2
         center = pygame.Vector2(width / 2, height / 2)
-        screen.fill((3, 5, 12))
-        pygame.draw.circle(screen, (28, 34, 51), center, radius, max(2, int(radius * 0.008)))
-        pygame.draw.circle(screen, accent, center, radius - 6, 2)
+        next_background_cache_key = feature_background_cache_key(
+            width,
+            height,
+            center,
+            radius,
+            accent,
+        )
+        if (
+            background_cache_key != next_background_cache_key
+            or background_cache_surface is None
+        ):
+            background_cache_surface = make_feature_background_surface(
+                (width, height),
+                center,
+                radius,
+                accent,
+            )
+            background_cache_key = next_background_cache_key
+        screen.blit(background_cache_surface, (0, 0))
 
         back_radius = max(25, int(radius * 0.075))
         back_center = round_safe_point(
