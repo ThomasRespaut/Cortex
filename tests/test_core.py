@@ -673,6 +673,28 @@ class InterfaceAssetTests(unittest.TestCase):
         finally:
             pygame.quit()
 
+    def test_legacy_status_panel_draws_visible_content(self):
+        import pygame
+        from app.legacy_widgets import draw_legacy_status_panel
+
+        pygame.init()
+        try:
+            surface = pygame.Surface((240, 240))
+            surface.fill((0, 0, 0))
+
+            draw_legacy_status_panel(
+                surface,
+                "Calendrier",
+                "Planning du jour",
+                (249, 115, 22),
+                ("RDV", "Taches", "Alertes"),
+            )
+
+            self.assertGreater(surface.get_bounding_rect().width, 0)
+            self.assertNotEqual((0, 0, 0), surface.get_at((120, 72))[:3])
+        finally:
+            pygame.quit()
+
     def test_feature_shell_reuses_scaled_icon_cache(self):
         import pygame
         from app.feature_shell import cached_scaled_icon

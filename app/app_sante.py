@@ -1,5 +1,6 @@
 import pygame
 
+from app.legacy_widgets import draw_legacy_status_panel
 from app.screen_assets import asset_path, load_background_or_fallback
 from app.screen_config import (
     circular_menu_layout,
@@ -32,6 +33,13 @@ def launch_health(screen, cortex, screen_width, screen_height):
     pygame.draw.rect(screen, border_color, boutton_quitter, width=border_width)
     for button in menu_buttons:
         pygame.draw.rect(screen, border_color, button, width=border_width)
+    draw_legacy_status_panel(
+        screen,
+        "Sante",
+        "Bien-etre",
+        (251, 113, 133),
+        ("Sommeil", "Pas", "Pouls"),
+    )
 
     while running:
         for event in pygame.event.get():
