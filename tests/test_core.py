@@ -611,6 +611,80 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_windowed_mode_can_request_frameless_preview(self):
+        import pygame
+        from Screen import CortexHome
+
+        screen_surface = mock.Mock()
+        with mock.patch.dict(
+            os.environ,
+            {
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "320x240",
+                "CORTEX_FRAMELESS": "true",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            with (
+                mock.patch("Screen.pygame.init"),
+                mock.patch("Screen.pygame.display.set_caption"),
+                mock.patch("Screen.pygame.mouse.set_visible"),
+                mock.patch(
+                    "Screen.pygame.display.set_mode",
+                    return_value=screen_surface,
+                ) as set_mode,
+                mock.patch("Screen.load_icon_or_fallback", return_value=mock.Mock()),
+                mock.patch("Screen.pygame.font.SysFont", return_value=mock.Mock()),
+            ):
+                home = CortexHome()
+
+        self.assertIs(screen_surface, home.screen)
+        set_mode.assert_called_once_with((320, 240), pygame.NOFRAME)
+
+    def test_home_menu_loads_cortex_with_runtime_mode_overrides(self):
+        from types import ModuleType
+
+        from Screen import CortexHome
+
+        screen_surface = mock.Mock()
+        cortex_module = ModuleType("cortex")
+        cortex_constructor = mock.Mock(return_value="local-cortex")
+        cortex_module.Cortex = cortex_constructor
+        with mock.patch.dict(
+            os.environ,
+            {
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "320x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_INPUT_MODE": "text",
+                "CORTEX_OUTPUT_MODE": "screen",
+                "CORTEX_LOCAL_MODE": "false",
+            },
+        ):
+            with (
+                mock.patch("Screen.pygame.init"),
+                mock.patch("Screen.pygame.display.set_caption"),
+                mock.patch("Screen.pygame.mouse.set_visible"),
+                mock.patch(
+                    "Screen.pygame.display.set_mode",
+                    return_value=screen_surface,
+                ),
+                mock.patch("Screen.load_icon_or_fallback", return_value=mock.Mock()),
+                mock.patch("Screen.pygame.font.SysFont", return_value=mock.Mock()),
+            ):
+                home = CortexHome()
+
+            with mock.patch.dict(sys.modules, {"cortex": cortex_module}):
+                home.load_cortex()
+
+        cortex_constructor.assert_called_once_with(
+            input_mode="text",
+            output_mode="screen",
+            local_mode=False,
+        )
+        self.assertEqual("local-cortex", home.cortex)
+        self.assertIsNone(home.loading_error)
+
     def test_home_menu_reuses_static_background_cache(self):
         import pygame
         from Screen import CortexHome
