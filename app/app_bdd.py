@@ -5,9 +5,11 @@ from app.screen_config import (
     circular_menu_layout,
     draw_round_mask,
     env_bool,
+    circle_hit_test,
     pointer_down_position,
     pointer_move_position,
     pointer_up_position,
+    rect_hit_test,
 )
 
 def launch_bdd(screen, cortex, screen_width, screen_height):
@@ -131,7 +133,7 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
                 pointer = pointer_up_position(event, width, height)
                 if not pointer:
                     continue
-                if boutton_quitter.collidepoint(pointer):
+                if rect_hit_test(boutton_quitter, pointer):
                     running = False
                 elif was_tap:
                     selection_pointer = pointer
@@ -174,7 +176,7 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
                 for node_id, pos in positions.items():
                     x = int(pos[0] * zoom + graph_center_x + offset_x)
                     y = int(pos[1] * zoom + graph_center_y + offset_y)
-                    if (selection_pointer[0] - x) ** 2 + (selection_pointer[1] - y) ** 2 <= int(20 * zoom) ** 2:
+                    if circle_hit_test(selection_pointer, (x, y), int(20 * zoom)):
                         # Ajouter les boutons et gérer les actions
                         buttons = {
                             "Ajouter": action_buttons[0],
@@ -204,7 +206,7 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
                                     if not click_pos:
                                         continue
                                     for button_name, button_rect in buttons.items():
-                                        if button_rect.collidepoint(click_pos):
+                                        if rect_hit_test(button_rect, click_pos):
                                             from database.database import Neo4jDatabase
 
                                             if button_name == "Ajouter":

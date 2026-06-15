@@ -27,6 +27,10 @@ def env_int(name, default):
         return default
 
 
+def env_touch_hit_slop(default=10):
+    return max(0, env_int("CORTEX_TOUCH_HIT_SLOP", default))
+
+
 def env_screen_size(name, default):
     value = os.getenv(name)
     if not value:
@@ -128,6 +132,21 @@ def circle_fits_round_viewport(position, width, height, item_radius, margin=0):
     radius = max(0, diameter / 2 - margin)
     center = pygame.Vector2(width / 2, height / 2)
     return pygame.Vector2(position).distance_to(center) + item_radius <= radius
+
+
+def circle_hit_test(position, center, radius, padding=None):
+    import pygame
+
+    if padding is None:
+        padding = env_touch_hit_slop()
+    return pygame.Vector2(position).distance_to(center) <= radius + max(0, padding)
+
+
+def rect_hit_test(rect, position, padding=None):
+    if padding is None:
+        padding = env_touch_hit_slop()
+    padding = max(0, int(padding))
+    return rect.inflate(padding * 2, padding * 2).collidepoint(position)
 
 
 def round_safe_point(center, radius, dx_ratio, dy_ratio, item_radius=0, margin=0):

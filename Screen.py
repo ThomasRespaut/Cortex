@@ -16,6 +16,7 @@ from app.app_cortex import launch_cortex
 from app.feature_shell import launch_feature
 from app.screen_assets import load_icon_or_fallback
 from app.screen_config import (
+    circle_hit_test,
     draw_round_mask as apply_round_mask,
     display_flags,
     env_bool,
@@ -400,7 +401,7 @@ class CortexHome:
 
     def app_at(self, position):
         for app, center, size in reversed(self.rendered_apps):
-            if pygame.Vector2(position).distance_to(center) <= size / 2:
+            if circle_hit_test(position, center, size / 2):
                 return app
         return None
 

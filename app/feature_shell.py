@@ -5,10 +5,12 @@ import pygame
 
 from app.screen_assets import load_icon_or_fallback
 from app.screen_config import (
+    circle_hit_test,
     draw_round_mask,
     env_bool,
     fit_text,
     pointer_down_position,
+    rect_hit_test,
     round_safe_point,
 )
 
@@ -63,9 +65,9 @@ FEATURE_ACCENTS = {
 
 
 def activate_feature_at(cortex, app_name, position, back_center, back_radius, card_rects, cards):
-    if pygame.Vector2(position).distance_to(back_center) <= back_radius:
+    if circle_hit_test(position, back_center, back_radius):
         return False
-    if app_name == "Réglages" and card_rects and card_rects[0].collidepoint(position):
+    if app_name == "Réglages" and card_rects and rect_hit_test(card_rects[0], position):
         cortex.local_mode = not cortex.local_mode
         cards[0] = "Mode local" if cortex.local_mode else "Mode en ligne"
     return True

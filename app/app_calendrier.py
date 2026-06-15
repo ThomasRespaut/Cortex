@@ -5,6 +5,7 @@ from app.screen_config import (
     draw_round_mask,
     env_bool,
     pointer_down_position,
+    rect_hit_test,
 )
 #from Screen import main
 
@@ -39,7 +40,7 @@ def launch_calendar(screen, cortex, screen_width, screen_height):
                 running = False
             else:
                 pointer = pointer_down_position(event, screen_width, screen_height)
-                if pointer and boutton_quitter.collidepoint(pointer):
+                if pointer and rect_hit_test(boutton_quitter, pointer):
                     running = False
 
         draw_round_mask(screen)

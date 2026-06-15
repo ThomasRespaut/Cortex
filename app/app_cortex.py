@@ -7,10 +7,12 @@ os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
 from app.screen_config import (
+    circle_hit_test,
     draw_round_mask,
     env_bool,
     fit_text,
     pointer_down_position,
+    rect_hit_test,
     round_safe_point,
     wrap_text,
 )
@@ -248,14 +250,14 @@ class CortexView:
         suggestion_rects,
     ):
         pos = pygame.Vector2(position)
-        if pos.distance_to(back_center) <= back_radius:
+        if circle_hit_test(pos, back_center, back_radius):
             self.running = False
             return
-        if pos.distance_to(orb_center) <= orb_radius:
+        if circle_hit_test(pos, orb_center, orb_radius):
             self.run_query()
             return
         for rect, suggestion in suggestion_rects:
-            if rect.collidepoint(position):
+            if rect_hit_test(rect, position):
                 self.run_query(suggestion)
                 return
 

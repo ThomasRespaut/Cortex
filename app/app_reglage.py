@@ -6,6 +6,7 @@ from app.screen_config import (
     draw_round_mask,
     env_bool,
     pointer_down_position,
+    rect_hit_test,
 )
 
 
@@ -92,9 +93,9 @@ def launch_reglage(screen, cortex, screen_width, screen_height):
                 running = False
             else:
                 pointer = pointer_down_position(event, screen_width, screen_height)
-                if pointer and boutton_quitter.collidepoint(pointer):
+                if pointer and rect_hit_test(boutton_quitter, pointer):
                     running = False
-                elif pointer and toggle_button.collidepoint(pointer):
+                elif pointer and rect_hit_test(toggle_button, pointer):
                     is_online = not is_online
                     if cortex.local_mode == True :
                         cortex.local_mode = False

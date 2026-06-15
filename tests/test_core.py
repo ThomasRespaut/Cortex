@@ -249,6 +249,7 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertIn("pointer_down_position", content, module)
             self.assertIn("circular_menu_layout", content, module)
             self.assertIn("draw_round_mask", content, module)
+            self.assertIn("rect_hit_test", content, module)
             self.assertIn("screen.get_size()", content, module)
             self.assertNotIn("event.pos", content, module)
             self.assertNotIn("pygame.display.Info", content, module)
@@ -293,6 +294,8 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("pointer_move_position", content)
         self.assertIn("pointer_up_position", content)
         self.assertIn("draw_round_mask", content)
+        self.assertIn("circle_hit_test", content)
+        self.assertIn("rect_hit_test", content)
         self.assertIn("screen.get_size()", content)
         self.assertIn("CORTEX_EXIT_AFTER_FRAME", content)
         self.assertIn("selection_pointer", content)
@@ -382,6 +385,20 @@ class InterfaceAssetTests(unittest.TestCase):
             radius,
         )
 
+    def test_touch_hit_helpers_expand_small_targets(self):
+        import pygame
+        from app.screen_config import circle_hit_test, rect_hit_test
+
+        rect = pygame.Rect(100, 100, 40, 40)
+
+        with mock.patch.dict(os.environ, {"CORTEX_TOUCH_HIT_SLOP": "12"}):
+            self.assertTrue(rect_hit_test(rect, (148, 120)))
+            self.assertTrue(circle_hit_test((137, 120), (120, 120), 20))
+
+        with mock.patch.dict(os.environ, {"CORTEX_TOUCH_HIT_SLOP": "0"}):
+            self.assertFalse(rect_hit_test(rect, (148, 120)))
+            self.assertFalse(circle_hit_test((141, 120), (120, 120), 20))
+
     def test_shared_round_mask_blacks_out_square_corners(self):
         import pygame
         from app.screen_config import draw_round_mask
@@ -444,6 +461,7 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("TAP_MOVE_LIMIT", content)
         self.assertIn("app == self.selected", content)
         self.assertIn("apply_round_mask(self.screen", content)
+        self.assertIn("circle_hit_test", content)
 
     def test_home_menu_round_mask_blacks_out_square_corners(self):
         import pygame
@@ -499,6 +517,10 @@ class InterfaceAssetTests(unittest.TestCase):
 
         self.assertIn("draw_round_mask(self.screen, center, radius)", cortex_content)
         self.assertIn("draw_round_mask(screen, center, radius)", feature_content)
+        self.assertIn("rect_hit_test", cortex_content)
+        self.assertIn("circle_hit_test", cortex_content)
+        self.assertIn("rect_hit_test", feature_content)
+        self.assertIn("circle_hit_test", feature_content)
 
     def test_home_menu_shows_notice_when_app_is_not_ready(self):
         import pygame
@@ -839,6 +861,29 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_uses_touch_hit_slop_for_icon_taps(self):
+        import pygame
+        from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_TOUCH_HIT_SLOP": "12",
+            },
+        ):
+            home = CortexHome()
+            try:
+                app = build_honeycomb(APP_DEFINITIONS)[0]
+                home.rendered_apps = [(app, pygame.Vector2(120, 120), 60)]
+
+                self.assertEqual(app, home.app_at((161, 120)))
+            finally:
+                pygame.quit()
+
     def test_home_menu_accepts_zero_coordinate_events_when_unclipped(self):
         import pygame
         from Screen import CortexHome
@@ -1093,6 +1138,25 @@ class InterfaceAssetTests(unittest.TestCase):
 
         self.assertFalse(view.running)
 
+    def test_cortex_view_activation_uses_touch_hit_slop(self):
+        from app.app_cortex import CortexView
+
+        view = CortexView.__new__(CortexView)
+        view.running = True
+        view.run_query = lambda prompt=None: self.fail("query should not run")
+
+        with mock.patch.dict(os.environ, {"CORTEX_TOUCH_HIT_SLOP": "12"}):
+            view.activate_at(
+                (131, 100),
+                back_center=(100, 100),
+                back_radius=20,
+                orb_center=(300, 300),
+                orb_radius=20,
+                suggestion_rects=[],
+            )
+
+        self.assertFalse(view.running)
+
     def test_feature_activation_supports_touch_settings_toggle(self):
         import pygame
         from app.feature_shell import activate_feature_at
@@ -1115,6 +1179,28 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertFalse(CortexState.local_mode)
         self.assertEqual("Mode en ligne", cards[0])
 
+    def test_feature_activation_uses_touch_hit_slop(self):
+        import pygame
+        from app.feature_shell import activate_feature_at
+
+        class CortexState:
+            local_mode = True
+
+        cards = ["Mode de calcul"]
+        with mock.patch.dict(os.environ, {"CORTEX_TOUCH_HIT_SLOP": "12"}):
+            running = activate_feature_at(
+                CortexState,
+                "Réglages",
+                position=(91, 25),
+                back_center=(200, 200),
+                back_radius=20,
+                card_rects=[pygame.Rect(0, 0, 80, 50)],
+                cards=cards,
+            )
+
+        self.assertTrue(running)
+        self.assertFalse(CortexState.local_mode)
+
 
 class ToolingDefaultsTests(unittest.TestCase):
     def test_raspberry_pi_launcher_defaults_to_screen_kiosk(self):
@@ -1136,6 +1222,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             content,
         )
         self.assertIn("CORTEX_ROUND_MASK=\"${CORTEX_ROUND_MASK:-true}\"", content)
+        self.assertIn("CORTEX_TOUCH_HIT_SLOP=\"${CORTEX_TOUCH_HIT_SLOP:-10}\"", content)
         self.assertIn("CORTEX_TAP_MOVE_LIMIT=\"${CORTEX_TAP_MOVE_LIMIT:-14}\"", content)
         self.assertIn(
             "CORTEX_EMPTY_DOUBLE_TAP_MS=\"${CORTEX_EMPTY_DOUBLE_TAP_MS:-500}\"",
@@ -1331,6 +1418,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("Environment=CORTEX_ROUND_MASK=true", content)
+        self.assertIn("Environment=CORTEX_TOUCH_HIT_SLOP=10", content)
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
@@ -1353,6 +1441,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("Environment=CORTEX_ROUND_MASK=true", content)
+        self.assertIn("Environment=CORTEX_TOUCH_HIT_SLOP=10", content)
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
@@ -1552,6 +1641,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("CORTEX_ROUND_MASK=true", content)
+        self.assertIn("CORTEX_TOUCH_HIT_SLOP=10", content)
         self.assertIn("CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
@@ -1639,6 +1729,7 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertTrue(any("SDL_TOUCH_MOUSE_EVENTS" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_ROUND_CLIP" in error for error in errors))
+        self.assertTrue(any("CORTEX_TOUCH_HIT_SLOP" in error for error in errors))
         self.assertTrue(any("CORTEX_TAP_MOVE_LIMIT" in error for error in errors))
         self.assertTrue(any("CORTEX_EMPTY_DOUBLE_TAP_MS" in error for error in errors))
         self.assertTrue(
