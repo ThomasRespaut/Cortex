@@ -138,6 +138,8 @@ SDL_VIDEODRIVER=dummy CORTEX_FULLSCREEN=false CORTEX_SKIP_CORTEX_LOAD=true CORTE
 `CORTEX_SCREENSHOT_PATH` choisit le fichier PNG de sortie, et
 `CORTEX_EXIT_AFTER_SCREENSHOT=true` ferme automatiquement l'application après la
 première capture pour les smokes locaux ou CI.
+`CORTEX_EXIT_AFTER_FRAME=true` ferme après un seul frame sans écrire de PNG, ce
+qui sert aux validations headless rapides du kiosque principal.
 
 Sur Raspberry Pi, le script de lancement kiosk applique des valeurs plein écran
 adaptées à l'écran tactile, puis lance `Screen.py`, qui charge `.env` via
