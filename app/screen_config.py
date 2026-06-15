@@ -29,12 +29,16 @@ def env_int(name, default):
         return default
 
 
+def env_positive_int(name, default):
+    return max(1, env_int(name, default))
+
+
 def env_touch_hit_slop(default=10):
     return max(0, env_int("CORTEX_TOUCH_HIT_SLOP", default))
 
 
 def env_fps(default=60):
-    return max(1, env_int("CORTEX_FPS", default))
+    return env_positive_int("CORTEX_FPS", default)
 
 
 def env_screen_size(name, default):

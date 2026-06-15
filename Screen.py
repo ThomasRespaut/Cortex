@@ -22,6 +22,7 @@ from app.screen_config import (
     env_bool,
     env_fps,
     env_int,
+    env_positive_int,
     env_screen_size,
     circle_fits_round_viewport,
     fit_text,
@@ -134,7 +135,7 @@ class CortexHome:
         if fullscreen:
             self.screen = pygame.display.set_mode((0, 0), display_flags(fullscreen))
         else:
-            preview_size = env_int("CORTEX_PREVIEW_SIZE", 900)
+            preview_size = env_positive_int("CORTEX_PREVIEW_SIZE", 900)
             screen_size = env_screen_size(
                 "CORTEX_SCREEN_SIZE",
                 (preview_size, preview_size),

@@ -577,6 +577,26 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_clamps_invalid_preview_size_before_creating_window(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_PREVIEW_SIZE": "0",
+                "CORTEX_SCREEN_SIZE": "",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                self.assertEqual((1, 1), home.screen.get_size())
+            finally:
+                pygame.quit()
+
     def test_home_menu_reuses_static_background_cache(self):
         import pygame
         from Screen import CortexHome
@@ -1357,6 +1377,7 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertTrue(screen_config.env_bool("CORTEX_TEST_TRUE"))
             self.assertFalse(screen_config.env_bool("CORTEX_TEST_FALSE", True))
             self.assertEqual(7, screen_config.env_int("CORTEX_TEST_INT", 7))
+            self.assertEqual(9, screen_config.env_positive_int("CORTEX_TEST_INT", 9))
             self.assertEqual(24, screen_config.env_fps())
             self.assertEqual(
                 (480, 480),
@@ -1374,6 +1395,13 @@ class InterfaceAssetTests(unittest.TestCase):
         for value in ("0", "-5", "abc"):
             with mock.patch.dict(os.environ, {"CORTEX_FPS": value}):
                 self.assertEqual(1 if value != "abc" else 60, screen_config.env_fps())
+
+        for value in ("0", "-5", "abc"):
+            with mock.patch.dict(os.environ, {"CORTEX_TEST_POSITIVE_INT": value}):
+                self.assertEqual(
+                    1 if value != "abc" else 11,
+                    screen_config.env_positive_int("CORTEX_TEST_POSITIVE_INT", 11),
+                )
 
     def test_screen_config_rejects_invalid_screen_size(self):
         from app import screen_config
@@ -2496,27 +2524,35 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         valid_content = "\n".join(
             [
+                "CORTEX_PREVIEW_SIZE=900",
                 'export CORTEX_FPS="${CORTEX_FPS:-60}"',
                 "Environment=CORTEX_TOUCH_EDGE_MARGIN=0",
                 "Environment=CORTEX_TOUCH_HIT_SLOP=10",
                 "Environment=CORTEX_TAP_MOVE_LIMIT=14",
                 "Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500",
                 "Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36",
+                'export CORTEX_VALIDATE_STEP_TIMEOUT="${CORTEX_VALIDATE_STEP_TIMEOUT:-120}"',
             ]
         )
         invalid_content = "\n".join(
             [
+                "CORTEX_PREVIEW_SIZE=0",
                 "Environment=CORTEX_FPS=0",
                 "Environment=CORTEX_TOUCH_HIT_SLOP=-1",
                 'export CORTEX_TAP_MOVE_LIMIT="${CORTEX_TAP_MOVE_LIMIT:-wide}"',
+                "CORTEX_VALIDATE_STEP_TIMEOUT=0",
             ]
         )
 
         self.assertEqual([], invalid_numeric_config_values("service", valid_content))
         errors = invalid_numeric_config_values("service", invalid_content)
+        self.assertTrue(any("CORTEX_PREVIEW_SIZE=0" in error for error in errors))
         self.assertTrue(any("CORTEX_FPS=0" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_HIT_SLOP=-1" in error for error in errors))
         self.assertTrue(any("CORTEX_TAP_MOVE_LIMIT=wide" in error for error in errors))
+        self.assertTrue(
+            any("CORTEX_VALIDATE_STEP_TIMEOUT=0" in error for error in errors)
+        )
 
     def test_raspberry_pi_preflight_validates_boolean_kiosk_values(self):
         from tools.raspberry_pi_preflight import invalid_boolean_config_values
@@ -2547,6 +2583,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         content = Path(".env.example").read_text(encoding="utf-8")
 
         self.assertIn("CORTEX_FULLSCREEN=true", content)
+        self.assertIn("CORTEX_PREVIEW_SIZE=900", content)
         self.assertIn("CORTEX_HIDE_CURSOR=true", content)
         self.assertIn("CORTEX_FPS=60", content)
         self.assertIn("CORTEX_SCREEN_SIZE=", content)
