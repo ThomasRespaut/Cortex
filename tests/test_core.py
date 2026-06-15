@@ -581,6 +581,40 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_accepts_zero_coordinate_events_when_unclipped(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_TOUCH_ROUND_CLIP": "false",
+            },
+        ):
+            home = CortexHome()
+            try:
+                down = pygame.event.Event(
+                    pygame.MOUSEBUTTONDOWN,
+                    {"button": 1, "pos": (0, 0)},
+                )
+                up = pygame.event.Event(
+                    pygame.MOUSEBUTTONUP,
+                    {"button": 1, "pos": (0, 0)},
+                )
+
+                home.handle_event(down)
+                self.assertTrue(home.dragging)
+                self.assertEqual((0, 0), tuple(home.press_position))
+
+                home.handle_event(up)
+                self.assertFalse(home.dragging)
+            finally:
+                pygame.quit()
+
     def test_screen_text_helpers_are_shared(self):
         helper_content = Path("app/screen_config.py").read_text(encoding="utf-8")
 

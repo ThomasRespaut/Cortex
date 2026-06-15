@@ -464,13 +464,13 @@ class CortexHome:
             self.zoom = max(0.72, min(1.28, self.zoom + event.y * 0.07))
         width, height = self.screen.get_size()
         pointer_down = pointer_down_position(event, width, height)
-        if pointer_down:
+        if pointer_down is not None:
             self.handle_pointer_down(pointer_down)
         pointer_move = pointer_move_position(event, width, height)
-        if pointer_move:
+        if pointer_move is not None:
             self.handle_pointer_move(pointer_move)
         pointer_up = pointer_up_position(event, width, height)
-        if pointer_up:
+        if pointer_up is not None:
             self.handle_pointer_up(pointer_up)
         return True
 
