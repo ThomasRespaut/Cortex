@@ -155,6 +155,14 @@ Les tests du cœur local ne nécessitent ni modèle IA, ni microphone, ni compte
 externe :
 
 ```bash
+python tools/run_local_checks.py
+```
+
+Cette commande enchaîne compilation Python, tests unitaires, `pip check`,
+validation du dataset fine-tuning et validation Raspberry Pi/Pygame. Pour lancer
+une étape isolée pendant un diagnostic :
+
+```bash
 python -m unittest discover -s tests -v
 python tools\validate_finetune_dataset.py --dataset-dir training\finetune_cortex_v3
 ```

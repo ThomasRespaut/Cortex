@@ -838,6 +838,41 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual("false", steps[1].env["CORTEX_FULLSCREEN"])
         self.assertEqual("480x480", steps[1].env["CORTEX_SCREEN_SIZE"])
 
+    def test_local_check_runner_covers_autonomous_validation_chain(self):
+        from tools.run_local_checks import build_check_steps
+
+        steps = build_check_steps(
+            "python",
+            "training/finetune_cortex_v3",
+            "480x480",
+        )
+        step_commands = [" ".join(step.command) for step in steps]
+
+        self.assertEqual(
+            [
+                "Compilation Python",
+                "Tests unitaires",
+                "Vérification dépendances",
+                "Validation dataset fine-tuning",
+                "Validation Raspberry Pi/Pygame",
+            ],
+            [step.name for step in steps],
+        )
+        self.assertIn(
+            "python -m compileall -q Screen.py app function_calling.py model_loader.py tools tests",
+            step_commands,
+        )
+        self.assertIn("python -m unittest discover -s tests -v", step_commands)
+        self.assertIn("python -m pip check", step_commands)
+        self.assertIn(
+            "python tools/validate_finetune_dataset.py --dataset-dir training/finetune_cortex_v3",
+            step_commands,
+        )
+        self.assertIn(
+            "python tools/validate_raspberry_pi_ui.py --project-root . --size 480x480",
+            step_commands,
+        )
+
     def test_raspberry_pi_requirements_exclude_heavy_local_model_stack(self):
         requirements = Path("requirements-raspberry-pi.txt").read_text(encoding="utf-8")
 
