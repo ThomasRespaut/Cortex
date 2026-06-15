@@ -55,5 +55,8 @@ jobs:
       - name: Render legacy Pygame screen smoke screenshots
         run: python tools/smoke_legacy_pygame_screens.py --size 480x480 --output-dir artifacts/legacy-screen-smoke
 
+      - name: Render modern Pygame screen smoke screenshots
+        run: python tools/smoke_modern_pygame_screens.py --size 480x480 --output-dir artifacts/modern-screen-smoke
+
       - name: Validate fine-tuning dataset
         run: python tools/validate_finetune_dataset.py --dataset-dir training/finetune_cortex_v3

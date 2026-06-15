@@ -143,6 +143,7 @@ Pour vérifier aussi les anciens sous-écrans Pygame sans interaction :
 
 ```bash
 python tools/smoke_legacy_pygame_screens.py --size 480x480
+python tools/smoke_modern_pygame_screens.py --size 480x480
 ```
 
 ### Tests rapides

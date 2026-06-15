@@ -192,6 +192,12 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertIn("env_bool", content, module)
             self.assertIn("CORTEX_EXIT_AFTER_FRAME", content, module)
 
+    def test_modern_pygame_modules_can_exit_after_one_frame(self):
+        for module in (Path("app/app_cortex.py"), Path("app/feature_shell.py")):
+            content = module.read_text(encoding="utf-8")
+            self.assertIn("env_bool", content, module)
+            self.assertIn("CORTEX_EXIT_AFTER_FRAME", content, module)
+
     def test_bdd_screen_uses_responsive_touch_layout(self):
         content = Path("app/app_bdd.py").read_text(encoding="utf-8")
 
@@ -452,6 +458,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("tools/raspberry_pi_preflight.py", content)
         self.assertIn("CORTEX_SCREENSHOT_PATH=artifacts/screen-smoke.png", content)
         self.assertIn("tools/smoke_legacy_pygame_screens.py", content)
+        self.assertIn("tools/smoke_modern_pygame_screens.py", content)
 
     def test_github_actions_runs_pygame_smokes(self):
         workflow = Path(".github/workflows/core-checks.yml")
@@ -461,6 +468,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("tools/verify_screen_smoke.py", content)
         self.assertIn("tools/raspberry_pi_preflight.py", content)
         self.assertIn("tools/smoke_legacy_pygame_screens.py", content)
+        self.assertIn("tools/smoke_modern_pygame_screens.py", content)
 
     def test_raspberry_pi_requirements_exclude_heavy_local_model_stack(self):
         requirements = Path("requirements-raspberry-pi.txt").read_text(encoding="utf-8")
@@ -586,6 +594,21 @@ class ToolingDefaultsTests(unittest.TestCase):
         finally:
             pygame.quit()
 
+    def test_modern_screen_smoke_tool_covers_catalog(self):
+        from Screen import APP_DEFINITIONS
+        from tools.smoke_modern_pygame_screens import FEATURE_SPECS, screen_slug
+
+        expected_names = [name for name, _ in APP_DEFINITIONS if name != "Cortex"]
+
+        self.assertEqual(expected_names, [spec.app_name for spec in FEATURE_SPECS])
+        self.assertEqual("sante", screen_slug("Santé"))
+        self.assertEqual("mots_de_passe", screen_slug("Mots de passe"))
+        self.assertEqual("meteo", screen_slug("Météo"))
+        self.assertTrue(
+            all(spec.name.isascii() for spec in FEATURE_SPECS),
+            [spec.name for spec in FEATURE_SPECS if not spec.name.isascii()],
+        )
+
     def test_raspberry_pi_preflight_accepts_repo_layout(self):
         from tools.raspberry_pi_preflight import collect_preflight_errors
 
@@ -625,6 +648,8 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "scripts/setup_raspberry_pi.sh",
                 "deploy/raspberry-pi/install_service.sh",
                 "deploy/raspberry-pi/cortex.service.example",
+                "tools/smoke_legacy_pygame_screens.py",
+                "tools/smoke_modern_pygame_screens.py",
             ):
                 path = root / relative_path
                 path.parent.mkdir(parents=True, exist_ok=True)

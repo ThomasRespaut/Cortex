@@ -20,6 +20,7 @@ REQUIRED_FILES = [
     "deploy/raspberry-pi/install_service.sh",
     "deploy/raspberry-pi/cortex.service.example",
     "tools/smoke_legacy_pygame_screens.py",
+    "tools/smoke_modern_pygame_screens.py",
 ]
 
 REQUIRED_ASSETS = [

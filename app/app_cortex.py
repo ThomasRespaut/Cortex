@@ -6,7 +6,7 @@ import time
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 import pygame
 
-from app.screen_config import pointer_down_position
+from app.screen_config import env_bool, pointer_down_position
 
 
 BACKGROUND_TOP = (18, 38, 86)
@@ -303,6 +303,8 @@ class CortexView:
                         )
 
             pygame.display.flip()
+            if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
+                self.running = False
             self.clock.tick(60)
 
 

@@ -38,6 +38,9 @@ CORTEX_EXIT_AFTER_SCREENSHOT=true \
 "$VENV_DIR/bin/python" tools/smoke_legacy_pygame_screens.py \
   --size "${CORTEX_SCREEN_SIZE:-480x480}" \
   --output-dir artifacts/legacy-screen-smoke
+"$VENV_DIR/bin/python" tools/smoke_modern_pygame_screens.py \
+  --size "${CORTEX_SCREEN_SIZE:-480x480}" \
+  --output-dir artifacts/modern-screen-smoke
 
 echo "Environnement Raspberry Pi prêt dans ${VENV_DIR}."
 echo "Smokes Pygame headless validés dans artifacts/."
