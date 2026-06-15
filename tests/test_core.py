@@ -395,6 +395,27 @@ class InterfaceAssetTests(unittest.TestCase):
             radius,
         )
 
+    def test_round_safe_rect_center_keeps_status_inside_circle(self):
+        import pygame
+        from app.screen_config import rect_fits_round_viewport, round_safe_rect_center
+
+        center = pygame.Vector2(240, 240)
+        radius = 240
+        rect_size = (130, 34)
+        position = round_safe_rect_center(
+            center,
+            radius,
+            0,
+            -0.9,
+            rect_size,
+            margin=6,
+        )
+        rect = pygame.Rect((0, 0), rect_size)
+        rect.center = position
+
+        self.assertLess(position.y, center.y)
+        self.assertTrue(rect_fits_round_viewport(rect, center, radius, margin=6))
+
     def test_touch_hit_helpers_expand_small_targets(self):
         import pygame
         from app.screen_config import circle_hit_test, rect_hit_test
@@ -468,6 +489,7 @@ class InterfaceAssetTests(unittest.TestCase):
         self.assertIn("safe_margin", content)
         self.assertIn("size / 2", content)
         self.assertIn("fit_text(self.label_font", content)
+        self.assertIn("round_safe_rect_center", content)
         self.assertIn("TAP_MOVE_LIMIT", content)
         self.assertIn("app == self.selected", content)
         self.assertIn("apply_round_mask(self.screen", content)

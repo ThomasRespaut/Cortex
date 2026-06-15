@@ -162,6 +162,53 @@ def circle_fits_round_viewport(position, width, height, item_radius, margin=0):
     return pygame.Vector2(position).distance_to(center) + item_radius <= radius
 
 
+def rect_fits_round_viewport(rect, center, radius, margin=0):
+    import pygame
+
+    viewport_center = pygame.Vector2(center)
+    usable_radius = max(0, radius - margin)
+    return all(
+        pygame.Vector2(corner).distance_to(viewport_center) <= usable_radius
+        for corner in (
+            rect.topleft,
+            rect.topright,
+            rect.bottomleft,
+            rect.bottomright,
+        )
+    )
+
+
+def round_safe_rect_center(center, radius, dx_ratio, dy_ratio, rect_size, margin=0):
+    import pygame
+
+    origin = pygame.Vector2(center)
+    vector = pygame.Vector2(dx_ratio, dy_ratio)
+    if vector.length_squared() == 0:
+        return origin
+
+    def fitted_at(position):
+        rect = pygame.Rect((0, 0), rect_size)
+        rect.center = position
+        return rect_fits_round_viewport(rect, origin, radius, margin=margin)
+
+    target = origin + vector * radius
+    if fitted_at(target):
+        return target
+    if not fitted_at(origin):
+        return origin
+
+    low = 0.0
+    high = 1.0
+    for _ in range(24):
+        middle = (low + high) / 2
+        candidate = origin + vector * radius * middle
+        if fitted_at(candidate):
+            low = middle
+        else:
+            high = middle
+    return origin + vector * radius * low
+
+
 def circle_hit_test(position, center, radius, padding=None):
     import pygame
 

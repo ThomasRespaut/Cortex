@@ -29,6 +29,7 @@ from app.screen_config import (
     pointer_move_position,
     pointer_up_position,
     prepare_screenshot_path,
+    round_safe_rect_center,
 )
 
 load_dotenv()
@@ -309,8 +310,17 @@ class CortexHome:
             mode = "LOCAL" if self.cortex.local_mode else "EN LIGNE"
             mode_color = ACCENT
         mode_surface = self.small_font.render(mode, True, mode_color)
-        mode_rect = mode_surface.get_rect(center=(center.x, center.y - radius * 0.9))
+        mode_rect = mode_surface.get_rect()
         pill = mode_rect.inflate(24, 10)
+        pill.center = round_safe_rect_center(
+            center,
+            radius,
+            0,
+            -0.9,
+            pill.size,
+            margin=max(4, int(radius * 0.025)),
+        )
+        mode_rect.center = pill.center
         pygame.draw.rect(self.screen, (12, 31, 44), pill, border_radius=pill.height // 2)
         pygame.draw.rect(self.screen, (28, 103, 128), pill, 1, border_radius=pill.height // 2)
         self.screen.blit(mode_surface, mode_rect)
@@ -324,8 +334,17 @@ class CortexHome:
             return
         text = fit_text(self.small_font, self.notice_text, radius * 1.25)
         notice_surface = self.small_font.render(text, True, TEXT)
-        notice_rect = notice_surface.get_rect(center=(center.x, center.y + radius * 0.78))
+        notice_rect = notice_surface.get_rect()
         notice_bg = notice_rect.inflate(26, 12)
+        notice_bg.center = round_safe_rect_center(
+            center,
+            radius,
+            0,
+            0.78,
+            notice_bg.size,
+            margin=max(4, int(radius * 0.025)),
+        )
+        notice_rect.center = notice_bg.center
         pygame.draw.rect(
             self.screen,
             (10, 20, 38),
