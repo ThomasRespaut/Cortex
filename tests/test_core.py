@@ -556,6 +556,45 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_empty_double_tap_resets_view(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                home.rendered_apps = []
+                home.offset.update(42, -24)
+                home.velocity.update(8, 3)
+                home.zoom = 1.2
+
+                with mock.patch(
+                    "pygame.time.get_ticks",
+                    side_effect=[1000, 1300, 1300],
+                ):
+                    home.handle_pointer_down((40, 120))
+                    home.handle_pointer_up((40, 120))
+                    self.assertEqual((42, -24), tuple(home.offset))
+                    self.assertEqual(1.2, home.zoom)
+
+                    home.handle_pointer_down((48, 122))
+                    home.handle_pointer_up((48, 122))
+
+                self.assertEqual((0, 0), tuple(home.offset))
+                self.assertEqual((0, 0), tuple(home.velocity))
+                self.assertEqual(1.0, home.zoom)
+                self.assertEqual("Vue recentrée", home.notice_text)
+            finally:
+                pygame.quit()
+
     def test_home_menu_zoom_keeps_focus_point_stable(self):
         import pygame
         from Screen import CortexHome

@@ -41,6 +41,8 @@ TAP_MOVE_LIMIT = 14
 ZOOM_MIN = 0.72
 ZOOM_MAX = 1.28
 PINCH_ZOOM_FACTOR = 0.003
+EMPTY_DOUBLE_TAP_MS = 500
+EMPTY_DOUBLE_TAP_DISTANCE = 36
 
 
 @dataclass
@@ -167,6 +169,8 @@ class CortexHome:
         self.selected = None
         self.active_fingers = {}
         self.pinch_last_distance = None
+        self.last_empty_tap_at = None
+        self.last_empty_tap_position = None
         self.rendered_apps = []
         self.screenshot_saved = False
         self.notice_text = ""
@@ -402,6 +406,13 @@ class CortexHome:
         self.offset = -target
         self.velocity.update(0, 0)
 
+    def reset_view(self):
+        self.offset.update(0, 0)
+        self.velocity.update(0, 0)
+        self.zoom = 1.0
+        self.selected = None
+        self.show_notice("Vue recentrée")
+
     def clamp_zoom(self, value):
         return max(ZOOM_MIN, min(ZOOM_MAX, value))
 
@@ -483,6 +494,26 @@ class CortexHome:
         self.selected = None
         if moved < tap_move_limit and tapped and tapped == selected:
             self.launch_app(tapped.name)
+        elif moved < tap_move_limit and tapped is None and selected is None:
+            self.handle_empty_tap(release)
+
+    def handle_empty_tap(self, position):
+        now = pygame.time.get_ticks()
+        position = pygame.Vector2(position)
+        if (
+            self.last_empty_tap_at is not None
+            and now - self.last_empty_tap_at <= EMPTY_DOUBLE_TAP_MS
+            and self.last_empty_tap_position is not None
+            and position.distance_to(self.last_empty_tap_position)
+            <= EMPTY_DOUBLE_TAP_DISTANCE
+        ):
+            self.reset_view()
+            self.last_empty_tap_at = None
+            self.last_empty_tap_position = None
+            return
+
+        self.last_empty_tap_at = now
+        self.last_empty_tap_position = position
 
     def handle_touch_event(self, event, width, height):
         if event.type == pygame.FINGERDOWN:

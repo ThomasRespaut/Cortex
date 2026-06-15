@@ -47,6 +47,19 @@ def dispatch_quietly(home, event):
         return home.handle_event(event)
 
 
+def empty_touch_point(home, size):
+    candidates = [
+        (size[0] // 2, int(size[1] * 0.22)),
+        (int(size[0] * 0.28), size[1] // 2),
+        (int(size[0] * 0.72), size[1] // 2),
+        (size[0] // 2, int(size[1] * 0.78)),
+    ]
+    for candidate in candidates:
+        if home.app_at(candidate) is None:
+            return candidate
+    raise RuntimeError("Aucune zone vide disponible pour le double-tap.")
+
+
 def smoke_home_touch_interactions(size):
     os.environ["CORTEX_SCREEN_SIZE"] = f"{size[0]}x{size[1]}"
     home = CortexHome()
@@ -111,6 +124,18 @@ def smoke_home_touch_interactions(size):
             raise RuntimeError("Le pinch tactile laisse un drag actif.")
         dispatch_quietly(home, finger_event(pygame.FINGERUP, wider, size, finger_id=2))
         dispatch_quietly(home, finger_event(pygame.FINGERUP, left, size, finger_id=1))
+
+        render_home_once(home)
+        empty = empty_touch_point(home, size)
+        home.offset.update(36, -24)
+        home.velocity.update(6, 2)
+        home.zoom = 1.18
+        dispatch_quietly(home, finger_event(pygame.FINGERDOWN, empty, size))
+        dispatch_quietly(home, finger_event(pygame.FINGERUP, empty, size))
+        dispatch_quietly(home, finger_event(pygame.FINGERDOWN, empty, size))
+        dispatch_quietly(home, finger_event(pygame.FINGERUP, empty, size))
+        if home.offset.length() > 0 or home.velocity.length() > 0 or home.zoom != 1.0:
+            raise RuntimeError("Le double-tap vide ne recentre pas le menu principal.")
     finally:
         pygame.quit()
     return app.name
