@@ -129,6 +129,15 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertEqual((64, 64), icon.get_size())
             self.assertGreater(icon.get_bounding_rect().width, 0)
 
+    def test_icon_fallback_rejects_zero_or_negative_sizes(self):
+        import pygame
+        from app.screen_assets import make_icon_fallback
+
+        pygame.font.init()
+
+        self.assertEqual((1, 1), make_icon_fallback("Cortex", size=0).get_size())
+        self.assertEqual((1, 1), make_icon_fallback("Cortex", size=-24).get_size())
+
     def test_icon_fallback_works_without_display(self):
         import pygame
         from app.screen_assets import make_icon_fallback
@@ -153,6 +162,16 @@ class InterfaceAssetTests(unittest.TestCase):
 
         self.assertEqual((160, 160), background.get_size())
         self.assertGreater(background.get_bounding_rect().height, 0)
+
+    def test_background_fallback_rejects_zero_or_negative_sizes(self):
+        import pygame
+        from app.screen_assets import make_background_fallback
+
+        pygame.font.init()
+        background = make_background_fallback("Cortex", (0, -12))
+
+        self.assertEqual((1, 1), background.get_size())
+        self.assertGreaterEqual(background.get_bounding_rect().width, 0)
 
     def test_pygame_asset_path_uses_linux_case(self):
         from app.screen_assets import asset_path

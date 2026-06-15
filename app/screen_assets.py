@@ -8,7 +8,15 @@ def asset_path(*parts):
     return os.path.join("app", "Images", *parts)
 
 
+def safe_surface_size(size, default=1):
+    if isinstance(size, int):
+        return max(default, size)
+    width, height = size
+    return max(default, int(width)), max(default, int(height))
+
+
 def make_icon_fallback(label, size=128, accent=(88, 214, 255)):
+    size = safe_surface_size(size)
     surface = pygame.Surface((size, size), pygame.SRCALPHA)
     pygame.draw.circle(surface, (10, 17, 35), (size // 2, size // 2), size // 2)
     pygame.draw.circle(surface, accent, (size // 2, size // 2), size // 2 - 4, 4)
@@ -25,7 +33,7 @@ def make_icon_fallback(label, size=128, accent=(88, 214, 255)):
 
 
 def make_background_fallback(label, size, accent=(88, 214, 255)):
-    width, height = size
+    width, height = safe_surface_size(size)
     surface = pygame.Surface((width, height))
     top = (16, 28, 58)
     bottom = (4, 7, 20)
@@ -54,6 +62,7 @@ def make_background_fallback(label, size, accent=(88, 214, 255)):
 
 
 def load_background_or_fallback(path, label, size, accent=(88, 214, 255)):
+    size = safe_surface_size(size)
     try:
         background = pygame.image.load(path)
         return pygame.transform.scale(background, size)
