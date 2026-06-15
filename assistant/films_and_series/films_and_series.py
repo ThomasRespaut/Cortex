@@ -1,5 +1,6 @@
 import requests
 import os
+import sys
 from dotenv import load_dotenv
 
 import ast
@@ -111,6 +112,10 @@ def recommend_media(title=None, genre=None, media_type='movie'):
     return str(results)
 
 def propose_recommendations(media_type='movie'):
+    if not sys.stdin.isatty():
+        print("Recherche films/séries interactive indisponible.")
+        return []
+
     genres = get_genre_list(media_type)
 
     # Afficher les genres disponibles
