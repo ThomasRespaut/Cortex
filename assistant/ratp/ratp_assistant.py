@@ -16,9 +16,16 @@ class IDFMAssistant:
             "" if self.idfm_api_key else "IDFM_API_KEY n'est pas configurée."
         )
 
+    def _set_runtime_error(self, message):
+        if self.idfm_api_key:
+            self.error_message = message
+
+    def _clear_runtime_error(self):
+        if self.idfm_api_key:
+            self.error_message = ""
 
     # Fonction pour obtenir les coordonnées GPS d'une ville donnée
-    def get_coords(self,city_name):
+    def get_coords(self, city_name):
         if not self.idfm_api_key:
             return None
 
@@ -41,7 +48,8 @@ class IDFMAssistant:
                 headers=headers,
                 timeout=DEFAULT_REQUEST_TIMEOUT,
             )
-        except requests.RequestException:
+        except requests.RequestException as error:
+            self._set_runtime_error(f"Erreur réseau IDFM : {error}")
             return None
 
         # Vérifier si la requête a réussi
@@ -49,6 +57,7 @@ class IDFMAssistant:
             try:
                 data_places = response_places.json()
             except ValueError:
+                self._set_runtime_error("Réponse IDFM places invalide.")
                 return None
 
             # Parcourir les résultats
@@ -70,19 +79,36 @@ class IDFMAssistant:
                 if coord:
                     return {'lat': coord['lat'], 'lon': coord['lon']}
         else:
-            print(f"Erreur {response_places.status_code} : {response_places.text}")
+            self._set_runtime_error(
+                f"Erreur IDFM lieux {response_places.status_code}."
+            )
+            return None
+
+        self._set_runtime_error(
+            "Impossible de récupérer les coordonnées GPS pour les villes spécifiées."
+        )
 
         return None
-
-    from datetime import datetime
 
     def calculate_route(self, from_city, to_city):
         if not self.idfm_api_key:
             return self.error_message
 
+        self._clear_runtime_error()
+
         # Récupérer les coordonnées GPS des villes
         from_coords = self.get_coords(from_city)
+        if not from_coords:
+            return (
+                self.error_message
+                or "Impossible de récupérer les coordonnées GPS pour les villes spécifiées."
+            )
         to_coords = self.get_coords(to_city)
+        if not to_coords:
+            return (
+                self.error_message
+                or "Impossible de récupérer les coordonnées GPS pour les villes spécifiées."
+            )
 
         if from_coords and to_coords:
             # URL de l'API pour calculer un itinéraire
@@ -114,14 +140,16 @@ class IDFMAssistant:
                     timeout=DEFAULT_REQUEST_TIMEOUT,
                 )
             except requests.RequestException as error:
-                return f"Erreur réseau IDFM : {error}"
+                self._set_runtime_error(f"Erreur réseau IDFM : {error}")
+                return self.error_message
 
             # Vérification du statut de la requête
             if response_journey.status_code == 200:
                 try:
                     data_journey = response_journey.json()
                 except ValueError:
-                    return "Réponse IDFM invalide."
+                    self._set_runtime_error("Réponse IDFM invalide.")
+                    return self.error_message
                 itineraries = []
 
                 # Pour chaque itinéraire trouvé
@@ -153,7 +181,10 @@ class IDFMAssistant:
 
                 return itineraries
             else:
-                return f"Erreur {response_journey.status_code} : {response_journey.text}"
+                self._set_runtime_error(
+                    f"Erreur IDFM itinéraire {response_journey.status_code}."
+                )
+                return self.error_message
 
         else:
             return "Impossible de récupérer les coordonnées GPS pour les villes spécifiées."
