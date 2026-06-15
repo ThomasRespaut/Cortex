@@ -20,14 +20,31 @@ from tools.smoke_modern_touch_interactions import smoke_modern_touch_interaction
 
 
 TOUCH_ROTATIONS = (0, 90, 180, 270)
+TOUCH_FLIP_CASES = (
+    (False, False),
+    (True, False),
+    (False, True),
+    (True, True),
+)
 
 
-def smoke_touch_rotations(size, rotations=TOUCH_ROTATIONS):
+def smoke_touch_rotations(size, rotations=TOUCH_ROTATIONS, flip_cases=TOUCH_FLIP_CASES):
     checked = []
     for rotation in rotations:
-        smoke_home_touch_interactions(size, touch_rotation=rotation)
-        smoke_modern_touch_interactions(size, touch_rotation=rotation)
-        checked.append(rotation)
+        for flip_x, flip_y in flip_cases:
+            smoke_home_touch_interactions(
+                size,
+                touch_rotation=rotation,
+                touch_flip_x=flip_x,
+                touch_flip_y=flip_y,
+            )
+            smoke_modern_touch_interactions(
+                size,
+                touch_rotation=rotation,
+                touch_flip_x=flip_x,
+                touch_flip_y=flip_y,
+            )
+            checked.append((rotation, flip_x, flip_y))
     return checked
 
 
@@ -50,12 +67,15 @@ def parse_args():
 def main():
     args = parse_args()
     try:
-        rotations = smoke_touch_rotations(args.size)
+        cases = smoke_touch_rotations(args.size)
     except Exception as error:
         print(f"Smoke rotations tactiles échoué: {error}")
         return 1
 
-    labels = ", ".join(str(rotation) for rotation in rotations)
+    labels = ", ".join(
+        f"{rotation}/flipX={str(flip_x).lower()}/flipY={str(flip_y).lower()}"
+        for rotation, flip_x, flip_y in cases
+    )
     print(f"Smoke rotations tactiles OK: {labels}.")
     return 0
 

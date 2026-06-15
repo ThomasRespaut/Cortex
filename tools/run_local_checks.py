@@ -121,7 +121,26 @@ def build_check_steps(
     project_root=".",
     step_timeout=300,
     touch_rotation=0,
+    touch_flip_x=False,
+    touch_flip_y=False,
 ):
+    raspberry_pi_command = [
+        python_bin,
+        "tools/validate_raspberry_pi_ui.py",
+        "--project-root",
+        project_root,
+        "--size",
+        screen_size,
+        "--step-timeout",
+        str(step_timeout),
+        "--touch-rotation",
+        str(touch_rotation),
+    ]
+    if touch_flip_x:
+        raspberry_pi_command.append("--touch-flip-x")
+    if touch_flip_y:
+        raspberry_pi_command.append("--touch-flip-y")
+
     return [
         CheckStep(
             "Contrôle whitespace Git",
@@ -171,18 +190,7 @@ def build_check_steps(
         ),
         CheckStep(
             "Validation Raspberry Pi/Pygame",
-            [
-                python_bin,
-                "tools/validate_raspberry_pi_ui.py",
-                "--project-root",
-                project_root,
-                "--size",
-                screen_size,
-                "--step-timeout",
-                str(step_timeout),
-                "--touch-rotation",
-                str(touch_rotation),
-            ],
+            raspberry_pi_command,
         ),
     ]
 
@@ -243,6 +251,16 @@ def parse_args():
         type=touch_rotation,
         help="Rotation tactile Cortex à valider dans les smokes Raspberry Pi.",
     )
+    parser.add_argument(
+        "--touch-flip-x",
+        action="store_true",
+        help="Valide le tactile avec l'axe X brut inversé.",
+    )
+    parser.add_argument(
+        "--touch-flip-y",
+        action="store_true",
+        help="Valide le tactile avec l'axe Y brut inversé.",
+    )
     return parser.parse_args()
 
 
@@ -263,6 +281,8 @@ def main():
         project_root=".",
         step_timeout=args.step_timeout,
         touch_rotation=args.touch_rotation,
+        touch_flip_x=args.touch_flip_x,
+        touch_flip_y=args.touch_flip_y,
     )
     for step in steps:
         returncode = run_step(step, project_root, args.step_timeout)

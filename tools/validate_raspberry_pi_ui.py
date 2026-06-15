@@ -76,12 +76,33 @@ def build_validation_steps(
     legacy_output_dir,
     modern_output_dir,
     touch_rotation=0,
+    touch_flip_x=False,
+    touch_flip_y=False,
 ):
     width, height = size
     screen_size = f"{width}x{height}"
     min_width = str(min(width, 400))
     min_height = str(min(height, 400))
-    touch_env = {"CORTEX_TOUCH_ROTATION": str(touch_rotation)}
+    touch_env = {
+        "CORTEX_TOUCH_ROTATION": str(touch_rotation),
+        "CORTEX_TOUCH_FLIP_X": "true" if touch_flip_x else "false",
+        "CORTEX_TOUCH_FLIP_Y": "true" if touch_flip_y else "false",
+    }
+
+    def touch_command(script):
+        command = [
+            python_bin,
+            script,
+            "--size",
+            screen_size,
+            "--touch-rotation",
+            str(touch_rotation),
+        ]
+        if touch_flip_x:
+            command.append("--touch-flip-x")
+        if touch_flip_y:
+            command.append("--touch-flip-y")
+        return command
 
     return [
         ValidationStep(
@@ -129,26 +150,12 @@ def build_validation_steps(
         ),
         ValidationStep(
             "Interactions tactiles menu principal",
-            [
-                python_bin,
-                "tools/smoke_home_touch_interactions.py",
-                "--size",
-                screen_size,
-                "--touch-rotation",
-                str(touch_rotation),
-            ],
+            touch_command("tools/smoke_home_touch_interactions.py"),
             env=pygame_headless_env(screen_size, **touch_env),
         ),
         ValidationStep(
             "Interactions tactiles écrans modernes",
-            [
-                python_bin,
-                "tools/smoke_modern_touch_interactions.py",
-                "--size",
-                screen_size,
-                "--touch-rotation",
-                str(touch_rotation),
-            ],
+            touch_command("tools/smoke_modern_touch_interactions.py"),
             env=pygame_headless_env(screen_size, **touch_env),
         ),
         ValidationStep(
@@ -255,6 +262,16 @@ def parse_args():
         type=touch_rotation,
         help="Rotation tactile Cortex à valider: 0, 90, 180 ou 270.",
     )
+    parser.add_argument(
+        "--touch-flip-x",
+        action="store_true",
+        help="Valide le tactile avec l'axe X brut inversé.",
+    )
+    parser.add_argument(
+        "--touch-flip-y",
+        action="store_true",
+        help="Valide le tactile avec l'axe Y brut inversé.",
+    )
     return parser.parse_args()
 
 
@@ -273,6 +290,8 @@ def main():
         args.legacy_output_dir,
         args.modern_output_dir,
         touch_rotation=args.touch_rotation,
+        touch_flip_x=args.touch_flip_x,
+        touch_flip_y=args.touch_flip_y,
     )
     for step in steps:
         returncode = run_step(step, project_root, args.step_timeout)

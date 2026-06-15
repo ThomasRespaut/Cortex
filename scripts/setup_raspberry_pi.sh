@@ -34,11 +34,19 @@ fi
 "$VENV_DIR/bin/python" -m pip install -r requirements-raspberry-pi.txt
 "$VENV_DIR/bin/python" -m pip check
 chmod +x scripts/launch_raspberry_pi.sh deploy/raspberry-pi/install_service.sh
+TOUCH_FLIP_ARGS=()
+if [ "${CORTEX_TOUCH_FLIP_X:-false}" = "true" ]; then
+  TOUCH_FLIP_ARGS+=("--touch-flip-x")
+fi
+if [ "${CORTEX_TOUCH_FLIP_Y:-false}" = "true" ]; then
+  TOUCH_FLIP_ARGS+=("--touch-flip-y")
+fi
 "$VENV_DIR/bin/python" tools/validate_raspberry_pi_ui.py \
   --project-root . \
   --size "${CORTEX_SCREEN_SIZE:-480x480}" \
   --step-timeout "${CORTEX_VALIDATE_STEP_TIMEOUT:-120}" \
   --touch-rotation "${CORTEX_TOUCH_ROTATION:-0}" \
+  "${TOUCH_FLIP_ARGS[@]}" \
   --screenshot artifacts/screen-smoke.png \
   --legacy-output-dir artifacts/legacy-screen-smoke \
   --modern-output-dir artifacts/modern-screen-smoke

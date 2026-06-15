@@ -31,7 +31,13 @@ def render_home_once(home):
     pygame.display.flip()
 
 
-def touch_fraction_for_screen_position(position, size, rotation):
+def touch_fraction_for_screen_position(
+    position,
+    size,
+    rotation,
+    touch_flip_x=None,
+    touch_flip_y=None,
+):
     rotation %= 360
     screen_x, screen_y = position
     width, height = size
@@ -47,11 +53,45 @@ def touch_fraction_for_screen_position(position, size, rotation):
     else:
         x = screen_x / width
         y = screen_y / height
+    if touch_flip_x is None:
+        touch_flip_x = os.getenv("CORTEX_TOUCH_FLIP_X", "").lower() in (
+            "1",
+            "true",
+            "yes",
+            "on",
+            "oui",
+        )
+    if touch_flip_y is None:
+        touch_flip_y = os.getenv("CORTEX_TOUCH_FLIP_Y", "").lower() in (
+            "1",
+            "true",
+            "yes",
+            "on",
+            "oui",
+        )
+    if touch_flip_x:
+        x = 1 - x
+    if touch_flip_y:
+        y = 1 - y
     return max(0.0, min(1.0, x)), max(0.0, min(1.0, y))
 
 
-def finger_event(event_type, position, size, finger_id=1, touch_rotation=0):
-    x, y = touch_fraction_for_screen_position(position, size, touch_rotation)
+def finger_event(
+    event_type,
+    position,
+    size,
+    finger_id=1,
+    touch_rotation=0,
+    touch_flip_x=None,
+    touch_flip_y=None,
+):
+    x, y = touch_fraction_for_screen_position(
+        position,
+        size,
+        touch_rotation,
+        touch_flip_x=touch_flip_x,
+        touch_flip_y=touch_flip_y,
+    )
     return pygame.event.Event(
         event_type,
         {
@@ -80,9 +120,16 @@ def empty_touch_point(home, size):
     raise RuntimeError("Aucune zone vide disponible pour le double-tap.")
 
 
-def smoke_home_touch_interactions(size, touch_rotation=0):
+def smoke_home_touch_interactions(
+    size,
+    touch_rotation=0,
+    touch_flip_x=False,
+    touch_flip_y=False,
+):
     os.environ["CORTEX_SCREEN_SIZE"] = f"{size[0]}x{size[1]}"
     os.environ["CORTEX_TOUCH_ROTATION"] = str(touch_rotation)
+    os.environ["CORTEX_TOUCH_FLIP_X"] = "true" if touch_flip_x else "false"
+    os.environ["CORTEX_TOUCH_FLIP_Y"] = "true" if touch_flip_y else "false"
     home = CortexHome()
     try:
         render_home_once(home)
@@ -289,13 +336,28 @@ def parse_args():
         choices=(0, 90, 180, 270),
         help="Rotation tactile Cortex à valider.",
     )
+    parser.add_argument(
+        "--touch-flip-x",
+        action="store_true",
+        help="Valide le tactile avec l'axe X brut inversé.",
+    )
+    parser.add_argument(
+        "--touch-flip-y",
+        action="store_true",
+        help="Valide le tactile avec l'axe Y brut inversé.",
+    )
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
     try:
-        app_name = smoke_home_touch_interactions(args.size, args.touch_rotation)
+        app_name = smoke_home_touch_interactions(
+            args.size,
+            args.touch_rotation,
+            touch_flip_x=args.touch_flip_x,
+            touch_flip_y=args.touch_flip_y,
+        )
     except Exception as error:
         print(f"Smoke interactions menu principal échoué: {error}")
         return 1

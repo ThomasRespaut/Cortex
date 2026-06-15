@@ -37,8 +37,14 @@ class DummyCortex:
         return None
 
 
-def finger_down(position, size, touch_rotation=0):
-    x, y = touch_fraction_for_screen_position(position, size, touch_rotation)
+def finger_down(position, size, touch_rotation=0, touch_flip_x=False, touch_flip_y=False):
+    x, y = touch_fraction_for_screen_position(
+        position,
+        size,
+        touch_rotation,
+        touch_flip_x=touch_flip_x,
+        touch_flip_y=touch_flip_y,
+    )
     return pygame.event.Event(
         pygame.FINGERDOWN,
         {
@@ -49,15 +55,33 @@ def finger_down(position, size, touch_rotation=0):
     )
 
 
-def pointer_from_finger(position, size, touch_rotation=0):
-    event = finger_down(position, size, touch_rotation)
+def pointer_from_finger(
+    position,
+    size,
+    touch_rotation=0,
+    touch_flip_x=False,
+    touch_flip_y=False,
+):
+    event = finger_down(
+        position,
+        size,
+        touch_rotation,
+        touch_flip_x=touch_flip_x,
+        touch_flip_y=touch_flip_y,
+    )
     pointer = pointer_down_position(event, size[0], size[1])
     if pointer is None:
         raise RuntimeError(f"Position tactile rejetée: {position}")
     return pointer
 
 
-def smoke_cortex_touch(screen, size, touch_rotation=0):
+def smoke_cortex_touch(
+    screen,
+    size,
+    touch_rotation=0,
+    touch_flip_x=False,
+    touch_flip_y=False,
+):
     view = CortexView(screen, DummyCortex())
     prompts = []
     view.run_query = lambda prompt=None: prompts.append(prompt)
@@ -72,7 +96,13 @@ def smoke_cortex_touch(screen, size, touch_rotation=0):
 
     suggestion_position = suggestion_rects[0][0].center
     view.activate_at(
-        pointer_from_finger(suggestion_position, size, touch_rotation),
+        pointer_from_finger(
+            suggestion_position,
+            size,
+            touch_rotation,
+            touch_flip_x=touch_flip_x,
+            touch_flip_y=touch_flip_y,
+        ),
         back_center,
         back_radius,
         orb_center,
@@ -83,7 +113,13 @@ def smoke_cortex_touch(screen, size, touch_rotation=0):
         raise RuntimeError("Le tap tactile sur une suggestion Cortex ne lance pas la requête.")
 
     view.activate_at(
-        pointer_from_finger(back_center, size, touch_rotation),
+        pointer_from_finger(
+            back_center,
+            size,
+            touch_rotation,
+            touch_flip_x=touch_flip_x,
+            touch_flip_y=touch_flip_y,
+        ),
         back_center,
         back_radius,
         orb_center,
@@ -94,7 +130,13 @@ def smoke_cortex_touch(screen, size, touch_rotation=0):
         raise RuntimeError("Le tap tactile sur retour Cortex ne ferme pas la vue.")
 
 
-def smoke_feature_touch(screen, size, touch_rotation=0):
+def smoke_feature_touch(
+    screen,
+    size,
+    touch_rotation=0,
+    touch_flip_x=False,
+    touch_flip_y=False,
+):
     cortex = DummyCortex()
     width, height = size
     radius = min(width, height) / 2
@@ -103,7 +145,15 @@ def smoke_feature_touch(screen, size, touch_rotation=0):
     first_card_center = (center.x, center.y - radius * 0.08 + card_height / 2)
 
     pygame.event.clear()
-    pygame.event.post(finger_down(first_card_center, size, touch_rotation))
+    pygame.event.post(
+        finger_down(
+            first_card_center,
+            size,
+            touch_rotation,
+            touch_flip_x=touch_flip_x,
+            touch_flip_y=touch_flip_y,
+        )
+    )
     launch_feature(
         screen,
         cortex,
@@ -114,13 +164,32 @@ def smoke_feature_touch(screen, size, touch_rotation=0):
         raise RuntimeError("Le tap tactile sur Réglages ne bascule pas le mode local.")
 
 
-def smoke_modern_touch_interactions(size, touch_rotation=0):
+def smoke_modern_touch_interactions(
+    size,
+    touch_rotation=0,
+    touch_flip_x=False,
+    touch_flip_y=False,
+):
     os.environ["CORTEX_TOUCH_ROTATION"] = str(touch_rotation)
+    os.environ["CORTEX_TOUCH_FLIP_X"] = "true" if touch_flip_x else "false"
+    os.environ["CORTEX_TOUCH_FLIP_Y"] = "true" if touch_flip_y else "false"
     pygame.init()
     screen = pygame.display.set_mode(size)
     try:
-        smoke_cortex_touch(screen, size, touch_rotation)
-        smoke_feature_touch(screen, size, touch_rotation)
+        smoke_cortex_touch(
+            screen,
+            size,
+            touch_rotation,
+            touch_flip_x=touch_flip_x,
+            touch_flip_y=touch_flip_y,
+        )
+        smoke_feature_touch(
+            screen,
+            size,
+            touch_rotation,
+            touch_flip_x=touch_flip_x,
+            touch_flip_y=touch_flip_y,
+        )
     finally:
         pygame.quit()
 
@@ -142,13 +211,28 @@ def parse_args():
         choices=(0, 90, 180, 270),
         help="Rotation tactile Cortex à valider.",
     )
+    parser.add_argument(
+        "--touch-flip-x",
+        action="store_true",
+        help="Valide le tactile avec l'axe X brut inversé.",
+    )
+    parser.add_argument(
+        "--touch-flip-y",
+        action="store_true",
+        help="Valide le tactile avec l'axe Y brut inversé.",
+    )
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
     try:
-        smoke_modern_touch_interactions(args.size, args.touch_rotation)
+        smoke_modern_touch_interactions(
+            args.size,
+            args.touch_rotation,
+            touch_flip_x=args.touch_flip_x,
+            touch_flip_y=args.touch_flip_y,
+        )
     except Exception as error:
         print(f"Smoke interactions modernes échoué: {error}")
         return 1

@@ -1201,6 +1201,16 @@ class InterfaceAssetTests(unittest.TestCase):
             (300.0, 300.0),
             rotated_touch_position(0.25, 0.75, width, height, 270),
         )
+        with mock.patch.dict(os.environ, {"CORTEX_TOUCH_FLIP_X": "true"}):
+            self.assertEqual(
+                (300.0, 300.0),
+                rotated_touch_position(0.25, 0.75, width, height, 0),
+            )
+        with mock.patch.dict(os.environ, {"CORTEX_TOUCH_FLIP_Y": "true"}):
+            self.assertEqual(
+                (100.0, 100.0),
+                rotated_touch_position(0.25, 0.75, width, height, 0),
+            )
 
     def test_touch_drag_motion_can_clamp_to_round_edge(self):
         import pygame
@@ -1565,6 +1575,8 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_FPS=\"${CORTEX_FPS:-60}\"", content)
         self.assertIn("CORTEX_SCREEN_SIZE=\"${CORTEX_SCREEN_SIZE:-480x480}\"", content)
         self.assertIn("CORTEX_TOUCH_ROTATION=\"${CORTEX_TOUCH_ROTATION:-0}\"", content)
+        self.assertIn("CORTEX_TOUCH_FLIP_X=\"${CORTEX_TOUCH_FLIP_X:-false}\"", content)
+        self.assertIn("CORTEX_TOUCH_FLIP_Y=\"${CORTEX_TOUCH_FLIP_Y:-false}\"", content)
         self.assertIn(
             "CORTEX_TOUCH_ROUND_CLIP=\"${CORTEX_TOUCH_ROUND_CLIP:-true}\"",
             content,
@@ -1631,6 +1643,9 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("tools/validate_raspberry_pi_ui.py", content)
         self.assertIn("--step-timeout \"${CORTEX_VALIDATE_STEP_TIMEOUT:-120}\"", content)
         self.assertIn("--touch-rotation \"${CORTEX_TOUCH_ROTATION:-0}\"", content)
+        self.assertIn("TOUCH_FLIP_ARGS", content)
+        self.assertIn("--touch-flip-x", content)
+        self.assertIn("--touch-flip-y", content)
         self.assertIn("--screenshot artifacts/screen-smoke.png", content)
         self.assertIn("--legacy-output-dir artifacts/legacy-screen-smoke", content)
         self.assertIn("--modern-output-dir artifacts/modern-screen-smoke", content)
@@ -1654,6 +1669,8 @@ class ToolingDefaultsTests(unittest.TestCase):
             "artifacts/legacy-screen-smoke",
             "artifacts/modern-screen-smoke",
             touch_rotation=90,
+            touch_flip_x=True,
+            touch_flip_y=True,
         )
         step_commands = [" ".join(step.command) for step in steps]
 
@@ -1681,11 +1698,11 @@ class ToolingDefaultsTests(unittest.TestCase):
             step_commands,
         )
         self.assertIn(
-            "python tools/smoke_home_touch_interactions.py --size 480x480 --touch-rotation 90",
+            "python tools/smoke_home_touch_interactions.py --size 480x480 --touch-rotation 90 --touch-flip-x --touch-flip-y",
             step_commands,
         )
         self.assertIn(
-            "python tools/smoke_modern_touch_interactions.py --size 480x480 --touch-rotation 90",
+            "python tools/smoke_modern_touch_interactions.py --size 480x480 --touch-rotation 90 --touch-flip-x --touch-flip-y",
             step_commands,
         )
         self.assertIn(
@@ -1706,6 +1723,8 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual("false", steps[1].env["CORTEX_FULLSCREEN"])
         self.assertEqual("480x480", steps[1].env["CORTEX_SCREEN_SIZE"])
         self.assertEqual("90", steps[1].env["CORTEX_TOUCH_ROTATION"])
+        self.assertEqual("true", steps[1].env["CORTEX_TOUCH_FLIP_X"])
+        self.assertEqual("true", steps[1].env["CORTEX_TOUCH_FLIP_Y"])
         for index in (4, 5, 6, 7, 8):
             self.assertEqual("dummy", steps[index].env["SDL_VIDEODRIVER"])
             self.assertEqual("0", steps[index].env["SDL_TOUCH_MOUSE_EVENTS"])
@@ -1713,6 +1732,8 @@ class ToolingDefaultsTests(unittest.TestCase):
             self.assertEqual("480x480", steps[index].env["CORTEX_SCREEN_SIZE"])
         for index in (4, 5, 7, 8):
             self.assertEqual("90", steps[index].env["CORTEX_TOUCH_ROTATION"])
+            self.assertEqual("true", steps[index].env["CORTEX_TOUCH_FLIP_X"])
+            self.assertEqual("true", steps[index].env["CORTEX_TOUCH_FLIP_Y"])
 
     def test_raspberry_pi_ui_validator_times_out_stuck_steps(self):
         from tools.validate_raspberry_pi_ui import ValidationStep, run_step
@@ -1784,6 +1805,18 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
         self.assertIn("--step-timeout 300", step_commands[-1])
         self.assertIn("--touch-rotation 0", step_commands[-1])
+        flipped_steps = build_check_steps(
+            "python",
+            "training/finetune_cortex_v3",
+            "480x480",
+            touch_rotation=270,
+            touch_flip_x=True,
+            touch_flip_y=True,
+        )
+        flipped_command = " ".join(flipped_steps[-1].command)
+        self.assertIn("--touch-rotation 270", flipped_command)
+        self.assertIn("--touch-flip-x", flipped_command)
+        self.assertIn("--touch-flip-y", flipped_command)
 
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
@@ -1900,6 +1933,8 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_FPS=60", content)
         self.assertIn("Environment=CORTEX_SCREEN_SIZE=480x480", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
+        self.assertIn("Environment=CORTEX_TOUCH_FLIP_X=false", content)
+        self.assertIn("Environment=CORTEX_TOUCH_FLIP_Y=false", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_CLAMP=true", content)
@@ -1926,6 +1961,8 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_FPS=60", content)
         self.assertIn("Environment=CORTEX_SCREEN_SIZE=480x480", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
+        self.assertIn("Environment=CORTEX_TOUCH_FLIP_X=false", content)
+        self.assertIn("Environment=CORTEX_TOUCH_FLIP_Y=false", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_CLAMP=true", content)
@@ -2106,9 +2143,13 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
 
     def test_touch_rotation_smoke_tool_covers_all_quadrants(self):
-        from tools.smoke_touch_rotations import TOUCH_ROTATIONS
+        from tools.smoke_touch_rotations import TOUCH_FLIP_CASES, TOUCH_ROTATIONS
 
         self.assertEqual((0, 90, 180, 270), TOUCH_ROTATIONS)
+        self.assertEqual(
+            ((False, False), (True, False), (False, True), (True, True)),
+            TOUCH_FLIP_CASES,
+        )
 
     def test_legacy_screen_smoke_tool_covers_bdd_view(self):
         from tools.smoke_legacy_pygame_screens import SCREEN_SPECS
@@ -2134,6 +2175,8 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_FPS=60", content)
         self.assertIn("CORTEX_SCREEN_SIZE=", content)
         self.assertIn("CORTEX_TOUCH_ROTATION=0", content)
+        self.assertIn("CORTEX_TOUCH_FLIP_X=false", content)
+        self.assertIn("CORTEX_TOUCH_FLIP_Y=false", content)
         self.assertIn("CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("CORTEX_TOUCH_EDGE_MARGIN=0", content)
         self.assertIn("CORTEX_TOUCH_EDGE_CLAMP=true", content)
@@ -2230,6 +2273,8 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertTrue(any("SDL_TOUCH_MOUSE_EVENTS" in error for error in errors))
         self.assertTrue(any("CORTEX_FPS" in error for error in errors))
+        self.assertTrue(any("CORTEX_TOUCH_FLIP_X" in error for error in errors))
+        self.assertTrue(any("CORTEX_TOUCH_FLIP_Y" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_ROUND_CLIP" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_EDGE_CLAMP" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_HIT_SLOP" in error for error in errors))

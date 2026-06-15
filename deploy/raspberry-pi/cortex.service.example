@@ -16,6 +16,8 @@ Environment=CORTEX_HIDE_CURSOR=true
 Environment=CORTEX_FPS=60
 Environment=CORTEX_SCREEN_SIZE=480x480
 Environment=CORTEX_TOUCH_ROTATION=0
+Environment=CORTEX_TOUCH_FLIP_X=false
+Environment=CORTEX_TOUCH_FLIP_Y=false
 Environment=CORTEX_TOUCH_ROUND_CLIP=true
 Environment=CORTEX_TOUCH_EDGE_MARGIN=0
 Environment=CORTEX_TOUCH_EDGE_CLAMP=true

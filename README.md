@@ -73,6 +73,8 @@ CORTEX_FULLSCREEN=true
 CORTEX_HIDE_CURSOR=true
 CORTEX_FPS=60
 CORTEX_TOUCH_ROTATION=0
+CORTEX_TOUCH_FLIP_X=false
+CORTEX_TOUCH_FLIP_Y=false
 CORTEX_TOUCH_ROUND_CLIP=true
 CORTEX_TOUCH_EDGE_MARGIN=0
 CORTEX_TOUCH_EDGE_CLAMP=true
@@ -86,7 +88,9 @@ CORTEX_VALIDATE_STEP_TIMEOUT=120
 
 `CORTEX_TOUCH_ROTATION` accepte `0`, `90`, `180` ou `270` pour aligner les
 coordonnées tactiles avec l'orientation réelle de l'écran.
-La validation Raspberry Pi rejoue aussi les smokes tactiles avec cette rotation.
+`CORTEX_TOUCH_FLIP_X=true` ou `CORTEX_TOUCH_FLIP_Y=true` inverse l'axe brut
+correspondant si le contrôleur tactile est monté dans l'autre sens.
+La validation Raspberry Pi rejoue aussi les smokes tactiles avec ces réglages.
 `CORTEX_TOUCH_ROUND_CLIP=true` ignore les appuis hors du disque utile de
 l'écran circulaire, et `CORTEX_TOUCH_EDGE_MARGIN` retire quelques pixels au
 rayon tactile si la bordure physique déclenche des appuis parasites.

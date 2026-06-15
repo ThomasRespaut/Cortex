@@ -113,6 +113,10 @@ def is_synthetic_touch_mouse_event(event):
 def rotated_touch_position(x, y, width, height, rotation=None):
     rotation = env_int("CORTEX_TOUCH_ROTATION", 0) if rotation is None else rotation
     rotation %= 360
+    if env_bool("CORTEX_TOUCH_FLIP_X", False):
+        x = 1 - x
+    if env_bool("CORTEX_TOUCH_FLIP_Y", False):
+        y = 1 - y
     px = x * width
     py = y * height
     if rotation == 90:
