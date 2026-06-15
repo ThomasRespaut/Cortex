@@ -1738,6 +1738,21 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("python tools/run_local_checks.py", content)
         self.assertIn("--screen-size 480x480", content)
 
+    def test_pygame_smokes_disable_sdl_touch_mouse_duplication(self):
+        smoke_tools = [
+            Path("tools/smoke_home_touch_interactions.py"),
+            Path("tools/smoke_modern_touch_interactions.py"),
+            Path("tools/smoke_legacy_touch_interactions.py"),
+            Path("tools/smoke_touch_rotations.py"),
+            Path("tools/smoke_legacy_pygame_screens.py"),
+            Path("tools/smoke_modern_pygame_screens.py"),
+        ]
+
+        for tool in smoke_tools:
+            content = tool.read_text(encoding="utf-8")
+            self.assertIn('os.environ.setdefault("SDL_TOUCH_MOUSE_EVENTS", "0")', content)
+            self.assertIn('os.environ.setdefault("SDL_MOUSE_TOUCH_EVENTS", "0")', content)
+
     def test_raspberry_pi_ui_validator_runs_full_headless_chain(self):
         from tools.validate_raspberry_pi_ui import build_validation_steps, parse_size
 

@@ -10,6 +10,8 @@ if str(ROOT) not in sys.path:
 
 os.environ.setdefault("PYGAME_HIDE_SUPPORT_PROMPT", "1")
 os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
+os.environ.setdefault("SDL_TOUCH_MOUSE_EVENTS", "0")
+os.environ.setdefault("SDL_MOUSE_TOUCH_EVENTS", "0")
 os.environ.setdefault("CORTEX_FULLSCREEN", "false")
 os.environ.setdefault("CORTEX_SKIP_CORTEX_LOAD", "true")
 os.environ.setdefault("CORTEX_EXIT_AFTER_FRAME", "true")
