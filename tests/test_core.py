@@ -1470,6 +1470,8 @@ class InterfaceAssetTests(unittest.TestCase):
             (300.0, 300.0),
             rotated_touch_position(0.25, 0.75, width, height, 270),
         )
+        with self.assertRaises(argparse.ArgumentTypeError):
+            rotated_touch_position(0.25, 0.75, width, height, 45)
         with mock.patch.dict(os.environ, {"CORTEX_TOUCH_FLIP_X": "true"}):
             self.assertEqual(
                 (300.0, 300.0),

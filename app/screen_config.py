@@ -135,7 +135,7 @@ def _clamp_touch_axis(value):
 
 
 def rotated_touch_position(x, y, width, height, rotation=None):
-    rotation = env_touch_rotation() if rotation is None else rotation
+    rotation = env_touch_rotation() if rotation is None else parse_touch_rotation(rotation)
     x = _clamp_touch_axis(x)
     y = _clamp_touch_axis(y)
     if env_bool("CORTEX_TOUCH_FLIP_X", False):
