@@ -103,6 +103,15 @@ def build_validation_steps(
             ],
         ),
         ValidationStep(
+            "Interactions tactiles écrans modernes",
+            [
+                python_bin,
+                "tools/smoke_modern_touch_interactions.py",
+                "--size",
+                screen_size,
+            ],
+        ),
+        ValidationStep(
             "Smokes anciens écrans Pygame",
             [
                 python_bin,

@@ -21,6 +21,7 @@ REQUIRED_FILES = [
     "deploy/raspberry-pi/cortex.service.example",
     "tools/validate_raspberry_pi_ui.py",
     "tools/smoke_home_touch_interactions.py",
+    "tools/smoke_modern_touch_interactions.py",
     "tools/smoke_legacy_pygame_screens.py",
     "tools/smoke_modern_pygame_screens.py",
 ]
