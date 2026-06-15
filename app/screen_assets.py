@@ -30,6 +30,8 @@ def safe_surface_size(size, default=1):
                 )
             except ValueError:
                 return default, default
+        safe_size = safe_icon_size(normalized, default=default)
+        return safe_size, safe_size
 
     if isinstance(size, (int, float)):
         safe_size = safe_icon_size(size, default=default)

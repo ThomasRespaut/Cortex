@@ -197,6 +197,14 @@ class InterfaceAssetTests(unittest.TestCase):
             (32, 24),
             make_background_fallback("Cortex", "32x24").get_size(),
         )
+        self.assertEqual(
+            (32, 32),
+            make_background_fallback("Cortex", "32").get_size(),
+        )
+        self.assertEqual(
+            (1, 1),
+            make_background_fallback("Cortex", "taille-invalide").get_size(),
+        )
 
     def test_pygame_asset_path_uses_linux_case(self):
         from app.screen_assets import asset_path
