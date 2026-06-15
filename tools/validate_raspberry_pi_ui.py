@@ -94,6 +94,15 @@ def build_validation_steps(
             ],
         ),
         ValidationStep(
+            "Interactions tactiles menu principal",
+            [
+                python_bin,
+                "tools/smoke_home_touch_interactions.py",
+                "--size",
+                screen_size,
+            ],
+        ),
+        ValidationStep(
             "Smokes anciens écrans Pygame",
             [
                 python_bin,

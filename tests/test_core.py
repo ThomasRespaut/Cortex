@@ -768,6 +768,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "Capture Screen.py headless",
                 "Validation capture Screen.py",
                 "Préflight avec capture",
+                "Interactions tactiles menu principal",
                 "Smokes anciens écrans Pygame",
                 "Smokes écrans Pygame modernes",
             ],
@@ -780,6 +781,10 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
         self.assertIn(
             "python tools/raspberry_pi_preflight.py --project-root . --screenshot artifacts/screen-smoke.png",
+            step_commands,
+        )
+        self.assertIn(
+            "python tools/smoke_home_touch_interactions.py --size 480x480",
             step_commands,
         )
         self.assertIn(
@@ -994,6 +999,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "deploy/raspberry-pi/install_service.sh",
                 "deploy/raspberry-pi/cortex.service.example",
                 "tools/validate_raspberry_pi_ui.py",
+                "tools/smoke_home_touch_interactions.py",
                 "tools/smoke_legacy_pygame_screens.py",
                 "tools/smoke_modern_pygame_screens.py",
             ):
@@ -1023,6 +1029,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "deploy/raspberry-pi/install_service.sh",
                 "deploy/raspberry-pi/cortex.service.example",
                 "tools/validate_raspberry_pi_ui.py",
+                "tools/smoke_home_touch_interactions.py",
                 "tools/smoke_legacy_pygame_screens.py",
                 "tools/smoke_modern_pygame_screens.py",
             ):
