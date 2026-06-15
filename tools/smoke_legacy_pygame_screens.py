@@ -14,6 +14,7 @@ os.environ.setdefault("CORTEX_EXIT_AFTER_FRAME", "true")
 
 import pygame
 
+from app.app_bdd import launch_bdd
 from app.app_calendrier import launch_calendar
 from app.app_horloge import launch_clock
 from app.app_jeu import launch_game
@@ -31,7 +32,48 @@ class ScreenSpec:
     launcher: object
 
 
+class EdgeMap(dict):
+    def __iter__(self):
+        return iter(self.keys())
+
+
+class SmokeGraph:
+    def __init__(self):
+        self.nodes = {
+            0: {"label": "Thomas Respaut"},
+            1: {"label": "Cortex"},
+            2: {"label": "Raspberry Pi"},
+            3: {"label": "Ecran tactile"},
+        }
+        self.edges = EdgeMap(
+            {
+                (0, 1): {"label": "utilise"},
+                (0, 2): {"label": "installe"},
+                (1, 3): {"label": "affiche"},
+            }
+        )
+
+    def neighbors(self, node_id):
+        return [target for source, target in self.edges if source == node_id]
+
+
+class SmokeDatabase:
+    def _initialiser_graphe(self):
+        graph = SmokeGraph()
+        noeuds = {}
+        node_id_map = {}
+        noeud_principal_id = 0
+        positions = {
+            0: (0, 0),
+            1: (140, -80),
+            2: (-120, 110),
+            3: (70, 145),
+        }
+        return graph, noeuds, node_id_map, noeud_principal_id, positions
+
+
 SCREEN_SPECS = [
+    ScreenSpec("bdd", launch_bdd),
     ScreenSpec("calendrier", launch_calendar),
     ScreenSpec("horloge", launch_clock),
     ScreenSpec("jeu", launch_game),
@@ -45,6 +87,7 @@ SCREEN_SPECS = [
 
 class DummyCortex:
     local_mode = True
+    db = SmokeDatabase()
 
 
 def parse_size(value):
