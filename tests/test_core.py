@@ -1304,6 +1304,42 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_zoom_ignores_invalid_values(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                home.zoom = 1.05
+                self.assertEqual(1.05, home.clamp_zoom("bad"))
+                self.assertEqual(1.05, home.clamp_zoom(float("nan")))
+
+                home.set_zoom("bad")
+                self.assertEqual(1.05, home.zoom)
+                home.set_zoom(float("inf"))
+                self.assertEqual(1.05, home.zoom)
+
+                home.set_zoom(99)
+                self.assertEqual(1.28, home.zoom)
+                home.set_zoom(-99)
+                self.assertEqual(0.72, home.zoom)
+
+                home.offset.update(7, -3)
+                home.set_zoom(1.1, focus="invalid")
+                self.assertEqual(1.1, home.zoom)
+                self.assertEqual((7, -3), tuple(home.offset))
+            finally:
+                pygame.quit()
+
     def test_home_menu_supports_two_finger_pinch_zoom(self):
         import pygame
         from Screen import CortexHome

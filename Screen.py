@@ -466,6 +466,12 @@ class CortexHome:
         self.show_notice("Vue recentrée")
 
     def clamp_zoom(self, value):
+        try:
+            value = float(value)
+        except (TypeError, ValueError):
+            return self.zoom
+        if not math.isfinite(value):
+            return self.zoom
         return max(ZOOM_MIN, min(ZOOM_MAX, value))
 
     def set_zoom(self, value, focus=None):
@@ -473,9 +479,13 @@ class CortexHome:
         next_zoom = self.clamp_zoom(value)
         if focus is not None and previous_zoom > 0 and next_zoom != previous_zoom:
             center, _ = self.viewport()
-            focus = pygame.Vector2(focus)
-            relative_focus = focus - center - self.offset
-            self.offset = focus - center - relative_focus * (next_zoom / previous_zoom)
+            try:
+                focus = pygame.Vector2(focus)
+            except (TypeError, ValueError):
+                focus = None
+            if focus is not None:
+                relative_focus = focus - center - self.offset
+                self.offset = focus - center - relative_focus * (next_zoom / previous_zoom)
         self.zoom = next_zoom
 
     def active_touch_distance(self):
