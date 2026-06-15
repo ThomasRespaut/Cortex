@@ -430,6 +430,10 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertNotIn("OPENAI_API_KEY=", content)
         self.assertNotIn("MISTRAL_API_KEY=", content)
 
+    def test_obsolete_pygame_entrypoints_are_removed(self):
+        self.assertFalse(Path("app/Screen3.py").exists())
+        self.assertFalse(Path("app/main_screen.py").exists())
+
     def test_raspberry_pi_launcher_uses_lf_line_endings(self):
         content = Path("scripts/launch_raspberry_pi.sh").read_bytes()
 
