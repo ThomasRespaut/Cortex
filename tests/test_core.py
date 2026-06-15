@@ -1,3 +1,4 @@
+import argparse
 import importlib.util
 import os
 import subprocess
@@ -1642,6 +1643,23 @@ class ToolingDefaultsTests(unittest.TestCase):
             self.assertEqual("0", steps[index].env["SDL_TOUCH_MOUSE_EVENTS"])
             self.assertEqual("0", steps[index].env["SDL_MOUSE_TOUCH_EVENTS"])
             self.assertEqual("480x480", steps[index].env["CORTEX_SCREEN_SIZE"])
+
+    def test_raspberry_pi_ui_validator_times_out_stuck_steps(self):
+        from tools.validate_raspberry_pi_ui import ValidationStep, run_step
+
+        step = ValidationStep(
+            "Commande lente",
+            [sys.executable, "-c", "import time; time.sleep(2)"],
+        )
+
+        self.assertEqual(124, run_step(step, ".", 1))
+
+    def test_raspberry_pi_ui_validator_rejects_invalid_step_timeout(self):
+        from tools.validate_raspberry_pi_ui import positive_int
+
+        self.assertEqual(5, positive_int("5"))
+        with self.assertRaises(argparse.ArgumentTypeError):
+            positive_int("0")
 
     def test_local_check_runner_covers_autonomous_validation_chain(self):
         from tools.run_local_checks import build_check_steps, secret_findings

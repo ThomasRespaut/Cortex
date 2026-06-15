@@ -31,6 +31,16 @@ def parse_size(value):
     return width, height
 
 
+def positive_int(value):
+    try:
+        parsed = int(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("La valeur doit être un entier") from error
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("La valeur doit être positive")
+    return parsed
+
+
 def relative_or_absolute(path):
     return str(path) if Path(path).is_absolute() else path
 
@@ -153,12 +163,25 @@ def build_validation_steps(
     ]
 
 
-def run_step(step, project_root):
+def run_step(step, project_root, timeout_seconds):
     print(f"\n==> {step.name}", flush=True)
     print(" ".join(step.command), flush=True)
     env = os.environ.copy()
     env.update(step.env)
-    result = subprocess.run(step.command, cwd=project_root, env=env, check=False)
+    try:
+        result = subprocess.run(
+            step.command,
+            cwd=project_root,
+            env=env,
+            check=False,
+            timeout=timeout_seconds,
+        )
+    except subprocess.TimeoutExpired:
+        print(
+            f"Étape expirée après {timeout_seconds}s: {step.name}",
+            flush=True,
+        )
+        return 124
     if result.returncode != 0:
         print(f"Étape échouée: {step.name} ({result.returncode})")
     return result.returncode
@@ -193,6 +216,12 @@ def parse_args():
         default="artifacts/modern-screen-smoke",
         help="Dossier des captures des écrans Pygame modernes.",
     )
+    parser.add_argument(
+        "--step-timeout",
+        default=120,
+        type=positive_int,
+        help="Durée maximale en secondes pour chaque étape de validation.",
+    )
     return parser.parse_args()
 
 
@@ -212,7 +241,7 @@ def main():
         args.modern_output_dir,
     )
     for step in steps:
-        returncode = run_step(step, project_root)
+        returncode = run_step(step, project_root, args.step_timeout)
         if returncode != 0:
             return returncode
 
