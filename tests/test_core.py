@@ -1762,6 +1762,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                 "Préflight avec capture",
                 "Interactions tactiles menu principal",
                 "Interactions tactiles écrans modernes",
+                "Interactions tactiles anciens écrans",
                 "Interactions tactiles toutes rotations",
                 "Smokes anciens écrans Pygame",
                 "Smokes écrans Pygame modernes",
@@ -1786,6 +1787,10 @@ class ToolingDefaultsTests(unittest.TestCase):
             step_commands,
         )
         self.assertIn(
+            "python tools/smoke_legacy_touch_interactions.py --size 480x480 --touch-rotation 90 --touch-flip-x --touch-flip-y",
+            step_commands,
+        )
+        self.assertIn(
             "python tools/smoke_touch_rotations.py --size 480x480",
             step_commands,
         )
@@ -1805,15 +1810,22 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertEqual("90", steps[1].env["CORTEX_TOUCH_ROTATION"])
         self.assertEqual("true", steps[1].env["CORTEX_TOUCH_FLIP_X"])
         self.assertEqual("true", steps[1].env["CORTEX_TOUCH_FLIP_Y"])
-        for index in (4, 5, 6, 7, 8):
+        for index in (4, 5, 6, 7, 8, 9):
             self.assertEqual("dummy", steps[index].env["SDL_VIDEODRIVER"])
             self.assertEqual("0", steps[index].env["SDL_TOUCH_MOUSE_EVENTS"])
             self.assertEqual("0", steps[index].env["SDL_MOUSE_TOUCH_EVENTS"])
             self.assertEqual("480x480", steps[index].env["CORTEX_SCREEN_SIZE"])
-        for index in (4, 5, 7, 8):
+        for index in (4, 5, 6, 8, 9):
             self.assertEqual("90", steps[index].env["CORTEX_TOUCH_ROTATION"])
             self.assertEqual("true", steps[index].env["CORTEX_TOUCH_FLIP_X"])
             self.assertEqual("true", steps[index].env["CORTEX_TOUCH_FLIP_Y"])
+
+    def test_legacy_touch_smoke_toggles_settings(self):
+        from tools.smoke_legacy_touch_interactions import (
+            smoke_legacy_touch_interactions,
+        )
+
+        smoke_legacy_touch_interactions((240, 240), touch_rotation=90)
 
     def test_raspberry_pi_ui_validator_times_out_stuck_steps(self):
         from tools.validate_raspberry_pi_ui import ValidationStep, run_step

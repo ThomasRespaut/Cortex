@@ -159,6 +159,11 @@ def build_validation_steps(
             env=pygame_headless_env(screen_size, **touch_env),
         ),
         ValidationStep(
+            "Interactions tactiles anciens écrans",
+            touch_command("tools/smoke_legacy_touch_interactions.py"),
+            env=pygame_headless_env(screen_size, **touch_env),
+        ),
+        ValidationStep(
             "Interactions tactiles toutes rotations",
             [
                 python_bin,
