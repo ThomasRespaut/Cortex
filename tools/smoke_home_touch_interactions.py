@@ -1,4 +1,6 @@
 import argparse
+import contextlib
+import io
 import os
 import sys
 from pathlib import Path
@@ -29,6 +31,22 @@ def render_home_once(home):
     pygame.display.flip()
 
 
+def finger_event(event_type, position, size):
+    return pygame.event.Event(
+        event_type,
+        {
+            "x": position[0] / size[0],
+            "y": position[1] / size[1],
+            "finger_id": 1,
+        },
+    )
+
+
+def dispatch_quietly(home, event):
+    with contextlib.redirect_stdout(io.StringIO()):
+        return home.handle_event(event)
+
+
 def smoke_home_touch_interactions(size):
     os.environ["CORTEX_SCREEN_SIZE"] = f"{size[0]}x{size[1]}"
     home = CortexHome()
@@ -40,20 +58,34 @@ def smoke_home_touch_interactions(size):
         app, position, _ = home.rendered_apps[-1]
         start = (int(position.x), int(position.y))
 
-        home.handle_pointer_down(start)
-        home.handle_pointer_up(start)
+        dispatch_quietly(home, finger_event(pygame.FINGERDOWN, start, size))
+        dispatch_quietly(home, finger_event(pygame.FINGERUP, start, size))
         if home.notice_text != "Aperçu: Cortex non chargé":
-            raise RuntimeError("Le tap sur une app indisponible n'affiche pas de notice.")
+            raise RuntimeError("Le tap tactile sur une app indisponible n'affiche pas de notice.")
 
-        home.handle_pointer_down(start)
-        home.handle_pointer_move((start[0] + 48, start[1]))
+        home.offset.update(0, 0)
+        dispatch_quietly(home, finger_event(pygame.FINGERDOWN, start, size))
+        dispatch_quietly(home, finger_event(pygame.FINGERMOTION, (1, 1), size))
+        if home.panning or home.offset.length() > 0:
+            raise RuntimeError("Un mouvement tactile hors du cercle déplace la grille.")
+        dispatch_quietly(home, finger_event(pygame.FINGERUP, start, size))
+
+        home.offset.update(0, 0)
+        dispatch_quietly(home, finger_event(pygame.FINGERDOWN, start, size))
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERMOTION, (start[0] + 48, start[1]), size),
+        )
         if not home.panning:
-            raise RuntimeError("Le drag du menu principal ne démarre pas le pan.")
+            raise RuntimeError("Le drag tactile du menu principal ne démarre pas le pan.")
         if home.offset.length() <= 0:
-            raise RuntimeError("Le drag du menu principal ne déplace pas la grille.")
+            raise RuntimeError("Le drag tactile du menu principal ne déplace pas la grille.")
         if home.selected is not None:
             raise RuntimeError("La sélection d'app reste active pendant un drag.")
-        home.handle_pointer_up((start[0] + 48, start[1]))
+        dispatch_quietly(
+            home,
+            finger_event(pygame.FINGERUP, (start[0] + 48, start[1]), size),
+        )
     finally:
         pygame.quit()
     return app.name
