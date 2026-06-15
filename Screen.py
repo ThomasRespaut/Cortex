@@ -178,6 +178,8 @@ class CortexHome:
         self.screenshot_saved = False
         self.notice_text = ""
         self.notice_until = 0
+        self.background_cache_key = None
+        self.background_cache_surface = None
         self.title_font = pygame.font.SysFont("Segoe UI", 30, bold=True)
         self.label_font = pygame.font.SysFont("Segoe UI", 22, bold=True)
         self.small_font = pygame.font.SysFont("Segoe UI", 16)
@@ -213,7 +215,7 @@ class CortexHome:
             app.grid_y * spacing,
         )
 
-    def draw_background(self, center, radius):
+    def make_background_surface(self, center, radius):
         width, height = self.screen.get_size()
         background = pygame.Surface((width, height))
         top = (22, 43, 88)
@@ -225,7 +227,6 @@ class CortexHome:
                 for channel in range(3)
             )
             pygame.draw.line(background, color, (0, y), (width, y))
-        self.screen.blit(background, (0, 0))
 
         glow = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
 
@@ -259,20 +260,38 @@ class CortexHome:
             (22, 206, 204),
             20,
         )
-        self.screen.blit(glow, (0, 0))
+        background.blit(glow, (0, 0))
 
         inner = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
         pygame.draw.circle(inner, (3, 7, 20, 60), center, radius * 0.98)
-        self.screen.blit(inner, (0, 0))
+        background.blit(inner, (0, 0))
 
-        pygame.draw.circle(self.screen, RING, center, radius, max(2, int(radius * 0.009)))
+        pygame.draw.circle(background, RING, center, radius, max(2, int(radius * 0.009)))
         pygame.draw.circle(
-            self.screen,
+            background,
             (151, 174, 225),
             center,
             radius - max(4, int(radius * 0.018)),
             max(1, int(radius * 0.003)),
         )
+        return background
+
+    def draw_background(self, center, radius):
+        width, height = self.screen.get_size()
+        cache_key = (
+            width,
+            height,
+            round(center.x, 2),
+            round(center.y, 2),
+            round(radius, 2),
+        )
+        if (
+            self.background_cache_key != cache_key
+            or self.background_cache_surface is None
+        ):
+            self.background_cache_surface = self.make_background_surface(center, radius)
+            self.background_cache_key = cache_key
+        self.screen.blit(self.background_cache_surface, (0, 0))
 
     def draw_status(self, center, radius):
         if self.skip_cortex_load:

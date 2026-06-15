@@ -511,6 +511,37 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_reuses_static_background_cache(self):
+        import pygame
+        from Screen import CortexHome
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                center, radius = home.viewport()
+
+                home.draw_background(center, radius)
+                first_surface = home.background_cache_surface
+                first_key = home.background_cache_key
+
+                home.draw_background(center, radius)
+                self.assertIs(first_surface, home.background_cache_surface)
+                self.assertEqual(first_key, home.background_cache_key)
+
+                home.draw_background(center, radius - 1)
+                self.assertIsNot(first_surface, home.background_cache_surface)
+                self.assertNotEqual(first_key, home.background_cache_key)
+            finally:
+                pygame.quit()
+
     def test_modern_pygame_views_apply_round_mask_before_flip(self):
         cortex_content = Path("app/app_cortex.py").read_text(encoding="utf-8")
         feature_content = Path("app/feature_shell.py").read_text(encoding="utf-8")
