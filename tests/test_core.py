@@ -202,15 +202,30 @@ class InterfaceAssetTests(unittest.TestCase):
                 "CORTEX_TEST_FALSE": "off",
                 "CORTEX_TEST_INT": "abc",
                 "CORTEX_TOUCH_ROTATION": "180",
+                "CORTEX_SCREEN_SIZE": "480x480",
             },
         ):
             self.assertTrue(screen_config.env_bool("CORTEX_TEST_TRUE"))
             self.assertFalse(screen_config.env_bool("CORTEX_TEST_FALSE", True))
             self.assertEqual(7, screen_config.env_int("CORTEX_TEST_INT", 7))
             self.assertEqual(
+                (480, 480),
+                screen_config.env_screen_size("CORTEX_SCREEN_SIZE", (900, 900)),
+            )
+            self.assertEqual(
                 (300.0, 100.0),
                 screen_config.rotated_touch_position(0.25, 0.75, 400, 400),
             )
+
+    def test_screen_config_rejects_invalid_screen_size(self):
+        from app import screen_config
+
+        for value in ("large", "480", "0x480", "480x0", "480xabc"):
+            with mock.patch.dict(os.environ, {"CORTEX_SCREEN_SIZE": value}):
+                self.assertEqual(
+                    (900, 900),
+                    screen_config.env_screen_size("CORTEX_SCREEN_SIZE", (900, 900)),
+                )
 
     def test_pointer_helpers_support_mouse_and_rotated_touch(self):
         import pygame

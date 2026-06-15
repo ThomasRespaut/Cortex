@@ -83,6 +83,14 @@ CORTEX_FULLSCREEN=false
 CORTEX_PREVIEW_SIZE=900
 ```
 
+Pour forcer une taille exacte de fenêtre, par exemple le panneau circulaire
+Raspberry Pi en 480x480, utilisez :
+
+```bash
+CORTEX_FULLSCREEN=false
+CORTEX_SCREEN_SIZE=480x480
+```
+
 Pour tester le rendu sans modèle, sans micro et sans fenêtre réelle :
 
 ```bash

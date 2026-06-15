@@ -27,6 +27,24 @@ def env_int(name, default):
         return default
 
 
+def env_screen_size(name, default):
+    value = os.getenv(name)
+    if not value:
+        return default
+    normalized = value.strip().lower().replace("*", "x")
+    if "x" not in normalized:
+        return default
+    width_text, height_text = normalized.split("x", 1)
+    try:
+        width = int(width_text.strip())
+        height = int(height_text.strip())
+    except ValueError:
+        return default
+    if width <= 0 or height <= 0:
+        return default
+    return width, height
+
+
 def display_flags(fullscreen):
     import pygame
 
