@@ -1373,6 +1373,15 @@ class InterfaceAssetTests(unittest.TestCase):
                 for _ in range(40):
                     home.handle_event(pygame.event.Event(pygame.MOUSEWHEEL, {"y": -1}))
                 self.assertEqual(0.72, home.zoom)
+
+                home.zoom = 1.0
+                for event in (
+                    pygame.event.Event(pygame.MOUSEWHEEL, {}),
+                    pygame.event.Event(pygame.MOUSEWHEEL, {"y": "bad"}),
+                    pygame.event.Event(pygame.MOUSEWHEEL, {"y": float("inf")}),
+                ):
+                    home.handle_event(event)
+                self.assertEqual(1.0, home.zoom)
             finally:
                 pygame.quit()
 

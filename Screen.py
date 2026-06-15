@@ -663,7 +663,12 @@ class CortexHome:
         if event.type in (pygame.FINGERDOWN, pygame.FINGERMOTION, pygame.FINGERUP):
             return self.handle_touch_event(event, width, height)
         if event.type == pygame.MOUSEWHEEL:
-            self.set_zoom(self.zoom + event.y * 0.07)
+            try:
+                wheel_y = float(getattr(event, "y", 0))
+            except (TypeError, ValueError):
+                wheel_y = 0
+            if math.isfinite(wheel_y):
+                self.set_zoom(self.zoom + wheel_y * 0.07)
         pointer_down = pointer_down_position(event, width, height)
         if pointer_down is not None:
             self.handle_pointer_down(pointer_down)
