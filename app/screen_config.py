@@ -34,8 +34,16 @@ def env_positive_int(name, default):
     return max(1, env_int(name, default))
 
 
+def env_non_negative_int(name, default):
+    return max(0, env_int(name, default))
+
+
 def env_touch_hit_slop(default=10):
-    return max(0, env_int("CORTEX_TOUCH_HIT_SLOP", default))
+    return env_non_negative_int("CORTEX_TOUCH_HIT_SLOP", default)
+
+
+def env_touch_edge_margin(default=0):
+    return env_non_negative_int("CORTEX_TOUCH_EDGE_MARGIN", default)
 
 
 def env_fps(default=60):
@@ -338,7 +346,7 @@ def pointer_down_position(event, width, height):
         position,
         width,
         height,
-        env_int("CORTEX_TOUCH_EDGE_MARGIN", 0),
+        env_touch_edge_margin(),
     ):
         return None
     return position
@@ -357,7 +365,7 @@ def pointer_move_position(event, width, height):
 
     if position is None:
         return None
-    edge_margin = env_int("CORTEX_TOUCH_EDGE_MARGIN", 0)
+    edge_margin = env_touch_edge_margin()
     if env_bool("CORTEX_TOUCH_ROUND_CLIP", True) and not is_inside_round_viewport(
         position,
         width,
@@ -383,7 +391,7 @@ def pointer_up_position(event, width, height):
 
     if position is None:
         return None
-    edge_margin = env_int("CORTEX_TOUCH_EDGE_MARGIN", 0)
+    edge_margin = env_touch_edge_margin()
     if env_bool("CORTEX_TOUCH_ROUND_CLIP", True) and not is_inside_round_viewport(
         position,
         width,
