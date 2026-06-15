@@ -74,6 +74,7 @@ CORTEX_HIDE_CURSOR=true
 CORTEX_TOUCH_ROTATION=0
 CORTEX_TOUCH_ROUND_CLIP=true
 CORTEX_TOUCH_EDGE_MARGIN=0
+CORTEX_TOUCH_EDGE_CLAMP=true
 CORTEX_ROUND_MASK=true
 CORTEX_TOUCH_HIT_SLOP=10
 CORTEX_TAP_MOVE_LIMIT=14
@@ -86,6 +87,8 @@ coordonnées tactiles avec l'orientation réelle de l'écran.
 `CORTEX_TOUCH_ROUND_CLIP=true` ignore les appuis hors du disque utile de
 l'écran circulaire, et `CORTEX_TOUCH_EDGE_MARGIN` retire quelques pixels au
 rayon tactile si la bordure physique déclenche des appuis parasites.
+`CORTEX_TOUCH_EDGE_CLAMP=true` maintient les drags sur le bord du disque au
+lieu de les couper dès que le doigt dépasse légèrement la zone visible.
 `CORTEX_ROUND_MASK=true` masque les coins du framebuffer carré, et
 `CORTEX_TOUCH_HIT_SLOP` ajoute une marge invisible autour des boutons et
 icônes pour compenser l'imprécision du tactile.

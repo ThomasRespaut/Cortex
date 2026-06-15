@@ -962,6 +962,40 @@ class InterfaceAssetTests(unittest.TestCase):
             rotated_touch_position(0.25, 0.75, width, height, 270),
         )
 
+    def test_touch_drag_motion_can_clamp_to_round_edge(self):
+        import pygame
+        from app.screen_config import (
+            clamp_to_round_viewport,
+            pointer_down_position,
+            pointer_move_position,
+        )
+
+        clipped_down = pygame.event.Event(
+            pygame.FINGERDOWN,
+            {"x": 0.0, "y": 0.0},
+        )
+        clipped_motion = pygame.event.Event(
+            pygame.FINGERMOTION,
+            {"x": 0.0, "y": 0.0},
+        )
+
+        with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROUND_CLIP": "true"}):
+            self.assertIsNone(pointer_down_position(clipped_down, 400, 400))
+            clamped = pointer_move_position(clipped_motion, 400, 400)
+
+        expected = clamp_to_round_viewport((0, 0), 400, 400)
+        self.assertAlmostEqual(expected[0], clamped[0], places=5)
+        self.assertAlmostEqual(expected[1], clamped[1], places=5)
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "CORTEX_TOUCH_ROUND_CLIP": "true",
+                "CORTEX_TOUCH_EDGE_CLAMP": "false",
+            },
+        ):
+            self.assertIsNone(pointer_move_position(clipped_motion, 400, 400))
+
     def test_screen_config_parses_environment_defaults(self):
         from app import screen_config
 
@@ -974,6 +1008,7 @@ class InterfaceAssetTests(unittest.TestCase):
                 "CORTEX_TOUCH_ROTATION": "180",
                 "CORTEX_TOUCH_ROUND_CLIP": "true",
                 "CORTEX_TOUCH_EDGE_MARGIN": "12",
+                "CORTEX_TOUCH_EDGE_CLAMP": "false",
                 "CORTEX_SCREEN_SIZE": "480x480",
             },
         ):
@@ -1005,6 +1040,7 @@ class InterfaceAssetTests(unittest.TestCase):
 
     def test_pointer_helpers_support_mouse_and_rotated_touch(self):
         import pygame
+        from app import screen_config
         from app.screen_config import (
             pointer_down_position,
             pointer_move_position,
@@ -1061,9 +1097,9 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertIsNone(pointer_down_position(clipped_corner_event, 400, 400))
             self.assertIsNone(pointer_down_position(clipped_touch_event, 400, 400))
             self.assertEqual((56, 78), pointer_move_position(mouse_motion_event, 400, 400))
-            self.assertIsNone(
-                pointer_move_position(clipped_mouse_motion_event, 400, 400)
-            )
+            clipped_mouse = pointer_move_position(clipped_mouse_motion_event, 400, 400)
+            self.assertIsNotNone(clipped_mouse)
+            self.assertTrue(screen_config.is_inside_round_viewport(clipped_mouse, 400, 400))
             self.assertEqual((90, 123), pointer_up_position(mouse_up_event, 400, 400))
             self.assertIsNone(pointer_down_position(ignored_mouse_event, 400, 400))
             self.assertEqual(
@@ -1074,12 +1110,26 @@ class InterfaceAssetTests(unittest.TestCase):
                 (200.0, 300.0),
                 pointer_move_position(touch_motion_event, 400, 400),
             )
-            self.assertIsNone(
-                pointer_move_position(clipped_touch_motion_event, 400, 400)
-            )
+            clipped_touch = pointer_move_position(clipped_touch_motion_event, 400, 400)
+            self.assertIsNotNone(clipped_touch)
+            self.assertTrue(screen_config.is_inside_round_viewport(clipped_touch, 400, 400))
             self.assertEqual(
                 (100.0, 200.0),
                 pointer_up_position(touch_up_event, 400, 400),
+            )
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "CORTEX_TOUCH_ROTATION": "180",
+                "CORTEX_TOUCH_EDGE_CLAMP": "false",
+            },
+        ):
+            self.assertIsNone(
+                pointer_move_position(clipped_mouse_motion_event, 400, 400)
+            )
+            self.assertIsNone(
+                pointer_move_position(clipped_touch_motion_event, 400, 400)
             )
 
         with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROUND_CLIP": "false"}):
@@ -1219,6 +1269,10 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
         self.assertIn(
             "CORTEX_TOUCH_EDGE_MARGIN=\"${CORTEX_TOUCH_EDGE_MARGIN:-0}\"",
+            content,
+        )
+        self.assertIn(
+            "CORTEX_TOUCH_EDGE_CLAMP=\"${CORTEX_TOUCH_EDGE_CLAMP:-true}\"",
             content,
         )
         self.assertIn("CORTEX_ROUND_MASK=\"${CORTEX_ROUND_MASK:-true}\"", content)
@@ -1417,6 +1471,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
+        self.assertIn("Environment=CORTEX_TOUCH_EDGE_CLAMP=true", content)
         self.assertIn("Environment=CORTEX_ROUND_MASK=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_HIT_SLOP=10", content)
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
@@ -1440,6 +1495,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
+        self.assertIn("Environment=CORTEX_TOUCH_EDGE_CLAMP=true", content)
         self.assertIn("Environment=CORTEX_ROUND_MASK=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_HIT_SLOP=10", content)
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
@@ -1640,6 +1696,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("CORTEX_TOUCH_EDGE_MARGIN=0", content)
+        self.assertIn("CORTEX_TOUCH_EDGE_CLAMP=true", content)
         self.assertIn("CORTEX_ROUND_MASK=true", content)
         self.assertIn("CORTEX_TOUCH_HIT_SLOP=10", content)
         self.assertIn("CORTEX_TAP_MOVE_LIMIT=14", content)
@@ -1716,6 +1773,7 @@ class ToolingDefaultsTests(unittest.TestCase):
                         "CORTEX_TOUCH_ROTATION=0",
                         "CORTEX_TOUCH_ROUND_CLIP=true",
                         "CORTEX_TOUCH_EDGE_MARGIN=0",
+                        "CORTEX_TOUCH_EDGE_CLAMP=true",
                     ]
                 ),
                 encoding="utf-8",
@@ -1729,6 +1787,7 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertTrue(any("SDL_TOUCH_MOUSE_EVENTS" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_ROUND_CLIP" in error for error in errors))
+        self.assertTrue(any("CORTEX_TOUCH_EDGE_CLAMP" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_HIT_SLOP" in error for error in errors))
         self.assertTrue(any("CORTEX_TAP_MOVE_LIMIT" in error for error in errors))
         self.assertTrue(any("CORTEX_EMPTY_DOUBLE_TAP_MS" in error for error in errors))

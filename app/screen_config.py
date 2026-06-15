@@ -125,6 +125,22 @@ def is_inside_round_viewport(position, width, height, edge_margin=0):
     return (px - center_x) ** 2 + (py - center_y) ** 2 <= radius**2
 
 
+def clamp_to_round_viewport(position, width, height, edge_margin=0):
+    import pygame
+
+    diameter = min(width, height)
+    radius = max(0, diameter / 2 - edge_margin)
+    center = pygame.Vector2(width / 2, height / 2)
+    pointer = pygame.Vector2(position)
+    offset = pointer - center
+    if radius <= 0:
+        return tuple(center)
+    if offset.length_squared() == 0 or offset.length() <= radius:
+        return tuple(pointer)
+    offset.scale_to_length(radius)
+    return tuple(center + offset)
+
+
 def circle_fits_round_viewport(position, width, height, item_radius, margin=0):
     import pygame
 
@@ -252,12 +268,15 @@ def pointer_move_position(event, width, height):
 
     if position is None:
         return None
+    edge_margin = env_int("CORTEX_TOUCH_EDGE_MARGIN", 0)
     if env_bool("CORTEX_TOUCH_ROUND_CLIP", True) and not is_inside_round_viewport(
         position,
         width,
         height,
-        env_int("CORTEX_TOUCH_EDGE_MARGIN", 0),
+        edge_margin,
     ):
+        if env_bool("CORTEX_TOUCH_EDGE_CLAMP", True):
+            return clamp_to_round_viewport(position, width, height, edge_margin)
         return None
     return position
 

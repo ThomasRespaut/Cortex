@@ -79,8 +79,8 @@ def smoke_home_touch_interactions(size):
         home.offset.update(0, 0)
         dispatch_quietly(home, finger_event(pygame.FINGERDOWN, start, size))
         dispatch_quietly(home, finger_event(pygame.FINGERMOTION, (1, 1), size))
-        if home.panning or home.offset.length() > 0:
-            raise RuntimeError("Un mouvement tactile hors du cercle déplace la grille.")
+        if not home.panning or home.offset.length() <= 0:
+            raise RuntimeError("Un drag tactile vers le bord rond ne déplace pas la grille.")
         dispatch_quietly(home, finger_event(pygame.FINGERUP, start, size))
 
         home.offset.update(0, 0)
