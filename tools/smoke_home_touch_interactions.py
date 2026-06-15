@@ -167,8 +167,8 @@ def smoke_home_touch_interactions(
         touch_flip_y=touch_flip_y,
         size=size,
     )
-    home = CortexHome()
     try:
+        home = CortexHome()
         render_home_once(home)
         if not home.rendered_apps:
             raise RuntimeError("Aucune app rendue sur le menu principal.")

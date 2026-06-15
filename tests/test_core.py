@@ -1843,11 +1843,17 @@ class ToolingDefaultsTests(unittest.TestCase):
         smoke_legacy_touch_interactions((240, 240), touch_rotation=90)
 
     def test_touch_smokes_restore_calibration_environment(self):
+        from tools.smoke_home_touch_interactions import (
+            restore_touch_environment,
+            snapshot_touch_environment,
+        )
         from tools.smoke_legacy_touch_interactions import (
             smoke_legacy_touch_interactions,
         )
+        from tools import smoke_home_touch_interactions, smoke_modern_touch_interactions
 
         calibration = {
+            "CORTEX_SCREEN_SIZE": "320x320",
             "CORTEX_TOUCH_ROTATION": "270",
             "CORTEX_TOUCH_FLIP_X": "true",
             "CORTEX_TOUCH_FLIP_Y": "false",
@@ -1860,6 +1866,47 @@ class ToolingDefaultsTests(unittest.TestCase):
                 touch_flip_y=True,
             )
 
+            for key, value in calibration.items():
+                self.assertEqual(value, os.environ.get(key))
+
+            with (
+                mock.patch.object(
+                    smoke_home_touch_interactions,
+                    "CortexHome",
+                    side_effect=RuntimeError("stop"),
+                ),
+                self.assertRaisesRegex(RuntimeError, "stop"),
+            ):
+                smoke_home_touch_interactions.smoke_home_touch_interactions(
+                    (240, 240),
+                    touch_rotation=90,
+                    touch_flip_x=False,
+                    touch_flip_y=True,
+                )
+            for key, value in calibration.items():
+                self.assertEqual(value, os.environ.get(key))
+
+            with (
+                mock.patch.object(
+                    smoke_modern_touch_interactions.pygame.display,
+                    "set_mode",
+                    side_effect=RuntimeError("stop"),
+                ),
+                self.assertRaisesRegex(RuntimeError, "stop"),
+            ):
+                smoke_modern_touch_interactions.smoke_modern_touch_interactions(
+                    (240, 240),
+                    touch_rotation=90,
+                    touch_flip_x=False,
+                    touch_flip_y=True,
+                )
+            for key, value in calibration.items():
+                self.assertEqual(value, os.environ.get(key))
+
+            snapshot = snapshot_touch_environment()
+            for key in calibration:
+                os.environ[key] = "temporary"
+            restore_touch_environment(snapshot)
             for key, value in calibration.items():
                 self.assertEqual(value, os.environ.get(key))
 

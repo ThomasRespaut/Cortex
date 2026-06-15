@@ -184,8 +184,8 @@ def smoke_modern_touch_interactions(
         touch_flip_y=touch_flip_y,
     )
     pygame.init()
-    screen = pygame.display.set_mode(size)
     try:
+        screen = pygame.display.set_mode(size)
         smoke_cortex_touch(
             screen,
             size,

@@ -78,8 +78,8 @@ def smoke_legacy_touch_interactions(
     toggle_position = menu_buttons[0].center
 
     pygame.init()
-    screen = pygame.display.set_mode(size)
     try:
+        screen = pygame.display.set_mode(size)
         local_mode, is_online = run_settings_with_event(
             screen,
             size,
