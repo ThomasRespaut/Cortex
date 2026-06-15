@@ -35,6 +35,19 @@ def relative_or_absolute(path):
     return str(path) if Path(path).is_absolute() else path
 
 
+def pygame_headless_env(screen_size, **extra):
+    env = {
+        "SDL_VIDEODRIVER": "dummy",
+        "SDL_TOUCH_MOUSE_EVENTS": "0",
+        "SDL_MOUSE_TOUCH_EVENTS": "0",
+        "CORTEX_FULLSCREEN": "false",
+        "CORTEX_SCREEN_SIZE": screen_size,
+        "CORTEX_SKIP_CORTEX_LOAD": "true",
+    }
+    env.update(extra)
+    return env
+
+
 def build_validation_steps(
     python_bin,
     project_root,
@@ -61,14 +74,11 @@ def build_validation_steps(
         ValidationStep(
             "Capture Screen.py headless",
             [python_bin, "Screen.py"],
-            env={
-                "SDL_VIDEODRIVER": "dummy",
-                "CORTEX_FULLSCREEN": "false",
-                "CORTEX_SCREEN_SIZE": screen_size,
-                "CORTEX_SKIP_CORTEX_LOAD": "true",
-                "CORTEX_SCREENSHOT_PATH": relative_or_absolute(screenshot),
-                "CORTEX_EXIT_AFTER_SCREENSHOT": "true",
-            },
+            env=pygame_headless_env(
+                screen_size,
+                CORTEX_SCREENSHOT_PATH=relative_or_absolute(screenshot),
+                CORTEX_EXIT_AFTER_SCREENSHOT="true",
+            ),
         ),
         ValidationStep(
             "Validation capture Screen.py",
@@ -102,6 +112,7 @@ def build_validation_steps(
                 "--size",
                 screen_size,
             ],
+            env=pygame_headless_env(screen_size),
         ),
         ValidationStep(
             "Interactions tactiles écrans modernes",
@@ -111,6 +122,7 @@ def build_validation_steps(
                 "--size",
                 screen_size,
             ],
+            env=pygame_headless_env(screen_size),
         ),
         ValidationStep(
             "Smokes anciens écrans Pygame",
@@ -123,6 +135,7 @@ def build_validation_steps(
                 relative_or_absolute(legacy_output_dir),
                 "--require-round-mask",
             ],
+            env=pygame_headless_env(screen_size),
         ),
         ValidationStep(
             "Smokes écrans Pygame modernes",
@@ -135,6 +148,7 @@ def build_validation_steps(
                 relative_or_absolute(modern_output_dir),
                 "--require-round-mask",
             ],
+            env=pygame_headless_env(screen_size),
         ),
     ]
 

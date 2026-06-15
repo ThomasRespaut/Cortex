@@ -1633,8 +1633,15 @@ class ToolingDefaultsTests(unittest.TestCase):
             step_commands,
         )
         self.assertEqual("dummy", steps[1].env["SDL_VIDEODRIVER"])
+        self.assertEqual("0", steps[1].env["SDL_TOUCH_MOUSE_EVENTS"])
+        self.assertEqual("0", steps[1].env["SDL_MOUSE_TOUCH_EVENTS"])
         self.assertEqual("false", steps[1].env["CORTEX_FULLSCREEN"])
         self.assertEqual("480x480", steps[1].env["CORTEX_SCREEN_SIZE"])
+        for index in (4, 5, 6, 7):
+            self.assertEqual("dummy", steps[index].env["SDL_VIDEODRIVER"])
+            self.assertEqual("0", steps[index].env["SDL_TOUCH_MOUSE_EVENTS"])
+            self.assertEqual("0", steps[index].env["SDL_MOUSE_TOUCH_EVENTS"])
+            self.assertEqual("480x480", steps[index].env["CORTEX_SCREEN_SIZE"])
 
     def test_local_check_runner_covers_autonomous_validation_chain(self):
         from tools.run_local_checks import build_check_steps, secret_findings
