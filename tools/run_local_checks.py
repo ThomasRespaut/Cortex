@@ -114,6 +114,21 @@ def touch_rotation(value):
     return parsed
 
 
+def screen_size(value):
+    normalized = value.lower().replace("*", "x")
+    if "x" not in normalized:
+        raise argparse.ArgumentTypeError("Format attendu: largeurxhauteur")
+    width_text, height_text = normalized.split("x", 1)
+    try:
+        width = int(width_text.strip())
+        height = int(height_text.strip())
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("La taille doit contenir deux entiers") from error
+    if width <= 0 or height <= 0:
+        raise argparse.ArgumentTypeError("La taille doit être positive")
+    return f"{width}x{height}"
+
+
 def build_check_steps(
     python_bin,
     dataset_dir,
@@ -232,6 +247,7 @@ def parse_args():
     parser.add_argument(
         "--screen-size",
         default="480x480",
+        type=screen_size,
         help="Taille utilisée par les smokes Raspberry Pi/Pygame.",
     )
     parser.add_argument(
