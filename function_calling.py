@@ -50,6 +50,8 @@ def parse_tool_call(response):
         key, value = part.split("=", 1)
         if not key or not key.replace("_", "").isalnum():
             raise ValueError(f"Nom d'argument invalide: {key}")
+        if key in arguments:
+            raise ValueError(f"Argument dupliqué: {key}")
         arguments[key] = _coerce_value(value)
 
     return tool_name, arguments
