@@ -674,6 +674,7 @@ class InterfaceAssetTests(unittest.TestCase):
             ):
                 home = CortexHome()
 
+            home.loading_error = "stale import error"
             with mock.patch.dict(sys.modules, {"cortex": cortex_module}):
                 home.load_cortex()
 
@@ -688,7 +689,7 @@ class InterfaceAssetTests(unittest.TestCase):
         cortex_constructor.reset_mock()
         cortex_constructor.return_value = "fallback-cortex"
         home.cortex = None
-        home.loading_error = None
+        home.loading_error = "stale runtime mode error"
         with mock.patch.dict(
             os.environ,
             {

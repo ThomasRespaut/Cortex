@@ -200,6 +200,7 @@ class CortexHome:
                 output_mode=env_output_mode(),
                 local_mode=env_bool("CORTEX_LOCAL_MODE", True),
             )
+            self.loading_error = None
         except Exception as error:
             self.loading_error = str(error)
             print(f"Impossible d'initialiser Cortex : {error}")
