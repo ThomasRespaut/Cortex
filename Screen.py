@@ -157,6 +157,7 @@ class CortexHome:
         self.velocity = pygame.Vector2()
         self.zoom = 1.0
         self.dragging = False
+        self.panning = False
         self.drag_origin = pygame.Vector2()
         self.last_pointer = pygame.Vector2()
         self.press_position = pygame.Vector2()
@@ -420,17 +421,20 @@ class CortexHome:
         self.last_pointer = pygame.Vector2(position)
         self.velocity.update(0, 0)
         self.selected = self.app_at(position)
+        self.panning = False
 
     def handle_pointer_move(self, position):
         if not self.dragging:
             return
         pointer = pygame.Vector2(position)
+        if pointer.distance_to(self.press_position) < TAP_MOVE_LIMIT:
+            return
         delta = pointer - self.last_pointer
+        self.panning = True
         self.offset += delta
         self.velocity = delta * 0.75
         self.last_pointer = pointer
-        if pointer.distance_to(self.press_position) >= TAP_MOVE_LIMIT:
-            self.selected = None
+        self.selected = None
 
     def handle_pointer_up(self, position):
         if not self.dragging:
@@ -440,6 +444,7 @@ class CortexHome:
         tapped = self.app_at(position)
         selected = self.selected
         self.dragging = False
+        self.panning = False
         self.selected = None
         if moved < TAP_MOVE_LIMIT and tapped and tapped == selected:
             self.launch_app(tapped.name)

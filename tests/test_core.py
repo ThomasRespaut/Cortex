@@ -412,6 +412,34 @@ class InterfaceAssetTests(unittest.TestCase):
                 home.handle_pointer_move((160, 120))
 
                 self.assertIsNone(home.selected)
+                self.assertTrue(home.panning)
+                self.assertGreater(home.offset.length(), 0)
+            finally:
+                pygame.quit()
+
+    def test_home_menu_small_touch_jitter_does_not_pan(self):
+        import pygame
+        from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+            },
+        ):
+            home = CortexHome()
+            try:
+                app = build_honeycomb(APP_DEFINITIONS)[0]
+                home.rendered_apps = [(app, pygame.Vector2(120, 120), 60)]
+                home.handle_pointer_down((120, 120))
+                home.handle_pointer_move((126, 120))
+
+                self.assertEqual((0, 0), tuple(home.offset))
+                self.assertFalse(home.panning)
+                self.assertEqual(app, home.selected)
             finally:
                 pygame.quit()
 
