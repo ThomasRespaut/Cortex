@@ -1,7 +1,12 @@
 import pygame
 import math
 
-from app.screen_config import circular_menu_layout, env_bool, rotated_touch_position
+from app.screen_config import (
+    circular_menu_layout,
+    env_bool,
+    pointer_down_position,
+    rotated_touch_position,
+)
 from database.database import Neo4jDatabase
 
 def launch_bdd(screen, cortex, screen_width, screen_height):
@@ -31,6 +36,8 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
     zoom_max = 5.0
     offset_x, offset_y = 0, 0
     finger_positions = {}
+    touch_start_positions = {}
+    moved_fingers = set()
     dragging = False
     last_distance = None
 
@@ -96,17 +103,23 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
 
         # Gérer les événements
         for event in pygame.event.get():
+            selection_pointer = None
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.FINGERDOWN:
                 width, height = screen.get_size()
                 finger_positions[event.finger_id] = rotated_touch_position(event.x, event.y, width, height)
+                touch_start_positions[event.finger_id] = finger_positions[event.finger_id]
+                moved_fingers.discard(event.finger_id)
                 if len(finger_positions) == 1:
                     dragging = True
             elif event.type == pygame.FINGERUP:
                 width, height = screen.get_size()
+                start_position = touch_start_positions.pop(event.finger_id, None)
+                was_tap = start_position is not None and event.finger_id not in moved_fingers
                 if event.finger_id in finger_positions:
                     del finger_positions[event.finger_id]
+                moved_fingers.discard(event.finger_id)
                 if len(finger_positions) < 2:
                     last_distance = None
                 dragging = False
@@ -114,10 +127,16 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
                 touch_x, touch_y = rotated_touch_position(event.x, event.y, width, height)
                 if boutton_quitter.collidepoint((touch_x, touch_y)):
                     running = False
+                elif was_tap:
+                    selection_pointer = (touch_x, touch_y)
             elif event.type == pygame.FINGERMOTION:
                 width, height = screen.get_size()
                 previous_position = finger_positions.get(event.finger_id)
                 finger_positions[event.finger_id] = rotated_touch_position(event.x, event.y, width, height)
+                if previous_position:
+                    moved_distance = math.dist(previous_position, finger_positions[event.finger_id])
+                    if moved_distance > 8:
+                        moved_fingers.add(event.finger_id)
                 if len(finger_positions) == 2:
                     fingers = list(finger_positions.values())
                     dist_current = math.sqrt((fingers[0][0] - fingers[1][0]) ** 2 +
@@ -138,11 +157,13 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
 
             # Gérer le clic sur un nœud
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = event.pos
+                selection_pointer = pointer_down_position(event, screen_width, screen_height)
+
+            if selection_pointer:
                 for node_id, pos in positions.items():
                     x = int(pos[0] * zoom + graph_center_x + offset_x)
                     y = int(pos[1] * zoom + graph_center_y + offset_y)
-                    if (mouse_pos[0] - x) ** 2 + (mouse_pos[1] - y) ** 2 <= int(20 * zoom) ** 2:
+                    if (selection_pointer[0] - x) ** 2 + (selection_pointer[1] - y) ** 2 <= int(20 * zoom) ** 2:
                         # Ajouter les boutons et gérer les actions
                         buttons = {
                             "Ajouter": action_buttons[0],
@@ -163,8 +184,14 @@ def launch_bdd(screen, cortex, screen_width, screen_height):
                                 if sub_event.type == pygame.QUIT:
                                     pygame.quit()
                                     exit()
-                                elif sub_event.type == pygame.MOUSEBUTTONDOWN:
-                                    click_pos = sub_event.pos
+                                else:
+                                    click_pos = pointer_down_position(
+                                        sub_event,
+                                        screen_width,
+                                        screen_height,
+                                    )
+                                    if not click_pos:
+                                        continue
                                     for button_name, button_rect in buttons.items():
                                         if button_rect.collidepoint(click_pos):
                                             if button_name == "Ajouter":
