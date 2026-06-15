@@ -204,11 +204,22 @@ def pointer_down_position(event, width, height):
 def pointer_move_position(event, width, height):
     import pygame
 
+    position = None
     if event.type == pygame.MOUSEMOTION:
-        return event.pos
-    if event.type == pygame.FINGERMOTION:
-        return rotated_touch_position(event.x, event.y, width, height)
-    return None
+        position = event.pos
+    elif event.type == pygame.FINGERMOTION:
+        position = rotated_touch_position(event.x, event.y, width, height)
+
+    if position is None:
+        return None
+    if env_bool("CORTEX_TOUCH_ROUND_CLIP", True) and not is_inside_round_viewport(
+        position,
+        width,
+        height,
+        env_int("CORTEX_TOUCH_EDGE_MARGIN", 0),
+    ):
+        return None
+    return position
 
 
 def pointer_up_position(event, width, height):

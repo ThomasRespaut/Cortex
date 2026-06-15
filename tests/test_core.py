@@ -569,6 +569,10 @@ class InterfaceAssetTests(unittest.TestCase):
             pygame.MOUSEMOTION,
             {"pos": (56, 78)},
         )
+        clipped_mouse_motion_event = pygame.event.Event(
+            pygame.MOUSEMOTION,
+            {"pos": (12, 34)},
+        )
         mouse_up_event = pygame.event.Event(
             pygame.MOUSEBUTTONUP,
             {"button": 1, "pos": (90, 123)},
@@ -580,6 +584,10 @@ class InterfaceAssetTests(unittest.TestCase):
         touch_motion_event = pygame.event.Event(
             pygame.FINGERMOTION,
             {"x": 0.5, "y": 0.25},
+        )
+        clipped_touch_motion_event = pygame.event.Event(
+            pygame.FINGERMOTION,
+            {"x": 0.0, "y": 0.0},
         )
         touch_up_event = pygame.event.Event(
             pygame.FINGERUP,
@@ -603,6 +611,9 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertIsNone(pointer_down_position(clipped_corner_event, 400, 400))
             self.assertIsNone(pointer_down_position(clipped_touch_event, 400, 400))
             self.assertEqual((56, 78), pointer_move_position(mouse_motion_event, 400, 400))
+            self.assertIsNone(
+                pointer_move_position(clipped_mouse_motion_event, 400, 400)
+            )
             self.assertEqual((90, 123), pointer_up_position(mouse_up_event, 400, 400))
             self.assertIsNone(pointer_down_position(ignored_mouse_event, 400, 400))
             self.assertEqual(
@@ -613,6 +624,9 @@ class InterfaceAssetTests(unittest.TestCase):
                 (200.0, 300.0),
                 pointer_move_position(touch_motion_event, 400, 400),
             )
+            self.assertIsNone(
+                pointer_move_position(clipped_touch_motion_event, 400, 400)
+            )
             self.assertEqual(
                 (100.0, 200.0),
                 pointer_up_position(touch_up_event, 400, 400),
@@ -620,6 +634,10 @@ class InterfaceAssetTests(unittest.TestCase):
 
         with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROUND_CLIP": "false"}):
             self.assertEqual((12, 34), pointer_down_position(clipped_corner_event, 400, 400))
+            self.assertEqual(
+                (12, 34),
+                pointer_move_position(clipped_mouse_motion_event, 400, 400),
+            )
 
     def test_prepare_screenshot_path_creates_parent_directory(self):
         from app.screen_config import prepare_screenshot_path
