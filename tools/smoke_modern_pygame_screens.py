@@ -68,7 +68,7 @@ class DummyCortex:
         return None
 
 
-def smoke_cortex(output_dir, size):
+def smoke_cortex(output_dir, size, require_round_mask=False):
     width, height = size
     screen = pygame.display.set_mode(size)
     screen.fill((0, 0, 0))
@@ -76,10 +76,15 @@ def smoke_cortex(output_dir, size):
     launch_cortex(screen, DummyCortex(), width, height)
     output_path = output_dir / "cortex.png"
     pygame.image.save(screen, output_path)
-    return output_path, validate_screen_image(output_path, min_width=width, min_height=height)
+    return output_path, validate_screen_image(
+        output_path,
+        min_width=width,
+        min_height=height,
+        require_round_mask=require_round_mask,
+    )
 
 
-def smoke_feature(spec, output_dir, size):
+def smoke_feature(spec, output_dir, size, require_round_mask=False):
     width, height = size
     screen = pygame.display.set_mode(size)
     screen.fill((0, 0, 0))
@@ -87,7 +92,12 @@ def smoke_feature(spec, output_dir, size):
     launch_feature(screen, DummyCortex(), spec.app_name, spec.icon_path)
     output_path = output_dir / f"{spec.name}.png"
     pygame.image.save(screen, output_path)
-    return output_path, validate_screen_image(output_path, min_width=width, min_height=height)
+    return output_path, validate_screen_image(
+        output_path,
+        min_width=width,
+        min_height=height,
+        require_round_mask=require_round_mask,
+    )
 
 
 def parse_args():
@@ -105,6 +115,11 @@ def parse_args():
         type=parse_size,
         help="Taille de surface Pygame à tester, par exemple 480x480.",
     )
+    parser.add_argument(
+        "--require-round-mask",
+        action="store_true",
+        help="Vérifie que les captures des vues modernes ont les coins noirs.",
+    )
     return parser.parse_args()
 
 
@@ -119,7 +134,11 @@ def main():
     pygame.init()
     try:
         try:
-            output_path, stats = smoke_cortex(output_dir, args.size)
+            output_path, stats = smoke_cortex(
+                output_dir,
+                args.size,
+                require_round_mask=args.require_round_mask,
+            )
             print(
                 f"cortex: {output_path} "
                 f"({stats['width']}x{stats['height']}, {stats['unique_colors']} couleurs)"
@@ -129,7 +148,12 @@ def main():
 
         for spec in FEATURE_SPECS:
             try:
-                output_path, stats = smoke_feature(spec, output_dir, args.size)
+                output_path, stats = smoke_feature(
+                    spec,
+                    output_dir,
+                    args.size,
+                    require_round_mask=args.require_round_mask,
+                )
                 print(
                     f"{spec.name}: {output_path} "
                     f"({stats['width']}x{stats['height']}, {stats['unique_colors']} couleurs)"

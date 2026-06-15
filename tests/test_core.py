@@ -1214,7 +1214,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         )
         self.assertIn("python Screen.py", step_commands)
         self.assertIn(
-            "python tools/verify_screen_smoke.py artifacts/screen-smoke.png --min-width 400 --min-height 400",
+            "python tools/verify_screen_smoke.py artifacts/screen-smoke.png --min-width 400 --min-height 400 --require-round-mask",
             step_commands,
         )
         self.assertIn(
@@ -1234,7 +1234,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             step_commands,
         )
         self.assertIn(
-            "python tools/smoke_modern_pygame_screens.py --size 480x480 --output-dir artifacts/modern-screen-smoke",
+            "python tools/smoke_modern_pygame_screens.py --size 480x480 --output-dir artifacts/modern-screen-smoke --require-round-mask",
             step_commands,
         )
         self.assertEqual("dummy", steps[1].env["SDL_VIDEODRIVER"])
@@ -1328,6 +1328,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
+        self.assertIn("Environment=CORTEX_ROUND_MASK=true", content)
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
@@ -1349,6 +1350,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
+        self.assertIn("Environment=CORTEX_ROUND_MASK=true", content)
         self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500", content)
         self.assertIn("Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36", content)
@@ -1429,6 +1431,66 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertGreaterEqual(stats["unique_colors"], 8)
         self.assertGreaterEqual(stats["bright_pixels"], 12)
+        self.assertEqual(0, stats["masked_corners"])
+
+    def test_screen_smoke_validator_accepts_round_masked_capture(self):
+        import pygame
+        from tools.verify_screen_smoke import validate_screen_image
+
+        pygame.init()
+        try:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                target = Path(temp_dir) / "round.png"
+                surface = pygame.Surface((320, 320))
+                surface.fill((0, 0, 0))
+                for index in range(10):
+                    pygame.draw.circle(
+                        surface,
+                        (40 + index * 20, 90 + index * 9, 180),
+                        (50 + index * 24, 160),
+                        18,
+                    )
+                pygame.image.save(surface, target)
+
+                stats = validate_screen_image(
+                    target,
+                    min_width=300,
+                    min_height=300,
+                    require_round_mask=True,
+                )
+        finally:
+            pygame.quit()
+
+        self.assertEqual(4, stats["masked_corners"])
+
+    def test_screen_smoke_validator_rejects_missing_round_mask(self):
+        import pygame
+        from tools.verify_screen_smoke import validate_screen_image
+
+        pygame.init()
+        try:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                target = Path(temp_dir) / "square.png"
+                surface = pygame.Surface((320, 320))
+                surface.fill((210, 30, 30))
+                for index in range(10):
+                    pygame.draw.circle(
+                        surface,
+                        (40 + index * 20, 90 + index * 9, 180),
+                        (32 + index * 28, 160),
+                        18,
+                    )
+                pygame.image.save(surface, target)
+
+                with self.assertRaisesRegex(ValueError, "Masque rond"):
+                    validate_screen_image(
+                        target,
+                        min_width=300,
+                        min_height=300,
+                        require_round_mask=True,
+                    )
+        finally:
+            pygame.quit()
 
     def test_screen_smoke_validator_rejects_blank_capture(self):
         import pygame

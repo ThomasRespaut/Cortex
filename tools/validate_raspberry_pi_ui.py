@@ -80,6 +80,7 @@ def build_validation_steps(
                 min_width,
                 "--min-height",
                 min_height,
+                "--require-round-mask",
             ],
         ),
         ValidationStep(
@@ -131,6 +132,7 @@ def build_validation_steps(
                 screen_size,
                 "--output-dir",
                 relative_or_absolute(modern_output_dir),
+                "--require-round-mask",
             ],
         ),
     ]

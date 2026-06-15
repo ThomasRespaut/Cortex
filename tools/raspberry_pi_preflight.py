@@ -44,6 +44,7 @@ REQUIRED_ENV_EXAMPLE_KEYS = [
     "CORTEX_TOUCH_ROTATION",
     "CORTEX_TOUCH_ROUND_CLIP",
     "CORTEX_TOUCH_EDGE_MARGIN",
+    "CORTEX_ROUND_MASK",
     "CORTEX_TAP_MOVE_LIMIT",
     "CORTEX_EMPTY_DOUBLE_TAP_MS",
     "CORTEX_EMPTY_DOUBLE_TAP_DISTANCE",
@@ -59,6 +60,7 @@ REQUIRED_TEXT_SNIPPETS = {
         "CORTEX_TOUCH_ROTATION=\"${CORTEX_TOUCH_ROTATION:-0}\"",
         "CORTEX_TOUCH_ROUND_CLIP=\"${CORTEX_TOUCH_ROUND_CLIP:-true}\"",
         "CORTEX_TOUCH_EDGE_MARGIN=\"${CORTEX_TOUCH_EDGE_MARGIN:-0}\"",
+        "CORTEX_ROUND_MASK=\"${CORTEX_ROUND_MASK:-true}\"",
         "CORTEX_TAP_MOVE_LIMIT=\"${CORTEX_TAP_MOVE_LIMIT:-14}\"",
         "CORTEX_EMPTY_DOUBLE_TAP_MS=\"${CORTEX_EMPTY_DOUBLE_TAP_MS:-500}\"",
         (
@@ -79,6 +81,7 @@ REQUIRED_TEXT_SNIPPETS = {
         "Environment=CORTEX_TOUCH_ROTATION=0",
         "Environment=CORTEX_TOUCH_ROUND_CLIP=true",
         "Environment=CORTEX_TOUCH_EDGE_MARGIN=0",
+        "Environment=CORTEX_ROUND_MASK=true",
         "Environment=CORTEX_TAP_MOVE_LIMIT=14",
         "Environment=CORTEX_EMPTY_DOUBLE_TAP_MS=500",
         "Environment=CORTEX_EMPTY_DOUBLE_TAP_DISTANCE=36",
@@ -170,7 +173,12 @@ def collect_preflight_errors(
         if not screenshot_path.is_absolute():
             screenshot_path = root / screenshot_path
         try:
-            validate_screen_image(screenshot_path, min_width=400, min_height=400)
+            validate_screen_image(
+                screenshot_path,
+                min_width=400,
+                min_height=400,
+                require_round_mask=True,
+            )
         except ValueError as error:
             errors.append(str(error))
 
