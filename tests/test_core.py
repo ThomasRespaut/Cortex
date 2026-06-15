@@ -175,6 +175,23 @@ class InterfaceAssetTests(unittest.TestCase):
             self.assertNotIn("screen_width/2-200", content, module)
             self.assertNotIn("500, 400", content, module)
 
+    def test_legacy_pygame_modules_can_exit_after_one_frame(self):
+        modules = [
+            Path("app/app_calendrier.py"),
+            Path("app/app_horloge.py"),
+            Path("app/app_jeu.py"),
+            Path("app/app_message.py"),
+            Path("app/app_musique.py"),
+            Path("app/app_reglage.py"),
+            Path("app/app_sante.py"),
+            Path("app/app_transport.py"),
+        ]
+
+        for module in modules:
+            content = module.read_text(encoding="utf-8")
+            self.assertIn("env_bool", content, module)
+            self.assertIn("CORTEX_EXIT_AFTER_FRAME", content, module)
+
     def test_circular_menu_layout_keeps_controls_inside_round_viewport(self):
         import pygame
         from app.screen_config import circular_menu_layout

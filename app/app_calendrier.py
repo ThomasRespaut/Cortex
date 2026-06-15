@@ -1,6 +1,6 @@
 import pygame
 from app.screen_assets import asset_path
-from app.screen_config import circular_menu_layout, pointer_down_position
+from app.screen_config import circular_menu_layout, env_bool, pointer_down_position
 #from Screen import main
 
 def launch_calendar(screen, cortex, screen_width, screen_height):
@@ -39,4 +39,6 @@ def launch_calendar(screen, cortex, screen_width, screen_height):
 
 
         pygame.display.flip()
+        if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
+            running = False
         clock.tick(60)

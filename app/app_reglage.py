@@ -1,7 +1,7 @@
 import pygame
 
 from app.screen_assets import asset_path
-from app.screen_config import circular_menu_layout, pointer_down_position
+from app.screen_config import circular_menu_layout, env_bool, pointer_down_position
 
 
 def launch_reglage(screen, cortex, screen_width, screen_height):
@@ -77,6 +77,8 @@ def launch_reglage(screen, cortex, screen_width, screen_height):
                     print(f"Changement de mode : {'Online' if is_online else 'Local'}")
 
         pygame.display.flip()
+        if env_bool("CORTEX_EXIT_AFTER_FRAME", False):
+            running = False
         clock.tick(60)
 
     return is_online  # Retourne l'état final du mode pour pouvoir l'utiliser ailleurs
