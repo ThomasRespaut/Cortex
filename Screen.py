@@ -427,7 +427,8 @@ class CortexHome:
         if not self.dragging:
             return
         pointer = pygame.Vector2(position)
-        if pointer.distance_to(self.press_position) < TAP_MOVE_LIMIT:
+        tap_move_limit = max(1, env_int("CORTEX_TAP_MOVE_LIMIT", TAP_MOVE_LIMIT))
+        if pointer.distance_to(self.press_position) < tap_move_limit:
             return
         delta = pointer - self.last_pointer
         self.panning = True
@@ -441,12 +442,13 @@ class CortexHome:
             return
         release = pygame.Vector2(position)
         moved = release.distance_to(self.press_position)
+        tap_move_limit = max(1, env_int("CORTEX_TAP_MOVE_LIMIT", TAP_MOVE_LIMIT))
         tapped = self.app_at(position)
         selected = self.selected
         self.dragging = False
         self.panning = False
         self.selected = None
-        if moved < TAP_MOVE_LIMIT and tapped and tapped == selected:
+        if moved < tap_move_limit and tapped and tapped == selected:
             self.launch_app(tapped.name)
 
     def handle_event(self, event):

@@ -39,6 +39,7 @@ Environment=CORTEX_HIDE_CURSOR=true
 Environment=CORTEX_TOUCH_ROTATION=0
 Environment=CORTEX_TOUCH_ROUND_CLIP=true
 Environment=CORTEX_TOUCH_EDGE_MARGIN=0
+Environment=CORTEX_TAP_MOVE_LIMIT=14
 ExecStart=${LAUNCHER}
 Restart=on-failure
 RestartSec=5

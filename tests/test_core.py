@@ -519,6 +519,35 @@ class InterfaceAssetTests(unittest.TestCase):
             finally:
                 pygame.quit()
 
+    def test_home_menu_honors_custom_tap_move_limit(self):
+        import pygame
+        from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb
+
+        with mock.patch.dict(
+            os.environ,
+            {
+                "SDL_VIDEODRIVER": "dummy",
+                "CORTEX_FULLSCREEN": "false",
+                "CORTEX_SCREEN_SIZE": "240x240",
+                "CORTEX_SKIP_CORTEX_LOAD": "true",
+                "CORTEX_TAP_MOVE_LIMIT": "60",
+            },
+        ):
+            home = CortexHome()
+            try:
+                app = build_honeycomb(APP_DEFINITIONS)[0]
+                home.rendered_apps = [(app, pygame.Vector2(120, 120), 90)]
+                with mock.patch.object(home, "launch_app") as launch_app:
+                    home.handle_pointer_down((120, 120))
+                    home.handle_pointer_move((158, 120))
+                    home.handle_pointer_up((158, 120))
+
+                self.assertEqual((0, 0), tuple(home.offset))
+                self.assertFalse(home.panning)
+                launch_app.assert_called_once_with(app.name)
+            finally:
+                pygame.quit()
+
     def test_home_menu_launches_matching_tap(self):
         import pygame
         from Screen import APP_DEFINITIONS, CortexHome, build_honeycomb
@@ -806,6 +835,7 @@ class ToolingDefaultsTests(unittest.TestCase):
             "CORTEX_TOUCH_EDGE_MARGIN=\"${CORTEX_TOUCH_EDGE_MARGIN:-0}\"",
             content,
         )
+        self.assertIn("CORTEX_TAP_MOVE_LIMIT=\"${CORTEX_TAP_MOVE_LIMIT:-14}\"", content)
         self.assertIn("SDL_VIDEODRIVER=\"${SDL_VIDEODRIVER:-kmsdrm}\"", content)
         self.assertIn("SDL_TOUCH_MOUSE_EVENTS=\"${SDL_TOUCH_MOUSE_EVENTS:-0}\"", content)
         self.assertIn("SDL_MOUSE_TOUCH_EVENTS=\"${SDL_MOUSE_TOUCH_EVENTS:-0}\"", content)
@@ -990,6 +1020,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
+        self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("Restart=on-failure", content)
 
     def test_raspberry_pi_service_installer_generates_systemd_unit(self):
@@ -1008,6 +1039,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("Environment=CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("Environment=CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("Environment=CORTEX_TOUCH_EDGE_MARGIN=0", content)
+        self.assertIn("Environment=CORTEX_TAP_MOVE_LIMIT=14", content)
         self.assertIn("systemctl daemon-reload", content)
         self.assertIn("CORTEX_START_SERVICE:-false", content)
         self.assertNotIn("OPENAI_API_KEY=", content)
@@ -1143,6 +1175,7 @@ class ToolingDefaultsTests(unittest.TestCase):
         self.assertIn("CORTEX_TOUCH_ROTATION=0", content)
         self.assertIn("CORTEX_TOUCH_ROUND_CLIP=true", content)
         self.assertIn("CORTEX_TOUCH_EDGE_MARGIN=0", content)
+        self.assertIn("CORTEX_TAP_MOVE_LIMIT=14", content)
 
     def test_env_example_documents_oauth_token_overrides(self):
         content = Path(".env.example").read_text(encoding="utf-8")
@@ -1227,6 +1260,7 @@ class ToolingDefaultsTests(unittest.TestCase):
 
         self.assertTrue(any("SDL_TOUCH_MOUSE_EVENTS" in error for error in errors))
         self.assertTrue(any("CORTEX_TOUCH_ROUND_CLIP" in error for error in errors))
+        self.assertTrue(any("CORTEX_TAP_MOVE_LIMIT" in error for error in errors))
         self.assertTrue(
             any("chmod +x scripts/launch_raspberry_pi.sh" in error for error in errors)
         )
