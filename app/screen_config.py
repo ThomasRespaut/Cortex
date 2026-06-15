@@ -50,7 +50,10 @@ def env_fps(default=60):
 
 
 def env_touch_rotation(default=0):
-    fallback = default if default in TOUCH_ROTATIONS else 0
+    try:
+        fallback = parse_touch_rotation(default)
+    except argparse.ArgumentTypeError:
+        fallback = 0
     try:
         return parse_touch_rotation(os.getenv("CORTEX_TOUCH_ROTATION", str(default)))
     except argparse.ArgumentTypeError:

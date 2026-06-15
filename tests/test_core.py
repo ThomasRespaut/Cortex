@@ -1611,6 +1611,8 @@ class InterfaceAssetTests(unittest.TestCase):
         for value in ("45", "-90", "abc"):
             with mock.patch.dict(os.environ, {"CORTEX_TOUCH_ROTATION": value}):
                 self.assertEqual(0, screen_config.env_touch_rotation())
+                self.assertEqual(90, screen_config.env_touch_rotation(default="90"))
+                self.assertEqual(0, screen_config.env_touch_rotation(default="45"))
 
         for value in ("-5", "abc"):
             with mock.patch.dict(os.environ, {"CORTEX_TOUCH_EDGE_MARGIN": value}):
